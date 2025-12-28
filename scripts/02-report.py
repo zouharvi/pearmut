@@ -173,20 +173,8 @@ for langs in [
 
 """
 python3 manage.py StartNewCampaign ~/pearmut/scripts/abc_data/appraise/manifest.json \
-    --batches-json ~/pearmut/scripts/abc_data/appraise/en{cs,hi,ko,pl,es,sk,de,it}.json \
+    --batches-json ~/pearmut/scripts/abc_data/appraise/en{cs,hi,ko,pl,es,sk,de,it,fi,no}.json \
     --csv-output ~/pearmut/scripts/abc_data/appraise/accounts.csv
-
-python3 manage.py StartNewCampaign ~/pearmut/scripts/abc_data/appraise/manifest_it.json \
-    --batches-json ~/pearmut/scripts/abc_data/appraise/enit.json \
-    --csv-output ~/pearmut/scripts/abc_data/appraise/accounts_it.csv
-
-python3 manage.py StartNewCampaign ~/pearmut/scripts/abc_data/appraise/manifest_fi.json \
-    --batches-json ~/pearmut/scripts/abc_data/appraise/enfi.json \
-    --csv-output ~/pearmut/scripts/abc_data/appraise/accounts_fi.csv
-
-python3 manage.py StartNewCampaign ~/pearmut/scripts/abc_data/appraise/manifest_no.json \
-    --batches-json ~/pearmut/scripts/abc_data/appraise/enno.json \
-    --csv-output ~/pearmut/scripts/abc_data/appraise/accounts_no.csv
 
 APPRAISE_ALLOWED_HOSTS=alani-unpleadable-vindicatedly.ngrok-free.dev,localhost APPRAISE_CSRF_TRUSTED_ORIGINS=https://alani-unpleadable-vindicatedly.ngrok-free.dev python3 manage.py runserver 
 
@@ -204,9 +192,6 @@ ngrok http --url=pearmut.ngrok.io 8001
 # gather Appraise data and convert them to Pearmut annotation data format
 """
 python3 manage.py ExportSystemScoresToCSV abc24 > ~/pearmut/scripts/abc_data/results/appraise_raw.csv
-python3 manage.py ExportSystemScoresToCSV abc26 > ~/pearmut/scripts/abc_data/results/appraise_raw_enit.csv
-python3 manage.py ExportSystemScoresToCSV abc27 > ~/pearmut/scripts/abc_data/results/appraise_raw_enfi.csv
-python3 manage.py ExportSystemScoresToCSV abc28 > ~/pearmut/scripts/abc_data/results/appraise_raw_enno.csv
 
 mv ~/Downloads/annotations.json ./scripts/abc_data/results/pearmut_raw.json
 """
@@ -246,14 +231,6 @@ for fname in glob.glob("abc_data/pearmut/*.json"):
 LANG3_TO_LANG2 = {v: k for k, v in LANG2_TO_LANG3.items()}
 
 text_raw = []
-with open("abc_data/results/appraise_raw_enhi.csv", "r") as f1:
-    text_raw.extend(f1.readlines())
-with open("abc_data/results/appraise_raw_enit.csv", "r") as f1:
-    text_raw.extend(f1.readlines())
-with open("abc_data/results/appraise_raw_enfi.csv", "r") as f1:
-    text_raw.extend(f1.readlines())
-with open("abc_data/results/appraise_raw_enno.csv", "r") as f1:
-    text_raw.extend(f1.readlines())
 with open("abc_data/results/appraise_raw.csv", "r") as f1:
     text_raw.extend(f1.readlines())
 header = [
@@ -450,7 +427,7 @@ import scipy.stats
 import itertools
 import numpy as np
 
-# inter-annotator agreement for Czech
+# inter-annotator agreement for English->Czech
 users = ["encs", "enfi", "enno"]
 
 for tool in ["pearmut", "appraise"]:
