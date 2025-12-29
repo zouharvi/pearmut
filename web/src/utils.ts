@@ -382,42 +382,7 @@ function spanMatches(userSpan: ErrorSpan, validationSpan: ValidationErrorSpan): 
 }
 
 /**
- * Validate user responses against validation rules
- * Returns validation result with failed items
- * TODO: merge with validateContrastiveResponse since everything is Contrastive
- */
-export function validateResponse(
-    response: Response,
-    validation: Validation,
-): boolean {
-    if (!validation) {
-        return true
-    }
-
-    // Validate score if specified
-    if (validation.score !== undefined) {
-        const [minScore, maxScore] = validation.score;
-        if (response.score === null || response.score < minScore || response.score > maxScore) {
-            return false
-        }
-    }
-    
-    // Validate error spans if specified
-    if (validation.error_spans !== undefined && validation.error_spans.length > 0) {
-        // Each expected span must be matched by at least one user span
-        for (const expectedSpan of validation.error_spans) {
-            const matched = response.error_spans.some(userSpan => spanMatches(userSpan, expectedSpan));
-            if (!matched) {
-                return false
-            }
-        }
-    }
-
-    return true
-}
-
-/**
- * Validate a response dictionary with score comparison support
+ * Validate a response dictionary with support for score ranges, error spans, and score comparison
  * @param responses - Record of responses for all models
  * @param validations - Record of validation rules for all models
  * @param model - Model name being validated
@@ -435,9 +400,23 @@ export function validateContrastiveResponse(
         return true;
     }
 
-    // First, perform standard validation (score range and error spans)
-    if (!validateResponse(response, validation)) {
-        return false;
+    // Validate score if specified
+    if (validation.score !== undefined) {
+        const [minScore, maxScore] = validation.score;
+        if (response.score === null || response.score < minScore || response.score > maxScore) {
+            return false;
+        }
+    }
+    
+    // Validate error spans if specified
+    if (validation.error_spans !== undefined && validation.error_spans.length > 0) {
+        // Each expected span must be matched by at least one user span
+        for (const expectedSpan of validation.error_spans) {
+            const matched = response.error_spans.some(userSpan => spanMatches(userSpan, expectedSpan));
+            if (!matched) {
+                return false;
+            }
+        }
     }
 
     // Check score_greaterthan condition if specified
