@@ -1,7 +1,8 @@
 {
   "info": {
     "assignment": "task-based",
-    "protocol": "ESA"
+    "protocol": "ESA",
+    "shuffle": false
   },
   "campaign_id": "example_attention_checks",
   "data": [
@@ -148,22 +149,11 @@
             "A": "Počasí ovlivňuje zemědělství.",
             "B": "Klima má dopad na farmaření."
           },
-          "instructions": "<b>Tutorial 2:</b> A is great: 88-98. B is acceptable: 60-75.",
+          "instructions": "<b>Tutorial 2:</b> A is greater than B.",
           "validation": {
             "A": {
-              "warning": "A is great. Score 88-98.",
-              "score": [
-                88,
-                98
-              ],
-              "allow_skip": true
-            },
-            "B": {
-              "warning": "B is acceptable. Score 60-75.",
-              "score": [
-                60,
-                75
-              ],
+              "warning": "A is greater than B.",
+              "score_greaterthan": "B",
               "allow_skip": true
             }
           }
