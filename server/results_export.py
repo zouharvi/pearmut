@@ -21,7 +21,7 @@ def comparison_significant(
     scores2 = [scores2[k] for k in common_items]
 
     return bool(
-        scipy.stats.ttest_rel(scores1, scores2, alternative="greater").pvalue < 0.05
+        scipy.stats.ttest_rel(scores1, scores2, alternative="two-sided").pvalue < 0.05
     )
 
 
