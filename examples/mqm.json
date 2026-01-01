@@ -8,7 +8,7 @@
     [
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu03620_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu03620_#_0",
           "src": "Pracuj s turistickou mapou a rozhodni, zda tvrzení je nebo není pravdivé, případně doplň správně větu.\n(Mapu si můžeš zvětšit kliknutím.)\nVe výřezu mapy jsou vrstvenice znázorněné po 20 metrech.\nVe výřezu mapy jsou vrstvenice znázorněné po 10 metrech.\nNejvyšším bodem na výřezu mapy je Babí lom.\nLeží v nadmořské výšce 450 m n. m. NE\nVrchol Babí lom – rozhledna leží v nadmořské výšce 521 metrů.\nModrá turistická značka nevede ve vyšší nadmořské výšce než 400 m n. m. NE\nRozcestí U studánky leží v nadmořské výšce 480 metrů.\nModrá turistická značka vede přes vrstvenici označující nadmořskou výšku 500 m n. m. ANO\nVrcholem, označeným kótou 438 m n. m. prochází modrá turistická značka.\nCesta po modré turistické značce od rozcestí U Studánky k rozcestí Babí lom bude stoupat.\nCesta po modré turistické značce od rozcestí U Studánky k rozcestí Pod Babím lomem povede po rovině.\nklesat\ndo kopce\nz kopce",
           "tgt": {
             "Shy": "Arbeite mit der Wanderkarte und entscheide, ob die Aussage wahr oder falsch ist, oder ergänze den Satz richtig.  \n(Du kannst die Karte durch Klicken vergrößern.)  \nIm Kartenausschnitt sind die Höhenlinien im Abstand von 10 Metern eingezeichnet.  \nDer höchste Punkt im Kartenausschnitt ist der Babí lom.  \nEr liegt auf einer Höhe von 521 m ü. M.  \nDie Wegkreuzung „U Studánky“ liegt auf einer Höhe von 480 Metern.  \nDer blaue Wanderweg führt über die Höhenlinie mit der Höheangabe 500 m ü. M.  \nDer blaue Wanderweg verläuft nicht in einer Höhe über 400 m ü. M.  \nDer Gipfel, der mit der Höhenangabe 438 m ü. M. gekennzeichnet ist, wird vom blauen Wanderweg überquert.  \nDer Weg entlang der blauen Wandermarkierung von der Wegkreuzung „U Studánky“ zur Wegkreuzung „Babí lom“ verläuft bergauf.  \nDer Weg entlang der blauen Wandermarkierung von der Wegkreuzung „U Studánky“ zur Wegkreuzung „Pod Babím lomem“ verläuft auf ebenem Gelände.  \n**Mögliche Ergänzungen:**  \n– bergauf  \n– bergab  \n– auf ebenem Gelände"
@@ -18,7 +18,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu03240_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu03240_#_0",
           "src": "V čele Velkomoravské říše stál vládce s titulem:\nkníže\nVelká Morava byla knížectví.\nhrabě\nKteré druhy ovoce pěstovali naši předkové?\njablka\nJabloním daří se v našich podmínkách.\nhrušky\nHrušním daří se v našich podmínkách.\nmeruňky\nDaří se jim v našich podmínkách.\nKdo byl ve společnosti nejvýše postavený?\nšlechtic\nŠlechtici byli bohatí, bojovali za panovníka a bránili lid.\npastevec\nObyvatelé v počátku trvání Velkomoravské říše věřili:\nve více bohů\nByli pohané, uctívali mnoho bohů.\nVěřili jen v sebe.\nv jednoho boha\nNevěřili v žádného boha.\nKonstantina a Metoděje pozval kníže:\nBřetislav\nSvatopluk\nMojmír\nRastislav\nByl velkomoravským knížetem, který rozpoznal nebezpečný vliv sousední francké říše.",
           "tgt": {
             "ONLINE-B": "An der Spitze des Großmährischen Reiches stand ein Herrscher mit dem Titel: Fürst Großmähren war ein Fürstentum. Graf Welche Obstsorten bauten unsere Vorfahren an? Äpfel Apfelbäume gedeihen unter unseren Bedingungen. Birnen Birnbäume gedeihen unter unseren Bedingungen. Aprikosen Sie gedeihen unter unseren Bedingungen. Wer war die ranghöchste Person in der Gesellschaft? Adliger Adlige waren reich, kämpften für den Monarchen und verteidigten das Volk. Hirte Die Einwohner glaubten zu Beginn des Großmährischen Reiches an: mehrere Götter Sie waren Heiden, beteten viele Götter an. Sie glaubten nur an sich selbst. einen Gott Sie glaubten an keinen Gott. Konstantin und Method wurden vom Fürsten eingeladen: Břetislav Svatopluk Mojmír Rastislav Er war ein großmährischer Fürst, der den gefährlichen Einfluss des benachbarten Frankenreichs erkannte."
@@ -26,7 +26,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu03240_#_1",
+          "item_id": "cs-de_DE_#_edu_#_edu03240_#_1",
           "src": "Písmo, které vzniklo na Velké Moravě, se jmenovalo:\nhlaholice\nnejstarší slovanské písmo\nazbuka\nlatinka\nstaroslověnština",
           "tgt": {
             "ONLINE-B": "Die in Großmähren entstandene Schrift hieß: Glagolitisch, die älteste slawische Schrift, Kyrillisch, Latein, Altkirchenslawisch."
@@ -35,7 +35,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_PMUL2755_#_0",
+          "item_id": "cs-de_DE_#_dialogue_#_PMUL2755_#_0",
           "src": "Cestujete do Cambridge a těšíte se na místní turistické atrakce.\nHledáte <i>místo k pobytu</i>. Hotel by měl mít <i>čtyři hvězdičky</i> a měl by být na <i>východě</i>.\nHotel by měl být typu <i>pension</i>.\nJakmile najdete <i>hotel</i>, chcete ho rezervovat pro <i>8 osob</i> a <i>5 nocí</i>, začínající od <i>středy</i>.\nUjistěte se, že dostanete <i>referenční číslo</i>.\nTaké hledáte <i>místa k návštěvě</i> ve městě. Atrakce by měla být v <i>centru</i> a měla by být typu <i>muzeum</i>.\nUjistěte se, že dostanete <i>PSČ</i>.\nTaké chcete zarezervovat <i>taxi</i>, abyste se mohli dopravit mezi oběma místy.\nChcete odejít z <i>atrakce</i> v <i>12:30</i>.\nUjistěte se, že dostanete <i>kontaktní číslo</i> a <i>typ vozu</i>.",
           "tgt": {
             "Wenyiil": "Sie reisen nach Cambridge und freuen sich auf die örtlichen Sehenswürdigkeiten.\nSie suchen eine <i>Unterkunft</i>. Das Hotel sollte <i>vier Sterne</i> haben und im <i>Osten</i> liegen.\nDas Hotel sollte vom Typ <i>Pension</i> sein.\nWenn Sie das <i>Hotel</i> gefunden haben, möchten Sie es für <i>8 Personen</i> für <i>5 Nächte</i> ab <i>Mittwoch</i> buchen.\nVergewissern Sie sich, dass Sie die <i>Referenznummer</i> erhalten.\nSie suchen auch nach <i>Sehenswürdigkeiten</i> in der Stadt. Die Attraktion sollte im <i>Stadtzentrum</i> sein und vom Typ <i>Museum</i> sein.\nVergewissern Sie sich, dass Sie die <i>Postleitzahl</i> erhalten.\nSie möchten auch ein <i>Taxi</i> buchen, um die beiden Orte zu verbinden.\nSie möchten die Attraktion um 12:30 Uhr verlassen.\nVergewissern Sie sich, dass Sie die <i>Kontaktnummer</i> und den <i>Fahrzeugtyp</i> erhalten."
@@ -43,7 +43,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_PMUL2755_#_1",
+          "item_id": "cs-de_DE_#_dialogue_#_PMUL2755_#_1",
           "src": "X: Ahoj, hledám 4hvězdičkový hotel na východě.\nY: Na východní straně města nejsou žádné 4hvězdičkové hotely. Měla bys zájem zůstat v penzionu místo toho?\nX: Ano, penzion je to, co vlastně hledám.\nY: V oblasti je 6 penzionů. Jaké máš cenové rozmezí?\nX: Nemám na mysli žádné konkrétní cenové rozmezí. Co navrhuješ pro 8 lidí na 5 nocí? Potřebuji to od středy.\nY: Doporučila bych Autumn House na adrese 710 Newmarket Road. Má internet a parkování a je levný. Zní to dobře?\nX: Ano, také hledám místa k návštěvě ve městě. Atrakce by měla být v centru a měla by to být muzeum.\nY: V centru máme mnoho muzeí na výběr! Hledáš umělecké muzeum, archeologické nebo vědecké?\nX: Můžeš si vybrat za mě, ale ráda bych znala PSČ muzea.\nY: Moje volba je Castle Galleries. PSČ je CB2 3BJ. Nikdy jsem neudělala tu rezervaci hotelu. Chtěla bys, abych to udělala nyní?\nX: Ano, prosím. Také potřebuji zarezervovat taxi, které mě může vzít z hotelu tam.\nY: Dobře, v kolik hodin budeš odjíždět?\nX: Rezervujte hotel pro 8 osob na 5 nocí, začínající ve středu.\nY: Rezervace byla úspěšná. Referenční číslo je 057BYPRI. Můžu ti ještě s něčím pomoci?\nX: Můžeme zarezervovat to taxi? Budu potřebovat odejít z galerií v 12:30.\nY: Tvoje rezervace byla dokončena. Bude to červená Audi a kontaktní číslo je 07888569243. Bude dnes něco dalšího?\nX: Ne, byla jsi velmi nápomocná. Nemám žádné další otázky. Děkuji. Na shledanou.\nY: Děkuji a užij si pobyt v Cambridge!",
           "tgt": {
             "Wenyiil": "X: Hallo, ich suche ein 4-Sterne-Hotel im Osten.\nY: Auf der Ostseite der Stadt gibt es keine 4-Sterne-Hotels. Wärst du stattdessen daran interessiert, in einer Pension zu übernachten?\nX: Ja, eine Pension ist es, was ich eigentlich suche.\nY: Es gibt 6 Pensionen in der Gegend. Was ist Ihre Preisklasse?\nX: Ich habe keine konkrete Preisklasse im Sinn. Was schlägst du für 8 Personen für 5 Nächte vor? Ich brauche es ab Mittwoch.\nIch würde das Autumn House in der Newmarket Road 710 empfehlen. Es hat Internet und Parkplätze und ist günstig. Klingt das gut?\nX: Ja, ich suche auch nach Sehenswürdigkeiten in der Stadt. Die Attraktion sollte im Zentrum sein und es sollte ein Museum sein.\nY: Im Zentrum haben wir viele Museen zu bieten! Suchst du ein Kunstmuseum, ein archäologisches oder ein wissenschaftliches?\nX: Du kannst für mich auswählen, aber ich würde gerne die Postleitzahl des Museums wissen.\nY: Meine Wahl ist Castle Galleries. Die Postleitzahl ist CB2 3BJ. Ich habe noch nie eine Hotelreservierung gemacht. Möchtest du, dass ich es jetzt mache?\nX: Ja, bitte. Ich muss auch ein Taxi buchen, das mich vom Hotel dorthin bringen kann.\nY: Okay, wann wirst du abfahren?\nX: Ich würde gerne ein Hotel für 8 Personen für 5 Nächte ab Mittwoch buchen.\nY: Die Reservierung war erfolgreich. Die Referenznummer lautet 057BYPRI. Kann ich Ihnen noch irgendwie helfen?\nX: Können wir das Taxi reservieren? Ich werde die Galerien um 12:30 Uhr verlassen müssen.\nIhre Reservierung ist abgeschlossen. Es wird ein rotes Audi sein, und die Kontaktnummer lautet 07888569243. Wünschen Sie heute noch etwas?\nX: Nein, Sie waren sehr hilfreich. Ich habe keine weiteren Fragen. Vielen Dank. Auf Wiedersehen.\nY: Vielen Dank und noch viel Spaß in Cambridge!"
@@ -52,7 +52,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu31712_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu31712_#_0",
           "src": "Umístím na jednotlivá roční období čísla tak, aby nejmenší číslo bylo na jaře.\nRozdíl čísel na podzim a v zimě je 20.\nVedle čísla 21 není číslo 23.\nUmístím na jednotlivá roční období čísla tak, aby na podzim bylo největší číslo.\nNaproti němu číslo o 34 menší.\nNejmenší číslo není v zimě.\nUmístím na jednotlivá roční období čísla tak, aby v zimě bylo číslo nejmenší.\nJaro má k sobě protilehlé číslo s rozdílem 15.\nSoučet všech čísel v kruhu je 100.\nUmístím na jednotlivá roční období čísla tak, aby součet dvou čísel v horní polovině kruhu se rovnal 47 a součet dvou čísel v levé polovině kruhu se rovnal 61.\nSoučet všech čísel v kruhu se rovná 100.",
           "tgt": {
             "Algharb": "Ich ordne den einzelnen Jahreszeiten Zahlen so zu, dass die kleinste Zahl dem Frühling zugeordnet ist.\nDer Unterschied zwischen den Zahlen im Herbst und im Winter beträgt 20.\nNeben der Zahl 21 ist nicht die Zahl 23.\nIch ordne den einzelnen Jahreszeiten Zahlen so zu, dass die größte Zahl dem Herbst zugeordnet ist.\nGegenüber ihm eine Nummer um 34 kleiner.\nDie kleinste Zahl ist nicht im Winter.\nIch ordne den einzelnen Jahreszeiten Zahlen so zu, dass die Zahl im Winter am kleinsten ist.\nJahr hat eine gegenüberliegende Zahl mit einem Unterschied von 15.\nDie Summe aller Zahlen im Kreis ist 100.\nIch ordne den einzelnen Jahreszeiten Zahlen so zu, dass die Summe der beiden Zahlen in der oberen Hälfte des Kreises 47 und die Summe der beiden Zahlen in der linken Hälfte des Kreises 61 beträgt.\nDie Summe aller Zahlen im Kreis beträgt 100."
@@ -62,7 +62,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_0",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_0",
           "src": "Never more (nevyhnutelnému?) konci Dejvické nádražky, oáze levného piva a bigbítů, která mění nájemce",
           "tgt": {
             "EuroLLM-22B": "Nie mehr (dem unvermeidlichen?) Ende der Dejvická nádražka, einer Oase billigen Biers und Bigbítes, die ihren Mieter wechselt"
@@ -70,28 +70,28 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_1",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_1",
           "src": "Dlouhá desetiletí to bývalo originální místo autentické kultury a svérázné poetiky, čím dál osamělejší ve zglajchšaltované šedi jiných kulturních svatostánků. Nyní se Dejvická nádražka dostává do rukou korporátu... Fantasy sága Maková válka je jen pro masochisty. A rozloučili jsme se s posledním zakládajícím členem slavné skupiny The Band.",
           "tgt": {
             "EuroLLM-22B": "Jahrzehntelang war dies ein origineller Ort authentischer Kultur und eigenwilliger Poesie, immer einsamer in der gleichförmigen Grauheit anderer Kulturtempel. Nun geht die Dejvická nádražka in die Hände eines Konzerns... Die Fantasysaga \"Maková válka\" ist nur etwas für Masochisten. Und wir haben uns von dem letzten Gründungsmitglied der berühmten Band The Band verabschiedet."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_2",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_2",
           "src": "Marek Gregor: Boje o zachování jedné z posledních klasických nádražních restaurací utichly. Zánik proslulé dejvické nádražky hrozil opakovaně, ale vždycky se místním z Prahy 6 místo skvělých koncertů s jedinečnou atmosférou a piva za slušnou cenu, kde kdysi vznikl legendární slogan Miloš Frýba na Hrad, podařilo ochránit. Nyní se zdá, že éra tamních bigbítů definitivně končí, Správa železnic vyhlásila vítěze výběrového řízení, kterým se stala společnost Spojka Events, provozující mimo jiné Fantovu kavárnu na hlavním nádraží.",
           "tgt": {
             "EuroLLM-22B": "Marek Gregor: Die Kämpfe um den Erhalt einer der letzten klassischen Bahnhofsrestaurants sind verstummt. Das Ende der berühmten Dejvická nádražka drohte wiederholt, aber den Bewohnern von Prag 6 gelang es immer, den Ort mit seinen großartigen Konzerten, der einzigartigen Atmosphäre und dem Bier zu einem vernünftigen Preis zu schützen, wo einst der legendäre Slogan \"Miloš Frýba auf den Hrad\" entstand. Nun scheint die Ära der Bigbítes dort endgültig zu Ende zu gehen. Die Eisenbahnverwaltung hat den Gewinner des Auswahlverfahrens bekannt gegeben, der die Firma Spojka Events ist, die unter anderem die Fantova-Kaffeehaus im Hauptbahnhof betreibt."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_3",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_3",
           "src": "Richard Klíčník: Fantasy sága R. F. Kuang s názvem Maková válka (vyd. Host) je u konce, a to i v audiopodobě (vyd. OneHotBook). Její četba či poslech jsou masochistické guilty pleasure. První dva díly jsou jak kvůli plochosti obřího množství postav, nesnesitelné hlavní hrdince a snad ještě nesnesitelnějšímu překladu Daniely Orlando k nepřežití. Jde o překlad překladu, originál je čínsky, česká verze vznikla na základě hojně kritizovaného anglického převodu. Kupodivu díl třetí je na tom po dějové stránce podstatně lépe (překlad jen o fous). Autorka už vyvraždila většinu otravných postav a zbylým může věnovat dost prostoru, aby mohly čtenáři lézt na nervy ještě víc. Vyzdvihnout musíme výkon Terezy Dočkalové, která četbu tří rozměrných knih přežila. Ale pokud rádi trpíte u béčkových fantasy, berte tohle Never more jako doporučení!",
           "tgt": {
             "EuroLLM-22B": "Richard Klíčník: Die Fantasysaga R. F. Kuang mit dem Titel \"Maková válka\" (veröffentlicht von Host) ist zu Ende, auch in Audioform (veröffentlicht von OneHotBook). Ihr Lesen oder Hören ist ein masochistisches \"guilty pleasure\". Die ersten beiden Bände sind aufgrund der Flachheit der riesigen Anzahl von Charakteren, der unerträglichen Hauptfigur und des noch unerträglicheren Übersetzungs von Daniela Orlando kaum zu überleben. Es handelt sich um eine Übersetzung der Übersetzung, der Originaltext ist chinesisch, die tschechische Version basiert auf einer stark kritisierten englischen Version. Seltsamerweise ist der dritte Band inhaltlich wesentlich besser (die Übersetzung ist nur ein wenig besser). Die Autorin hat die meisten der lästigen Charaktere bereits umgebracht und kann den verbleibenden noch mehr Platz widmen, damit sie den Lesern noch mehr auf die Nerven gehen können. Wir müssen die Leistung von Tereza Dočkalová hervorheben, die das Lesen der drei umfangreichen Bücher überlebt hat. Aber wenn Sie gerne bei B-Fantasy leiden, dann nehmen Sie dieses \"Never more\" als Empfehlung!"
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_4",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_4",
           "src": "Vojtěch Rynda: Před dvěma týdny zemřel Garth Hudson, primárně klávesista skupiny The Band a hlavní tvůrce jejího pestrého zvuku. The Band vytvořili spoustu skvělé muziky sami za sebe i s jinými, zejména s Bobem Dylanem, kterému začali dělat doprovodnou kapelu ještě pod jménem The Hawks na konci léta 1965 - tedy pár týdnů poté, co končí film Bob Dylan: Úplně neznámý, jenž právě běží v kinech. Garth Hudson se jeho americké premiéry ještě dožil. Z původní sestavy The Band byl poslední.",
           "tgt": {
             "EuroLLM-22B": "Vojtěch Rynda: Vor zwei Wochen starb Garth Hudson, hauptsächlich Keyboarder der Band The Band und Hauptgestalter ihres vielfältigen Klangs. The Band haben viel großartige Musik allein und mit anderen geschaffen, insbesondere mit Bob Dylan, dem sie ab Ende des Sommers 1965, also wenige Wochen nach dem Ende des Films \"Bob Dylan: Unbekannt\", der gerade in den Kinos läuft, als Begleitband unter dem Namen The Hawks spielten. Garth Hudson erlebte die amerikanische Premiere noch mit. Er war das letzte Mitglied der ursprünglichen Besetzung von The Band."
@@ -100,7 +100,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08500_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu08500_#_0",
           "src": "Mihule potoční je v Česku kriticky ohrožený druh.\nMalé tělní otvory za hlavou na boku těla mihule jsou žaberní otvory, které slouží k dýchání.\nRozhodni, zda se jedná o pravdivé, nebo nepravdivé tvrzení. Odpovíš-li na vše dobře, odkryje se obrázek.\nLarvy mihule se nazývají minohy.\nKruhoústí mají chrupavčitou kostru.\nPotravou mihule říční je plankton.\nMihule mají velké zuby v několika řadách.\nMihule říční žije v moři u severoevropských břehů.\nÚsta mihule jsou tvořena kruhovitou přísavkou.\nMihule mořská parazituje na rybách.\nMihule mořská žije v tropických oblastech.\nMihule mořská je menší než mihule říční.\nMihule říční žije v řekách a tře se v potocích.\nDospělci mihule potoční se živí planktonem.\nMihule dýchají celým povrchem těla.\nMihule má hadovitý tvar těla.\nMihule nemají čelisti.",
           "tgt": {
             "ONLINE-B": "Das Flussneunauge ist in der Tschechischen Republik eine vom Aussterben bedrohte Art. Die kleinen Körperöffnungen hinter dem Kopf seitlich am Körper des Neunauges sind Kiemenöffnungen, die zum Atmen dienen. Entscheiden Sie, ob diese Aussage wahr oder falsch ist. Wenn Sie alle Fragen richtig beantworten, wird ein Bild angezeigt. Neunaugenlarven werden Neunaugen genannt. Rundmäuler haben ein knorpeliges Skelett. Das Flussneunauge ernährt sich von Plankton. Neunaugen haben große Zähne in mehreren Reihen. Das Flussneunauge lebt im Meer vor der Küste Nordeuropas. Das Maul des Neunauges wird von einem runden Saugnapf gebildet. Meerneunaugen parasitieren Fische. Meerneunaugen leben in tropischen Gebieten. Meerneunaugen sind kleiner als Flussneunaugen. Flussneunaugen leben in Flüssen und laichen in Bächen. Erwachsene Flussneunaugen ernähren sich von Plankton. Neunaugen atmen durch die gesamte Körperoberfläche. Neunaugen haben eine schlangenförmige Körperform. Neunaugen haben keine Kiefer."
@@ -110,7 +110,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_respekt-cs.11394_#_0",
+          "item_id": "cs-de_DE_#_news_#_respekt-cs.11394_#_0",
           "src": "Zvýšení koncesionářských poplatků se nejspíš posune do Senátu, ale děti cálovat nebudou • RESPEKT",
           "tgt": {
             "TranssionTranslate": "Die Erhöhung der Konzessionsgebühren wird wahrscheinlich an den Senat weitergeleitet, aber sie werden die Kinder nicht küssen • RESPEKT"
@@ -118,7 +118,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_respekt-cs.11394_#_1",
+          "item_id": "cs-de_DE_#_news_#_respekt-cs.11394_#_1",
           "src": "Poslanci se ve středu mimořádně sejdou k závěrečnému schvalování sporné vládní novely, která počítá se zvýšením koncesionářských poplatků a rozšířením okruhu poplatníků. \"Ta minulá debata před koncem roku byla poměrně hodně určující a ukazující, co si opozice o ČT myslí. Viděli jsme i jakési odkrytí plánu, kdy Andrej Babiš otevřeně mluvil o tom, že by koncesionářské poplatky rád zrušil a financování veřejnoprávních institucí navázal na státní rozpočet. Tím by de facto dostal obě média pod přímou státní kontrolu, čímž by z nich udělal vydíratlená média. Mimořádná schůze určuje, že nebude možné měnit program a pravděpodobně by se to v případě, že se to nestihne odhlasovat ve středu, odložilo na pátek,\" říká ve Výtahu Respektu František Trojan, podle kterého se novela nejspíš posune do horní komory. Ve zpravodajském podcastu ale mluví i o dalším klíčovém momentu, který tento týden poslance čeká, a to hlasování o možném vydání šéfa SPD Tomia Okamury k trestnímu stíhání. Podle policie by se totiž kvůli loňské billboardové kampani mohl dopustit podněcování k nenávisti vůči skupině osob nebo omezování jejich práv a svobod. Jaká je šance, že poslanci Okamuru vydají? Jak jsou na tom vlastně jednotlivé strany a hnutí půl roku před sněmovními volbami? A jak se rýsuje volební spolupráce jednotlivých uskupení?",
           "tgt": {
             "TranssionTranslate": "Die Abgeordneten treffen sich am Mittwoch zu einer außerordentlichen Sitzung, um den umstrittenen Regierungsänderungsantrag abzuschließen, der eine Erhöhung der Konzessionsgebühren und eine Ausweitung des Steuerzahlerkreises vorsieht. „Die letzte Debatte vor Jahresende war ziemlich entscheidend und zeigte, was die Opposition über CT denkt. Wir erlebten auch eine Art Enthüllung des Plans, als Andrej Babiš offen über seinen Wunsch sprach, die Konzessionsgebühren abzuschaffen und die Finanzierung öffentlicher Einrichtungen an den Staatshaushalt zu koppeln. Dies würde beide Medien de facto unter direkte staatliche Kontrolle stellen und sie somit zu erpressbaren Medien machen. Die außerordentliche Sitzung stellt fest, dass eine Änderung des Programms nicht möglich sein wird, und sie würde wahrscheinlich auf Freitag verschoben, wenn nicht am Mittwoch darüber abgestimmt wird“, sagt František Trojan in Výtaha Respekt, dem zufolge der Änderungsantrag wahrscheinlich ins Oberhaus gelangt. Im Nachrichten-Podcast spricht er auch über einen weiteren wichtigen Moment, der die Abgeordneten diese Woche erwartet, nämlich die Abstimmung über die mögliche Auslieferung des SPD-Vorsitzenden Tomi Okamura zur Strafverfolgung. Laut Polizei könnte er sich aufgrund seiner Plakatkampagne im vergangenen Jahr der Anstiftung zum Hass gegen eine Gruppe oder der Einschränkung ihrer Rechte und Freiheiten schuldig gemacht haben. Wie stehen die Chancen, dass die Abgeordneten Okamura ausliefern? Wie steht es um die einzelnen Parteien und Bewegungen sechs Monate vor den Parlamentswahlen? Und wie gestaltet sich die Wahlzusammenarbeit der einzelnen Gruppen?"
@@ -127,7 +127,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08502_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu08502_#_0",
           "src": "Víš, jak vypadají rybí pásma?\nRoztřiď charakteristiky k jednotlivým pásmům.\npásmo lipanové\npásmo cejnové\npásmo pstruhové\npásmo parmové\nmálo kyslíku\nhodně planktonu\nhorské potoky a řeky\ndolní toky velkých řek\nmeandry\nmenší spád vody\nteplota vody 15–20 °C\nstudená voda\nhodně bezobratlých živočichů\nstřední toky\nteplota vody až 25 °C v létě\nhodně trav a řas\nhodně kyslíku\nteplejší voda, až 30 °C\npodhorské potoky\nRoztřiď ryby podle toho, ve kterém rybím pásmu se vyskytují.\ncejnové\nhrouzek\npstruh\nsumec\nstřevle\nkapr\nokoun\nkaras\nplotice\nhlavatka\nvranka\nmník\nperlín\nRoztřiď znaky dravých a nedravých ryb.\nryby dravé\nryby nedravé\nrychlý pohyb vpřed\npotrava drobné ryby či obratlovci\ntělo zploštělé ze stran\ndlouhé válcovité tělo\npomalý pohyb vlněním\njen požeráková kost\nrostlinná potrava, hmyz, plankton\nukrývá se mezi stonky vodních rostlin\ndrobné zuby směrem dozadu\nhřbetní ploutev posunutá dozadu",
           "tgt": {
             "Yolu": "Weißt du, wie Fischherde aussehen?\nOrdne die Eigenschaften den einzelnen Regionen zu.\nLipan-Bereich\nZollbandbreite\nForellen-Gebiet\nPaarmová Farbe\nwenig Sauerstoff\nviel Plankton\nBergbäche und Flüsse\nUntere Flussläufe großer Flüsse\nMeandry\ngeringer Wasserabfluss\nWassertemperatur 15–20 °C\nkaltes Wasser.\nViele wirbellose Tiere\nMittlere Flüsse\nWassertemperatur bis zu 25 °C im Sommer\nViel Gras und Algen\nviel Sauerstoff\nWärmeres Wasser, bis zu 30 °C\nPodhorské Potoky (Podhorské Bäche)\nSortiere die Fische nach dem Gebiet, in dem sie vorkommen.\nPreisvärt\nHrouzek (Hrausek)\nPstruh (Forelle)\nsumec   (sumek)\nStřevle (Strevel)\nKapre\nOkoun (Eiche)\nKaras (Karasi)\nPlotice   (Plotitz)\nKopfdeckel\nvranka (Vranka)\nMnikaus\nPerlen\nOrdne die Merkmale von Raubfischen und Nicht-Raubfischen ein.\nRaubfische\nnicht aggressive Fische\nschnelle Vorwärtsbewegung\nNahrung: kleine Fische oder Wirbeltiere\nKörper an den Seiten abgeflacht\nlanger zylindrischer Körper\nlangsame Bewegung in Wellenform\nNur ein Knochenfleisch\nPflanzennahrung, Insekten, Plankton\nversteckt sich unter den Stängeln von Wasserpflanzen\nkleine Zähne nach hinten gerichtet\nRückenflosse nach hinten versetzt"
@@ -135,7 +135,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08502_#_1",
+          "item_id": "cs-de_DE_#_edu_#_edu08502_#_1",
           "src": "cejn\nštika\ncandát\nlín",
           "tgt": {
             "Yolu": "Zejn\nSchinka\nKandidat/Kandidatin\nLin (Lín)"
@@ -144,7 +144,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_cesky_rozhlas-cs.188013_#_0",
+          "item_id": "cs-de_DE_#_news_#_cesky_rozhlas-cs.188013_#_0",
           "src": "Vydejte se na tour de Divadlo Spejbla a Hurvínka a poznejte slasti i strasti vodiče loutek. I přes dokonalou zručnost někdy vypadne loutka z ruky, pak začíná velké dobrodružství",
           "tgt": {
             "Yolu": "Begeben Sie sich auf eine Tour durch das Spejbl und Hurvínka-Theater und lernen Sie die Freuden und Leiden des Puppenspielers kennen. Auch bei perfektem Geschick kann manchmal die Puppe aus den Händen fallen, und dann beginnt ein großes Abenteuer."
@@ -152,7 +152,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_cesky_rozhlas-cs.188013_#_1",
+          "item_id": "cs-de_DE_#_news_#_cesky_rozhlas-cs.188013_#_1",
           "src": "Dvojici loutek Spejbla a Hurvínka znají snad opravdu všichni. Dřevěné figurce Spejbla, jehož prvním \"vodičem\" byl slavný loutkář Josef Skupa, je už více než sto let. A na kulatou stovku táhne i nezbednému Hurvínkovi. Diváci vídají tuhle nerozlučnou dvojku pravidelně v Divadle Spejbla a Hurvínka v Dejvicích, a to hned v několika inscenacích. Málokdo si ale dokáže představit, jak náročné je takovou loutku vodit.",
           "tgt": {
             "Yolu": "Die zwei Puppen Spejbl und Hurvínek kennt vielleicht wirklich jeder. Die Holzfigur Spejbl, deren erster „Führer“ der berühmte Puppenspieler Josef Skupa war, ist bereits über hundert Jahre alt. Und auch der freche Hurvínek nähert sich dem hundertsten Geburtstag. Die Zuschauer sehen dieses unzertrennbare Duo regelmäßig im Teatrale Spejbl a Hurvínek in Dejvice, und zwar gleich in mehreren Inszenierungen. Nur wenige können sich jedoch vorstellen, wie anspruchsvoll es ist, eine solche Puppe zu führen."
@@ -161,7 +161,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08596_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu08596_#_0",
           "src": "Člověk má celkem kostí více než…\nMezi kosti obličejové části lebky nepatří…\nkost čelní\nkost nosní\nkost lícní\nkost slzní\nMezi svaly horní končetiny patří…\nvelký prsní sval\nsval trapézový\nsval krejčovský\nsval deltový\nDvojcípá chlopeň se v srdci nachází...\nna začátku aorty\nmezi pravou síní a pravou komorou\nna začátku plicní tepny\nmezi levou síní a levou komorou\nŽluč…\nse vytváří ve žlučníku\nmá nažloutlou barvu\nusnadňuje trávení cukrů\nje tvořena jaterními buňkami\nPůsobením UV záření vzniká v kůži vitamin…\nZrakové centrum koncového mozku je v laloku…\ntýlním\ntemenním\nčelním\nspánkovým\nV přední části přechází oko v průhlednou…\nrohovku\nbělimu\nzornici\ncévnatku",
           "tgt": {
             "Claude-4": "Der Mensch hat insgesamt mehr als … Knochen\nZu den Knochen des Gesichtsteils des Schädels gehört nicht…\nStirnbein\nNasenbein\nJochbein\nTränenbein\nZu den Muskeln der oberen Extremität gehört…\ngroßer Brustmuskel\nTrapezmuskel\nSchneidermuskel\nDeltamuskel\nDie Bikuspidalklappe befindet sich im Herzen...\nam Anfang der Aorta\nzwischen rechtem Vorhof und rechter Kammer\nam Anfang der Lungenarterie\nzwischen linkem Vorhof und linker Kammer\nDie Galle…\nwird in der Gallenblase gebildet\nhat eine gelbliche Farbe\nerleichtert die Verdauung von Zuckern\nwird von Leberzellen gebildet\nDurch die Einwirkung von UV-Strahlung entsteht in der Haut Vitamin…\nDas Sehzentrum des Endhirns befindet sich im … Lappen\nHinterhaupts-\nScheitel-\nStirn-\nSchläfen-\nIm vorderen Teil geht das Auge in die durchsichtige … über\nHornhaut\nLederhaut\nPupille\nAderhaut"
@@ -169,7 +169,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08596_#_1",
+          "item_id": "cs-de_DE_#_edu_#_edu08596_#_1",
           "src": "Krátké výběžky nervových buněk (neuronů)...\nvedou vzruch k dalším buňkám\njsou neurity\njsou dendrity\nvytváří synapse\nTěhotenství trvá u člověka přibližně…\n180 dnů\n280 dnů\n365 dnů\n200 dnů",
           "tgt": {
             "Claude-4": "Kurze Fortsätze von Nervenzellen (Neuronen)...\nleiten Erregungen zu anderen Zellen weiter\nsind Neuriten\nsind Dendriten\nbilden Synapsen\nDie Schwangerschaft dauert beim Menschen etwa…\n180 Tage\n280 Tage\n365 Tage\n200 Tage"
@@ -180,7 +180,7 @@
     [
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_0",
+          "item_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_0",
           "src": "Lesy ČR na 100 místech upraví hospodaření, pomohou vzácným druhům",
           "tgt": {
             "GemTrans": "Die staatliche Forstverwaltung \"Lesy ČR\" wird an 100 Standorten Maßnahmen zur Verbesserung des Forstwirtschaftsbetriebs ergreifen, um gefährdete Arten zu schützen."
@@ -188,42 +188,42 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_1",
+          "item_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_1",
           "src": "Bernartice (Benešovsko) - Borové lesy u Želivky s výskytem kriticky ohrožené byliny kuřičky hadcové, Ždánický nebo Český les a další místa zařadily Lesy ČR do nového programu 100 ostrovů obnovy přírody. V těchto oblastech upraví způsob hospodaření tak, aby lépe vyhovoval přirozenému prostředí vzácných rostlinných nebo živočišných druhů. U Želivky je například potřeba strhávat humusovou vrstvu, aby se vzácná kuřička dostala k hornině hadec, na níž je závislá, řekl dnes novinářům generální ředitel Lesů ČR Dalibor Šafařík.",
           "tgt": {
             "GemTrans": "Bernartice (Bezirk Benešov) – Die Wälder in der Nähe von Želivka, in denen die stark gefährdete Pflanze „Hadcová kuřička“ (eine Art Hahnenfuß) vorkommt, sowie der Ždánický- oder „Český les“ (Tschechischer Wald) und andere Gebiete wurden von den staatlichen Forstbetrieben (Lesy ČR) in ein neues Programm mit dem Namen „100 Inseln der Wiederherstellung der Natur“ aufgenommen. In diesen Gebieten wird die Forstwirtschaft so angepasst, dass sie besser mit dem natürlichen Lebensraum seltener Pflanzen- oder Tierarten übereinstimmt. In der Nähe von Želivka beispielsweise muss die Humusschicht entfernt werden, damit die seltene Pflanze Zugang zum Gestein (Hadc) erhält, von dem sie abhängig ist, erklärte der Generaldirektor von Lesy ČR, Dalibor Šafařík, heute gegenüber Journalisten."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_2",
+          "item_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_2",
           "src": "Opatření budou zahrnovat sanaci starých melioračních příkopů nebo vyhloubení tůní. Další možností je využití pastvy hospodářských zvířat nebo ponechávání takzvaných biotopových stromů, které mají za úkol podpořit rozvoj organismů na ně vázaných. \"Měníme obnovu porostů tak, aby byly ve prospěch vzácných endemických ohrožených druhů nebo i takových druhů, které chceme v rozvoji té oblasti podpořit,\" uvedl Šafařík. Náklady na opatření budou podle něj nízké, půjde o jednotky milionů korun. \"Je možné, že v určitých případech dojde ke snížení výnosů, ale může to být přechodná záležitost,\" dodal.",
           "tgt": {
             "GemTrans": "Die Maßnahmen umfassen die Sanierung alter Entwässerungsgräben oder die Anlage von Teichen. Eine weitere Möglichkeit ist die Nutzung von Weideland für Nutztiere oder das Belassen sogenannter Biotopbäume, die dazu dienen, die Entwicklung von daran gebundenen Organismen zu fördern. \"Wir verändern die Wiederaufforstung so, dass sie zum Wohle seltener, endemischer und gefährdeter Arten oder auch solcher Arten beiträgt, deren Entwicklung in dieser Region wir fördern wollen\", sagte Šafařík. Die Kosten für die Maßnahmen seien gering und würden sich im Bereich von einigen Millionen Kronen bewegen. \"Es ist möglich, dass es in bestimmten Fällen zu Ertragsminderungen kommt, aber das kann vorübergehend sein\", fügte er hinzu."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_3",
+          "item_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_3",
           "src": "Lesy ČR chtějí během roku vybrat území s velkým biologickým potenciálem i ta, v nichž je třeba promyšlenými lesnickými zásahy a úpravou hospodaření tento potenciál nastartovat. Mezi vybranými oblastmi jsou kromě borových lesů u Želivky třeba Ždánický les s výskytem cikády viniční nebo Přimda v Českém lese, kde mají opatření pomoci datlíku tříprstému a kočce divoké. \"To není nějaká konzervace území ve smyslu bezzásahovosti, ale promyšlené zásahy, které mají vést k prosperitě a integraci zájmů v daném území,\" zdůraznil Šafařík.",
           "tgt": {
             "GemTrans": "Die tschechische Forstbehörde \"Lesy ČR\" plant, im Laufe des Jahres Gebiete mit hohem ökologischem Potenzial zu identifizieren, sowie solche, in denen gezielte forstwirtschaftliche Maßnahmen und eine Anpassung der Bewirtschaftung erforderlich sind, um dieses Potenzial zu fördern. Zu den ausgewählten Gebieten gehören neben den Kiefernwäldern bei Želivka auch der Ždánický-Wald, in dem die Weinzikade vorkommt, und Přimda im Böhmischen Wald, wo Maßnahmen zum Schutz des Dreizehenspechts und der Wildkatze ergriffen werden sollen. \"Dies ist keine Art von Naturschutz im Sinne von Nicht-Eingriff, sondern gezielte Maßnahmen, die darauf abzielen, die Entwicklung zu fördern und die Interessen in dem jeweiligen Gebiet in Einklang zu bringen\", betonte Šafařík."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_4",
+          "item_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_4",
           "src": "Cílem je vytvořit krajinu, v níž se prolínají různé způsoby hospodaření a ochrany přírody. Ministr zemědělství Marek Výborný (KDU-ČSL) vyzdvihl, že Lesy ČR budou na programu spolupracovat nejen s orgány ochrany přírody, regionální státní správou a vědeckou komunitou, ale i občanskými organizacemi a veřejností. \"Společně tak pomůžeme dostát závazkům, které pro Česko plynou z nařízení Evropské unie o obnově přírody a adaptaci lesů na klimatickou změnu,\" dodal Výborný.",
           "tgt": {
             "GemTrans": "Ziel ist es, eine Landschaft zu schaffen, in der verschiedene Formen der Landwirtschaft und des Naturschutzes miteinander harmonieren. Landwirtschaftsminister Marek Výborný (KDU-ČSL) betonte, dass die staatlichen Forstbetriebe (Lesy ČR) im Rahmen dieses Programms nicht nur mit Naturschutzbehörden, regionalen Verwaltungen und der wissenschaftlichen Gemeinschaft zusammenarbeiten werden, sondern auch mit Bürgerinitiativen und der Öffentlichkeit. „Gemeinsam werden wir dazu beitragen, die Verpflichtungen zu erfüllen, die sich für die Tschechische Republik aus der EU-Verordnung zur Wiederherstellung der Natur und zur Anpassung der Wälder an den Klimawandel ergeben“, fügte Výborný hinzu."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_5",
+          "item_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_5",
           "src": "Prvním pomyslným ostrovem obnovy přírody je 45hektarová plocha v hospodářském lese nedaleko národní přírodní památky Hadce u Želivky, kde roste kuřička hadcová uvedená na seznamu kriticky ohrožených rostlin. Roste jen v Čechách, a to na dvou místech. Lesy v Bernarticích-Borovsku jsou jedním z nich. V minulosti se tam osvědčila lesní pastva, návratu ohrožených rostlin pomáhá stádo ovcí. Podle jednatele Českého svazu ochránců přírody Vlašim Karla Kříže se za posledních 15 let podařilo populaci kuřičky zvýšit třikrát, předtím byla téměř na vyhynutí.",
           "tgt": {
             "GemTrans": "Ein erstes „Pilotprojekt“ zur Wiederherstellung der Natur ist eine 45 Hektar große Fläche in einem Wirtschaftswald in der Nähe des Naturdenkmals „Hadce u Želivky“, wo die „Hadce-Nelke“ (ein auf der Liste der gefährdeten Pflanzen stehendes Gewächs) wächst. Diese Pflanze kommt nur in Böhmen vor, und zwar an zwei Standorten. Einer davon sind die Wälder in Bernartice-Borovsko. In der Vergangenheit hat sich hier die Weidewirtschaft als erfolgreich erwiesen, und eine Schafherde trägt zur Wiederansiedlung gefährdeter Pflanzen bei. Laut Karl Kříž, dem Geschäftsführer des tschechischen Naturschutzbundes in Vlašim, konnte die Population der Hadce-Nelke in den letzten 15 Jahren verdreifacht werden, zuvor war sie fast vom Aussterben bedroht."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_6",
+          "item_id": "cs-de_DE_#_news_#_ctk.cz.120672_#_6",
           "src": "\"Upravujeme v oblasti hospodaření, abychom podpořili a rozšířili populaci této ohrožené rostliny a dalších vázaných na horninu zvanou hadec jako kuřička Smejkalova nebo houba zvaná kuřátka něžná. Zásadní jsou opakovaná opatření, zejména kosení, lesní pastva, prosvětlování lesa a výsadba kuřičky, která provádí Český svaz ochránců přírody Vlašim,\" uvedl lesní správce z Ledče nad Sázavou Jaroslav Moravec.",
           "tgt": {
             "GemTrans": "\"Wir setzen Maßnahmen im Bereich der Bewirtschaftung um, um die Population dieser gefährdeten Pflanze und anderer Arten, die an den sogenannten \"Hadec\"-Felsformationen gebunden sind, wie beispielsweise die \"Smejkal-Nelke\" oder der Pilz \"zarte Pfifferlinge\", zu fördern und zu erweitern. Entscheidend sind dabei wiederholte Maßnahmen, insbesondere das Mähen, die Beweidung, die Durchforstung des Waldes und die Anpflanzung der \"Smejkal-Nelke\", die vom tschechischen Naturschutzbund in Vlašim durchgeführt werden\", erklärte der Förster aus Ledče nad Sázavou, Jaroslav Moravec."
@@ -232,7 +232,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu02178_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu02178_#_0",
           "src": "V jakém podnebném pásmu se rozkládá Středomoří?\nv subtropickém\nv tropickém suchém\nv tropickém střídavě vlhkém\nv mírném\nVe kterém období roku jsou řeky ve Středomoří téměř bez vody?\nleden–březen\nříjen–listopad\nčerven–srpen\nsrpen–říjen\nKterá rostlina nepatří mezi zemědělsky pěstované rostliny v oblasti Středomoří?\ndub korkový\npistácie\nNení zemědělská rostlina.\nCo jsou macchie?\nneprostupné porosty keřů\nokrasné rostliny\noloupané kmeny dubu korkového\nstromy rostoucí na pobřeží\nKteré tvrzení vysvětluje pojem vádí?\nDuna, která se velmi rychle pohybuje pouští.\nVelké skalní útvary, které vznikly jako následek dlouhodobého proudění větru.\nSuchá koryta řek, kterými voda protéká jen občas.\nPodzemní voda, která ve výjimečných případech tryská na povrch pouště.",
           "tgt": {
             "DLUT_GTCOM": "In welcher Klimazone befindet sich das Mittelmeer?\nin den Subtropen\nin tropischen Trockengebieten\nin tropischen Wechselfeuchten\nin mild\nZu welcher Jahreszeit sind die Flüsse im Mittelmeer fast trocken?\nJanuar–März\nOktober–November\nJuni–August\nAugust–Oktober\nWelche Pflanze zählt nicht zu den landwirtschaftlich genutzten Pflanzen im Mittelmeerraum?\nKorkeiche\nPistazie\nEs handelt sich nicht um eine landwirtschaftliche Pflanze.\nWas ist Macchia?\nundurchdringliche Büsche\nZierpflanzen\ngeschälte Korkeichenstämme\nBäume wachsen an der Küste\nWelche Aussage erklärt das Konzept von Wādī?\nEine Düne, die sich sehr schnell durch die Wüste bewegt.\nGroße Felsformationen, die durch langjährigen Windstrom entstanden sind.\nTrockene Flussbetten, durch die nur gelegentlich Wasser fließt.\nGrundwasser, das in Ausnahmefällen an die Oberfläche der Wüste sprudelt."
@@ -240,28 +240,28 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu02178_#_1",
+          "item_id": "cs-de_DE_#_edu_#_edu02178_#_1",
           "src": "Které tvrzení neplatí pro rostliny rostoucí v pouštích?\nMají rozsáhlý kořenový systém pro čerpání vody z velké hloubky.\nMají velké listy a rozvětvené stonky kvůli vytváření stínu pro kořeny.\nČasto přežívají velkou částí těla pod povrchem.\nMají tvrdé, kožovité listy.\nKterého z živočichů nespatříš na poušti?\nkolibříka\nŽiví se nektarem z květů a drobným hmyzem.\nchřestýše\nfenka berberského\nštíra\nJak se nazývají lidé, kteří putují přes pouště s karavanami?\ndromedáři\npoutníci\nhonáci\nnomádi\nKterá období se střídají během roku v africké savaně?\njaro, léto, podzim a zima\nobdobí chladu a období horka\nobdobí trávy a období sucha\nobdobí dešťů a období sucha",
           "tgt": {
             "DLUT_GTCOM": "Welche Aussage über in Wüsten wachsende Pflanzen ist NICHT richtig?\nSie verfügen über ein ausgedehntes Wurzelsystem, um Wasser aus großen Tiefen zu ziehen.\nSie haben große Blätter und verzweigte Stängel, um den Wurzeln Schatten zu spenden.\nSie überleben oft, obwohl ein großer Teil ihres Körpers unter der Oberfläche liegt.\nSie haben harte, ledrige Blätter.\nWelches dieser Tiere werden Sie in der Wüste nicht sehen?\nKolibri\nSie ernähren sich von Blütennektar und kleinen Insekten.\nKlapperschlangen\nWeibchen des Barbary Sheepdog\nSkorpion\nWie nennt man Menschen, die mit Wohnwagen durch Wüsten reisen?\nDromedare\nPilger\nViehtreiber\nNomaden\nWelche Jahreszeiten wechseln sich im Laufe eines Jahres in der afrikanischen Savanne ab?\nFrühling, Sommer, Herbst und Winter\nkalte Jahreszeit und heiße Jahreszeit\nGrassaison und Trockenzeit\nRegenzeit und Trockenzeit"
           }
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu02178_#_2",
+          "item_id": "cs-de_DE_#_edu_#_edu02178_#_2",
           "src": "V subrovníkovém pásmu se vyskytují sezonní větry, které v létě přinášejí srážky od moře na pevninu a v zimě proudí z pevniny na moře.\nJak zní jejich název?\npasáty\nmonzuny\ntornáda\nhurikány\nCo je typickou dřevinou australské savany?\nakácie\nbaobab\nblahovičník\njiným názvem též Eucalyptus\npalma kokosová\nKterý z uvedených živočichů nežije v africké savaně?\nzebra\npuma\nŽije v Severní Americe.\nlev\nžirafa\nJaké je podnebí v tropickém pásmu okolo rovníku?\nJe zde stále stejné podnebí.\nStřídají se čtyři roční období.\nStřídá se horké a chladné období.\nStřídá se období děšťů a období sucha.\nKterá rostlina neroste v tropických deštných lesích?\nbromélie\nCedr je jehličnatý strom hornatých oblastí.\norchidej\nbambus",
           "tgt": {
             "DLUT_GTCOM": "In der subäquatorialen Zone treten saisonale Winde auf, die im Sommer Niederschläge vom Meer auf das Land bringen und im Winter vom Land zum Meer strömen.\nWie heißen sie?\nPassatwinde\nMonsun\nTornados\nHurrikane\nWas ist ein typisches Baumaterial der australischen Savanne?\nAkazie\nBaobab\nApfelbaum\nauch bekannt als Eukalyptus\nKokospalme\nWelches der folgenden Tiere lebt nicht in der afrikanischen Savanne?\nZebra\nPuma\nEr lebt in Nordamerika.\nLöwe\nGiraffe\nWie ist das Klima in der tropischen Zone rund um den Äquator?\nDas Klima hier ist immer noch dasselbe.\nVier Jahreszeiten wechseln sich ab.\nHeiße und kalte Jahreszeiten wechseln sich ab.\nEs gibt eine Abwechslung zwischen Regen- und Trockenzeiten.\nWelche Pflanze wächst nicht in tropischen Regenwäldern?\nBromelie\nDie Zeder ist ein immergrüner Baum aus Bergregionen.\nOrchidee\nBambus"
           }
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu02178_#_3",
+          "item_id": "cs-de_DE_#_edu_#_edu02178_#_3",
           "src": "Jaké podmínky panují v bylinném patře tropického deštného lesa?\nJe zde hodně světla a dostatek vláhy.\nJe zde málo světla a chladno.\nJe zde dostatek světla, ale v půdě málo živin pro růst rostlin.\nJe zde nedostatek světla a dostatek vláhy.\nProč je půda v tropickém deštném lese neúrodná?\nJe zde málo odumřelých rostlin a živočichů, ze kterých vzniká humus.\nOpadané listy, ze kterých vzniká humus, jsou chudé na živiny.\nJe zde nedostatek půdních živočichů, kteří vytvářejí humus.\nÚrodné látky jsou z půdy vyplavovány každodenním deštěm.\nKteré tvrzení o horní hranici lesa je správné?\nNad horní hranicí lesa zůstává sníh ležet po celý rok.\nNad horní hranicí lesa rostou už pouze jehličnany.\nNad horní hranicí lesa již nerostou stromy.\nJe zde totiž nedostatek srážek a chladné podnebí.\nNad horní hranicí lesa se zvyšuje teplota vzduchu, protože krajina je bez stromů a může ji tedy více prohřát slunce.",
           "tgt": {
             "DLUT_GTCOM": "Welche Bedingungen herrschen in der Krautschicht eines tropischen Regenwaldes?\nEs ist viel Licht und es gibt viel Feuchtigkeit.\nEs ist wenig Licht und kalt.\nEs ist zwar ausreichend Licht vorhanden, aber der Boden enthält nicht genügend Nährstoffe für das Pflanzenwachstum.\nEs fehlt an Licht und ausreichend Feuchtigkeit.\nWarum ist der Boden im tropischen Regenwald unfruchtbar?\nEs gibt nur wenige tote Pflanzen und Tiere, aus denen Humus gebildet wird.\nAbgefallenes Laub, aus dem Humus gebildet wird, ist nährstoffarm.\nEs fehlt an humusbildenden Bodentieren.\nDurch den täglichen Regen werden fruchtbare Substanzen aus dem Boden ausgewaschen.\nWelche Aussage zur oberen Waldgrenze ist richtig?\nOberhalb der oberen Waldgrenze liegt das ganze Jahr über Schnee.\nOberhalb der oberen Waldgrenze wachsen nur noch Nadelbäume.\nÜber die obere Waldgrenze hinaus wachsen keine Bäume mehr.\nEs fehlt an Niederschlägen und es herrscht ein kaltes Klima.\nOberhalb der oberen Waldgrenze steigt die Lufttemperatur an, da die Landschaft baumlos ist und daher stärker von der Sonne erwärmt werden kann."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu02178_#_4",
+          "item_id": "cs-de_DE_#_edu_#_edu02178_#_4",
           "src": "Nejvyšší polohy hor tvoří stupeň alpinských luk.\nKterou přírodní krajinu tyto louky připomínají?\nprérii\nRostou zde většinou mechy a lišejníky, vřesy, pokroucené zakrslé vrby, nerostou zde stromy.\nJe zde chladné podnebí.",
           "tgt": {
             "DLUT_GTCOM": "Die höchsten Berglagen bilden eine Stufe alpiner Wiesen.\nWelcher natürlichen Landschaft ähneln diese Wiesen?\nPrärie\nHier wachsen hauptsächlich Moose und Flechten, Heidekraut und knorrige Zwergweiden, es wachsen keine Bäume.\nDas Klima hier ist kalt."
@@ -270,7 +270,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_respekt-cs.11394_#_0",
+          "item_id": "cs-de_DE_#_news_#_respekt-cs.11394_#_0",
           "src": "Zvýšení koncesionářských poplatků se nejspíš posune do Senátu, ale děti cálovat nebudou • RESPEKT",
           "tgt": {
             "Gemma-3-27B": "Die Erhöhung der Rundfunkgebühren wird voraussichtlich in den Senat verschoben, aber Kinder werden nicht bestraft • RESPEKT"
@@ -278,7 +278,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_respekt-cs.11394_#_1",
+          "item_id": "cs-de_DE_#_news_#_respekt-cs.11394_#_1",
           "src": "Poslanci se ve středu mimořádně sejdou k závěrečnému schvalování sporné vládní novely, která počítá se zvýšením koncesionářských poplatků a rozšířením okruhu poplatníků. \"Ta minulá debata před koncem roku byla poměrně hodně určující a ukazující, co si opozice o ČT myslí. Viděli jsme i jakési odkrytí plánu, kdy Andrej Babiš otevřeně mluvil o tom, že by koncesionářské poplatky rád zrušil a financování veřejnoprávních institucí navázal na státní rozpočet. Tím by de facto dostal obě média pod přímou státní kontrolu, čímž by z nich udělal vydíratlená média. Mimořádná schůze určuje, že nebude možné měnit program a pravděpodobně by se to v případě, že se to nestihne odhlasovat ve středu, odložilo na pátek,\" říká ve Výtahu Respektu František Trojan, podle kterého se novela nejspíš posune do horní komory. Ve zpravodajském podcastu ale mluví i o dalším klíčovém momentu, který tento týden poslance čeká, a to hlasování o možném vydání šéfa SPD Tomia Okamury k trestnímu stíhání. Podle policie by se totiž kvůli loňské billboardové kampani mohl dopustit podněcování k nenávisti vůči skupině osob nebo omezování jejich práv a svobod. Jaká je šance, že poslanci Okamuru vydají? Jak jsou na tom vlastně jednotlivé strany a hnutí půl roku před sněmovními volbami? A jak se rýsuje volební spolupráce jednotlivých uskupení?",
           "tgt": {
             "Gemma-3-27B": "Die Abgeordneten werden sich am Mittwoch zu einer außerordentlichen Sitzung treffen, um die umstrittene Regierungsvorlage abschließend zu verabschieden, die eine Erhöhung der Rundfunkgebühren und eine Erweiterung des Kreises der Gebührenzahler vorsieht. „Die vergangene Debatte vor Jahresende war recht prägend und zeigte, was die Opposition von ČT hält. Wir haben auch eine Art Aufdeckung des Plans gesehen, bei der Andrej Babiš offen darüber sprach, die Rundfunkgebühren gerne abschaffen und die Finanzierung der öffentlich-rechtlichen Einrichtungen an den Staatshaushalt knüpfen zu wollen. Damit würde er de facto beide Medien unter direkte staatliche Kontrolle bringen und sie erpressbar machen. Die außerordentliche Sitzung bedeutet, dass das Programm nicht geändert werden kann und es wahrscheinlich ist, dass es, falls es nicht bis Mittwoch abgestimmt wird, auf Freitag verschoben wird“, sagt František Trojan im Aufzug von Respekt. Er geht davon aus, dass die Novelle wahrscheinlich in die obere Kammer verschoben wird. In dem Nachrichten-Podcast spricht er auch über einen weiteren wichtigen Moment, der die Abgeordneten diese Woche erwartet, nämlich die Abstimmung über die mögliche Auslieferung des SPD-Vorsitzenden Tomio Okamura zur Strafverfolgung. Laut Polizei könnte er sich aufgrund der letztjährigen Plakatkampagne der Anstiftung zu Hass gegen eine Personengruppe oder der Einschränkung ihrer Rechte und Freiheiten schuldig gemacht haben. Wie hoch sind die Chancen, dass die Abgeordneten Okamura ausliefern? Wie stehen die einzelnen Parteien und Bewegungen ein halbes Jahr vor den Parlamentswahlen da? Und wie zeichnet sich die Wahlzusammenarbeit der einzelnen Gruppierungen ab?"
@@ -287,7 +287,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_SNG0991_#_0",
+          "item_id": "cs-de_DE_#_dialogue_#_SNG0991_#_0",
           "src": "Hledáte <i>místo k pobytu</i>. Hotel by měl <i>zahrnovat bezplatné parkování</i> a měl by být typu <i>penzion</i>.\nHotel by měl být v <i>drahém</i> cenovém rozmezí a měl by <i>zahrnovat bezplatné Wi-Fi</i>.\nPokud takový hotel neexistuje, co třeba jeden, který je v <i>levném</i> cenovém rozmezí.\nJakmile najdete <i>hotel</i>, chcete si ho zarezervovat pro <i>8 osob</i> a <i>4 noci</i>, počínaje <i>pátkem</i>.\nUjistěte se, že dostanete <i>referenční číslo</i>.",
           "tgt": {
             "ONLINE-W": "Sie suchen eine <i>Unterkunft</i>. Das Hotel sollte <i>kostenloses Parken</i> beinhalten und vom Typ <i>Gästehaus</i> sein.\nDas Hotel sollte in der <i>teuren</i> Preisklasse liegen und <i>kostenloses Wi-Fi</i> beinhalten.\nWenn es kein solches Hotel gibt, wie wäre es mit einem, das in der <i>billigen</i> Preisklasse liegt.\nWenn du ein <i>Hotel</i> gefunden hast, buchst du es für <i>8 Personen</i> und <i>4 Nächte</i>, beginnend mit <i>Freitag</i>.\nAchte darauf, dass du eine <i>Referenznummer</i> bekommst."
@@ -295,7 +295,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_SNG0991_#_1",
+          "item_id": "cs-de_DE_#_dialogue_#_SNG0991_#_1",
           "src": "X: Ahoj, chci najít penzion s bezplatným parkováním. Můžeš mi s tím pomoct?\nY: Ahoj, jasně! Je tady 21 penzionů, které mají dostupné parkování. Máš nějaké preference ohledně cenového rozmezí nebo části města?\nX: Opravdu bych chtěla něco drahého.\nY: Omlouvám se, ale nemohu najít žádný drahý penzion. Zkusíme jiné cenové rozmezí?\nX: Dobře, zkusme levný hotel.\nY: Chceš levný hotel nebo levný penzion?\nX: Měla jsem na mysli levný penzion s bezplatným Wi-Fi.\nY: Co takhle Alexander Bed and Breakfast?\nX: Zní to dobře! Pojďme to zarezervovat! 8 lidí na 4 noci, začínající v pátek.\nY: Rezervace byla provedena. Tvoje referenční číslo je 2V7EJVA7. Potřebuješ ještě něco?\nX: Ne, to stačí. Děkuji moc za tvou pomoc!\nY: Není zač! Doufám, že budete mít příjemný pobyt!",
           "tgt": {
             "ONLINE-W": "X: Hallo, ich möchte ein Gästehaus mit kostenlosem Parkplatz finden. Können Sie mir dabei helfen?\nY: Hi, sicher! Es gibt 21 Gästehäuser, die einen Parkplatz zur Verfügung haben. Haben Sie irgendwelche Wünsche bezüglich der Preisklasse oder des Stadtteils?\nX: Ich hätte wirklich gern etwas Teures.\nY: Es tut mir leid, aber ich kann keine teuren Gästehäuser finden. Sollen wir es in einer anderen Preisklasse versuchen?\nX: Okay, versuchen wir es mit einem billigen Hotel.\nY: Wollen Sie ein billiges Hotel oder ein billiges Gästehaus?\nX: Ich meinte eine billige Pension mit kostenlosem Wi-Fi.\nY: Wie wäre es mit dem Alexander Bed and Breakfast?\nX: Klingt gut! Dann buchen wir es! 8 Personen für 4 Nächte, ab Freitag.\nY: Die Reservierung ist bereits erfolgt. Ihre Referenznummer ist 2V7EJVA7. Brauchen Sie noch etwas?\nX: Nein, das ist genug. Vielen Dank für Ihre Hilfe!\nY: Gern geschehen! Ich hoffe, Sie haben einen angenehmen Aufenthalt!"
@@ -304,7 +304,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08600_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu08600_#_0",
           "src": "Stabilizovaná poloha\nPokud jsem sám zachránce, volám ihned, ještě před započetím resuscitace, záchrannou službu číslo 150.\nPrůchodnost dýchacích cest zajistíme záklonem hlavy a zdvihnutím brady postiženého.\nVdechy z úst do úst provádíme pouze u známého člověka nebo malého dítěte.\nV bezvědomí vydrží mozek bez kyslíku pouze 10–15 minut.\nPostiženého v bezvědomí a se zástavou dechu urychleně uložíme do stabilizované polohy.\nPokud jsme dva zachránci, provádíme střídavě dva vdechy po 15 stlačeních hrudníku.\nS masáží srdce začínáme 5 cm nad hrudní kostí.\nJsem-li jeden zachránce, provádím 30 stlačení hrudníku a poté vždy dva vdechy z úst do úst.\nTep u člověka v bezvědomí zjišťujeme na vřetenní tepně na palcové straně zápěstí.",
           "tgt": {
             "Llama-4-Maverick": "Stabile Seitenlage\nWenn ich als einziger Helfer da bin, rufe ich sofort, noch vor dem Beginn der Wiederbelebung, den Rettungsdienst unter der Nummer 150 an.\nDie Durchgängigkeit der Atemwege sichern wir durch Überstrecken des Kopfes und Anheben des Kinns der betroffenen Person.\nAtemspende von Mund zu Mund führen wir nur bei einer bekannten Person oder einem kleinen Kind durch.\nIm Zustand der Bewusstlosigkeit hält das Gehirn ohne Sauerstoff nur 10–15 Minuten durch.\nDie betroffene Person im Zustand der Bewusstlosigkeit und mit Atemstillstand bringen wir schnell in die stabile Seitenlage.\nWenn wir zu zweit sind, führen wir abwechselnd zwei Atemspenden nach je 15 Brustkorbkompressionen durch.\nMit der Herzmassage beginnen wir 5 cm oberhalb des Brustbeins.\nBin ich ein einzelner Helfer, mache ich 30 Brustkorbkompressionen und danach immer zwei Atemspenden von Mund zu Mund.\nDen Puls einer Person im Zustand der Bewusstlosigkeit überprüfen wir an der Speichenschlagader auf der Daumenseite des Handgelenks."
@@ -314,7 +314,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08492_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu08492_#_0",
           "src": "Doplněním správných slov do vět vytvoříš charakteristiku brouků a jejich zástupců.\nBrouci jsou důležitou skupinou hmyzu.\nJejich ústní ústrojí je kousací.\nPrvní pár křídel je přeměněn v krovky.\nDruhý pár křídel je blanitý.\nVývin brouků je nepřímý s proměnou dokonalou.\nBrouci mohou žít v různých prostředích.\nPotápník a vodomil žijí ve vodě.\nVelké škody v lese způsobuje lýkožrout smrkový.\nKovově lesklé tělo má zlatohlávek.\nJeho příbuzný z Afriky je vruboun posvátný neboli skarabeus (znáš z dějepisu).\nNáš největší brouk je roháč obecný.\nV noci vidíme světlo, které vytváří světluška menší.\nNať a listy brambor jsou potrava pro mandelinku bramborovou, která byla do Evropy dovezena z Ameriky.\nPotravou slunéček sedmitečných jsou mšice.\nNápadně dlouhými tykadly se vyznačují tesaříci.",
           "tgt": {
             "NLLB": "Indem Sie die richtigen Wörter in die Sätze einfügen, erstellen Sie die Charakteristik der Käfer und ihrer Vertreter.\nKäfer sind eine wichtige Gruppe von Insekten.\nIhre Mundhöhle sind beißend.\nDas erste Paar Flügel verwandelt sich in Stollen.\nDas zweite Paar Flügel ist geschmückt.\nDie Entwicklung der Käfer ist indirekt, mit perfekter Verwandlung.\nKäfer können in verschiedenen Umgebungen leben.\nTaucher und Wasserliebhaber leben im Wasser.\nGroße Schäden an den Wäldern verursacht der Strohwurm.\nMetallglänzender Körper mit goldenen Köpfen.\nSein afrikanischer Verwandter ist der heilige Grubeus oder Skarabeus.\nUnser größter Käfer ist der Hornhaufen.\nIn der Nacht sehen wir das Licht, das von einem kleineren Leuchtturm erzeugt wird.\nDie Nudeln und die Kartoffelblätter sind Nahrung für die Mandelkartoffel, die aus Amerika nach Europa eingeführt wurde.\nDas Futter der siebzigjährigen Sonnenblumen sind Muscheln.\nMit auffällig langen Stangen zeichnen sich Zimmerleute aus."
@@ -324,7 +324,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu34346_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu34346_#_0",
           "src": "Pojď si připravit medovnicové koule.\nOčísluj (1–7) jednotlivé kroky v popisu postupu tak, jak za sebou následují.\n6 Po dvou hodinách vyndáme těsto z ledničky a vytvarujeme z něj kuličky, které obalujeme v odložených drobečcích.\n3 V době pečení si připravíme krém z kondenzovaného mléka a másla.\n5 V misce si smícháme krém a rozmixované drobky z placek, vypracujeme z nich hmotu, kterou dáme na dvě hodiny odpočinout do lednice.\n1 Uděláme těsto, z něj vytvoříme placky libovolného tvaru.\n4 Vychladlé placky rozdrtíme na jemné drobečky a ty rozmixujeme v mixéru, trochu drobečků si odložíme na obalovaní.\n2 Placky pečeme na 180 °C asi 10 minut a pak je necháme vychladnout.\n7 Kuličky naservírujeme na talíř a je hotovo.\nAť vám chutná!",
           "tgt": {
             "IRB-MT": "Lasst uns Honigkuchenbällchen zubereiten.\nNummeriere (1–7) die einzelnen Schritte in der Beschreibung der Vorgehensweise in der Reihenfolge, wie sie aufeinander folgen.\n6 Nach zwei Stunden nehmen wir den Teig aus dem Kühlschrank und formen daraus Bällchen, die wir in den Streuseln wenden.\n3 Während des Backens bereiten wir eine Creme aus Kondensmilch und Butter zu.\n5 In einer Schüssel verrühren wir die Creme und die gemahlenen Streusel vom Kuchen, verkneten daraus eine Masse, die wir für zwei Stunden in den Kühlschrank stellen.\n1 Wir machen den Teig, daraus formen wir Plätzchen beliebiger Form.\n4 Die abgekühlten Plätzchen zerbröseln wir zu feinen Streuseln und mixen diese im Mixer. Etwas Streusel legen wir zum Panieren beiseite.\n2 Die Plätzchen backen wir bei 180 °C etwa 10 Minuten und lassen sie dann abkühlen.\n7 Die Bällchen servieren wir auf einem Teller und es ist fertig.\nGuten Appetit!"
@@ -334,7 +334,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu03620_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu03620_#_0",
           "src": "Pracuj s turistickou mapou a rozhodni, zda tvrzení je nebo není pravdivé, případně doplň správně větu.\n(Mapu si můžeš zvětšit kliknutím.)\nVe výřezu mapy jsou vrstvenice znázorněné po 20 metrech.\nVe výřezu mapy jsou vrstvenice znázorněné po 10 metrech.\nNejvyšším bodem na výřezu mapy je Babí lom.\nLeží v nadmořské výšce 450 m n. m. NE\nVrchol Babí lom – rozhledna leží v nadmořské výšce 521 metrů.\nModrá turistická značka nevede ve vyšší nadmořské výšce než 400 m n. m. NE\nRozcestí U studánky leží v nadmořské výšce 480 metrů.\nModrá turistická značka vede přes vrstvenici označující nadmořskou výšku 500 m n. m. ANO\nVrcholem, označeným kótou 438 m n. m. prochází modrá turistická značka.\nCesta po modré turistické značce od rozcestí U Studánky k rozcestí Babí lom bude stoupat.\nCesta po modré turistické značce od rozcestí U Studánky k rozcestí Pod Babím lomem povede po rovině.\nklesat\ndo kopce\nz kopce",
           "tgt": {
             "Gemma-3-12B": "Arbeite mit der Wanderkarte und entscheide, ob die Aussage wahr oder falsch ist, oder vervollständige den Satz richtig.\n(Die Karte kannst du durch Klicken vergrößern.)\nIm Ausschnitt der Karte sind Höhenlinien alle 20 Meter eingezeichnet.\nIm Ausschnitt der Karte sind Höhenlinien alle 10 Meter eingezeichnet.\nDer höchste Punkt im Ausschnitt der Karte ist der Babí lom.\nEr liegt in einer Höhe von 450 m über dem Meeresspiegel. NEIN\nDer Gipfel Babí lom – Aussichtsturm liegt in einer Höhe von 521 Metern.\nDie blaue Markierung führt nicht in einer höheren Höhe als 400 m über dem Meeresspiegel. NEIN\nDer Kreuzungspunkt U studánky liegt in einer Höhe von 480 Metern.\nDie blaue Markierung führt über eine Höhenlinie, die eine Höhe von 500 m über dem Meeresspiegel angibt. JA\nDer Gipfel, der mit der Quote 438 m über dem Meeresspiegel gekennzeichnet ist, wird von der blauen Markierung durchquert.\nDer Weg entlang der blauen Markierung vom Kreuzungspunkt U Studánky zum Kreuzungspunkt Babí lom wird steigen.\nDer Weg entlang der blauen Markierung vom Kreuzungspunkt U Studánky zum Kreuzungspunkt Pod Babím lomem wird eben verlaufen.\nabwärts\nbergauf\nbergab"
@@ -344,7 +344,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_MUL2376_#_0",
+          "item_id": "cs-de_DE_#_dialogue_#_MUL2376_#_0",
           "src": "Plánujete svou cestu do Cambridge\nHledáte <i>konkrétní atrakci</i>. Její název je <i>muzeum archeologie a antropologie</i>\nUjistěte se, že dostanete <i>typ atrakce</i>\nHledáte také <i>místo k obědu</i>. Restaurace by měla být v <i>drahém</i> cenovém rozmezí a měla by být na <i>severu</i>\nRestaurace by měla podávat <i>evropská</i> jídla\nJakmile najdete <i>restauraci</i>, kterou chcete, chcete si rezervovat stůl pro <i>2 osoby</i> na <i>20:00</i> v <i>neděli</i>\nPokud rezervace nevyjde, co třeba <i>19:00</i>?\nUjistěte se, že dostanete <i>referenční číslo</i>",
           "tgt": {
             "UvA-MT": "Planen Sie Ihre Reise nach Cambridge?\nSie suchen <i>eine bestimmte Attraktion</i>. Ihr Name ist <i>Museum für Archäologie und Anthropologie</i>.\nStellen Sie sicher, dass Sie <i>den Typ der Attraktion</i> erhalten.\nSie suchen auch <i>einen Ort zum Mittagessen</i>. Das Restaurant sollte im <i>teuren</i> Preissegment liegen und sich im <i>Norden</i> befinden.\nDas Restaurant sollte <i>europäische</i> Küche anbieten.\nSobald Sie <i>das Restaurant</i> gefunden haben, das Ihnen gefällt, möchten Sie einen Tisch für <i>2 Personen</i> um <i>20:00 Uhr</i> am <i>Sonntag</i> reservieren.\nWenn die Reservierung nicht möglich ist, wie wäre es mit <i>19:00 Uhr</i>?\nStellen Sie sicher, dass Sie <i>eine Referenznummer</i> erhalten."
@@ -352,7 +352,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_MUL2376_#_1",
+          "item_id": "cs-de_DE_#_dialogue_#_MUL2376_#_1",
           "src": "X: Ahoj, hledám muzeum archeologie a antropologie. Víš, kde ho najdu?\nY: Ahoj! Muzeum archeologie a antropologie je na University of Cambridge, Downing Street. Jejich telefonní číslo je 01223333516. Potřebuješ ještě něco?\nX: Jasně, a typ atrakce je muzeum, že?\nY: Ano, přesně tak!\nX: Zní to skvěle, díky za info!\nY: Není zač. Můžu ti pomoct s něčím dalším?\nX: Ano, hledám místo na oběd, něco dražšího na severu. Evropská kuchyně by byla fajn.\nY: Na severu je jen jedna drahá evropská restaurace, a to City Stop Restaurant. Chceš udělat rezervaci?\nX: Určitě, prosím. Rezervuj mi stůl pro dvě osoby na neděli... třeba v 20:00?\nY: V tu dobu není otevřeno. Můžeme zkusit jinou restauraci nebo čas?\nX: Hmm, tak zkusíme dříve. Co třeba v 19:00?\nY: Super, mám stůl. Bude rezervován na 15 minut. Tvoje referenční číslo je: ZN0CVH11. Ještě něco?\nX: Ne, to je všechno. Moc děkuji za pomoc!\nY: Rádo se stalo! Měj krásný den!",
           "tgt": {
             "UvA-MT": "X: Hallo, ich suche ein Museum für Archäologie und Anthropologie. Weißt du, wo ich es finde?\nY: Hallo! Das Museum für Archäologie und Anthropologie befindet sich an der University of Cambridge, Downing Street. Ihre Telefonnummer ist 01223333516. Brauchst du noch etwas?\nX: Klar, und der Typ der Attraktion ist ein Museum, richtig?\nY: Ja, genau!\nX: Das klingt toll, danke für die Info!\nY: Gern geschehen. Kann ich dir bei etwas anderem helfen?\nX: Ja, ich suche einen Ort zum Mittagessen, etwas teureres im Norden. Europäische Küche wäre schön.\nY: Im Norden gibt es nur ein teures europäisches Restaurant, und das ist das City Stop Restaurant. Möchtest du eine Reservierung machen?\nX: Sicher, bitte. Reserviere mir einen Tisch für zwei Personen für Sonntag... vielleicht um 20:00?\nY: Zu dieser Zeit ist es geschlossen. Können wir ein anderes Restaurant oder eine andere Zeit ausprobieren?\nX: Hmm, dann versuchen wir es früher. Wie wäre es mit 19:00?\nY: Super, ich habe einen Tisch. Er wird für 15 Minuten reserviert. Deine Referenznummer ist: ZN0CVH11. Noch etwas?\nX: Nein, das ist alles. Vielen Dank für die Hilfe!\nY: Gern geschehen! Hab einen schönen Tag!"
@@ -361,7 +361,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16547_#_0",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16547_#_0",
           "src": "Je hejtman Půta na vodítku a Černochová utržená ze řetězu? A lžou volební průzkumy?",
           "tgt": {
             "UvA-MT": "Ist Hejtman Půta an der Leine und Černochová aus der Kontrolle geraten? Und lügen die Wahlumfragen?"
@@ -369,21 +369,21 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16547_#_1",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16547_#_1",
           "src": "Je to takový český folklór. Soudy v trestních kauzách politiků se táhnou dlouhé roky a často vyjdou do ztracena. V případě libereckého hejtmana Martina Půty to dopadlo tak napůl. V jedné větvi své kauzy byl zatím nepravomocně odsouzen, ale trestaný skutek se jeví banálně. Jak Půtův soud ovlivní hnutí STAN? Proč se soudy vlečou? A jak se mají politici k trestnímu stíhání správně postavit? I o tom je nová epizoda politického podcastu Reflexu Padni komu padni.",
           "tgt": {
             "UvA-MT": "Es handelt sich um eine Art tschechischer Folklore. Gerichtsverfahren in Strafsachen von Politikern ziehen sich über lange Jahre hin und enden oft im Nichts. Im Fall des libereckischen Landrats Martin Půta endete es halbwegs. In einem Teil seiner Angelegenheit wurde er bereits in erster Instanz verurteilt, aber die begangene Tat erscheint banal. Wie wird Půtas Prozess das STAN-Bündnis beeinflussen? Warum ziehen sich die Gerichtsverfahren so in die Länge? Und wie sollten sich Politiker gegenüber Strafverfolgungen verhalten? Auch darüber handelt die neue Episode des politischen Podcasts Reflex „Padni komu padni“."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16547_#_2",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16547_#_2",
           "src": "Jestli je něco skutečně trestuhodné, je to komunikační neumětelství ministryně obrany Jany Černochové. V partii na Primě si vzala na paškál koaliční partnery, vedení české armády i opoziční politiky. Jen asi trochu pozapomněla, že nikdo z nich zrovna nesedí s ní ve studiu. Možná by jí mohl plukovník Foltýn coby koordinátor strategické komunikace Úřadu vlády trochu proškolit. I když...",
           "tgt": {
             "UvA-MT": "Wenn etwas wirklich verwerflich ist, dann ist es die Kommunikationsunfähigkeit der Verteidigungsministerin Jana Černochová. In der Sendung auf Primě nahm sie die Koalitionspartner, die Führung der tschechischen Armee und die Oppositionspolitiker ins Visier. Sie schien dabei ein wenig zu vergessen, dass keiner von ihnen gerade mit ihr im Studio saß. Vielleicht könnte ihr Oberst Foltýn, als Koordinator für strategische Kommunikation der Regierung, etwas Nachhilfe geben. Obwohl..."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16547_#_3",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16547_#_3",
           "src": "Nemine týden, aby se neobjevil nový průzkum volebních preferencí. A do voleb tomu zdá se nebude jinak. Jak si máme tyto průzkumy vykládat? Jak se dělají a skutečně jimi politici manipulují veřejné mínění, jak kdekdo tvrdí? Dozvíte se ve videu.",
           "tgt": {
             "UvA-MT": "Es vergeht keine Woche, ohne dass eine neue Umfrage zu den Wahlpräferenzen erscheint. Und bis zu den Wahlen scheint sich daran nichts zu ändern. Wie sollen wir diese Umfragen interpretieren? Wie werden sie durchgeführt und manipulieren Politiker tatsächlich die öffentliche Meinung, wie viele behaupten? Sie erfahren es im Video."
@@ -394,7 +394,7 @@
     [
       [
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_MUL2162_#_0",
+          "item_id": "cs-de_DE_#_dialogue_#_MUL2162_#_0",
           "src": "Hledáte informace v Cambridge\nHledáte <i>vlak</i>. Vlak by měl jet do <i>London Kings Cross</i> a měl by <i>přijet do 16:00</i>.\nVlak by měl odjíždět v <i>sobotu</i> a měl by odjíždět z <i>Cambridge</i>.\nUjistěte se, že dostanete <i>cenu</i>, <i>ID vlaku</i> a <i>čas odjezdu</i>.\nHledáte také <i>místo k pobytu</i>. Hotel by měl mít <i>3 hvězdy</i> a měl by být v <i>umírněném</i> cenovém rozmezí.\nHotel by měl <i>zahrnovat bezplatné Wi-Fi</i> a měl by být typu <i>penzion</i>.\nUjistěte se, že dostanete <i>zda mají bezplatné parkování</i>, <i>adresu</i> a <i>telefonní číslo</i>.",
           "tgt": {
             "Yolu": "Suchen Sie Informationen in Cambridge?\nSie suchen einen <i>Zug</i>. Der Zug sollte nach <i>London Kings Cross</i> fahren und sollte <i>um 16:00 Uhr ankommen</i>.\nDer Zug sollte <i>am Samstag</i> abfahren und aus <i>Cambridge</i> starten.\nStellen Sie sicher, dass Sie <i>den Preis</i>, <i>die Zug-ID</i> und <i>die Abfahrtszeit</i> erhalten.\nSie suchen auch <i>eine Unterkunft</i>. Der Hotel sollte <i>3 Sterne</i> haben und in einem <i>mäßigen</i> Preissegment liegen.\nDas Hotel sollte <i>gratis WLAN</i> bieten und vom Typ <i>Pension</i> sein.\nStellen Sie sicher, dass Sie <i>Informationen darüber, ob kostenlose Parkplätze vorhanden sind</i>, <i>die Adresse</i> und <i>die Telefonnummer</i> erhalten."
@@ -402,7 +402,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_MUL2162_#_1",
+          "item_id": "cs-de_DE_#_dialogue_#_MUL2162_#_1",
           "src": "X: Ahoj, hledám vlak do London Kings Cross, který přijede do 16:00. Můžeš mi s tím pomoct?\nY: Ahoj, jasně! V jaký den budeš cestovat?\nX: V sobotu, odjíždím z Cambridge.\nY: Super, vidím několik vlaků. Kdy bys chtěla odjet?\nX: Potřebuji cenu a ujisti se, že přijede do 16:00.\nY: Vlak TR6203 stojí 18,88 liber a přijede v 15:51. Vyhovuje ti to? Můžu ti rezervovat lístek, pokud chceš.\nX: Není potřeba to rezervovat. Jsou nějaké 3hvězdičkové hotely v umírněném cenovém rozmezí?\nY: Můžeš mi říct, jestli máš nějaké preference ohledně internetu nebo parkování?\nX: Chtěla bych, aby měl bezplatné Wi-Fi.\nY: Našla jsem tři penziony, které splňují tvoje požadavky. Chceš zůstat na severu, jihu nebo západě?\nX: Má některý z nich také bezplatné parkování?\nY: Ano, všechny mají bezplatné parkování. Kterou část města bys chtěla zůstat?\nX: Jakákoli, vezmu první na tvém seznamu. Potřebuji prosím adresu a telefonní číslo.\nY: Penzion Bridge Guest House je na adrese 151 Hills Road a jejich číslo je 01223247942.\nX: Skvělé, děkuji! To je vše, co jsem potřebovala.\nY: Není zač! Děkujeme, že používáš naše služby. Zavolej nám kdykoli. Měj se hezky!",
           "tgt": {
             "Yolu": "X: Hallo, ich suche einen Zug nach London Kings Cross, der bis 16:00 Uhr ankommt. Kannst du mir dabei helfen?\nY: Hallo, klar! An welchem Tag wirst du reisen?\nX: Am Samstag fahre ich von Cambridge weg.\nY: Super, ich sehe ein paar Züge. Wann möchtest du abfahren?\nX: Ich brauche einen Preis und möchte sicherstellen, dass er bis 16:00 Uhr ankommt.\nY: Der Zug TR6203 kostet 18,88 Pfund und kommt um 15:51 an. Passt dir das? Ich kann dir ein Ticket reservieren, wenn du möchtest.\nX: Es ist nicht nötig, das zu reservieren. Gibt es irgendwelche 3-Sterne-Hotels in einem moderaten Preisbereich?\nY: Kannst du mir sagen, ob du irgendwelche Vorlieben bezüglich Internet oder Parken hast?\nX: Ich möchte, dass er kostenloses WLAN hat.\nY: Ich habe drei Pensionen gefunden, die deinen Anforderungen entsprechen. Möchtest du im Norden, Süden oder Westen bleiben?\nX: Bietet einer von ihnen auch kostenlose Parkmöglichkeiten?\nY: Ja, alle haben kostenlose Parkplätze. In welchem Teil der Stadt möchtest du bleiben?\nX: Welche auch immer, ich nehme die erste auf deiner Liste. Ich brauche bitte die Adresse und die Telefonnummer.\nY: Die Pension Bridge Guest House befindet sich an der Adresse 151 Hills Road und ihre Telefonnummer ist 01223247942.\nX: Großartig, danke! Das ist alles, was ich gebraucht habe.\nY: Kein Problem! Danke, dass du unsere Dienstleistungen nutzt. Ruf uns jederzeit an. Schönen Tag noch!"
@@ -411,7 +411,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu32838_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu32838_#_0",
           "src": "Obrázek jednoho představuje 10 kg jablek. Ke sloupkům v grafu doplním správné množství spotřebovaných jablek ve školní jídelně v jednotlivých dnech. \n40 kg\n50 kg\n20 kg\n30 kg\n10 kg\nŽáci 3. ročníku psali test z prvouky a dostali různé známky. K jednotlivým sloupkům přiřadím kartičky s počtem žáků, kteří dostali danou známku.\nObrázekpředstavuje 2 žáky.\nŽáci 3. ročníku psali test z prvouky.\nDiagram znázorňuje, kolik žáků 3.\nB z testu získalo jakou známku.\nSymbol představuje vždy 3 žáky. Ke sloupkům postupně přiřadím všechny kartičky s čísly tak, aby číslo 1 bylo u sloupku s nejvyšším počtem žáků a číslo 5 u sloupku s nejnižším počtem žáků.",
           "tgt": {
             "SRPOL": "Ein Bild repräsentiert 10 kg Äpfel. Zu den Säulen im Diagramm füge ich die richtige Menge an konsumierten Äpfeln in der Schulkantine an den einzelnen Tagen hinzu.\n40 kg\n50 kg\n20 kg\n30 kg\n10 kg\nDie Schüler der 3. Klasse schrieben einen Test in Heimatkunde und bekamen unterschiedliche Noten. Zu den einzelnen Spalten füge ich Karteikarten mit der Anzahl der Schüler hinzu, die eine bestimmte Note erhalten haben.\nDas Bild zeigt zwei Schüler.\nSchüler der 3. Klasse schrieben einen Test in Heimatkunde.\nDas Diagramm zeigt an, wie viele Schüler der 3.\nWelche Note hat B im Test bekommen.\nDas Symbol stellt immer 3 Schüler dar. Ich ordne alle Karten mit Zahlen den Spalten zu, sodass die Zahl 1 bei der Spalte mit der höchsten Schülerzahl und die Zahl 5 bei der Spalte mit der niedrigsten Schülerzahl ist."
@@ -421,7 +421,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu03246_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu03246_#_0",
           "src": "Přemyslovci dostali jméno podle:\nsvatého Přemysla\nPřemysla Kováře\nPřemysla Oráče\nPřemysl Oráč je podle legend zakladatel dynastie Přemyslovců.\nManžel kněžny Libuše, věštkyně a dcery vojvody Kroka.\nPříběh poprvé zmiňuje ve své kronice Kosmas ve 12. století.\nPrvní Přemyslovci měli titul:\nČeské knížectví trvalo v letech 870–1212.\nPřemyslovská dynastie vládla v Čechách 436 let.\nPocházelo z ní 32 knížat a 7 králů.\nJako první přijal křesťanství kníže:\nBořivoj\nKníže Bořivoj I. přijal na Velehradě křest z rukou velkomoravského biskupa Metoděje.\nVáclav\nVratislav\nKnížete Václava nechal zavraždit:\nbratr Břetislav\nbratranec Boleslav\nbratr Boleslav\nVáclav byl zavražděn ve (Staré) Boleslavi, sídle svého bratra Boleslava, který díky tomu převzal vládu.",
           "tgt": {
             "DeepSeek-V3": "Die Přemysliden erhielten ihren Namen nach:\ndem heiligen Přemysl\nPřemysl dem Schmied\nPřemysl dem Pflüger\nPřemysl der Pflüger ist der Legende nach der Begründer der Dynastie der Přemysliden.\nEhemann der Fürstin Libuše, einer Seherin und Tochter des Fürsten Krok.\nDie Geschichte wird erstmals im 12. Jahrhundert in der Chronik des Kosmas erwähnt.\nDie ersten Přemysliden trugen den Titel:\nDas böhmische Fürstentum bestand in den Jahren 870–1212.\nDie Přemysliden-Dynastie herrschte 436 Jahre in Böhmen.\nAus ihr gingen 32 Fürsten und 7 Könige hervor.\nAls erster nahm das Christentum an der Fürst:\nBořivoj\nFürst Bořivoj I. empfing auf dem Velehrad die Taufe aus den Händen des großmährischen Bischofs Method.\nVáclav\nVratislav\nDen Fürsten Václav ließ ermorden:\nBruder Břetislav\nVetter Boleslav\nBruder Boleslav\nVáclav wurde in (Alt-)Boleslav, dem Sitz seines Bruders Boleslav, ermordet, der dadurch die Herrschaft übernahm."
@@ -429,7 +429,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu03246_#_1",
+          "item_id": "cs-de_DE_#_edu_#_edu03246_#_1",
           "src": "Po smrti Václava na trůn usedl:\nBoleslav\nBoleslav I. je českými historiky i přes bratrovraždu hodnocen jako energický vládce a jako jeden z nejúspěšnějších českých panovníků.\nKarel\nPo smrti byl Václav prohlášen za:\nhrdinu\nmučedníka\nsvatého\nPo smrti začal být Václav uctíván jako svatý pro svou, v legendách mu připisovanou zbožnost.",
           "tgt": {
             "DeepSeek-V3": "Nach Václavs Tod bestieg den Thron:\nBoleslav\nBoleslav I. wird von tschechischen Historikern trotz des Brudermordes als energischer Herrscher und als einer der erfolgreichsten böhmischen Regenten bewertet.\nKarel\nNach seinem Tod wurde Václav zum:\nHelden\nMärtyrer\nHeiligen\nNach seinem Tod begann man, Václav als Heiligen zu verehren, aufgrund seiner, in den Legenden zugeschriebenen Frömmigkeit."
@@ -438,7 +438,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu32072_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu32072_#_0",
           "src": "Vyberu správnou odpověď.\nRáno tatínek vybral z bankomatu 1 000 korun, aby mohl zaplatit všechny odpolední výdaje.\nS mamkou a taťkou jsme si totiž po obědě udělali výlet na fotbalový zápas.\nKolik korun zaplatí za vstup naše rodina, jestliže vstupenka pro dospělého stojí 250Kč a pro dítě 130Kč?\n580 Kč\n630 Kč\n380 Kč\nNa zápas jsme přijeli veřejnou dopravou.\nKaždý rodič měl jízdenku v hodnotě 40Kč a mně koupili poloviční.\nKolik korun dohromady nás stály jízdenky z domu na stadion?\n80 Kč\n120 Kč\n100 Kč\nO poločase jsme si všichni dali párek v rohlíku za 32 korun a dohromady jsme pili z 2litrové lahve ledový broskvový čaj, který stál 39Kč.\nKolik korun stálo občerstvení?\n125 Kč\n73 Kč\n71 Kč\n135 Kč",
           "tgt": {
             "Qwen3-235B": "Ich wähle die richtige Antwort.  \nAm Morgen hat Papa 1 000 Kronen am Geldautomaten abgehoben, um alle Ausgaben am Nachmittag bezahlen zu können.  \nDenn mit Mama und Papa habe ich nach dem Mittagessen einen Ausflug zum Fußballspiel gemacht.  \nWie viel Kronen zahlt unsere Familie für den Eintritt, wenn eine Erwachsenenkarte 250 Kč und eine Kinderkarte 130 Kč kostet?  \n580 Kč  \n630 Kč  \n380 Kč  \nZu dem Spiel sind wir mit dem öffentlichen Verkehr gefahren.  \nJeder Erwachsene hatte eine Fahrkarte im Wert von 40 Kč und für mich haben sie eine halbpreisige gekauft.  \nWie viel Kronen haben die Fahrkarten vom Haus zum Stadion insgesamt gekostet?  \n80 Kč  \n120 Kč  \n100 Kč  \nZur Halbzeitpause haben wir alle eine Wurst im Brötchen für 32 Kronen gegessen und gemeinsam haben wir aus einer 2-Liter-Flasche eistee mit Pfirsichgeschmack getrunken, die 39 Kč kostete.  \nWie viel Kronen kostete das Verpflegung insgesamt?  \n125 Kč  \n73 Kč  \n71 Kč  \n135 Kč  "
@@ -446,7 +446,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu32072_#_1",
+          "item_id": "cs-de_DE_#_edu_#_edu32072_#_1",
           "src": "Napíšu výsledek.\nKolik korun zbylo tatínkovi z vybrané hotovosti, jestliže ještě koupil na zpáteční cestu jízdenky ve stejné hodnotě jako při cestě tam?35 korun",
           "tgt": {
             "Qwen3-235B": "Ich schreibe das Ergebnis auf.  \nWie viele Kronen blieben Papa von dem abgehobenen Bargeld übrig, wenn er außerdem noch für die Rückfahrt Fahrkarten im gleichen Wert wie für die Hinfahrt kaufte?  \n35 Kronen"
@@ -455,7 +455,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08510_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu08510_#_0",
           "src": "Vyber slova tak, aby vznikly správné věty.\nŠplhavci jsou přizpůsobeni životu v lese zobákem, který je silný dlátovitý.\nV dutině ústní je jazyk lepkavý vysunovatelný se zpětnými háčky.\nPotravou šplhavců jsou larvy dřevokazného hmyzu.\nUchycení ke stromu umožňuje šplhavcům klínovitý ocas a ostré drápy.\nPrsty na nohou mají 2 dopředu a 2 dozadu.\nŽlunu zelenou poznáme podle červeného peří na hlavě a zbytek těla je nazelenalý.\nDatel černý je náš největší šplhavec.\nStrakapoud má peří zbarvené černo-červeně-bíle.\nkrátký tenký\ndlouhý\nkrátký bez háčků\ndlouhý vidličnatý\nbobule\nlétající hmyz\nmávání křídly\nzobák\n3 dopředu a 1 dozadu\n4 dozadu\nčervených křídel\nčerveného bříška\nnejmenší šplhavec\nstřední šplhavec\nčerno-červeně-zeleně\nčerno-zeleno-hnědě",
           "tgt": {
             "Yolu": "Wähle die Wörter so aus, dass korrekte Sätze entstehen.\nKlettervögel sind an das Leben im Wald angepasst und besitzen einen starken, schraubchenartigen Schnabel.\nIm Mundinnenraum ist die Zunge klebrig und mit Rückhaltehaken versehen, die sich herausziehen lassen.\nDie Nahrung der Kletterer sind die Larven von Holzfraßinsekten.\nDie Befestigung am Baum wird durch den keilförmigen Schwanz und die scharfen Krallen des Kletterers ermöglicht.\nDie Zehen an den Füßen haben 2 nach vorne und 2 nach hinten gerichtete Fingerspitzen.\nDie Grünkobra wird anhand der roten Federn am Kopf erkannt, der restliche Körper ist hellgrün.\nDatel Černý ist unser größter Gremlin.\nStrakapoud hat Federn in schwarz-rot-weißer Farbe.\nkurz und dünn\nlang (längst)\nkurz, ohne Haken\nlanggabelig\nBeere\nFliegende Insekten\nFlügelschlag\nSchnabel\n3 nach vorne und 1 nach hinten\n4 nach hinten\nRote Flügel\nRotes Bauchchen\nkleinster Mistkerl\nMittlerer Schlumpf\nschwarz-rot-grün\nschwarz-grün-braun"
@@ -465,7 +465,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08502_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu08502_#_0",
           "src": "Víš, jak vypadají rybí pásma?\nRoztřiď charakteristiky k jednotlivým pásmům.\npásmo lipanové\npásmo cejnové\npásmo pstruhové\npásmo parmové\nmálo kyslíku\nhodně planktonu\nhorské potoky a řeky\ndolní toky velkých řek\nmeandry\nmenší spád vody\nteplota vody 15–20 °C\nstudená voda\nhodně bezobratlých živočichů\nstřední toky\nteplota vody až 25 °C v létě\nhodně trav a řas\nhodně kyslíku\nteplejší voda, až 30 °C\npodhorské potoky\nRoztřiď ryby podle toho, ve kterém rybím pásmu se vyskytují.\ncejnové\nhrouzek\npstruh\nsumec\nstřevle\nkapr\nokoun\nkaras\nplotice\nhlavatka\nvranka\nmník\nperlín\nRoztřiď znaky dravých a nedravých ryb.\nryby dravé\nryby nedravé\nrychlý pohyb vpřed\npotrava drobné ryby či obratlovci\ntělo zploštělé ze stran\ndlouhé válcovité tělo\npomalý pohyb vlněním\njen požeráková kost\nrostlinná potrava, hmyz, plankton\nukrývá se mezi stonky vodních rostlin\ndrobné zuby směrem dozadu\nhřbetní ploutev posunutá dozadu",
           "tgt": {
             "Qwen3-235B": "Weiß du, wie Fischzonen aussehen?\nOrdne die Merkmale den jeweiligen Zonen zu.\nBarbenzone  \nNasezone  \nForellenzone  \nKarpfenzonen  \nwenig Sauerstoff  \nviel Plankton  \nBergbäche und Flüsse  \nUnterläufe großer Flüsse  \nMäander  \ngeringer Gefälle  \nWassertemperatur 15–20 °C  \nkaltes Wasser  \nviele Wirbellose  \nMittelabschnitte  \nWassertemperatur bis 25 °C im Sommer  \nviel Gras und Algen  \nviel Sauerstoff  \nwärmeres Wasser, bis 30 °C  \nVorlandbäche  \nOrdne die Fische danach, in welcher Fischzone sie vorkommen.\nNase  \nGiebel  \nForelle  \nWels  \nSchleie  \nKarpfen  \nBarsch  \nKarausche  \nRotauge  \nBitterling  \nGründling  \nHecht  \nZander  \nOrdne die Merkmale von Raubfischen und Nicht-Raubfischen zu.\nRaubfische  \nNicht-Raubfische  \nschnelle Vorwärtsbewegung  \nNahrung kleine Fische oder Wirbeltiere  \nKörper seitlich abgeflacht  \nlänglicher zylindrischer Körper  \nlangsame Wellenbewegung  \nnur Kehlgräte  \npflanzliche Nahrung, Insekten, Plankton  \nversteckt sich zwischen Stängeln der Wasserpflanzen  \nkleine Zähne nach hinten gerichtet  \nRückenflosse nach hinten verschoben"
@@ -473,7 +473,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08502_#_1",
+          "item_id": "cs-de_DE_#_edu_#_edu08502_#_1",
           "src": "cejn\nštika\ncandát\nlín",
           "tgt": {
             "Qwen3-235B": "Wels  \nHecht  \nWallers  \nKarpfen"
@@ -482,7 +482,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu31632_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu31632_#_0",
           "src": "Děti měřily rostliny, které pěstovaly.\nAnička naměřila 202 mm, Klárka 5 cm a 5 mm.\nLukáš 153 mm, Martin 1 dm a 1 cm.\nKdo naměřil nejvíce?\nKdo nejméně?Na obrázku mám vyznačené naměřené délky.\nK nejdelší a nejkratší přiřadím správně jména dětí, které je naměřily.\nMartin\nKlárka\nLukáš\nAnička\nPetrova rostlina povyrostla za 3 dny o 80 mm.\nNyní měří 14 cm.\nKolik měřila před 3 dny?Vyberu správnou odpověď a přetáhnu ji do obrázku.\n11 cm\nPetr a Tomáš pořádali šnečí závody.\nPetrův šnek urazil 220 mm.\nTomášův o 19 cm více.\nJak dlouhou trasu ulezl Tomášův hlemýžď? Vyberu správnou odpověď a přetáhnu ji do obrázku.\n3 cm\n4 dm 1 cm",
           "tgt": {
             "Wenyiil": "Die Kinder maßen die Pflanzen, die sie angebaut hatten.\nAnička maß 202 mm, Klárka 5 cm und 5 mm.\nLukáš 153 mm, Martin 1 dm und 1 cm.\nWer hat am meisten gemessen? (Wer hat die höchste Messung erzielt?)\nWer am wenigsten? Auf dem Foto habe ich die gemessenen Längen markiert.\nIch ordne den längsten und kürzesten Stücken die richtigen Namen der Kinder zu, die sie gemessen haben.\nMartin\nKlara\nLukas\nAnicka\nPeters Pflanze ist in 3 Tagen um 80 mm gewachsen.\nJetzt misst sie 14 cm.\nWie hoch war sie vor 3 Tagen?Ich wähle die richtige Antwort aus und ziehe sie in das Bild.\n11 cm\nPeter und Thomas veranstalteten Schneckenrennen.\nPetrs Schnecke hat 220 mm zurückgelegt.\nTomáš hat 19 cm mehr.\nWie lang ist der Weg, den Toms Schnecke gelaufen ist?Ich wähle die richtige Antwort aus und ziehe sie in das Bild.\n3 cm\n4 dm 1 cm"
@@ -490,7 +490,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu31632_#_1",
+          "item_id": "cs-de_DE_#_edu_#_edu31632_#_1",
           "src": "Děti se měřily.\nTomáš měří 15 dm, Simonka 134 cm , Kubík 1 m 57 cm, Barča 1 m 290 mm.\nKdo z dětí je nevyšší?\nKdo je nejnižší?K obrázku metru přiřadím správně jména dětí.\nNahoru přetáhnu, kdo je nejvyšší, a dolů, kdo je nejnižší.\nBarča\nTomáš\nSimonka\nKubík",
           "tgt": {
             "Wenyiil": "Die Kinder haben sich gemessen.\nTomáš misst 15 dm, Simonka 134 cm, Kubík 1 m 57 cm, Barča 1 m 290 mm.\nWer von den Kindern ist größer?\nWer ist am kleinsten? Ich ordne die Namen der Kinder dem Bild des Meters richtig zu.\nNach oben ziehe ich, wer am höchsten ist, und nach unten, wer am niedrigsten ist.\nDie Bar\nThomas\nSimonka\nKubik"
@@ -499,7 +499,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_MUL1139_#_0",
+          "item_id": "cs-de_DE_#_dialogue_#_MUL1139_#_0",
           "src": "Cestujete do Cambridge a těšíte se na místní turistické atrakce.\nHledáte <i>ubytování</i>. Hotel by měl <i>zahrnovat bezplatné parkování</i> a měl by být v <i>drahém</i> cenovém rozpětí.\nHotel by měl <i>zahrnovat bezplatné Wi-Fi</i> a měl by být typu <i>hotel</i>.\nJakmile najdete <i>hotel</i>, chcete si ho zarezervovat pro <i>8 lidí</i> na <i>3 noci</i> s počátkem od <i>úterý</i>.\nPokud rezervace selže, co třeba <i>2 noci</i>?\nUjistěte se, že získáte <i>referenční číslo</i>.\nTaké hledáte <i>místa k návštěvě</i> ve městě. Atrakce by měla být v <i>centru</i> a měla by být typu <i>kolej</i>.\nUjistěte se, že zjistíte <i>vstupné</i> a <i>PSČ</i>.\nTaké chcete zarezervovat <i>taxi</i> na přepravu mezi dvěma místy.\nChcete opustit <i>atrakci</i> ve <i>24:30</i>.\nUjistěte se, že získáte <i>kontaktní číslo</i> a <i>typ vozu</i>.",
           "tgt": {
             "TowerPlus-9B": "Sie reisen nach Cambridge und freuen sich auf die örtlichen Touristenattraktionen.\nSie suchen eine <i>Unterkunft</i>. Das Hotel sollte <i>kostenfreie Parkplätze</i> umfassen und in einem <i>luxuriösen</i> Preisbereich liegen.\nDas Hotel sollte <i>kostenloses WLAN</i> umfassen und ein <i>Hotel</i> sein.\nSobald Sie ein <i>Hotel</i> gefunden haben, möchten Sie es für <i>8 Personen</i> für <i>3 Nächte</i> ab <i>Dienstag</i> reservieren.\nFalls die Buchung fehlschlägt, was wäre mit <i>2 Nächten</i>?\nStellen Sie sicher, dass Sie eine <i>Buchungsnummer</i> erhalten.\nSie suchen auch nach <i>Besichtigungsobjekten</i> in der Stadt. Die Attraktion sollte im <i>Stadtzentrum</i> liegen und ein <i>College</i> sein.\nStellen Sie sicher, dass Sie das <i>Eintrittsgeld</i> und die <i>PLZ</i> herausfinden.\nSie möchten auch ein <i>Taxi</i> für die Beförderung zwischen zwei Orten reservieren.\nSie möchten die <i>Attraktion</i> um <i>24:30</i> verlassen.\nStellen Sie sicher, dass Sie die <i>Kontaktnummer</i> und den <i>Fahrzeugtyp</i> erhalten."
@@ -507,7 +507,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_MUL1139_#_1",
+          "item_id": "cs-de_DE_#_dialogue_#_MUL1139_#_1",
           "src": "X: Dobrý den! Můžeš mi pomoci najít hotel? Hledám hotel, který má bezplatné parkování a je drahý.\nY: Tady je seznam hotelů s bezplatným parkováním, které jsou drahé.\nX: Neobdržela jsem žádný seznam hotelů. Můžeš mi prosím vybrat jeden, hotel s bezplatným parkováním a Wi-Fi, který je luxusní?\nY: Máme hotel University Arms. Nachází se v centru a má Wi-Fi a parkování. Chtěla bys ho pro tebe rezervovat?\nX: Ano, pokud je drahý. Chtěla bych přijet v úterý a zůstat na 3 noci. Bude nás 8.\nY: Omlouvám se, ale hotel není k dispozici pro tvoji žádost. Chtěla bys zkusit jiný den nebo kratší pobyt?\nX: Můžeš zkusit 2 noci místo toho?\nY: Doporučuji hotel Huntingdon Marriott, který má to, co potřebuješ. Tvoje referenční číslo rezervace je FTTNX1M7. Tvůj dvoudenní pobyt začne v úterý. Děkuji!\nX: Také se zajímám o návštěvu koleje v centru města. Můžeš mi s tím pomoci?\nY: Určitě. V centru je 13 kolejí. Chtěla bys více informací?\nX: Ano, prosím, dej mi vědět PSČ a vstupné jedné z kolejí v centrální oblasti.\nY: Christ's College je velmi známá, vstup je zdarma a jejich PSČ je cb23bu. Bude něco dalšího?\nX: Budu potřebovat taxi, abych se dostala mezi hotelem a kolejí. Můžeš to také zařídit?\nY: Ano, mohu. Můžeš mi prosím říct čas, kdy bys chtěla odjet nebo dorazit?\nX: Chtěla bych opustit kolej ve 24:30 a také bych chtěla mít kontaktní číslo a typ vozu.\nY: Dobře. Zarezervovala jsem ti černý Volkswagen, který si pro tebe přijede ve 24:30 na Christ's College. Kontaktní číslo je 07324891478. Můžu ti ještě s něčím pomoci?\nX: Ne, to je všechno. Děkuji.",
           "tgt": {
             "TowerPlus-9B": "X: Guten Tag! Kannst du mir helfen, ein Hotel zu finden? Ich suche ein Hotel mit kostenfreien Parkplätzen, das luxuriös ist.\nY: Hier ist eine Liste von Hotels mit kostenfreien Parkplätzen, die luxuriös sind.\nX: Ich habe keine Liste von Hotels erhalten. Kannst du mir bitte eines auswählen, ein Hotel mit kostenfreien Parkplätzen und WLAN, das luxuriös ist?\nY: Wir haben das Hotel University Arms. Es liegt im Stadtzentrum und bietet WLAN und Parkplätze. Möchtest du es für dich reservieren?\nX: Ja, wenn es luxuriös ist. Ich möchte am Dienstag ankommen und 3 Nächte bleiben. Wir sind zu dritt.\nY: Es tut mir leid, aber das Hotel ist für deine Anfrage nicht verfügbar. Möchtest du einen anderen Tag oder einen kürzeren Aufenthalt versuchen?\nX: Kannst du stattdessen 2 Nächte versuchen?\nY: Ich empfehle das Huntingdon Marriott Hotel, das das bietet, was du brauchst. Deine Buchungsnummer lautet FTTNX1M7. Dein zweitägiger Aufenthalt beginnt am Dienstag. Danke!\nX: Ich interessiere mich auch für einen Besuch eines Colleges im Stadtzentrum. Kannst du mir dabei helfen?\nY: Natürlich. Im Stadtzentrum gibt es 13 Colleges. Möchtest du mehr Informationen?\nX: Ja, bitte lass mich die PLZ und das Eintrittsgeld für eines der Colleges im Stadtzentrum wissen.\nY: Das Christ's College ist sehr bekannt, der Eintritt ist kostenlos und ihre PLZ lautet cb23bu. Gibt es noch etwas anderes?\nX: Ich werde ein Taxi brauchen, um vom Hotel zum College zu kommen. Kannst du das auch arrangieren?\nY: Ja, das kann ich. Kannst du mir bitte sagen, zu welchem Zeitpunkt du fahren oder ankommen möchtest?\nX: Ich möchte das College um 24:30 verlassen und ich möchte auch die Kontaktnummer und den Fahrzeugtyp haben.\nY: Gut. Ich habe für dich ein schwarzes Volkswagen reserviert, das dich um 24:30 am Christ's College abholt. Die Kontaktnummer lautet 07324891478. Kann ich dir noch mit etwas anderem helfen?\nX: Nein, das war alles. Danke."
@@ -516,7 +516,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu30034_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu30034_#_0",
           "src": "Pozorně si přečti úryvek.\nPak vyber správnou odpověď.\nPeter Wohlleben: Slyšíš, jak mluví stromy?, upraveno\nSrnčí rodina V prvních týdnech života srnčí miminko často leží opuštěné v trávě.\nMaminka odešla do lesa hledat potravu.\nMalé srnče skoro není cítit.\nA protože se také pevně tiskne k zemi a zůstává ležet, tak je lišky a divočáci nezpozorují.\nJestli někdy narazíš na takového malého srnečka, pěkně ho nech tam, kde je.\nAni se ho nedotýkej, protože jinak by načichl člověčinou a maminka srna by se k němu už nevrátila.\nUž zakrátko bude větší a půjde s maminkou.\nPo pozorném čtení určitě vybereš správnou odpověď.\nSrnčí miminko je po narození stále s maminkou.\nNESrna odchází od srnčete hledat potravu.\nANOSrnčí miminko si najde potravu samo.\nNESrnčí miminko se schovává v trávě.\nANOSrnčí miminko umí být velmi nenápadné.\nANOLišky a divočáci srnčí miminko snadno najdou.\nNEMaminka se pro opuštěné srnčí miminko vrátí.\nANOPokud narazíme na srnčí miminko, smíme se ho dotýkat.",
           "tgt": {
             "Qwen2.5-7B": "Lies den Absatz sorgfältig durch.\nWähle die richtige Antwort dann.\nPeter Wohlleben: Kannst du die Bäume hören?, überarbeitet\nFerkeljunge In den ersten Wochen des Lebens liegt das Ferkeljunge oft alleine im Gras.\nDie Mutter geht in den Wald, um Nahrung zu suchen.\nDas kleine Ferkel ist fast nicht wahrzunehmen.\nDeshalb bleibt es fest an der Erde geklammert und liegt still, sodass Füchse und Raubtiere es nicht entdecken.\nWenn du je auf so ein kleines Ferkel stoßt, lass es bitte dort, wo es ist.\nBerühre es auch nicht, da es sonst den Menschengeruch annehmen würde und die Ferkelmutter es nicht mehr zurückfinden würde.\nBald wird es größer und geht mit der Mutter.\nNach sorgfältigem Lesen wirst du die richtige Antwort bestimmt auswählen.\nDas Ferkeljunge bleibt nach der Geburt noch immer mit der Mutter.\nNESscheint, dass das Ferkeljunge von der Ferkelmutter alleine geht, um Nahrung zu suchen.\nANOSscheint, dass das Ferkeljunge sich selbst Nahrung sucht.\nNESscheint, dass das Ferkeljunge sich im Gras versteckt.\nANOSscheint, dass das Ferkeljunge sehr unauffällig ist.\nNEMögen Füchse und Raubtiere das Ferkeljunge leicht entdecken.\nANOMögen wir das Ferkeljunge berühren, wenn wir es finden."
@@ -526,7 +526,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu34346_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu34346_#_0",
           "src": "Pojď si připravit medovnicové koule.\nOčísluj (1–7) jednotlivé kroky v popisu postupu tak, jak za sebou následují.\n6 Po dvou hodinách vyndáme těsto z ledničky a vytvarujeme z něj kuličky, které obalujeme v odložených drobečcích.\n3 V době pečení si připravíme krém z kondenzovaného mléka a másla.\n5 V misce si smícháme krém a rozmixované drobky z placek, vypracujeme z nich hmotu, kterou dáme na dvě hodiny odpočinout do lednice.\n1 Uděláme těsto, z něj vytvoříme placky libovolného tvaru.\n4 Vychladlé placky rozdrtíme na jemné drobečky a ty rozmixujeme v mixéru, trochu drobečků si odložíme na obalovaní.\n2 Placky pečeme na 180 °C asi 10 minut a pak je necháme vychladnout.\n7 Kuličky naservírujeme na talíř a je hotovo.\nAť vám chutná!",
           "tgt": {
             "AyaExpanse-8B": "Bereite Bienenstich-Kugeln zu.\nZählt die einzelnen Schritte (1–7) in der Anleitung nacheinander ab.\n6 Nach zwei Stunden nehmen wir den Teig aus dem Kühlschrank und formen aus ihm Kugeln, die wir in gehackten Mandeln wälzen.\n3 Während des Backens bereiten wir eine Creme aus Kondensmilch und Butter zu.\n5 Vermischt die Creme und die zerkleinerten Plätzchen in einer Schüssel, formt daraus eine Masse, die ihr für zwei Stunden in den Kühlschrank stellt.\n1 Bereitet den Teig zu, formt daraus Plätzchen in beliebiger Form.\n4 Lasst die abgekühlten Plätzchen in einem Mixer zu feinen Hackstücken zerfallen und wählt etwas davon für die Überzug aus.\n2 Backt die Plätzchen bei 180 °C für etwa 10 Minuten und lasst sie dann abkühlen.\n7 Serviert die Kugeln auf einem Teller und fertig.\nGuten Appetit!"
@@ -538,7 +538,7 @@
     [
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08512_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu08512_#_0",
           "src": "Přetáhni základní znaky k nelétavým ptákům.\nPŠTROSI\nTUČŇÁCI\npotrava ryby, korýši, hlavonožci\nkřídla mají funkci ploutví\nsilné nohy\ntělo uzpůsobené k plavání\ntělo uzpůsobené k běhu\nvšežravec\nvejce zahřívají v záhybu kůže\nmalá hlava\ndlouhý krk\nmohutné tělo\nsilná vrstva podkožního tuku\ntorpédovitý tvar těla\nPřetáhni charakteristické znaky k jednotlivým ptákům.\nemu hnědý\nnandu pampový\ntučňák císařský\npštros dvouprstý\nvšežravý\ndokáže běžet rychlostí 70 km/h\nvýskyt: Afrika\nvýška až 250 cm\nvýška 150–190 cm\nvýskyt: Antarktida\nstepní pták\nmasožravý\nbýložravý\nžije ve velkých koloniích\nvýskyt: Jižní Amerika\nvýška 90–140 cm\nhustě opeřený krk\nvýška až 120 cm\nvýskyt: Austrálie",
           "tgt": {
             "EuroLLM-22B": "Ziehe die grundlegenden Merkmale zu den flugunfähigen Vögeln.\nSTRUTHIO\nPINGUINE\nNahrung Fische, Krebstiere, Kopffüßer\nFlügel dienen als Flossen\nstarke Beine\nKörper an das Schwimmen angepasst\nKörper an das Laufen angepasst\nAllesfresser\nEier werden in einer Hautfalte gewärmt\nkleiner Kopf\nlanger Hals\nmassiver Körper\nstarke Fettschicht\ntorpedoförmiger Körper\nZiehe die charakteristischen Merkmale zu den einzelnen Vögeln.\nEMU braun\nNANDU pampas\nKAISERPINGUIN\nSTRUTHIO zweizehlig\nAllesfresser\nkann mit 70 km/h laufen\nVerbreitung: Afrika\nHöhe bis 250 cm\nHöhe 150–190 cm\nVerbreitung: Antarktis\nSteppenvogel\nfleischfressend\npflanzenfressend\nlebt in großen Kolonien\nVerbreitung: Südamerika\nHöhe 90–140 cm\ndicht befiederter Hals\nHöhe bis 120 cm\nVerbreitung: Australien"
@@ -548,7 +548,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_blesk.cz.112043_#_0",
+          "item_id": "cs-de_DE_#_news_#_blesk.cz.112043_#_0",
           "src": "Ina T. hodnotí sexy pokusy hvězd: Myslivcová přestřelila!",
           "tgt": {
             "TowerPlus-72B": "Ina T. bewertet die sexy Versuche der Stars: Myslivcová hat übers Ziel hinausgeschossen!"
@@ -556,14 +556,14 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_blesk.cz.112043_#_1",
+          "item_id": "cs-de_DE_#_news_#_blesk.cz.112043_#_1",
           "src": "U celebrit oblíbený punc sexy vzhledu u jejich skalních fanoušků jistě boduje, ale nutno dodat, že se tato snaha často míjí účinkem a módní estéty spíše děsí. Honba za sexy přitažlivostí, kdy dotyčná nedisponuje citem pro míru a příležitost budiž příkladem, jak s erotičností nenakládat. Sklouznout k ordinérnosti je totiž při ignoraci známého pořekadla méně je více snazší, než se může zdát.",
           "tgt": {
             "TowerPlus-72B": "Bei Prominenten ist der Anstrich eines sexy Aussehens bei ihren treuen Fans sicherlich ein Pluspunkt, aber es muss hinzugefügt werden, dass diese Bemühungen oft wirkungslos bleiben und Modeästheten eher erschrecken. Die Jagd nach sexueller Attraktivität, wenn die Betroffene kein Gespür für Maß und Anlass hat, sei ein Beispiel dafür, wie man mit Erotizität nicht umgehen sollte. Es ist nämlich leichter, als es scheinen mag, in die Vulgarität abzurutschen, wenn man das bekannte Sprichwort \"weniger ist mehr\" ignoriert."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_blesk.cz.112043_#_2",
+          "item_id": "cs-de_DE_#_news_#_blesk.cz.112043_#_2",
           "src": "Playboy party, ač je příležitostí, kde je pro experimentování se svůdností prostor, vzhledem k faktu, že časopis pečetí kšeft s erotikou, místem zdařilých sexy outfitů není. Příkladem jest i model známé rapperky, jež se nasoukala do prádlového, černými kosticemi tvrdě členěného korzetu, které byť se vrací do módy, v tomto laciném provedení do společnosti nepatří. Elastická mini sukně odhalující tetováním zhusta zdobená stehna módní analfabetismus jen násobí.",
           "tgt": {
             "TowerPlus-72B": "Die Playboy-Partys, obwohl sie eine Gelegenheit bieten, mit Verführung zu experimentieren, da das Magazin mit Erotik Geschäfte macht, sind kein Ort für gelungene sexy Outfits. Ein Beispiel ist das Modell der bekannten Rapperin, die sich in ein waschmaschinenhartes Korsett mit schwarzen Knochen gezwängt hat, das obwohl es wieder in Mode kommt, in dieser billigen Ausführung nicht in die Gesellschaft gehört. Der elastische Minirock, der die mit Tattoos übersäten Oberschenkel enthüllt, vervielfacht nur den modischen Analphabetismus."
@@ -572,7 +572,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_ct24-cs.206403_#_0",
+          "item_id": "cs-de_DE_#_news_#_ct24-cs.206403_#_0",
           "src": "Vypravěčem spletitého příběhu, točícího se kolem ukradeného velkého diamantu, je neúspěšný boxerský promotér zvaný Turek, který se k divokému kolotoči událostí připletl se svým komplicem Tommym vlastně náhodou. Ukradený diamant má předat kurýr Franky Čtyřprsťák americkému šéfovi Avimu. O drahokam však mají zájem další gangsteři a zlodějíčci, mezi nimi především bezohledný ruský zabiják Boris Břitva, černošští provozovatelé zastavárny Vincent a Solomon a nakonec i nemilosrdný gangster a organizátor nelegálních boxerských zápasů Kruťák. V nepřehledné hře o drahocenný lup sehraje významnou roli také irsko-cikánský boxerský šampion Mickey, jehož podivnému dialektu jen málokdo rozumí. Není divu, že při tomto počtu účastníků v pomyslném ringu v tomhle zápase brzy nejde o vítězství, ale o holé přežití.",
           "tgt": {
             "Wenyiil": "Der Erzähler der verworrenen Geschichte, die sich um einen gestohlenen großen Diamanten dreht, ist ein erfolgloser Boxpromoter namens Turek, der mit seinem Komplizen Tommy eigentlich zufällig in die wilde Karussellwelt der Ereignisse gerät. Der gestohlene Diamant soll vom Kurier Franky VierHandbreit an den amerikanischen Boss Avi übergeben werden. An dem Edelstein sind jedoch auch andere Gangster und Kleinganoven interessiert, darunter vor allem der skrupellose russische Killer Boris Břitva, die schwarzen Pfandhausbetreiber Vincent und Solomon und schließlich der gnadenlose Gangster und Organisator illegaler Boxkämpfe Kruťák. Im unübersichtlichen Spiel um den wertvollen Beutegegenstand spielt auch der irisch-zigeunerische Boxchampion Mickey eine wichtige Rolle, dessen seltsamen Dialekt kaum jemand versteht. Es ist kein Wunder, dass es bei dieser Anzahl von Teilnehmern im imaginären Ring in diesem Kampf bald nicht mehr um den Sieg, sondern nur noch um das nackte Überleben geht."
@@ -580,7 +580,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_ct24-cs.206403_#_1",
+          "item_id": "cs-de_DE_#_news_#_ct24-cs.206403_#_1",
           "src": "Autorská gangsterská komedie Guye Ritchieho s českým názvem Podfu (c) k nesporně těží z úspěchu tvůrcova předchozího snímku stejného žánru Sbal prachy a vypadni (1998). Scénář údajně vznikal již v průběhu natáčení zmíněného titulu a vychází z podobné zápletky a jejího rozvíjení.",
           "tgt": {
             "Wenyiil": "Guy Ritchies Autoren-Gangsterkomödie „Snatch – Schweine und Diamanten“ (Originaltitel) profitiert unbestreitbar vom Erfolg des Vorgängerfilms desselben Genres „Bube, Dame, König, grAS“ (1998). Das Drehbuch entstand angeblich bereits während der Dreharbeiten zu dem genannten Titel und basiert auf einer ähnlichen Verwicklung und deren Entwicklung."
@@ -589,7 +589,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu34434_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu34434_#_0",
           "src": "Na obrázku vidíte císaře Josefa II., který je znám velkým množstvím svých reforem ve prospěch obyvatelstva.\nZa svůj život vydal nad 6 000 nařízení, mezi které patří například toleranční patent, zrušení nevolnictví či cenzury.\nNěkterá nařízení byla také úsměvná.\nNapříklad zákaz nošení korzetů či zákaz hlubokého klanění.\nLidé se směli přestěhovat pouze do sousedního panství.\nPoddaný mohl jít svobodně studovat mimo hranice panství.\nZrušení nevolnictví je ukázka osvícenského absolutismu.\nPo vydání patentu o zrušení nevolnictví se lidé stěhovali do měst za prací.\nPoddaní se nesměli svobodně ženit ani po vydání patentu o zrušení nevolnictví.\nPo zrušení nevolnictví se poddaní mohli bez svolení vrchnosti ženit.\nKe zrušení nevolnictví došlo ve 20. století.\nPatent o zrušení nevolnictví neruší povinnost robotovat.\nPoddaný si díky zrušení nevolnictví vyměnil roli s vrchností.\nPatent o zrušení nevolnictví vešel v platnost v roce 1781.\nZrušení nevolnictví nedovolovalo poddaným se stěhovat do měst.\nPatent o zrušení nevolnictví nařizuje vrchnosti pracovat na polích.\nPo zrušení nevolnictví se mohli lidé volně stěhovat.\nPoddaní již nemuseli pracovat pro vrchnost.\nPatent o zrušení nevolnitví vydala Marie Terezie.\nPatent o zrušení nevolnictví vydal Josef II.",
           "tgt": {
             "Claude-4": "Auf dem Bild sehen Sie Kaiser Joseph II., der für eine große Anzahl seiner Reformen zugunsten der Bevölkerung bekannt ist.\nZu Lebzeiten erließ er über 6.000 Verordnungen, zu denen beispielsweise das Toleranzpatent, die Aufhebung der Leibeigenschaft oder der Zensur gehören.\nEinige Verordnungen waren auch amüsant.\nZum Beispiel das Verbot des Tragens von Korsetts oder das Verbot tiefer Verbeugungen.\nDie Menschen durften nur in die benachbarte Herrschaft umziehen.\nEin Untertan konnte frei außerhalb der Grenzen der Herrschaft studieren gehen.\nDie Aufhebung der Leibeigenschaft ist ein Beispiel für den aufgeklärten Absolutismus.\nNach Erlass des Patents zur Aufhebung der Leibeigenschaft zogen die Menschen auf der Suche nach Arbeit in die Städte.\nDie Untertanen durften auch nach Erlass des Patents zur Aufhebung der Leibeigenschaft nicht frei heiraten.\nNach der Aufhebung der Leibeigenschaft konnten die Untertanen ohne Erlaubnis der Obrigkeit heiraten.\nDie Aufhebung der Leibeigenschaft erfolgte im 20. Jahrhundert.\nDas Patent zur Aufhebung der Leibeigenschaft hebt nicht die Verpflichtung zur Robotarbeit auf.\nDer Untertan tauschte dank der Aufhebung der Leibeigenschaft die Rolle mit der Obrigkeit.\nDas Patent zur Aufhebung der Leibeigenschaft trat im Jahr 1781 in Kraft.\nDie Aufhebung der Leibeigenschaft erlaubte den Untertanen nicht, in die Städte zu ziehen.\nDas Patent zur Aufhebung der Leibeigenschaft befiehlt der Obrigkeit, auf den Feldern zu arbeiten.\nNach der Aufhebung der Leibeigenschaft konnten sich die Menschen frei bewegen.\nDie Untertanen mussten nicht mehr für die Obrigkeit arbeiten.\nDas Patent zur Aufhebung der Leibeigenschaft erließ Maria Theresia.\nDas Patent zur Aufhebung der Leibeigenschaft erließ Joseph II."
@@ -599,7 +599,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_MUL2162_#_0",
+          "item_id": "cs-de_DE_#_dialogue_#_MUL2162_#_0",
           "src": "Hledáte informace v Cambridge\nHledáte <i>vlak</i>. Vlak by měl jet do <i>London Kings Cross</i> a měl by <i>přijet do 16:00</i>.\nVlak by měl odjíždět v <i>sobotu</i> a měl by odjíždět z <i>Cambridge</i>.\nUjistěte se, že dostanete <i>cenu</i>, <i>ID vlaku</i> a <i>čas odjezdu</i>.\nHledáte také <i>místo k pobytu</i>. Hotel by měl mít <i>3 hvězdy</i> a měl by být v <i>umírněném</i> cenovém rozmezí.\nHotel by měl <i>zahrnovat bezplatné Wi-Fi</i> a měl by být typu <i>penzion</i>.\nUjistěte se, že dostanete <i>zda mají bezplatné parkování</i>, <i>adresu</i> a <i>telefonní číslo</i>.",
           "tgt": {
             "Gemma-3-27B": "Sie suchen Informationen in Cambridge.\nSie suchen einen <i>Zug</i>. Der Zug soll nach <i>London Kings Cross</i> fahren und vor <i>16:00 Uhr</i> ankommen.\nDer Zug soll am <i>Samstag</i> abfahren und von <i>Cambridge</i> abfahren.\nStellen Sie sicher, dass Sie den <i>Preis</i>, die <i>Zugnummer</i> und die <i>Abfahrtszeit</i> erhalten.\nSie suchen auch eine <i>Unterkunft</i>. Das Hotel sollte <i>3 Sterne</i> haben und im <i>moderaten</i> Preisbereich liegen.\nDas Hotel sollte <i>kostenloses WLAN</i> beinhalten und eine <i>Pension</i> sein.\nStellen Sie sicher, dass Sie erfahren, <i>ob kostenlose Parkplätze vorhanden sind</i>, die <i>Adresse</i> und die <i>Telefonnummer</i>."
@@ -607,7 +607,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_MUL2162_#_1",
+          "item_id": "cs-de_DE_#_dialogue_#_MUL2162_#_1",
           "src": "X: Ahoj, hledám vlak do London Kings Cross, který přijede do 16:00. Můžeš mi s tím pomoct?\nY: Ahoj, jasně! V jaký den budeš cestovat?\nX: V sobotu, odjíždím z Cambridge.\nY: Super, vidím několik vlaků. Kdy bys chtěla odjet?\nX: Potřebuji cenu a ujisti se, že přijede do 16:00.\nY: Vlak TR6203 stojí 18,88 liber a přijede v 15:51. Vyhovuje ti to? Můžu ti rezervovat lístek, pokud chceš.\nX: Není potřeba to rezervovat. Jsou nějaké 3hvězdičkové hotely v umírněném cenovém rozmezí?\nY: Můžeš mi říct, jestli máš nějaké preference ohledně internetu nebo parkování?\nX: Chtěla bych, aby měl bezplatné Wi-Fi.\nY: Našla jsem tři penziony, které splňují tvoje požadavky. Chceš zůstat na severu, jihu nebo západě?\nX: Má některý z nich také bezplatné parkování?\nY: Ano, všechny mají bezplatné parkování. Kterou část města bys chtěla zůstat?\nX: Jakákoli, vezmu první na tvém seznamu. Potřebuji prosím adresu a telefonní číslo.\nY: Penzion Bridge Guest House je na adrese 151 Hills Road a jejich číslo je 01223247942.\nX: Skvělé, děkuji! To je vše, co jsem potřebovala.\nY: Není zač! Děkujeme, že používáš naše služby. Zavolej nám kdykoli. Měj se hezky!",
           "tgt": {
             "Gemma-3-27B": "X: Hallo, ich suche einen Zug nach London Kings Cross, der vor 16:00 Uhr ankommt. Können Sie mir dabei helfen?\nY: Hallo, klar! An welchem Tag reisen Sie?\nX: Am Samstag, ich fahre von Cambridge ab.\nY: Super, ich sehe ein paar Züge. Wann möchten Sie abfahren?\nX: Ich brauche den Preis und stellen Sie sicher, dass er vor 16:00 Uhr ankommt.\nY: Der Zug TR6203 kostet 18,88 Pfund und kommt um 15:51 Uhr an. Passt das für Sie? Soll ich Ihnen ein Ticket buchen, wenn Sie möchten?\nX: Eine Buchung ist nicht nötig. Gibt es 3-Sterne-Hotels in einem moderaten Preisbereich?\nY: Können Sie mir sagen, ob Sie bestimmte Präferenzen bezüglich Internet oder Parkmöglichkeiten haben?\nX: Ich hätte gerne kostenloses WLAN.\nY: Ich habe drei Pensionen gefunden, die Ihren Anforderungen entsprechen. Möchten Sie im Norden, Süden oder Westen übernachten?\nX: Hat einer von ihnen auch kostenlose Parkplätze?\nY: Ja, alle haben kostenlose Parkplätze. In welchem Teil der Stadt möchten Sie übernachten?\nX: Egal, ich nehme den ersten auf Ihrer Liste. Ich brauche bitte die Adresse und die Telefonnummer.\nY: Die Bridge Guest House Pension befindet sich in der 151 Hills Road und ihre Nummer ist 01223247942.\nX: Großartig, danke! Das ist alles, was ich brauchte.\nY: Gern geschehen! Vielen Dank, dass Sie unseren Service nutzen. Rufen Sie uns jederzeit an. Einen schönen Tag noch!"
@@ -616,7 +616,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_0",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_0",
           "src": "Never more (nevyhnutelnému?) konci Dejvické nádražky, oáze levného piva a bigbítů, která mění nájemce",
           "tgt": {
             "TranssionTranslate": "Nie mehr (unvermeidliches?) Ende der Dejvická nádražka, einer Oase mit billigem Bier und großen Beats, die ihre Mieter wechselt"
@@ -624,28 +624,28 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_1",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_1",
           "src": "Dlouhá desetiletí to bývalo originální místo autentické kultury a svérázné poetiky, čím dál osamělejší ve zglajchšaltované šedi jiných kulturních svatostánků. Nyní se Dejvická nádražka dostává do rukou korporátu... Fantasy sága Maková válka je jen pro masochisty. A rozloučili jsme se s posledním zakládajícím členem slavné skupiny The Band.",
           "tgt": {
             "TranssionTranslate": "Jahrzehntelang war es ein ursprünglicher Ort authentischer Kultur und eigentümlicher Poesie, der im grellen Grau anderer Kulturstätten zunehmend einsam wurde. Nun fällt Dejvická nádražka in die Hände der Konzernwelt … Die Fantasy-Saga Poppy War ist nur etwas für Masochisten. Und wir haben uns vom letzten Gründungsmitglied der berühmten Gruppe The Band verabschiedet."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_2",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_2",
           "src": "Marek Gregor: Boje o zachování jedné z posledních klasických nádražních restaurací utichly. Zánik proslulé dejvické nádražky hrozil opakovaně, ale vždycky se místním z Prahy 6 místo skvělých koncertů s jedinečnou atmosférou a piva za slušnou cenu, kde kdysi vznikl legendární slogan Miloš Frýba na Hrad, podařilo ochránit. Nyní se zdá, že éra tamních bigbítů definitivně končí, Správa železnic vyhlásila vítěze výběrového řízení, kterým se stala společnost Spojka Events, provozující mimo jiné Fantovu kavárnu na hlavním nádraží.",
           "tgt": {
             "TranssionTranslate": "Marek Gregor: Der Kampf um den Erhalt eines der letzten klassischen Bahnhofsrestaurants ist beendet. Der berühmte Bahnhof Dejvice war wiederholt vom Aussterben bedroht, doch den Einheimischen aus Prag 6 gelang es stets, den Ort großartiger Konzerte mit einzigartiger Atmosphäre und gutem Bier zu einem vernünftigen Preis zu erhalten, wo einst der legendäre Slogan „Miloš Frýba na Hrad“ entstand. Nun scheint die Ära der großen Beats dort endgültig zu Ende zu gehen. Die Bahnverwaltung hat den Gewinner der Ausschreibung bekannt gegeben: die Firma Spojka Events, die unter anderem das Café Fants am Hauptbahnhof betreibt."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_3",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_3",
           "src": "Richard Klíčník: Fantasy sága R. F. Kuang s názvem Maková válka (vyd. Host) je u konce, a to i v audiopodobě (vyd. OneHotBook). Její četba či poslech jsou masochistické guilty pleasure. První dva díly jsou jak kvůli plochosti obřího množství postav, nesnesitelné hlavní hrdince a snad ještě nesnesitelnějšímu překladu Daniely Orlando k nepřežití. Jde o překlad překladu, originál je čínsky, česká verze vznikla na základě hojně kritizovaného anglického převodu. Kupodivu díl třetí je na tom po dějové stránce podstatně lépe (překlad jen o fous). Autorka už vyvraždila většinu otravných postav a zbylým může věnovat dost prostoru, aby mohly čtenáři lézt na nervy ještě víc. Vyzdvihnout musíme výkon Terezy Dočkalové, která četbu tří rozměrných knih přežila. Ale pokud rádi trpíte u béčkových fantasy, berte tohle Never more jako doporučení!",
           "tgt": {
             "TranssionTranslate": "Richard Klíčník: Fantasy-Saga R.F. Kuangs Buch „The Poppy War“ (veröffentlicht von Guest) ist erschienen, auch als Audioversion (veröffentlicht von OneHotBook).Es zu lesen oder anzuhören ist ein masochistisches, heimliches Vergnügen.Die ersten beiden Teile sind aufgrund der Eintönigkeit der vielen Charaktere, der unerträglichen Hauptfigur und der vielleicht noch unerträglicheren Übersetzung von Daniela Orlando unerträglich.Dies ist die Übersetzung einer Übersetzung, das Original ist chinesisch, die tschechische Version wurde auf Grundlage der vielfach kritisierten englischen Übersetzung erstellt.Kurioserweise ist der dritte Teil inhaltlich deutlich besser (die Übersetzung ist nur um Haaresbreite davon entfernt).Die meisten lästigen Charaktere hat der Autor bereits sterben lassen und kann den verbleibenden genügend Raum geben, den Lesern noch mehr auf die Nerven zu gehen.Hervorzuheben ist die Leistung von Tereza Dočkalová, die das Lesen von drei dicken Büchern überlebt hat.Wer aber gerne in B-bewerteter Fantasy leidet, dem sei dieses „Never More“ empfohlen!"
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_4",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16563_#_4",
           "src": "Vojtěch Rynda: Před dvěma týdny zemřel Garth Hudson, primárně klávesista skupiny The Band a hlavní tvůrce jejího pestrého zvuku. The Band vytvořili spoustu skvělé muziky sami za sebe i s jinými, zejména s Bobem Dylanem, kterému začali dělat doprovodnou kapelu ještě pod jménem The Hawks na konci léta 1965 - tedy pár týdnů poté, co končí film Bob Dylan: Úplně neznámý, jenž právě běží v kinech. Garth Hudson se jeho americké premiéry ještě dožil. Z původní sestavy The Band byl poslední.",
           "tgt": {
             "TranssionTranslate": "Vojtěch Rynda: Garth Hudson, vor allem Keyboarder der Band und Hauptgestalter ihres vielseitigen Sounds, ist vor zwei Wochen gestorben. Die Band hat viel großartige Musik für sich und andere geschaffen, insbesondere mit Bob Dylan, für den sie im Spätsommer 1965 – wenige Wochen nach dem Ende des Films „Bob Dylan: A Complete Unknown“, der derzeit in den Kinos läuft – unter dem Namen The Hawks als Begleitband gegründet wurde. Garth Hudson erlebte die US-Premiere noch. Er war der letzte der ursprünglichen Besetzung der Band."
@@ -654,7 +654,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08480_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu08480_#_0",
           "src": "Pozor, u některých otázek může být i více správných odpovědí.\nKde se vyskytují plži?\ndýchají kyslík pomocí plicního vaku\nve vodách sladkých i slaných\nněkteří vodní plži mají žábry jako dýchací orgán\nCo ochraňuje tělo plžů?\nplži nemají vnitřní kostru\nlasturu mají mlži\nZe kterých částí se skládá tělo plžů?\nhlava, svalnatá noha, útrobní vak\nhlava a svalnatá noha, ve které jsou umístěny vnitřní orgány\npouze svalnatá noha a útrobní vak\nZnámým zástupcem plžů je hlemýžď zahradní, který má v dutině ústní drsný jazýček.\nK čemu mu slouží?\nk přidržování na listech\nke strouhání potravy\nke kousání potravy\nk olizování potravy",
           "tgt": {
             "EuroLLM-22B": "Hinweis: Bei einigen Fragen können mehrere Antworten richtig sein.\nWo kommen Schnecken vor?\nSie atmen Sauerstoff mit einer Lunge.\nin Süß- und Salzwasser\neinige Wasserschnecken haben Kiemen als Atmungsorgane\nWas schützt den Körper der Schnecken?\nSchnecken haben keine innere Wirbelsäule.\nMuscheln haben eine Schale.\nAus welchen Teilen besteht der Körper der Schnecken?\nKopf, muskulöse Fuß, Eingeweidesack\nKopf und muskulöse Fuß, in dem die inneren Organe untergebracht sind\nnur muskulöser Fuß und Eingeweidesack\nEin bekannter Vertreter der Schnecken ist die Gartenschnecke, die in der Mundhöhle eine raue Zunge hat.\nWofür dient sie ihr?\nzum Festhalten an Blättern\nzum Reiben von Nahrung\nzum Beißen von Nahrung\nzum Abschlecken von Nahrung"
@@ -662,14 +662,14 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08480_#_1",
+          "item_id": "cs-de_DE_#_edu_#_edu08480_#_1",
           "src": "Jak dýchá hlemýžď zahradní?\npomocí plicního vaku\npomocí žaber\nKrev se v těle plžů volně rozlévá.\nJakou mají tedy cévní soustavu?\nnemají žádnou cévní soustavu\notevřenou\nuzavřenou\nHlemýžď je hermafrodit.\nCo to znamená?\njedinec nepotřebuje k oplození druhého jedince, protože má v sobě samčí i samičí pohlavní buňky\nkaždý jedinec má obě pohlaví, produkuje samičí i samčí pohlavní buňky\nklade vajíčka, snůšku pak oplodní jiný jedinec\nCo se líhne z nakladených vajíček hlemýždě?\npupeny\nlarvy, které dospívají ve slizu\nmalí plži\nKteří z uvedených plžů nemají viditelnou schránku?\nKterá ze skupin uvádí sladkovodní plže?\nplovatka bahenní, okružák ploský, bahnatka malá\npáskovka keřová, okružák ploský, bahnatka malá\npáskovka je suchozemský plž\nostranka jaderská, plovatka bahenní, bahenka živorodá\nostranka je mořský plž",
           "tgt": {
             "EuroLLM-22B": "Wie atmet die Gartenschnecke?\nmit einer Lunge\nmit Kiemen\nDas Blut der Schnecken fließt frei im Körper.\nWelche Art von Kreislaufsystem haben sie also?\nsie haben kein Kreislaufsystem\noffen\ngeschlossen\nDie Gartenschnecke ist ein Hermaphrodit.\nWas bedeutet das?\ndas Individuum braucht keinen anderen, um sich zu paaren, da es sowohl männliche als auch weibliche Geschlechtszellen in sich trägt\njedes Individuum hat beide Geschlechter und produziert sowohl männliche als auch weibliche Geschlechtszellen\nlegt Eier, die dann von einem anderen Individuum befruchtet werden\nWas schlüpft aus den gelegten Eiern der Gartenschnecke?\nKnospen\nLarven, die im Schleim heranreifen\nkleine Schnecken\nWelche der genannten Schnecken haben keine sichtbare Schale?\nWelche der Gruppen nennt Süßwasser-Schnecken?\nTeichnapfschnecke, Tellerschnecke, Kleine Sumpfdeckelschnecke\nSchildkröten-Napfschnecke, Tellerschnecke, Kleine Sumpfdeckelschnecke\ndie Schildkröten-Napfschnecke ist eine Landschnecke\nAdria-Napfschnecke, Teichnapfschnecke, Lebendgebärende Sumpfdeckelschnecke\ndie Adria-Napfschnecke ist eine Meeresschnecke"
           }
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08480_#_2",
+          "item_id": "cs-de_DE_#_edu_#_edu08480_#_2",
           "src": "Kteří z těchto plžů žijí v moři?\nplovatka je sladkovodní plž\nzavinutec tygrovaný\nhomolice síťkovaná\nJakou potravou se živí hlemýžď?\nrostlinnou\nživočišnou\nje všežravec\nKterá tykadla hlemýždě nesou oči?\nnemá oči na tykadlech\ndlouhá\nkrátká\nCo umožňuje klouzavý pohyb hlemýždě zahradního?\nsvalnatá noha a brvy\nsvalnatá noha a bičíky\nsvalnatá noha a sliz",
           "tgt": {
             "EuroLLM-22B": "Welche dieser Schnecken leben im Meer?\ndie Teichnapfschnecke ist eine Süßwasser-Schnecke\nTigerschnegel\nSeeigel\nWas frisst die Gartenschnecke?\npflanzlich\ntierisch\nist ein Allesfresser\nWelche der Fühler des Gartenschneckens tragen Augen?\nsie hat keine Augen an den Fühlern\nlange\nkurze\nWas ermöglicht die gleitende Bewegung der Gartenschnecke?\nmuskulöser Fuß und Borsten\nmuskulöser Fuß und Geißeln\nmuskulöser Fuß und Schleim"
@@ -678,7 +678,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_respekt-cs.11394_#_0",
+          "item_id": "cs-de_DE_#_news_#_respekt-cs.11394_#_0",
           "src": "Zvýšení koncesionářských poplatků se nejspíš posune do Senátu, ale děti cálovat nebudou • RESPEKT",
           "tgt": {
             "Algharb": "Die Erhöhung der Rundfunkgebühren geht wahrscheinlich in den Senat, aber Kinder werden nicht zur Kasse gebeten • RESPEKT"
@@ -686,7 +686,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_respekt-cs.11394_#_1",
+          "item_id": "cs-de_DE_#_news_#_respekt-cs.11394_#_1",
           "src": "Poslanci se ve středu mimořádně sejdou k závěrečnému schvalování sporné vládní novely, která počítá se zvýšením koncesionářských poplatků a rozšířením okruhu poplatníků. \"Ta minulá debata před koncem roku byla poměrně hodně určující a ukazující, co si opozice o ČT myslí. Viděli jsme i jakési odkrytí plánu, kdy Andrej Babiš otevřeně mluvil o tom, že by koncesionářské poplatky rád zrušil a financování veřejnoprávních institucí navázal na státní rozpočet. Tím by de facto dostal obě média pod přímou státní kontrolu, čímž by z nich udělal vydíratlená média. Mimořádná schůze určuje, že nebude možné měnit program a pravděpodobně by se to v případě, že se to nestihne odhlasovat ve středu, odložilo na pátek,\" říká ve Výtahu Respektu František Trojan, podle kterého se novela nejspíš posune do horní komory. Ve zpravodajském podcastu ale mluví i o dalším klíčovém momentu, který tento týden poslance čeká, a to hlasování o možném vydání šéfa SPD Tomia Okamury k trestnímu stíhání. Podle policie by se totiž kvůli loňské billboardové kampani mohl dopustit podněcování k nenávisti vůči skupině osob nebo omezování jejich práv a svobod. Jaká je šance, že poslanci Okamuru vydají? Jak jsou na tom vlastně jednotlivé strany a hnutí půl roku před sněmovními volbami? A jak se rýsuje volební spolupráce jednotlivých uskupení?",
           "tgt": {
             "Algharb": "Die Abgeordneten kommen am Mittwoch zu einer außerordentlichen Sitzung zusammen, um die umstrittene Gesetzesnovelle der Regierung endgültig zu verabschieden, die eine Erhöhung der Rundfunkgebühren und eine Erweiterung des Kreises der Gebührenzahler vorsieht. „Die letzte Debatte vor Jahresende war ziemlich richtungsweisend und hat gezeigt, was die Opposition über das Tschechische Fernsehen denkt. Wir haben auch eine Art Enthüllung des Plans gesehen, als Andrej Babiš offen darüber sprach, dass er die Rundfunkgebühren gerne abschaffen und die Finanzierung der öffentlich-rechtlichen Institutionen an den Staatshaushalt binden würde. Damit würde er de facto beide Medien unter direkte staatliche Kontrolle bringen und sie so zu erpressbaren Medien machen. Die außerordentliche Sitzung legt fest, dass es nicht möglich sein wird, die Tagesordnung zu ändern, und falls die Abstimmung am Mittwoch nicht stattfindet, wird sie wahrscheinlich auf Freitag verschoben“, sagt František Trojan im Respekt-Podcast und fügt hinzu, dass die Novelle höchstwahrscheinlich in die obere Parlamentskammer weitergeleitet wird. In dem Nachrichten-Podcast spricht er aber auch über einen weiteren entscheidenden Moment, der die Abgeordneten diese Woche erwartet: die Abstimmung über die mögliche Auslieferung des SPD-Chefs Tomio Okamura zur Strafverfolgung. Laut Polizei könnte er sich aufgrund der letztjährigen Plakatkampagne der Anstiftung zum Hass gegen eine Personengruppe oder der Einschränkung ihrer Rechte und Freiheiten schuldig gemacht haben. Wie stehen die Chancen, dass die Abgeordneten Okamura ausliefern? Wie stehen die einzelnen Parteien und Bewegungen ein halbes Jahr vor den Parlamentswahlen da? Und wie zeichnet sich die Wahlkooperation der einzelnen Gruppierungen ab?"
@@ -695,7 +695,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_MUL2162_#_0",
+          "item_id": "cs-de_DE_#_dialogue_#_MUL2162_#_0",
           "src": "Hledáte informace v Cambridge\nHledáte <i>vlak</i>. Vlak by měl jet do <i>London Kings Cross</i> a měl by <i>přijet do 16:00</i>.\nVlak by měl odjíždět v <i>sobotu</i> a měl by odjíždět z <i>Cambridge</i>.\nUjistěte se, že dostanete <i>cenu</i>, <i>ID vlaku</i> a <i>čas odjezdu</i>.\nHledáte také <i>místo k pobytu</i>. Hotel by měl mít <i>3 hvězdy</i> a měl by být v <i>umírněném</i> cenovém rozmezí.\nHotel by měl <i>zahrnovat bezplatné Wi-Fi</i> a měl by být typu <i>penzion</i>.\nUjistěte se, že dostanete <i>zda mají bezplatné parkování</i>, <i>adresu</i> a <i>telefonní číslo</i>.",
           "tgt": {
             "SRPOL": "Suchen Sie nach Informationen in Cambridge\nSie suchen nach <i>Zug</i>. Der Zug sollte nach <i>London Kings Cross</i> fahren und sollte um <i>16:00 Uhr</i> ankommen.\nDer Zug sollte am <i>Samstag</i> abfahren und sollte von <i>Cambridge</i> abfahren.\nStellen Sie sicher, dass Sie den <i>Preis</i>, die <i>Zug-ID</i> und die <i>Abfahrtszeit</i> erhalten.\nSie suchen auch nach einer <i>Unterkunft</i>. Der Hotel sollte <i>3 Sterne</i> haben und in einem <i>moderaten</i> Preisbereich liegen.\nDas Hotel sollte <i>kostenloses WLAN</i> beinhalten und sollte als <i>Pension</i> klassifiziert sein.\nStellen Sie sicher, dass Sie <i>ob es einen kostenlosen Parkplatz gibt</i>, <i>die Adresse</i> und <i>die Telefonnummer</i> erhalten."
@@ -703,7 +703,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_MUL2162_#_1",
+          "item_id": "cs-de_DE_#_dialogue_#_MUL2162_#_1",
           "src": "X: Ahoj, hledám vlak do London Kings Cross, který přijede do 16:00. Můžeš mi s tím pomoct?\nY: Ahoj, jasně! V jaký den budeš cestovat?\nX: V sobotu, odjíždím z Cambridge.\nY: Super, vidím několik vlaků. Kdy bys chtěla odjet?\nX: Potřebuji cenu a ujisti se, že přijede do 16:00.\nY: Vlak TR6203 stojí 18,88 liber a přijede v 15:51. Vyhovuje ti to? Můžu ti rezervovat lístek, pokud chceš.\nX: Není potřeba to rezervovat. Jsou nějaké 3hvězdičkové hotely v umírněném cenovém rozmezí?\nY: Můžeš mi říct, jestli máš nějaké preference ohledně internetu nebo parkování?\nX: Chtěla bych, aby měl bezplatné Wi-Fi.\nY: Našla jsem tři penziony, které splňují tvoje požadavky. Chceš zůstat na severu, jihu nebo západě?\nX: Má některý z nich také bezplatné parkování?\nY: Ano, všechny mají bezplatné parkování. Kterou část města bys chtěla zůstat?\nX: Jakákoli, vezmu první na tvém seznamu. Potřebuji prosím adresu a telefonní číslo.\nY: Penzion Bridge Guest House je na adrese 151 Hills Road a jejich číslo je 01223247942.\nX: Skvělé, děkuji! To je vše, co jsem potřebovala.\nY: Není zač! Děkujeme, že používáš naše služby. Zavolej nám kdykoli. Měj se hezky!",
           "tgt": {
             "SRPOL": "X: Hallo, ich suche einen Zug nach London Kings Cross, der bis 16:00 Uhr ankommt. Kannst du mir dabei helfen?\nY: Hallo, klar! An welchem Tag wirst du reisen?\nX: Am Samstag fahre ich von Cambridge weg.\nY: Super, ich sehe ein paar Züge. Wann möchtest du losfahren?\nX: Ich brauche den Preis und bitte stellen Sie sicher, dass er bis 16:00 Uhr eintrifft.\nY: Der Zug TR6203 kostet 18,88 Pfund und kommt um 15:51 Uhr. Passt das für dich? Wenn du möchtest, kann ich dir ein Ticket reservieren.\nX: Es ist nicht nötig, das zu reservieren. Gibt es 3-Sterne-Hotels in einem moderaten Preissegment?\nY: Können Sie mir sagen, ob Sie Vorlieben bezüglich Internet oder Parkplätzen haben?\nX: Ich wünschte, es gäbe kostenloses WLAN.\nY: Ich habe drei Pensionen gefunden, die deinen Anforderungen entsprechen. Möchtest du im Norden, Süden oder Westen bleiben?\nX: Gibt es bei einem von ihnen auch kostenlose Parkplätze?\nY: Ja, alle haben kostenlose Parkplätze. In welchem Teil der Stadt möchtest du bleiben?\nX: Egal, ich nehme den ersten auf deiner Liste. Ich brauche bitte die Adresse und die Telefonnummer.\nY: Die Penzion Bridge Guest House befindet sich unter der Adresse 151 Hills Road und ihre Telefonnummer lautet 01223247942.\nX: Super, danke! Das ist alles, was ich brauchte.\nY: Kein Problem! Danke, dass Sie unsere Dienstleistungen nutzen. Rufen Sie uns jederzeit an. Alles Gute!"
@@ -712,7 +712,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_radio_praha-cs.18143_#_0",
+          "item_id": "cs-de_DE_#_news_#_radio_praha-cs.18143_#_0",
           "src": "Na Šumavě loni klesla těžba kůrovcového lesa",
           "tgt": {
             "Mistral-7B": "Im Böhmerwald-Nationalpark wurde die Ausbeute von Kiefernholz gesenkt"
@@ -720,7 +720,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_radio_praha-cs.18143_#_1",
+          "item_id": "cs-de_DE_#_news_#_radio_praha-cs.18143_#_1",
           "src": "Šumavský národní park loni vytěžil 130.000 krychlových metrů kůrovcového dřeva. Je to přibližně o 100.000 krychlových metrů méně než v roce 2023. Naznačuje to, že by mohla končit kůrovcová gradace, která na Šumavě začala v roce 2019. Loni park vytěžil celkem 205.000 krychlových metrů dřeva, meziročně o 70.000 méně. ČTK to řekl mluvčí NP Šumava Jan Dvořák. \"Objem kůrovcových těžeb začal narůstat v roce 2019, kdy jsme na celém území národního parku ve státem spravovaných lesích vytěžili skoro 210.000 krychlových metrů dříví napadeného kůrovcem. V roce 2022 to bylo 218.000 a v roce následujícím 237.000. Loni jsme zaznamenali razantní pokles, který může být signálem konečné fáze této kůrovcové gradace,\" uvedl náměstek ředitele NP Šumava Jan Kozel. Šumava zažila v novodobé historii největší kůrovcovou kalamitu po orkánu Kyrill, který Česko zasáhl v lednu 2007. Následkem rozsáhlých polomů lýkožrout zasáhl odhadem 2,6 milionu krychlových metrů stromů. Přibližně 1,1 milionu dal NP Šumava vykácet, zbytek zůstal stát nebo ležet v bezzásahových územích. Loni klesl také objem stromů napadených kůrovcem na bezzázahových územích. Jde o lokality, které se nechávají přirozenému vývoji.",
           "tgt": {
             "Mistral-7B": "Der Böhmerwald-Nationalpark hat in diesem Jahr 130.000 Kubikmeter Kiefernholz abgebaut. Das entspricht ungefähr 100.000 Kubikmetern weniger als im Jahr 2023. Das deutet darauf hin, dass die Kiefernbehandlung, die im Böhmerwald seit 2019 angesetzt wurde, beendet werden könnte. Der Nationalpark hat insgesamt 205.000 Kubikmeter Holz abgebaut, was 70.000 Kubikmetern weniger bedeutet als im Vorjahr. CTK hat das der Sprecher des Nationalparks Böhmerwald, Jan Dvořák, mitgeteilt. \"Der Umfang der Kiefernholzgewinnung begann zu wachsen im Jahr 2019, als wir auf dem gesamten Gebiet des Nationalparks in den von der Staatsverwaltung verwalteten Wäldern fast 210.000 Kubikmeter Holz angemacht haben, das von dem Kiefernschwarm befallen war. Im Jahr 2022 betrug es 218.000 und im folgenden Jahr 237.000. Wir haben einen dramatischen Rückgang verzeichnet, der möglicherweise ein Signal für das Ende dieser Kiefernbehandlung sein könnte,\" sagte der Stellvertreter des Leiters des Nationalparks Böhmerwald, Jan Kozel. Der Böhmerwald erlebte in der neueren Geschichte die größte Kiefernkatastrophe seit dem Orkan Kyrill, der das Land im Januar 2007 traf. Als Folge von umfangreichen Schäden an den Lärchen wurde der Kiefernschwarm auf rund 2,6 Millionen Kubikmeter Bäume geschätzt. Rund 1,1 Millionen Bäume musste der Nationalpark Böhmerwald fällen, der Rest blieb stehen oder lag in unberührten Gebieten. Auch der Umfang der Bäume, die von dem Kiefernschwarm befallen waren, sank auf den unberührten Gebieten. Es handelt sich um Lokalitäten, die sich der natürlichen Entwicklung überlassen."
@@ -731,7 +731,7 @@
     [
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08602_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu08602_#_0",
           "src": "Trojcípý šátek.\nPoužívá se k zavěšení, pokud se zlomenina nachází na horní končetině.\nPři zlomenině v oblasti pánve je nutné uložit zraněného do stabilizované polohy a co nejrychleji odvézt k lékaři.\nZlomeniny se dělí na zavřené a volné.\nDlaha musí jít vždy přes dva klouby, jeden nad a jeden pod zlomeným místem.\nÚlomek kosti vyčnívající z rány musí být sterilně zakryt.\nZavřená zlomenina je taková, kdy kůže nad zlomeninou není porušena.\nJako dlahu lze použít vše, co máme po ruce, např. opasek.\nPři zlomenině končetiny je potřeba nejprve vrátit končetinu do původní polohy.\nPokud dojde ke zlomenině v zimě, zásadně nesundáváme oděvy, boty či rukavice, aby oteklá tkáň neomrzla.\nV nouzovém případě je možné končetinu znehybnit tím, že ji přivážeme k druhé končetině.",
           "tgt": {
             "CommandR7B": "Dreiecksschal.\nEr wird verwendet, wenn der Bruch sich im Oberkörper befindet.\nBei einem Bruch im Beckenbereich muss der Verletzte in eine stabile Position gelegt und so schnell wie möglich zum Arzt gebracht werden.\nBrüche lassen sich in geschlossene und offene Brüche einteilen.\nDer Gips muss immer über zwei Gelenke gehen, eines über und eines unter dem gebrochenen Ort.\nDer Bruchteil des Knochens, der aus der Wunde herausragt, muss sterilisiert abgedeckt werden.\nEin geschlossener Bruch ist derjenige, bei dem die Haut über dem Bruch nicht verletzt ist.\nAls Gips kann alles verwendet werden, was zur Hand ist, z. B. ein Gürtel.\nBei einem Gliedbruch muss das Glied zunächst in seine ursprüngliche Position zurückgeführt werden.\nWenn der Bruch im Winter auftritt, sollten die Kleidung, Schuhe oder Handschuhe nicht abgenommen werden, um die geschwollene Gewebe nicht zu erfrieren.\nIm Notfall kann das Glied durch Verknüpfung mit dem anderen Glied bewegungsunfähig gemacht werden."
@@ -741,7 +741,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu34434_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu34434_#_0",
           "src": "Na obrázku vidíte císaře Josefa II., který je znám velkým množstvím svých reforem ve prospěch obyvatelstva.\nZa svůj život vydal nad 6 000 nařízení, mezi které patří například toleranční patent, zrušení nevolnictví či cenzury.\nNěkterá nařízení byla také úsměvná.\nNapříklad zákaz nošení korzetů či zákaz hlubokého klanění.\nLidé se směli přestěhovat pouze do sousedního panství.\nPoddaný mohl jít svobodně studovat mimo hranice panství.\nZrušení nevolnictví je ukázka osvícenského absolutismu.\nPo vydání patentu o zrušení nevolnictví se lidé stěhovali do měst za prací.\nPoddaní se nesměli svobodně ženit ani po vydání patentu o zrušení nevolnictví.\nPo zrušení nevolnictví se poddaní mohli bez svolení vrchnosti ženit.\nKe zrušení nevolnictví došlo ve 20. století.\nPatent o zrušení nevolnictví neruší povinnost robotovat.\nPoddaný si díky zrušení nevolnictví vyměnil roli s vrchností.\nPatent o zrušení nevolnictví vešel v platnost v roce 1781.\nZrušení nevolnictví nedovolovalo poddaným se stěhovat do měst.\nPatent o zrušení nevolnictví nařizuje vrchnosti pracovat na polích.\nPo zrušení nevolnictví se mohli lidé volně stěhovat.\nPoddaní již nemuseli pracovat pro vrchnost.\nPatent o zrušení nevolnitví vydala Marie Terezie.\nPatent o zrušení nevolnictví vydal Josef II.",
           "tgt": {
             "Laniqo": "Auf dem Foto ist Kaiser Josef II. abgebildet, der für zahlreiche Reformen im Interesse der Bevölkerung bekannt ist.\nWährend seines Lebens erließ er über 6000 Verordnungen, darunter den Toleranzpatent, die Aufhebung des Lehenszwanges und die Abschaffung der Zensur.\nEs gab auch einige sehr lustige Verordnungen.\nZum Beispiel ist das Tragen von Korsetts verboten, genau wie tiefe Verbeugungen.\nDie Leute durften nur in ein benachbartes Gebiet umziehen.\nDie Untertanen hatten die Freiheit, außerhalb der Grenzen der Herrschaft zu studieren.\nDie Abschaffung der Leibeigenschaft ist ein Beispiel für aufgeklärten Absolutismus.\nNach Erlass des Patents, das die Untertänigkeit abschaffte, zogen die Menschen auf der Suche nach Arbeit in die Städte.\nAuch nach dem Patent, das die Untertänigkeit aufhob, durften die Untertanen nicht frei heiraten.\nNach der Abschaffung der Leibeigenschaft konnten sich die Untertanen nun ohne Erlaubnis ihres Herren verheiraten.\nDie Abschaffung des feudalen Untertänigkeitsverhältnisses erfolgte im 20. Jahrhundert.\nDas Patent über die Abschaffung der Leibeigenschaft änderte nichts an der Arbeitspflicht.\nDank der Abschaffung der Leibeigenschaft war der Untertan nun seinem Herrn gleichgestellt.\nDas Patent, mit dem die Untertänigkeit aufgehoben wurde, trat 1781 in Kraft.\nDa das Untertanenwesen abgeschafft war, war den Bauern die Auswanderung in die Städte nicht mehr erlaubt.\nDas Patent über die Aufhebung der Untertänigkeit befahl den Grundherren, selbst auf den Feldern zu arbeiten.\nNach der Abschaffung der Leibeigenschaft konnten die Menschen ihre Wohnsitze frei wählen.\nDie Untertanen waren nicht mehr verpflichtet, für ihren Herrn zu arbeiten.\nMaria Theresia erließ ein Patent, das die Untertänigkeit abschaffte.\nJoseph II. erließ ein Patent, mit dem das Untertanenwesen abgeschafft wurde."
@@ -751,7 +751,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu03620_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu03620_#_0",
           "src": "Pracuj s turistickou mapou a rozhodni, zda tvrzení je nebo není pravdivé, případně doplň správně větu.\n(Mapu si můžeš zvětšit kliknutím.)\nVe výřezu mapy jsou vrstvenice znázorněné po 20 metrech.\nVe výřezu mapy jsou vrstvenice znázorněné po 10 metrech.\nNejvyšším bodem na výřezu mapy je Babí lom.\nLeží v nadmořské výšce 450 m n. m. NE\nVrchol Babí lom – rozhledna leží v nadmořské výšce 521 metrů.\nModrá turistická značka nevede ve vyšší nadmořské výšce než 400 m n. m. NE\nRozcestí U studánky leží v nadmořské výšce 480 metrů.\nModrá turistická značka vede přes vrstvenici označující nadmořskou výšku 500 m n. m. ANO\nVrcholem, označeným kótou 438 m n. m. prochází modrá turistická značka.\nCesta po modré turistické značce od rozcestí U Studánky k rozcestí Babí lom bude stoupat.\nCesta po modré turistické značce od rozcestí U Studánky k rozcestí Pod Babím lomem povede po rovině.\nklesat\ndo kopce\nz kopce",
           "tgt": {
             "Wenyiil": "Arbeite mit der touristischen Karte und entscheide, ob die Aussage wahr ist oder nicht, bzw. vervollständige den Satz korrekt.\n(Die Karte kannst du vergrößern, indem du darauf klickst.)\nIm Kartenausschnitt sind die Höhenlinien in 20-Meter-Abständen dargestellt.\nIm Kartenausschnitt sind die Höhenlinien in 10-Meter-Abständen dargestellt.\nDer höchste Punkt auf dem Kartenausschnitt ist der Babí lom.\nEs liegt auf einer Höhe von 450 m ü. M.\nDer Gipfel Babí lom – der Aussichtsturm – liegt auf einer Höhe von 521 Metern.\nDie blaue Wandertour führt nicht in eine Höhe von mehr als 400 m ü. M. NEIN\nDie Wegkreuzung U studánky liegt auf einer Höhe von 480 Metern.\nDas blaue Wanderzeichen führt über eine Höhenlinie, die eine Höhe von 500 m ü. M. markiert.\nDie blaue Wanderroute führt über den Gipfel, der mit 438 m ü. M. markiert ist.\nDer Weg entlang der blauen Wanderroute von der Wegkreuzung U Studánky zur Wegkreuzung Babí lom wird ansteigen.\nDer Weg entlang der blauen Wanderroute von der Wegkreuzung U Studánky zur Wegkreuzung Pod Babím lomem verläuft flach.\nsinken\nbergauf\nden Hügel hinunter"
@@ -761,7 +761,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_PMUL3748_#_0",
+          "item_id": "cs-de_DE_#_dialogue_#_PMUL3748_#_0",
           "src": "Plánujete svou cestu do Cambridge.\nHledáte <i>místa, kam jít</i> ve městě. Atrakcí by měla být v <i>centru</i>.\nUjistěte se, že získáte <i>typ atrakce</i>.\nTaké hledáte <i>určitý hotel</i>. Jeho název je <i>Express by Holiday Inn Cambridge</i>.\nJakmile najdete <i>hotel</i>, chcete si ho zarezervovat pro <i>1 osobu</i> na <i>5 nocí</i> začínající od <i>úterý</i>.\nPokud rezervace selže, co takhle <i>2 noci</i>?\nUjistěte se, že získáte <i>referenční číslo</i>.\nTaké chcete rezervovat <i>taxi</i> pro přepravu mezi oběma místy.\nChcete odjet z <i>hotelu</i> v <i>02:45</i>.\nUjistěte se, že získáte <i>kontaktní číslo</i> a <i>typ auta</i>.",
           "tgt": {
             "DeepSeek-V3": "Sie planen Ihre Reise nach Cambridge.  \nSie suchen nach <i>Orten, die Sie besuchen können</i> in der Stadt. Die Attraktionen sollten sich im <i>Zentrum</i> befinden.  \nStellen Sie sicher, dass Sie den <i>Typ der Attraktion</i> erhalten.  \nAußerdem suchen Sie nach einem <i>bestimmten Hotel</i>. Sein Name ist <i>Express by Holiday Inn Cambridge</i>.  \nSobald Sie das <i>Hotel</i> gefunden haben, möchten Sie es für <i>1 Person</i> für <i>5 Nächte</i> ab <i>Dienstag</i> reservieren.  \nFalls die Buchung scheitert, wie wäre es mit <i>2 Nächten</i>?  \nStellen Sie sicher, dass Sie die <i>Referenznummer</i> erhalten.  \nSie möchten auch ein <i>Taxi</i> für den Transport zwischen beiden Orten buchen.  \nSie möchten vom <i>Hotel</i> um <i>02:45 Uhr</i> abfahren.  \nStellen Sie sicher, dass Sie die <i>Kontaktnummer</i> und den <i>Fahrzeugtyp</i> erhalten.  "
@@ -769,7 +769,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_PMUL3748_#_1",
+          "item_id": "cs-de_DE_#_dialogue_#_PMUL3748_#_1",
           "src": "X: Ahoj, plánuji výlet do Cambridge a potřebuju nápady na místo, kam můžu jít v centru.\nY: Je tu hodně na výběr! Můžeš prozkoumat architektonické památky, lodě a plavby, koleje, muzea, parky, divadla, a dokonce noční kluby.\nX: Co doporučuješ?\nY: Doporučuji Whipple Museum of the History of Science. Je to vzdělávací a zdarma!\nX: Dobře, to zní zábavně.\nY: Můžu ti dnes ještě s něčím pomoci?\nX: Co mi můžeš říct o Express by Holiday Inn Cambridge?\nY: Jistě, nachází se na východě a je v drahé cenové kategorii. Jejich telefonní číslo je 01223866800.\nX: Můžeš mi to prosím rezervovat? Potřebuji to pro 1 osobu na 5 nocí, začínající v úterý.\nY: Zarezervovala jsem tvůj pobyt v Express by Holiday Inn Cambridge. Tvoje referenční číslo je YE0M6SG1.\nX: Skvělé! Děkuji. Také jsem doufala, že si rezervuji taxi, můžeš mi s tím pomoci?\nY: Ano, mohu. Jaké je místo odjezdu a cílové místo, a kdy bys chtěla odjet?\nX: Chtěla bych odjet z hotelu v 02:45 do muzea.\nY: Dobře, zarezervovala jsem to pro tebe. Tvoje taxi je žlutá Honda a telefonní číslo je 07272096370. Mohu ti dnes ještě s něčím pomoci?\nX: Děkuji moc za pomoc.\nY: Co dalšího mohu pro tebe dnes udělat?\nX: Můžeš mi říct adresu policejní stanice? Mám problém a potřebuji pomoc co nejdříve.\nY: Policejní stanice se nachází v Parkside, Cambridge. Jejich telefonní číslo je 01223358966. Mohu pro tebe ještě něco udělat?\nX: To je vše, co potřebuji. Děkuji moc!\nY: Není zač. Měj skvělý den!",
           "tgt": {
             "DeepSeek-V3": "X: Hallo, ich plane einen Ausflug nach Cambridge und brauche Ideen für Orte, die ich im Zentrum besuchen kann.  \nY: Es gibt viel zur Auswahl! Sie können architektonische Sehenswürdigkeiten, Boote und Fahrten, Colleges, Museen, Parks, Theater und sogar Nachtclubs erkunden.  \nX: Was empfehlen Sie?  \nY: Ich empfehle das Whipple Museum of the History of Science. Es ist lehrreich und kostenlos!  \nX: Gut, das klingt unterhaltsam.  \nY: Kann ich Ihnen heute noch mit etwas anderem helfen?  \nX: Können Sie mir etwas über das Express by Holiday Inn Cambridge erzählen?  \nY: Sicher, es befindet sich im Osten und liegt in einer teuren Preisklasse. Die Telefonnummer lautet 01223866800.  \nX: Können Sie es bitte für mich reservieren? Ich benötige es für 1 Person für 5 Nächte, beginnend am Dienstag.  \nY: Ich habe Ihren Aufenthalt im Express by Holiday Inn Cambridge reserviert. Ihre Referenznummer lautet YE0M6SG1.  \nX: Großartig! Vielen Dank. Ich hoffe auch, ein Taxi zu reservieren, können Sie mir dabei helfen?  \nY: Ja, das kann ich. Wo ist der Abholort und das Ziel, und wann möchten Sie abfahren?  \nX: Ich möchte um 02:45 Uhr vom Hotel zum Museum fahren.  \nY: Gut, ich habe es für Sie reserviert. Ihr Taxi ist ein gelber Honda und die Telefonnummer lautet 07272096370. Kann ich Ihnen heute noch weiterhelfen?  \nX: Vielen Dank für Ihre Hilfe.  \nY: Was kann ich heute noch für Sie tun?  \nX: Können Sie mir die Adresse der Polizeistation nennen? Ich habe ein Problem und brauche so schnell wie möglich Hilfe.  \nY: Die Polizeistation befindet sich in Parkside, Cambridge. Die Telefonnummer lautet 01223358966. Kann ich noch etwas für Sie tun?  \nX: Das ist alles, was ich brauche. Vielen Dank!  \nY: Gern geschehen. Einen schönen Tag noch!"
@@ -778,7 +778,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_MUL2376_#_0",
+          "item_id": "cs-de_DE_#_dialogue_#_MUL2376_#_0",
           "src": "Plánujete svou cestu do Cambridge\nHledáte <i>konkrétní atrakci</i>. Její název je <i>muzeum archeologie a antropologie</i>\nUjistěte se, že dostanete <i>typ atrakce</i>\nHledáte také <i>místo k obědu</i>. Restaurace by měla být v <i>drahém</i> cenovém rozmezí a měla by být na <i>severu</i>\nRestaurace by měla podávat <i>evropská</i> jídla\nJakmile najdete <i>restauraci</i>, kterou chcete, chcete si rezervovat stůl pro <i>2 osoby</i> na <i>20:00</i> v <i>neděli</i>\nPokud rezervace nevyjde, co třeba <i>19:00</i>?\nUjistěte se, že dostanete <i>referenční číslo</i>",
           "tgt": {
             "Claude-4": "Sie planen Ihre Reise nach Cambridge\nSie suchen eine <i>bestimmte Attraktion</i>. Ihr Name ist <i>Museum für Archäologie und Anthropologie</i>\nStellen Sie sicher, dass Sie den <i>Attraktionstyp</i> erhalten\nSie suchen auch einen <i>Ort zum Mittagessen</i>. Das Restaurant sollte in der <i>teuren</i> Preisklasse sein und im <i>Norden</i> liegen\nDas Restaurant sollte <i>europäische</i> Gerichte servieren\nSobald Sie das <i>Restaurant</i> gefunden haben, das Sie möchten, möchten Sie einen Tisch für <i>2 Personen</i> um <i>20:00 Uhr</i> am <i>Sonntag</i> reservieren\nFalls die Reservierung nicht klappt, wie wäre es mit <i>19:00 Uhr</i>?\nStellen Sie sicher, dass Sie eine <i>Referenznummer</i> erhalten"
@@ -786,7 +786,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_dialogue_#_MUL2376_#_1",
+          "item_id": "cs-de_DE_#_dialogue_#_MUL2376_#_1",
           "src": "X: Ahoj, hledám muzeum archeologie a antropologie. Víš, kde ho najdu?\nY: Ahoj! Muzeum archeologie a antropologie je na University of Cambridge, Downing Street. Jejich telefonní číslo je 01223333516. Potřebuješ ještě něco?\nX: Jasně, a typ atrakce je muzeum, že?\nY: Ano, přesně tak!\nX: Zní to skvěle, díky za info!\nY: Není zač. Můžu ti pomoct s něčím dalším?\nX: Ano, hledám místo na oběd, něco dražšího na severu. Evropská kuchyně by byla fajn.\nY: Na severu je jen jedna drahá evropská restaurace, a to City Stop Restaurant. Chceš udělat rezervaci?\nX: Určitě, prosím. Rezervuj mi stůl pro dvě osoby na neděli... třeba v 20:00?\nY: V tu dobu není otevřeno. Můžeme zkusit jinou restauraci nebo čas?\nX: Hmm, tak zkusíme dříve. Co třeba v 19:00?\nY: Super, mám stůl. Bude rezervován na 15 minut. Tvoje referenční číslo je: ZN0CVH11. Ještě něco?\nX: Ne, to je všechno. Moc děkuji za pomoc!\nY: Rádo se stalo! Měj krásný den!",
           "tgt": {
             "Claude-4": "X: Hallo, ich suche das Museum für Archäologie und Anthropologie. Weißt du, wo ich es finde?\nY: Hallo! Das Museum für Archäologie und Anthropologie befindet sich an der University of Cambridge, Downing Street. Ihre Telefonnummer ist 01223333516. Brauchst du noch etwas?\nX: Klar, und der Attraktionstyp ist Museum, richtig?\nY: Ja, genau so!\nX: Das klingt toll, danke für die Info!\nY: Gern geschehen. Kann ich dir mit etwas anderem helfen?\nX: Ja, ich suche einen Ort zum Mittagessen, etwas Teureres im Norden. Europäische Küche wäre schön.\nY: Im Norden gibt es nur ein teures europäisches Restaurant, und das ist das City Stop Restaurant. Möchtest du eine Reservierung machen?\nX: Auf jeden Fall, bitte. Reservier mir einen Tisch für zwei Personen am Sonntag... vielleicht um 20:00 Uhr?\nY: Zu der Zeit ist es nicht geöffnet. Können wir ein anderes Restaurant oder eine andere Zeit versuchen?\nX: Hmm, dann versuchen wir es früher. Wie wäre es mit 19:00 Uhr?\nY: Super, ich habe einen Tisch. Er wird für 15 Minuten reserviert. Deine Referenznummer ist: ZN0CVH11. Noch etwas?\nX: Nein, das ist alles. Vielen Dank für die Hilfe!\nY: Gern geschehen! Hab einen schönen Tag!"
@@ -795,7 +795,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08596_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu08596_#_0",
           "src": "Člověk má celkem kostí více než…\nMezi kosti obličejové části lebky nepatří…\nkost čelní\nkost nosní\nkost lícní\nkost slzní\nMezi svaly horní končetiny patří…\nvelký prsní sval\nsval trapézový\nsval krejčovský\nsval deltový\nDvojcípá chlopeň se v srdci nachází...\nna začátku aorty\nmezi pravou síní a pravou komorou\nna začátku plicní tepny\nmezi levou síní a levou komorou\nŽluč…\nse vytváří ve žlučníku\nmá nažloutlou barvu\nusnadňuje trávení cukrů\nje tvořena jaterními buňkami\nPůsobením UV záření vzniká v kůži vitamin…\nZrakové centrum koncového mozku je v laloku…\ntýlním\ntemenním\nčelním\nspánkovým\nV přední části přechází oko v průhlednou…\nrohovku\nbělimu\nzornici\ncévnatku",
           "tgt": {
             "TranssionMT": "Ein Mensch hat insgesamt mehr Knochen als...\nZwischen den Knochen des Gesichtsteils des Schädelteils gehört nicht...\nStirnknochen\nNasenknochen\nGesichtsknochen\nKnochen-Tränen\nZwischen den Muskeln der oberen Gliedmaßen befinden sich...\ngroßer Brustmuskel\nTrapezmuskel\nSchneidermuskel\nMuskeldelte\nDie Zwillingsklappe befindet sich im Herzen...\nzu Beginn der Aorta\nzwischen der rechten Halle und der rechten Kammer\nzu Beginn der Lungenarterien\nzwischen der linken Halle und der linken Kammer\nDie Galle...\nwird in der Gallenhöhle gebildet\nmit einer gelben Farbe\nErleichtert die Verdauung von Zucker\nbesteht aus Leberzellen\nDurch die Wirkung von UV-Strahlung entsteht in der Haut ein Vitamin...\nDas optische Zentrum des Endgehirns befindet sich im Lapoque...\nRückseite\nDunkel\nVorderseite\nSchlafgefühl\nIm vorderen Teil übergeht das Auge in eine transparente...\nHornhaut\nWeiß\nAubergine\nGefäßgewebe"
@@ -803,7 +803,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu08596_#_1",
+          "item_id": "cs-de_DE_#_edu_#_edu08596_#_1",
           "src": "Krátké výběžky nervových buněk (neuronů)...\nvedou vzruch k dalším buňkám\njsou neurity\njsou dendrity\nvytváří synapse\nTěhotenství trvá u člověka přibližně…\n180 dnů\n280 dnů\n365 dnů\n200 dnů",
           "tgt": {
             "TranssionMT": "Kurze Ausbrüche von Nervenzellen (Neuronen) ...\nführen zu Aufregung für weitere Zellen\nDie Neuriten sind\nDendriten sind\nerzeugt Synapsen\nEine Schwangerschaft dauert bei einem Menschen ungefähr...\n180 Tage\n280 Tage\n365 Tage\n200 Tage"
@@ -812,7 +812,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16578_#_0",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16578_#_0",
           "src": "Jako Objev roku byli na Cenách kritiky nominovaní tři filmaři, \"vyhrál\" ale i moderátor Jan Špaček",
           "tgt": {
             "Gemini-2.5-Pro": "Als Entdeckung des Jahres waren beim Preis der Kritik drei Filmemacher nominiert, „gewonnen“ hat aber auch der Moderator Jan Špaček"
@@ -820,28 +820,28 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16578_#_1",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16578_#_1",
           "src": "O výsledcích letošních Cen české filmové kritiky si můžete myslet cokoliv (vyhrála Amerikánka, oceněn byl i Rok vdovy, Vlny neproměnily žádnou z nominací), ale v jedné věci panuje celkem univerzální shoda: už dlouho nebyl ceremoniál Cen tak povedený. A velkou zásluhu na tom měl komik Jan Špaček, který ho moderoval.",
           "tgt": {
             "Gemini-2.5-Pro": "Man mag von den Ergebnissen des diesjährigen Preises der tschechischen Filmkritik halten, was man will (es gewann *Amerikánka*, ausgezeichnet wurde auch *Rok vdovy*, *Vlny* konnte keine der Nominierungen für sich entscheiden), aber in einer Sache herrscht eine ziemlich allgemeine Übereinstimmung: Selten war eine Preisverleihung so gelungen. Und einen großen Anteil daran hatte der Komiker Jan Špaček, der sie moderierte."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16578_#_2",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16578_#_2",
           "src": "Účast internetových osobností na udílení tuzemských filmových cen je problematická od chvíle, kdy Kazma v roce 2015 potrápil organizátory Českého lva dětinským vtípkem s \"dvojníkem\" herce Jima Carreyho. Cesta na pódia těchto ceremoniálů se youtuberům a tiktokerům nicméně zjevně otevírá.",
           "tgt": {
             "Gemini-2.5-Pro": "Die Teilnahme von Internet-Persönlichkeiten an der Verleihung heimischer Filmpreise ist problematisch, seit Kazma im Jahr 2015 die Organisatoren des Tschechischen Löwen mit einem kindischen Streich mit einem „Doppelgänger“ des Schauspielers Jim Carrey auf die Probe stellte. Dennoch öffnet sich für Youtuber und Tiktoker offensichtlich der Weg auf die Bühnen dieser Zeremonien."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16578_#_3",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16578_#_3",
           "src": "Vyhlašování Cen české filmové kritiky v sobotu 1. února v prostoru Archa+ moderoval Jan Špaček - a i když byli v kategorii Cena innogy pro objev roku nominováni Kristina Dufková za animovaný Život k sežrání, Alexander Kashcheev za dokument Ještě nejsem, kým chci být a (vítězný) Martin Pavol Repka za hraný film Od marca do mája, \"objevem roku\" patnáctého ročníku akce se stal právě i Špaček. Projev čerstvě šestadvacetiletého komika nemusí být pro každého, satirické jehličky v něm jsou někdy schované až zákeřně a Špačkovo moderování tiskových konferencí festivalu dokumentů Ji.hlava bývalo k chytání za hlavu trapností (jistě záměrně). Ale omezení daná ceremoniálem v přímém přenosu mu zjevně pomohla k většímu soustředění a důstojnost večera k vlídnější poloze. Co ale Špaček má v sobě nezávisle na žánru a příležitosti, je pohotovost, s jakou reaguje na osoby, s nimiž mluví, a schopnost udržovat linky průběžných vtipů - třeba s tím, že by ocenění neměli děkovat svým rodinám. Kouzelné byly přednahrané skeče s představiteli opomíjených filmových profesí, jako jsou kašéři nebo lidé od stavby. Scénka \"tréninku\" s nominanty právě na Objev roku by obstála i sama o sobě jako krátký film. Podívejte se sami - záznam udílení je k vidění na iVysílání České televize.",
           "tgt": {
             "Gemini-2.5-Pro": "Die Verleihung des Preises der tschechischen Filmkritik am Samstag, dem 1. Februar, im Veranstaltungsort Archa+ wurde von Jan Špaček moderiert – und obwohl in der Kategorie „Innogy-Preis für die Entdeckung des Jahres“ Kristina Dufková für den Animationsfilm *Život k sežrání*, Alexander Kashcheev für den Dokumentarfilm *Ještě nejsem, kým chci být* und der (siegreiche) Martin Pavol Repka für den Spielfilm *Od marca do mája* nominiert waren, wurde eben auch Špaček zur „Entdeckung des Jahres“ der fünfzehnten Ausgabe der Veranstaltung. Die Darbietung des frischgebackenen 26-jährigen Komikers mag nicht jedermanns Sache sein, die satirischen Spitzen darin sind manchmal fast schon hinterhältig versteckt, und Špačeks Moderation der Pressekonferenzen des Dokumentarfilmfestivals Ji.hlava war oft zum Fremdschämen peinlich (sicherlich mit Absicht). Aber die durch die Live-Übertragung der Zeremonie gesetzten Grenzen verhalfen ihm offensichtlich zu größerer Konzentration und die Würde des Abends zu einer freundlicheren Haltung. Was Špaček jedoch unabhängig von Genre und Anlass auszeichnet, ist seine Schlagfertigkeit, mit der er auf seine Gesprächspartner reagiert, und die Fähigkeit, Running Gags aufrechtzuerhalten – etwa den, dass die Preisträger sich nicht bei ihren Familien bedanken sollten. Zauberhaft waren die vorab aufgezeichneten Sketche mit Vertretern vernachlässigter Filmberufe wie Stuntmen oder Bühnenbauern. Der Sketch des „Trainings“ mit den Nominierten für die Entdeckung des Jahres hätte auch für sich allein als Kurzfilm bestehen können. Überzeugen Sie sich selbst – die Aufzeichnung der Verleihung ist im iVysílání des Tschechischen Fernsehens verfügbar."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_reflex.cz.16578_#_4",
+          "item_id": "cs-de_DE_#_news_#_reflex.cz.16578_#_4",
           "src": "U kritiků Amerikánka porazila Vlny, na blížících se Českých lvech to může být naopak: tamní hlasující akademici za loňský rok vyzdvihli Vlny už tím, že je vyslali na Oscary, a většinou se své volby drží právě i v rámci Lvů. Udílení 8. března v Rudolfinu bude moderovat další internetová osobnost - Karel \"Kovy\" Kovář.",
           "tgt": {
             "Gemini-2.5-Pro": "Bei den Kritikern setzte sich *Amerikánka* gegen *Vlny* durch, bei den bevorstehenden Tschechischen Löwen könnte es umgekehrt sein: Die dort abstimmenden Akademiker haben *Vlny* für das vergangene Jahr bereits gewürdigt, indem sie den Film ins Oscar-Rennen schickten, und meistens bleiben sie auch im Rahmen der Löwen bei ihrer Wahl. Die Verleihung am 8. März im Rudolfinum wird von einer weiteren Internet-Persönlichkeit moderiert – Karel „Kovy“ Kovář."
@@ -850,7 +850,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_blesk.cz.112532_#_0",
+          "item_id": "cs-de_DE_#_news_#_blesk.cz.112532_#_0",
           "src": "Boj o poplatky pro ČT a Rozhlas znovu ve Sněmovně: Závěrečné kolo mohou znovu zhatit obstrukce",
           "tgt": {
             "Algharb": "Der Streit um die Gebühren für ČT und den Rundfunk erneut im Parlament: Obstruktionen könnten die Schlussrunde wieder scheitern lassen"
@@ -858,21 +858,21 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_blesk.cz.112532_#_1",
+          "item_id": "cs-de_DE_#_news_#_blesk.cz.112532_#_1",
           "src": "Poslední kolo sněmovního projednávání novely o poplatcích za Českou televizi (ČT) a za Český rozhlas (ČRo) blokovala opoziční hnutí ANO a SPD zatím čtyři jednací dny. K samotné předloze se poslanci dostali až ve středu na mimořádné schůzi, kterou k ní nechala koalice svolat. Při ní jsou možnosti obstrukcí o něco omezenější. Zatím ale nezačala obecná debata, kterou by mohl vládní tábor ukončit prosazením pevného termínu pro hlasování o podobě novely.",
           "tgt": {
             "Algharb": "Die Oppositionsbewegungen ANO und SPD blockierten die letzte Runde der parlamentarischen Verhandlung der Novelle über die Gebühren für das Tschechische Fernsehen (ČT) und den Tschechischen Rundfunk (ČRo) bislang an vier Sitzungstagen. Die Abgeordneten kamen erst am Mittwoch in einer außerordentlichen Sitzung, die die Koalition zu diesem Zweck einberufen ließ, zum eigentlichen Gesetzesentwurf. Bei dieser sind die Möglichkeiten für Obstruktionen etwas eingeschränkter. Bislang hat jedoch die allgemeine Debatte noch nicht begonnen, die das Regierungslager durch die Festlegung eines festen Abstimmungstermins über die Form der Novelle beenden könnte."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_blesk.cz.112532_#_2",
+          "item_id": "cs-de_DE_#_news_#_blesk.cz.112532_#_2",
           "src": "Předloha zvyšuje poplatek pro ČT o 15 korun na 150 korun měsíčně a pro ČRo o deset korun na 55 korun za měsíc. Poplatek se má nově vztahovat na zařízení schopná přijímat vysílání prostřednictvím internetu, nejen na televizní a na rozhlasové přijímače. Zachován ale bude princip jedné platby za domácnost. Novela obsahuje také pravidla pravidelné valorizace poplatku a změnu jeho úhrady pro podnikatele a právnické osoby.",
           "tgt": {
             "Algharb": "Der Gesetzentwurf erhöht die Gebühr für das Tschechische Fernsehen um 15 Kronen auf 150 Kronen monatlich und für den Tschechischen Rundfunk um zehn Kronen auf 55 Kronen pro Monat. Die Gebühr soll künftig für Geräte gelten, die Sendungen über das Internet empfangen können, und nicht nur für Fernseh- und Radiogeräte. Das Prinzip einer Zahlung pro Haushalt bleibt jedoch erhalten. Die Novelle enthält auch Regeln für die regelmäßige Indexierung der Gebühr und eine Änderung der Zahlungsmodalitäten für Unternehmer und juristische Personen."
           }
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_blesk.cz.112532_#_3",
+          "item_id": "cs-de_DE_#_news_#_blesk.cz.112532_#_3",
           "src": "Vláda změny v poplatcích zdůvodňuje potřebou finanční stabilizace veřejnoprávní televize a rozhlasu a dlouhodobé udržitelnosti jejich činnosti. Politici z ANO a SPD naopak mluví o korupci dvojice médií veřejné služby, o dalším zásahu do peněženek lidí či o výpalném s ohledem na nový způsob výběru poplatku od právnických osob. Česká televize a Český rozhlas by se podle nich měly spojit a financovat ze státního rozpočtu.",
           "tgt": {
             "Algharb": "Die Regierung begründet die Gebührenänderungen mit der Notwendigkeit der finanziellen Stabilisierung des öffentlich-rechtlichen Fernsehens und Rundfunks sowie der langfristigen Nachhaltigkeit ihrer Tätigkeit. Politiker von ANO und SPD sprechen hingegen von Korruption der beiden öffentlich-rechtlichen Medien, einem weiteren Eingriff in die Geldbeutel der Menschen oder von Schutzgeld angesichts der neuen Art der Gebührenerhebung von juristischen Personen. Das Tschechische Fernsehen und der Tschechische Rundfunk sollten sich ihrer Meinung nach zusammenschließen und aus dem Staatshaushalt finanziert werden."
@@ -881,7 +881,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu31632_#_0",
+          "item_id": "cs-de_DE_#_edu_#_edu31632_#_0",
           "src": "Děti měřily rostliny, které pěstovaly.\nAnička naměřila 202 mm, Klárka 5 cm a 5 mm.\nLukáš 153 mm, Martin 1 dm a 1 cm.\nKdo naměřil nejvíce?\nKdo nejméně?Na obrázku mám vyznačené naměřené délky.\nK nejdelší a nejkratší přiřadím správně jména dětí, které je naměřily.\nMartin\nKlárka\nLukáš\nAnička\nPetrova rostlina povyrostla za 3 dny o 80 mm.\nNyní měří 14 cm.\nKolik měřila před 3 dny?Vyberu správnou odpověď a přetáhnu ji do obrázku.\n11 cm\nPetr a Tomáš pořádali šnečí závody.\nPetrův šnek urazil 220 mm.\nTomášův o 19 cm více.\nJak dlouhou trasu ulezl Tomášův hlemýžď? Vyberu správnou odpověď a přetáhnu ji do obrázku.\n3 cm\n4 dm 1 cm",
           "tgt": {
             "EuroLLM-9B": "Děti měřily rostliny, které pěstovaly.\nAnička naměřila 202 mm, Klárka 5 cm a 5 mm.\nLukáš 153 mm, Martin 1 dm a 1 cm.\nKdo naměřil nejvíce?\nKdo nejméně?\nAuf dem Bild sind die gemessenen Längen markiert.\nIch ordne den längsten und kürzesten die Namen der Kinder zu, die sie gemessen haben.\nMartin\nKlárka\nLukáš\nAnička\nPeters Pflanze ist in 3 Tagen um 80 mm gewachsen.\nSie misst jetzt 14 cm.\nWie viel maß sie vor 3 Tagen?\nIch wähle die richtige Antwort und ziehe sie in das Bild.\n11 cm\nPetr und Tomáš veranstalteten Schneckenrennen.\nPeters Schnecke legte 220 mm zurück.\nTomáš legte 19 cm mehr zurück.\nWie lange Strecke legte Tomášu Schnecke zurück? Ich wähle die richtige Antwort und ziehe sie in das Bild.\n3 cm\n4 dm 1 cm"
@@ -889,7 +889,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_edu_#_edu31632_#_1",
+          "item_id": "cs-de_DE_#_edu_#_edu31632_#_1",
           "src": "Děti se měřily.\nTomáš měří 15 dm, Simonka 134 cm , Kubík 1 m 57 cm, Barča 1 m 290 mm.\nKdo z dětí je nevyšší?\nKdo je nejnižší?K obrázku metru přiřadím správně jména dětí.\nNahoru přetáhnu, kdo je nejvyšší, a dolů, kdo je nejnižší.\nBarča\nTomáš\nSimonka\nKubík",
           "tgt": {
             "EuroLLM-9B": "Die Kinder haben sich gemessen.\nTomáš misst 15 dm, Simonka 134 cm, Kubík 1 m 57 cm, Barča 1 m 290 mm.\nWer von den Kindern ist am höchsten?\nWer ist am niedrigsten?\nIch ordne die Namen der Kinder dem Meterbild richtig zu.\nNach oben ziehe ich, wer am höchsten ist, und nach unten, wer am niedrigsten ist.\nBarča\nTomáš\nSimonka\nKubík"
@@ -898,7 +898,7 @@
       ],
       [
         {
-          "doc_id": "cs-de_DE_#_news_#_ceska_televize-cs.156327_#_0",
+          "item_id": "cs-de_DE_#_news_#_ceska_televize-cs.156327_#_0",
           "src": "Vypravěčem spletitého příběhu, točícího se kolem ukradeného velkého diamantu, je neúspěšný boxerský promotér zvaný Turek, který se k divokému kolotoči událostí připletl se svým komplicem Tommym vlastně náhodou. Ukradený diamant má předat kurýr Franky Čtyřprsťák americkému šéfovi Avimu. O drahokam však mají zájem další gangsteři a zlodějíčci, mezi nimi především bezohledný ruský zabiják Boris Břitva, černošští provozovatelé zastavárny Vincent a Solomon a nakonec i nemilosrdný gangster a organizátor nelegálních boxerských zápasů Kruťák. V nepřehledné hře o drahocenný lup sehraje významnou roli také irsko-cikánský boxerský šampion Mickey, jehož podivnému dialektu jen málokdo rozumí. Není divu, že při tomto počtu účastníků v pomyslném ringu v tomhle zápase brzy nejde o vítězství, ale o holé přežití.",
           "tgt": {
             "Wenyiil": "Der Erzähler der verworrenen Geschichte, die sich um einen gestohlenen großen Diamanten dreht, ist ein erfolgloser Boxpromoter namens Turek, der mit seinem Komplizen Tommy eigentlich zufällig in die wilde Karussellwelt der Ereignisse geraten ist. Der gestohlene Diamant soll vom Kurier Franky VierHandbreit an den amerikanischen Boss Avi übergeben werden. An dem Edelstein sind jedoch auch andere Gangster und Kleinganoven interessiert, darunter vor allem der skrupellose russische Killer Boris Břitva, die schwarzen Pfandhausbetreiber Vincent und Solomon und schließlich auch der gnadenlose Gangster und Organisator illegaler Boxkämpfe Kruťák. Im unübersichtlichen Spiel um den kostbaren Beutegegenstand spielt auch der irisch-zigeunerische Boxchampion Mickey, dessen seltsamen Dialekt kaum jemand versteht, eine wichtige Rolle. Es ist kein Wunder, dass bei dieser Anzahl von Teilnehmern im imaginären Ring in diesem Kampf bald nicht mehr um den Sieg, sondern um das nackte Überleben geht."
@@ -906,7 +906,7 @@
           "instructions": "Evaluate translation from cs to German."
         },
         {
-          "doc_id": "cs-de_DE_#_news_#_ceska_televize-cs.156327_#_1",
+          "item_id": "cs-de_DE_#_news_#_ceska_televize-cs.156327_#_1",
           "src": "Autorská gangsterská komedie Guye Ritchieho s českým názvem Podfu (c) k nesporně těží z úspěchu tvůrcova předchozího snímku stejného žánru Sbal prachy a vypadni (1998). Scénář údajně vznikal již v průběhu natáčení zmíněného titulu a vychází z podobné zápletky a jejího rozvíjení.",
           "tgt": {
             "Wenyiil": "Guy Ritchies Autoren-Gangsterkomödie mit dem tschechischen Titel Snatch – Schweine und Diamanten (2000) profitiert unbestreitbar vom Erfolg des Vorgängerfilms desselben Genres, Bube, Dame, König, grAS (1998). Das Drehbuch entstand angeblich bereits während der Dreharbeiten zu dem genannten Titel und basiert auf einer ähnlichen Verwicklung und deren Entwicklung."

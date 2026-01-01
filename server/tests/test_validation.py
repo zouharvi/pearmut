@@ -206,7 +206,7 @@ class TestItemValidation:
                                 {
                                     "src": "hello",
                                     "tgt": {"A": "hola", "B": "ola"},
-                                    "doc_id": "123",
+                                    "item_id": "123",
                                     "model": "system1",
                                     "instructions": "Translate this",
                                     "validation": {"A": {"score": [70, 80]}}

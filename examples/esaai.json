@@ -8,7 +8,7 @@
     [
       [
         {
-          "doc_id": "esaai_demo_1",
+          "item_id": "esaai_demo_1",
           "src": "The quick brown fox jumps over the lazy dog.",
           "tgt": {
             "System-A": "Rychlá hnědá liška skáče přes líného psa."
@@ -32,7 +32,7 @@
           }
         },
         {
-          "doc_id": "esaai_demo_2",
+          "item_id": "esaai_demo_2",
           "src": "Machine translation has improved significantly in recent years.",
           "tgt": {
             "System-A": "Strojový překlad se v posledních letech výrazně zlepšil."
@@ -52,7 +52,7 @@
       ],
       [
         {
-          "doc_id": "esaai_demo_3",
+          "item_id": "esaai_demo_3",
           "src": "Artificial intelligence is transforming how we work and live.",
           "tgt": {
             "System-B": "Umělá inteligence mění způsob, jakým pracujeme a žijeme."

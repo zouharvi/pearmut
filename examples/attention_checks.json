@@ -8,7 +8,7 @@
     [
       [
         {
-          "doc_id": "tutorial_1",
+          "item_id": "tutorial_1",
           "src": "The quick brown fox jumps over the lazy dog.",
           "tgt": {
             "A": "Rychlá hnědá liška skáče přes líného psa.",
@@ -46,7 +46,7 @@
       ],
       [
         {
-          "doc_id": "tutorial_2",
+          "item_id": "tutorial_2",
           "src": "Machine translation improves daily.",
           "tgt": {
             "A": "Strojový překlad se denně zlepšuje.",
@@ -75,7 +75,7 @@
       ],
       [
         {
-          "doc_id": "attention_check_1",
+          "item_id": "attention_check_1",
           "src": "AI transforms industries.",
           "tgt": {
             "A": "UI transformuje průmysly.",
@@ -104,7 +104,7 @@
     [
       [
         {
-          "doc_id": "tutorial_1",
+          "item_id": "tutorial_1",
           "src": "Scientists study ocean currents.",
           "tgt": {
             "A": "Vědci studují mořské proudy.",
@@ -142,7 +142,7 @@
       ],
       [
         {
-          "doc_id": "tutorial_2",
+          "item_id": "tutorial_2",
           "src": "Weather affects agriculture.",
           "tgt": {
             "A": "Počasí ovlivňuje zemědělství.",
@@ -171,7 +171,7 @@
       ],
       [
         {
-          "doc_id": "attention_check_1",
+          "item_id": "attention_check_1",
           "src": "Energy costs rise.",
           "tgt": {
             "A": "Ceny energie rostou.",
@@ -200,7 +200,7 @@
     [
       [
         {
-          "doc_id": "tutorial_1",
+          "item_id": "tutorial_1",
           "src": "Technology changes society.",
           "tgt": {
             "A": "Technologie mění společnost.",
@@ -238,7 +238,7 @@
       ],
       [
         {
-          "doc_id": "tutorial_2",
+          "item_id": "tutorial_2",
           "src": "Education is important.",
           "tgt": {
             "A": "Vzdělání je důležité.",
@@ -267,7 +267,7 @@
       ],
       [
         {
-          "doc_id": "attention_check_1",
+          "item_id": "attention_check_1",
           "src": "Markets fluctuate daily.",
           "tgt": {
             "A": "Trhy denně kolísají.",
@@ -296,7 +296,7 @@
     [
       [
         {
-          "doc_id": "silent_check_1",
+          "item_id": "silent_check_1",
           "src": "The weather forecast predicts rain tomorrow.",
           "tgt": {
             "A": "Banán létá rychle přes hory kočka.",
@@ -321,7 +321,7 @@
       ],
       [
         {
-          "doc_id": "silent_check_2",
+          "item_id": "silent_check_2",
           "src": "Scientists have discovered a new planet.",
           "tgt": {
             "A": "Vědci objevili novou planetu.",
@@ -346,7 +346,7 @@
       ],
       [
         {
-          "doc_id": "silent_check_3",
+          "item_id": "silent_check_3",
           "src": "The restaurant serves excellent Italian cuisine.",
           "tgt": {
             "A": "Počítač zpívá modrou knihu telefon.",

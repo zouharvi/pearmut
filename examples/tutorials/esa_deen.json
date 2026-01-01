@@ -8,7 +8,7 @@
     [
       [
         {
-          "doc_id": "deen_#_tutorial_#_1",
+          "item_id": "deen_#_tutorial_#_1",
           "src": "Der Hund ist rausgerannt.",
           "tgt": {
             "model-tutorial": "The dog ran outside."
@@ -27,7 +27,7 @@
           }
         },
         {
-          "doc_id": "deen_#_tutorial_#_2",
+          "item_id": "deen_#_tutorial_#_2",
           "src": "Der Hund ist rausgerannt.",
           "tgt": {
             "model-tutorial": "The dog walked outside."
@@ -52,7 +52,7 @@
           }
         },
         {
-          "doc_id": "deen_#_tutorial_#_3",
+          "item_id": "deen_#_tutorial_#_3",
           "src": "Der Hund ist rausgerannt.",
           "tgt": {
             "model-tutorial": "The dog stayed inside."
@@ -77,7 +77,7 @@
           }
         },
         {
-          "doc_id": "deen_#_tutorial_#_4",
+          "item_id": "deen_#_tutorial_#_4",
           "src": "Obwohl die Katzen die Nacht draußen verbrachten, war ihnen nicht kalt.",
           "tgt": {
             "model-tutorial": "Although the cats were outside over the night, they did not get cold."
@@ -98,7 +98,7 @@
       ],
       [
         {
-          "doc_id": "deen_#_tutorial_#_5",
+          "item_id": "deen_#_tutorial_#_5",
           "src": "Der Hund ist rausgerannt.",
           "tgt": {
             "model-tutorial": "The walked outside."
@@ -123,7 +123,7 @@
           }
         },
         {
-          "doc_id": "deen_#_tutorial_#_6",
+          "item_id": "deen_#_tutorial_#_6",
           "src": "Der Hund ist rausgerannt.",
           "tgt": {
             "model-tutorial": "The dog ran outside."
@@ -153,7 +153,7 @@
       ],
       [
         {
-          "doc_id": "de-en-attention-check-1",
+          "item_id": "de-en-attention-check-1",
           "src": "Die Sonne scheint hell am Himmel.",
           "tgt": {
             "model-tutorial": "The sun shines brightly in the sky."
@@ -171,7 +171,7 @@
           }
         },
         {
-          "doc_id": "de-en-attention-check-2",
+          "item_id": "de-en-attention-check-2",
           "src": "Das Buch liegt auf dem Tisch.",
           "tgt": {
             "model-tutorial": "The book is under the chair."

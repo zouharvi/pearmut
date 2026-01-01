@@ -37,7 +37,7 @@ for doc_id, segments in documents.items():
         document_task = []
         for seg_i, seg in segments:
             document_task.append({
-                "doc_id": f"{doc_id}_#_{seg_i}",
+                "item_id": f"{doc_id}_#_{seg_i}",
                 "models": [model],
                 "src": seg["src_text"],
                 "tgt": [seg["tgt_text"][model]],

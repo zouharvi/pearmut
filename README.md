@@ -68,11 +68,13 @@ Campaigns are defined in JSON files (see [examples/](examples/)). The simplest c
         {
           "instructions": "Evaluate translation from en to cs_CZ",  # message to show to users above the first item
           "src": "This will be the year that Guinness loses its cool. Cheers to that!",
-          "tgt": {"modelA": "Nevím přesně, kdy jsem to poprvé zaznamenal. Možná to bylo ve chvíli, ..."}
+          "tgt": {"modelA": "Nevím přesně, kdy jsem to poprvé zaznamenal. Možná to bylo ve chvíli, ..."},
+          "item_id": "first item in first document"
         },
         {
           "src": "I'm not sure I can remember exactly when I sensed it. Maybe it was when some...",
-          "tgt": {"modelA": "Tohle bude rok, kdy Guinness přijde o svůj „cool“ faktor. Na zdraví!"}
+          "tgt": {"modelA": "Tohle bude rok, kdy Guinness přijde o svůj „cool“ faktor. Na zdraví!"},
+          "item_id": "second item in first document"
         }
         ...
       ],
@@ -87,20 +89,10 @@ Campaigns are defined in JSON files (see [examples/](examples/)). The simplest c
   ]
 }
 ```
-Task items are protocol-specific. For ESA/DA/MQM protocols, each item is a dictionary representing a document unit:
-```python
-[
-  {
-    "src": "A najednou se všechna tato voda naplnila dalšími lidmi a dalšími věcmi.",  # required
-    "tgt": {"modelA": "And suddenly all the water became full of other people and other people."}  # required (dict)
-  },
-  {
-    "src": "toto je pokračování stejného dokumentu",
-    "tgt": {"modelA": "this is a continuation of the same document"}
-    # Additional keys stored for analysis
-  }
-]
-```
+
+Each item has to have `src` (string) and `tgt` (dictionary from model names to strings, even for a single model evaluation).
+For full Pearmut functionality (e.g. automatic statistical analysis), add `item_id` as well.
+Any other keys that you add will simply be stored in the logs.
 
 Load campaigns and start the server:
 ```bash
