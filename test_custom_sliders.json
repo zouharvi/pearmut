@@ -1,0 +1,31 @@
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "ESA",
+    "sliders": ["Fluency", "Naturalness", "Interestingness"]
+  },
+  "campaign_id": "test_custom_sliders",
+  "data": [
+    [
+      [
+        {
+          "item_id": "test_1",
+          "src": "This is a test source sentence.",
+          "tgt": {
+            "Model-A": "Toto je testovací zdrojová věta.",
+            "Model-B": "Tohle je testovací věta zdroje."
+          },
+          "instructions": "Evaluate translation from English to Czech. Rate each aspect from 0 to 100."
+        },
+        {
+          "item_id": "test_2",
+          "src": "Machine translation has improved significantly in recent years.",
+          "tgt": {
+            "Model-A": "Strojový překlad se v posledních letech výrazně zlepšil.",
+            "Model-B": "Strojový překlad byl v poslední době podstatně lepší."
+          }
+        }
+      ]
+    ]
+  ]
+}
