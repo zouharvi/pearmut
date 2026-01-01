@@ -52,6 +52,12 @@
       position: relative;
     }
 
+    /* When output_response contains slider_container children, stack vertically */
+    .output_response:has(.slider_container) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
     .output_response input[type=range] {
       flex: 1;
       min-width: 0;
@@ -63,6 +69,30 @@
       color: #555;
       text-align: right;
       margin-left: 5px;
+    }
+
+    /* Custom sliders styling */
+    .slider_container {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .slider_container:first-child {
+      margin-top: 0;
+    }
+
+    .slider_container input[type=range] {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .slider_name {
+      display: inline-block;
+      width: 120px;
+      margin-right: 8px;
+      color: #333;
+      flex-shrink: 0;
     }
 
     /* on displays with less than 1000px - stack vertically */
@@ -95,6 +125,12 @@
       pointer-events: none;
       z-index: -1;
       color: #777;
+    }
+
+    /* Hide anchors when custom sliders are present */
+    .output_response:has(.slider_container)::before,
+    .output_response:has(.slider_container)::after {
+      display: none;
     }
 
     .output_response::before {

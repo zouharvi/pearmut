@@ -501,6 +501,7 @@ export type DataGoodbye = {
 export type ProtocolInfo = {
     protocol: "DA" | "ESA" | "MQM",
     item_i: number,
+    sliders?: string[],  // Optional custom slider names
     instructions?: string,
 }
 
