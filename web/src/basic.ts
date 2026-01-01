@@ -263,11 +263,18 @@ async function display_next_payload(response: DataPayload) {
     for (let item_i = 0; item_i < data.length; item_i++) {
         let item = data[item_i]
         // character-level stuff won't work on media tags
-        let no_src_char = item.src ? isMediaContent(item.src) : true
-        let no_ref_char = item.ref ? isMediaContent(item.ref) : true
+        let no_src_char = !item.src || isMediaContent(item.src)
+        let no_ref_char = !item.ref || isMediaContent(item.ref)
 
-        let src_chars = item.src ? (no_src_char ? item.src : contentToCharSpans(item.src, "src_char")) : ""
-        let ref_chars = item.ref ? (no_ref_char ? item.ref : contentToCharSpans(item.ref, "ref_char")) : ""
+        // Build character spans for source and reference
+        let src_chars = ""
+        if (item.src) {
+            src_chars = no_src_char ? item.src : contentToCharSpans(item.src, "src_char")
+        }
+        let ref_chars = ""
+        if (item.ref) {
+            ref_chars = no_ref_char ? item.ref : contentToCharSpans(item.ref, "ref_char")
+        }
 
         // Build source and reference boxes - only if they exist
         let srcRefBoxes = ""
