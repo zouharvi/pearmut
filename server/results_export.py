@@ -17,6 +17,9 @@ def comparison_significant(
 
     # compute intersection
     common_items = set(scores1.keys()).intersection(set(scores2.keys()))
+    if len(common_items) < 2:
+        return False
+
     scores1 = [scores1[k] for k in common_items]
     scores2 = [scores2[k] for k in common_items]
 

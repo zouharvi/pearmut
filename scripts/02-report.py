@@ -99,7 +99,7 @@ for langs in [
     "enno",
 ]:
     lang1, lang2 = langs[:2], langs[2:]
-    with open(f"abc_data/raw_src/{langs}.json", "r") as f:
+    with open(f"abc_data/translations/{langs}.json", "r") as f:
         data = json.load(f)
     rng = random.Random(langs)
     data_flat = [
@@ -386,7 +386,6 @@ for i, quality in enumerate(["Speed", "Clarity", "Effort"]):
             )
 
 
-    
 for quantity in results:
     print(f"[{quantity:<20}]", end=", ")
     for tool in ["appraise", "pearmut"]:
@@ -672,8 +671,6 @@ def measure_average_response(
 appraise_csrf_cookie = input()
 pearmut_token_ensk = input()
 
-# %%
-
 measure_average_response(
     url="http://localhost:8001/basic.html",
     method="get",
@@ -714,9 +711,6 @@ measure_average_response(
     iterations=100,
 )
 
-# %%
-
-
 measure_average_response(
     url="http://localhost:8000/direct-assessment-document/",
     method="get",
@@ -730,8 +724,6 @@ measure_average_response(
     method="get",
     iterations=100,
 )
-
-# %%
 
 
 def measure_average_response_chill(*args, **kwargs):
@@ -771,8 +763,6 @@ measure_average_response_chill(
     iterations=100,
 )
 
-# %%
-
 measure_average_response_chill(
     url="https://pearmut.ngrok.io/download-annotations",
     method="get",
@@ -793,7 +783,6 @@ measure_average_response_chill(
     iterations=100,
 )
 
-# %%
 # run bash command 100 times
 
 import subprocess
@@ -811,7 +800,6 @@ print(
     sep="\n",
 )
 
-# %%
 # run bash command 100 times
 
 import subprocess
@@ -846,7 +834,6 @@ print(
     sep="\n",
 )
 
-# %%
 # run bash command 100 times
 
 import subprocess
