@@ -26,7 +26,12 @@ const searchParams = new URLSearchParams(window.location.search)
 const frozenMode = searchParams.has("frozen")
 
 // Each model has its own response
-type CandidateResponse = { score: number | null, error_spans: Array<ErrorSpan> }
+// scores is either a single number (legacy) or an object mapping slider names to scores
+type CandidateResponse = { 
+    score: number | null,  // For backward compatibility and when no custom sliders
+    scores?: Record<string, number | null>,  // For custom sliders
+    error_spans: Array<ErrorSpan> 
+}
 // Response for a document with multiple models - keyed by model name
 type DocumentResponse = Record<string, CandidateResponse>
 
@@ -108,9 +113,19 @@ function check_unlock() {
         }
     }
 
-    // Check if all scores are set (if protocol requires scores)
+    // Check if all scores are set
+    // For custom sliders: all sliders must be answered
+    // For single score: the score must be set
     let all_done = response_log.every(doc_responses =>
-        Object.values(doc_responses).every(r => r.score != null)
+        Object.values(doc_responses).every(r => {
+            if (r.scores) {
+                // Custom sliders mode: all sliders must be non-null
+                return Object.values(r.scores).every(val => val !== null)
+            } else {
+                // Legacy mode: single score must be non-null
+                return r.score != null
+            }
+        })
     )
     if (!all_done) {
         $("#button_next").attr("disabled", "disabled")
@@ -133,13 +148,42 @@ function cleanupPreviousItem(): void {
     $(window).off('resize.toolbox')
 }
 
-function _slider_html(item_i: number, model: string): string {
-    return `
-    <div class="output_response">
-      <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}">
-      <span class="slider_label">❓/100</span>
-    </div>
+function _slider_html(item_i: number, model: string, sliders?: string[]): string {
+    // If no custom sliders, use default "Score" slider
+    if (!sliders || sliders.length === 0) {
+        return `
+        <div class="output_response">
+          <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}_score">
+          <span class="slider_label">❓/100</span>
+        </div>
+        `
+    }
+    
+    // Generate multiple sliders with labels
+    let html = '<div class="output_response">'
+    
+    // Add Score slider first, always present
+    html += `
+      <div class="slider_container">
+        <label class="slider_name">Score</label>
+        <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}_Score" data-slider="Score">
+        <span class="slider_label" data-slider="Score">❓/100</span>
+      </div>
     `
+    
+    // Add custom sliders
+    for (const slider of sliders) {
+        html += `
+          <div class="slider_container">
+            <label class="slider_name">${slider}</label>
+            <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}_${slider}" data-slider="${slider}">
+            <span class="slider_label" data-slider="${slider}">❓/100</span>
+          </div>
+        `
+    }
+    
+    html += '</div>'
+    return html
 }
 
 async function display_next_payload(response: DataPayload) {
@@ -157,6 +201,7 @@ async function display_next_payload(response: DataPayload) {
             for (const [model, r] of Object.entries(docResponses)) {
                 result[model] = {
                     "score": r.score,
+                    "scores": r.scores ? {...r.scores} : undefined,
                     "error_spans": r.error_spans ? [...r.error_spans] : [],
                 }
             }
@@ -172,9 +217,18 @@ async function display_next_payload(response: DataPayload) {
         response_log = data.map(item => {
             const result: DocumentResponse = {}
             for (const model of Object.keys(item.tgt)) {
+                const hasCustomSliders = response.info.sliders && response.info.sliders.length > 0
                 result[model] = {
                     "score": null,
+                    "scores": hasCustomSliders ? {} : undefined,
                     "error_spans": [],
+                }
+                // Initialize all custom slider values to null
+                if (hasCustomSliders) {
+                    result[model].scores!["Score"] = null
+                    for (const slider of response.info.sliders!) {
+                        result[model].scores![slider] = null
+                    }
                 }
             }
             return result
@@ -232,7 +286,7 @@ async function display_next_payload(response: DataPayload) {
             let candidate_block = $(`
             <div class="output_candidate" data-candidate="${model}" data-model="${model}">
               <div class="output_tgt">${tgt_chars}</div>
-              ${_slider_html(item_i, model)}
+              ${_slider_html(item_i, model, response.info.sliders)}
             </div>
             `)
 
@@ -466,47 +520,113 @@ async function display_next_payload(response: DataPayload) {
                 }
             }
 
-            // Setup slider for this model
-            let slider = candidate_block.find("input[type='range']")
-            let label = candidate_block.find(".slider_label")
-            slider.on("click input", function () {
-                // In frozen mode, do not allow changing scores
-                if (frozenMode) return
+            // Setup slider(s) for this model
+            const hasCustomSliders = response.info.sliders && response.info.sliders.length > 0
+            
+            if (hasCustomSliders) {
+                // Multiple sliders mode
+                const allSliderNames = ["Score", ...response.info.sliders!]
+                
+                for (const sliderName of allSliderNames) {
+                    let slider = candidate_block.find(`input[data-slider="${sliderName}"]`)
+                    let label = candidate_block.find(`.slider_label[data-slider="${sliderName}"]`)
+                    
+                    slider.on("click input", function () {
+                        // In frozen mode, do not allow changing scores
+                        if (frozenMode) return
 
-                let val = parseInt((<HTMLInputElement>this).value)
-                label.text(`${val}/100`)
+                        let val = parseInt((<HTMLInputElement>this).value)
+                        label.text(`${val}/100`)
 
-                if (response_log[item_i][model].score == null) {
+                        if (response_log[item_i][model].scores![sliderName] == null) {
+                            response_log[item_i][model].scores![sliderName] = val
+                            // Also update legacy score field with first slider value (Score)
+                            if (sliderName === "Score") {
+                                response_log[item_i][model].score = val
+                            }
+                            has_unsaved_work = true
+                            check_unlock()
+                            action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "slider": sliderName, "value": val })
+                        }
+                    })
+                    
+                    slider.on("change", function () {
+                        // In frozen mode, do not allow changing scores
+                        if (frozenMode) return
+
+                        let val = parseInt((<HTMLInputElement>this).value)
+                        label.text(`${val}/100`)
+                        response_log[item_i][model].scores![sliderName] = val
+                        // Also update legacy score field with first slider value (Score)
+                        if (sliderName === "Score") {
+                            response_log[item_i][model].score = val
+                        }
+                        has_unsaved_work = true
+                        check_unlock()
+                        // push only for change which happens just once
+                        action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "slider": sliderName, "value": val })
+                    })
+
+                    // Disable slider in frozen mode
+                    if (frozenMode) {
+                        slider.prop("disabled", true)
+                    }
+
+                    // Pre-fill score from payload_existing if available
+                    const existingScore = response.payload_existing?.annotation[item_i]?.[model]?.scores?.[sliderName]
+                    if (existingScore != null) {
+                        slider.val(existingScore)
+                        label.text(`${existingScore}/100`)
+                        response_log[item_i][model].scores![sliderName] = existingScore
+                        // Also set legacy score field
+                        if (sliderName === "Score") {
+                            response_log[item_i][model].score = existingScore
+                        }
+                    }
+                }
+            } else {
+                // Single slider mode (legacy)
+                let slider = candidate_block.find("input[type='range']")
+                let label = candidate_block.find(".slider_label")
+                slider.on("click input", function () {
+                    // In frozen mode, do not allow changing scores
+                    if (frozenMode) return
+
+                    let val = parseInt((<HTMLInputElement>this).value)
+                    label.text(`${val}/100`)
+
+                    if (response_log[item_i][model].score == null) {
+                        response_log[item_i][model].score = val
+                        has_unsaved_work = true
+                        check_unlock()
+                        action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
+                    }
+                })
+                slider.on("change", function () {
+                    // In frozen mode, do not allow changing scores
+                    if (frozenMode) return
+
+                    let val = parseInt((<HTMLInputElement>this).value)
+                    label.text(`${val}/100`)
                     response_log[item_i][model].score = val
                     has_unsaved_work = true
                     check_unlock()
+                    // push only for change which happens just once
                     action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
+                })
+
+                // Disable slider in frozen mode
+                if (frozenMode) {
+                    slider.prop("disabled", true)
                 }
-            })
-            slider.on("change", function () {
-                // In frozen mode, do not allow changing scores
-                if (frozenMode) return
 
-                let val = parseInt((<HTMLInputElement>this).value)
-                label.text(`${val}/100`)
-                response_log[item_i][model].score = val
-                has_unsaved_work = true
-                check_unlock()
-                // push only for change which happens just once
-                action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
-            })
-
-            // Disable slider in frozen mode
-            if (frozenMode) {
-                slider.prop("disabled", true)
-            }
-
-            // Pre-fill score from payload_existing if available
-            const existingScore = response.payload_existing?.annotation[item_i]?.[model]?.score
-            if (existingScore != null) {
-                slider.val(existingScore)
-                label.text(`${existingScore}/100`)
-                response_log[item_i][model].score = existingScore
+                // Pre-fill score from payload_existing if available
+                const existingScore = response.payload_existing?.annotation[item_i]?.[model]?.score
+                if (existingScore != null) {
+                    slider.val(existingScore)
+                    label.text(`${existingScore}/100`)
+                    response_log[item_i][model].score = existingScore
+                }
             }
         }
 
