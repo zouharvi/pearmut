@@ -90,7 +90,9 @@ Campaigns are defined in JSON files (see [examples/](examples/)). The simplest c
 }
 ```
 
-Each item has to have `src` (string) and `tgt` (dictionary from model names to strings, even for a single model evaluation).
+Each item has to have `tgt` (dictionary from model names to strings, even for a single model evaluation).
+Optionally, you can also include `src` (source string) and/or `ref` (reference string).
+If neither `src` nor `ref` is provided, only the model outputs will be displayed.
 For full Pearmut functionality (e.g. automatic statistical analysis), add `item_id` as well.
 Any other keys that you add will simply be stored in the logs.
 
@@ -300,6 +302,7 @@ The `users` field accepts:
     ...
 }
 ```
+
 
 ### Multimodal Annotations
 

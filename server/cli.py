@@ -59,7 +59,7 @@ def _run(args_unknown):
 def _validate_item_structure(items):
     """
     Validate that items have the correct structure.
-    Items should be lists of dictionaries with 'src' and 'tgt' keys.
+    Items should be lists of dictionaries with 'tgt' and optionally 'src' and/or 'ref' keys.
     The 'tgt' field should be a dictionary mapping model names to translations.
     
     Args:
@@ -70,13 +70,17 @@ def _validate_item_structure(items):
 
     for item in items:
         if not isinstance(item, dict):
-            raise ValueError("Each item must be a dictionary with 'src' and 'tgt' keys")
-        if 'src' not in item or 'tgt' not in item:
-            raise ValueError("Each item must contain 'src' and 'tgt' keys")
+            raise ValueError("Each item must be a dictionary with 'tgt' key")
+        if 'tgt' not in item:
+            raise ValueError("Each item must contain 'tgt' key")
         
-        # Validate src is always a string
-        if not isinstance(item['src'], str):
+        # Validate src is a string if present
+        if 'src' in item and not isinstance(item['src'], str):
             raise ValueError("Item 'src' must be a string")
+        
+        # Validate ref is a string if present
+        if 'ref' in item and not isinstance(item['ref'], str):
+            raise ValueError("Item 'ref' must be a string")
         
         # Validate tgt is a dictionary (basic template with model names)
         if isinstance(item['tgt'], str):
