@@ -5,6 +5,7 @@ from typing import Any
 
 from fastapi.responses import JSONResponse
 
+from .constants import PROTOCOL_INSTRUCTIONS
 from .utils import (
     RESET_MARKER,
     check_validation_threshold,
@@ -12,6 +13,25 @@ from .utils import (
     get_db_log_item,
     save_db_payload,
 )
+
+
+def _get_instructions(tasks_data: dict, campaign_id: str) -> str:
+    """
+    Get instructions for the campaign.
+    If custom instructions are provided, use them.
+    Otherwise, use default instructions based on protocol.
+    Returns empty string if no instructions are found.
+    """
+    campaign_info = tasks_data[campaign_id]["info"]
+    
+    # Check if custom instructions are provided
+    if "instructions" in campaign_info:
+        return campaign_info["instructions"]
+    
+    # Fall back to protocol default instructions
+    protocol = campaign_info.get("protocol", "")
+    return PROTOCOL_INSTRUCTIONS.get(protocol, "")
+
 
 
 def _completed_response(
@@ -132,6 +152,7 @@ def get_i_item_taskbased(
             "time": user_progress["time"],
             "info": {
                 "item_i": item_i,
+                "instructions": _get_instructions(data_all, campaign_id),
             }
             | {
                 k: v
@@ -178,6 +199,7 @@ def get_i_item_singlestream(
             "time": user_progress["time"],
             "info": {
                 "item_i": item_i,
+                "instructions": _get_instructions(data_all, campaign_id),
             }
             | {
                 k: v
@@ -224,6 +246,7 @@ def get_next_item_taskbased(
             "time": user_progress["time"],
             "info": {
                 "item_i": item_i,
+                "instructions": _get_instructions(data_all, campaign_id),
             }
             | {
                 k: v
@@ -279,6 +302,7 @@ def get_next_item_singlestream(
             "progress": progress,
             "info": {
                 "item_i": item_i,
+                "instructions": _get_instructions(data_all, campaign_id),
             }
             | {
                 k: v
@@ -439,6 +463,7 @@ def get_next_item_dynamic(
             "progress": user_progress["progress"],
             "info": {
                 "item_i": item_i,
+                "instructions": _get_instructions(tasks_data, campaign_id),
             }
             | {
                 k: v

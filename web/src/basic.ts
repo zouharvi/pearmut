@@ -197,8 +197,12 @@ async function display_next_payload(response: DataPayload) {
     protocol_error_spans = response.info.protocol == "ESA" || response.info.protocol == "MQM"
     protocol_error_categories = response.info.protocol == "MQM"
 
-    if (!protocol_error_spans) $("#instructions_spans").hide()
-    if (!protocol_error_categories) $("#instructions_categories").hide()
+    // Set global instructions from payload
+    if (response.info.instructions) {
+        $("#instructions_global").html(response.info.instructions)
+    } else {
+        $("#instructions_global").html("")
+    }
 
     $("#output_div").html("")
 
