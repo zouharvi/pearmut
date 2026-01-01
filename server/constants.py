@@ -8,13 +8,13 @@ PROTOCOL_INSTRUCTIONS = {
           <li>Score each translation using the slider based on meaning preservation and quality.
             <strong>Important:</strong> The relative order of scores matters; ensure better translations have higher
             scores than worse ones.
+            <ul>
+              <li>0: <strong>Nonsense</strong>: most information is lost.</li>
+              <li>33%: <strong>Broken</strong>: major gaps and narrative issues.</li>
+              <li>66%: <strong>Middling</strong>: minor issues with grammar or consistency.</li>
+              <li>100%: <strong>Perfect</strong>: meaning and grammar align completely with the source.</li>
+            </ul>
           </li>
-          <ul>
-            <li>0: <strong>Nonsense</strong>: most information is lost.</li>
-            <li>33%: <strong>Broken</strong>: major gaps and narrative issues.</li>
-            <li>66%: <strong>Middling</strong>: minor issues with grammar or consistency.</li>
-            <li>100%: <strong>Perfect</strong>: meaning and grammar align completely with the source.</li>
-          </ul>
         </ul>
     """,
     "ESA": """
@@ -40,13 +40,13 @@ PROTOCOL_INSTRUCTIONS = {
           <li>Score each translation using the slider based on meaning preservation and quality.
             <strong>Important:</strong> The relative order of scores matters; ensure better translations have higher
             scores than worse ones.
+            <ul>
+              <li>0: <strong>Nonsense</strong>: most information is lost.</li>
+              <li>33%: <strong>Broken</strong>: major gaps and narrative issues.</li>
+              <li>66%: <strong>Middling</strong>: minor issues with grammar or consistency.</li>
+              <li>100%: <strong>Perfect</strong>: meaning and grammar align completely with the source.</li>
+            </ul>
           </li>
-          <ul>
-            <li>0: <strong>Nonsense</strong>: most information is lost.</li>
-            <li>33%: <strong>Broken</strong>: major gaps and narrative issues.</li>
-            <li>66%: <strong>Middling</strong>: minor issues with grammar or consistency.</li>
-            <li>100%: <strong>Perfect</strong>: meaning and grammar align completely with the source.</li>
-          </ul>
         </ul>
     """,
     "MQM": """
@@ -72,13 +72,13 @@ PROTOCOL_INSTRUCTIONS = {
           <li>Score each translation using the slider based on meaning preservation and quality.
             <strong>Important:</strong> The relative order of scores matters; ensure better translations have higher
             scores than worse ones.
+            <ul>
+              <li>0: <strong>Nonsense</strong>: most information is lost.</li>
+              <li>33%: <strong>Broken</strong>: major gaps and narrative issues.</li>
+              <li>66%: <strong>Middling</strong>: minor issues with grammar or consistency.</li>
+              <li>100%: <strong>Perfect</strong>: meaning and grammar align completely with the source.</li>
+            </ul>
           </li>
-          <ul>
-            <li>0: <strong>Nonsense</strong>: most information is lost.</li>
-            <li>33%: <strong>Broken</strong>: major gaps and narrative issues.</li>
-            <li>66%: <strong>Middling</strong>: minor issues with grammar or consistency.</li>
-            <li>100%: <strong>Perfect</strong>: meaning and grammar align completely with the source.</li>
-          </ul>
           <li>
             Error types:
             After highlighting an error fragment, you will be asked to select the specific error type (main category and
