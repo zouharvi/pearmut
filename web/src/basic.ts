@@ -148,12 +148,27 @@ function cleanupPreviousItem(): void {
     $(window).off('resize.toolbox')
 }
 
+// Constant for the default score slider name
+const DEFAULT_SCORE_SLIDER = "Score"
+
+/**
+ * Escapes HTML to prevent XSS vulnerabilities
+ */
+function escapeHtml(unsafe: string): string {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 function _slider_html(item_i: number, model: string, sliders?: string[]): string {
-    // If no custom sliders, use default "Score" slider
+    // If no custom sliders, use default single slider (legacy mode)
     if (!sliders || sliders.length === 0) {
         return `
         <div class="output_response">
-          <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}_score">
+          <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}">
           <span class="slider_label">❓/100</span>
         </div>
         `
@@ -163,21 +178,23 @@ function _slider_html(item_i: number, model: string, sliders?: string[]): string
     let html = '<div class="output_response">'
     
     // Add Score slider first, always present
+    const scoreSliderSafe = escapeHtml(DEFAULT_SCORE_SLIDER)
     html += `
       <div class="slider_container">
-        <label class="slider_name">Score</label>
-        <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}_Score" data-slider="Score">
-        <span class="slider_label" data-slider="Score">❓/100</span>
+        <label class="slider_name">${scoreSliderSafe}</label>
+        <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}_${DEFAULT_SCORE_SLIDER}" data-slider="${scoreSliderSafe}">
+        <span class="slider_label" data-slider="${scoreSliderSafe}">❓/100</span>
       </div>
     `
     
     // Add custom sliders
     for (const slider of sliders) {
+        const sliderSafe = escapeHtml(slider)
         html += `
           <div class="slider_container">
-            <label class="slider_name">${slider}</label>
-            <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}_${slider}" data-slider="${slider}">
-            <span class="slider_label" data-slider="${slider}">❓/100</span>
+            <label class="slider_name">${sliderSafe}</label>
+            <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}_${sliderSafe}" data-slider="${sliderSafe}">
+            <span class="slider_label" data-slider="${sliderSafe}">❓/100</span>
           </div>
         `
     }
@@ -225,7 +242,7 @@ async function display_next_payload(response: DataPayload) {
                 }
                 // Initialize all custom slider values to null
                 if (hasCustomSliders) {
-                    result[model].scores!["Score"] = null
+                    result[model].scores![DEFAULT_SCORE_SLIDER] = null
                     for (const slider of response.info.sliders!) {
                         result[model].scores![slider] = null
                     }
@@ -525,7 +542,7 @@ async function display_next_payload(response: DataPayload) {
             
             if (hasCustomSliders) {
                 // Multiple sliders mode
-                const allSliderNames = ["Score", ...response.info.sliders!]
+                const allSliderNames = [DEFAULT_SCORE_SLIDER, ...response.info.sliders!]
                 
                 for (const sliderName of allSliderNames) {
                     let slider = candidate_block.find(`input[data-slider="${sliderName}"]`)
@@ -541,7 +558,7 @@ async function display_next_payload(response: DataPayload) {
                         if (response_log[item_i][model].scores![sliderName] == null) {
                             response_log[item_i][model].scores![sliderName] = val
                             // Also update legacy score field with first slider value (Score)
-                            if (sliderName === "Score") {
+                            if (sliderName === DEFAULT_SCORE_SLIDER) {
                                 response_log[item_i][model].score = val
                             }
                             has_unsaved_work = true
@@ -558,7 +575,7 @@ async function display_next_payload(response: DataPayload) {
                         label.text(`${val}/100`)
                         response_log[item_i][model].scores![sliderName] = val
                         // Also update legacy score field with first slider value (Score)
-                        if (sliderName === "Score") {
+                        if (sliderName === DEFAULT_SCORE_SLIDER) {
                             response_log[item_i][model].score = val
                         }
                         has_unsaved_work = true
@@ -579,7 +596,7 @@ async function display_next_payload(response: DataPayload) {
                         label.text(`${existingScore}/100`)
                         response_log[item_i][model].scores![sliderName] = existingScore
                         // Also set legacy score field
-                        if (sliderName === "Score") {
+                        if (sliderName === DEFAULT_SCORE_SLIDER) {
                             response_log[item_i][model].score = existingScore
                         }
                     }
