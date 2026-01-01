@@ -91,7 +91,7 @@ Campaigns are defined in JSON files (see [examples/](examples/)). The simplest c
 ```
 
 Each item has to have `tgt` (dictionary from model names to strings, even for a single model evaluation).
-Optionally, you can also include `src` (source text string) and/or `ref` (reference text string).
+Optionally, you can also include `src` (source string) and/or `ref` (reference string).
 If neither `src` nor `ref` is provided, only the model outputs will be displayed.
 For full Pearmut functionality (e.g. automatic statistical analysis), add `item_id` as well.
 Any other keys that you add will simply be stored in the logs.
@@ -303,26 +303,6 @@ The `users` field accepts:
 }
 ```
 
-### Source and Reference Texts
-
-By default, each evaluation item can include both source text (`src`) and reference text (`ref`) alongside the model outputs (`tgt`). Both fields are optional:
-
-```python
-{
-  "src": "The quick brown fox jumps over the lazy dog.",    # Source text (optional)
-  "ref": "Le renard brun rapide saute par-dessus le chien paresseux.",  # Reference text (optional)
-  "tgt": {
-    "modelA": "Le vif renard brun saute sur le chien paresseux.",
-    "modelB": "Un renard brun rapide bondit au-dessus d'un chien flegmatique."
-  }
-}
-```
-
-- **Source text** (`src`): The original text to be translated or processed
-- **Reference text** (`ref`): A reference translation or gold standard output
-- Both are displayed in separate boxes above the model outputs
-- The alignment feature (when enabled) highlights corresponding text across source, reference, and model outputs
-- If neither `src` nor `ref` is provided, only the model outputs will be displayed
 
 ### Multimodal Annotations
 
