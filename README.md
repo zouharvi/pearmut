@@ -126,12 +126,13 @@ The `shuffle` parameter in campaign `info` controls this behavior:
 
 ### Custom Instructions
 
-Set campaign-level instructions using the `instructions` field in `info`. Supports HTML. Defaults to protocol-specific instructions (DA: scoring, ESA: error spans + scoring, MQM: error spans + categories + scoring):
+Set campaign-level instructions using the `instructions` field in `info` (supports HTML).
+Instructions default to protocol-specific ones (DA: scoring, ESA: error spans + scoring, MQM: error spans + categories + scoring).
 ```python
 {
   "info": {
     "protocol": "DA",
-    "instructions": "<p>Rate translation quality on a 0-100 scale.</p>"
+    "instructions": "Rate translation quality on a 0-100 scale.<br>Pay special attention to document-level phenomena."
   }
 }
 ```
