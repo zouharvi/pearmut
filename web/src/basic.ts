@@ -39,7 +39,8 @@ type DataPayload = {
     progress: Array<boolean>,
     time: number,
     payload: Array<{
-        src: string,
+        src?: string,  // Optional source text
+        ref?: string,  // Optional reference text
         tgt: Record<string, string>,  // Dictionary of model->translation
         checks?: any,
         instructions?: string,
@@ -262,15 +263,26 @@ async function display_next_payload(response: DataPayload) {
     for (let item_i = 0; item_i < data.length; item_i++) {
         let item = data[item_i]
         // character-level stuff won't work on media tags
-        let no_src_char = isMediaContent(item.src)
+        let no_src_char = item.src ? isMediaContent(item.src) : true
+        let no_ref_char = item.ref ? isMediaContent(item.ref) : true
 
-        let src_chars = no_src_char ? item.src : contentToCharSpans(item.src, "src_char")
+        let src_chars = item.src ? (no_src_char ? item.src : contentToCharSpans(item.src, "src_char")) : ""
+        let ref_chars = item.ref ? (no_ref_char ? item.ref : contentToCharSpans(item.ref, "ref_char")) : ""
+
+        // Build source and reference boxes - only if they exist
+        let srcRefBoxes = ""
+        if (item.src) {
+            srcRefBoxes += `<div class="output_src">${src_chars}</div>`
+        }
+        if (item.ref) {
+            srcRefBoxes += `<div class="output_ref">${ref_chars}</div>`
+        }
 
         let output_block = $(`
         <div class="output_block">
           <span class="instructions_message"></span>
           <div class="output_srctgt">
-            <div class="output_src">${src_chars}</div>
+            ${srcRefBoxes}
           </div>
         </div>
         `)
@@ -280,7 +292,8 @@ async function display_next_payload(response: DataPayload) {
         }
 
         // Add each model's output
-        let src_chars_els = no_src_char ? [] : output_block.find(".src_char").toArray()
+        let src_chars_els = no_src_char || !item.src ? [] : output_block.find(".src_char").toArray()
+        let ref_chars_els = no_ref_char || !item.ref ? [] : output_block.find(".ref_char").toArray()
 
         for (const [model, tgt] of Object.entries(item.tgt)) {
             let no_tgt_char = isMediaContent(tgt)
@@ -316,6 +329,7 @@ async function display_next_payload(response: DataPayload) {
                     // leaving target character
                     $(obj.el).on("mouseleave", function () {
                         $(".src_char").removeClass("highlighted")
+                        $(".ref_char").removeClass("highlighted")
                         $(".tgt_char").removeClass("highlighted")
                         $(".tgt_char").removeClass("highlighted_active")
 
@@ -328,12 +342,22 @@ async function display_next_payload(response: DataPayload) {
                     // entering target character
                     $(obj.el).on("mouseenter", function () {
                         $(".src_char").removeClass("highlighted")
+                        $(".ref_char").removeClass("highlighted")
                         $(".tgt_char").removeClass("highlighted")
                         if (settings_show_alignment && !is_missing) {
                             // Highlight corresponding characters in source
-                            let src_i = Math.round(i / tgt_chars_objs.length * src_chars_els.length)
-                            for (let j = Math.max(0, src_i - 5); j <= Math.min(src_chars_els.length - 1, src_i + 5); j++) {
-                                $(src_chars_els[j]).addClass("highlighted")
+                            if (src_chars_els.length > 0) {
+                                let src_i = Math.round(i / tgt_chars_objs.length * src_chars_els.length)
+                                for (let j = Math.max(0, src_i - 5); j <= Math.min(src_chars_els.length - 1, src_i + 5); j++) {
+                                    $(src_chars_els[j]).addClass("highlighted")
+                                }
+                            }
+                            // Highlight corresponding characters in reference
+                            if (ref_chars_els.length > 0) {
+                                let ref_i = Math.round(i / tgt_chars_objs.length * ref_chars_els.length)
+                                for (let j = Math.max(0, ref_i - 5); j <= Math.min(ref_chars_els.length - 1, ref_i + 5); j++) {
+                                    $(ref_chars_els[j]).addClass("highlighted")
+                                }
                             }
                             // Highlight corresponding characters in all other candidates
                             let relative_pos = i / tgt_chars_objs.length
@@ -648,20 +672,62 @@ async function display_next_payload(response: DataPayload) {
         }
 
         // Source character hover effects
-        if (!no_src_char) {
+        if (!no_src_char && item.src) {
             src_chars_els.forEach((obj, i) => {
                 $(obj).on("mouseleave", function () {
                     $(".src_char").removeClass("highlighted")
+                    $(".ref_char").removeClass("highlighted")
                     $(".tgt_char").removeClass("highlighted")
                 })
 
                 $(obj).on("mouseenter", function () {
+                    $(".ref_char").removeClass("highlighted")
                     $(".tgt_char").removeClass("highlighted")
                     if (settings_show_alignment) {
+                        // Highlight corresponding characters in reference
+                        if (ref_chars_els.length > 0) {
+                            let ref_i = Math.round(i / src_chars_els.length * ref_chars_els.length)
+                            for (let j = Math.max(0, ref_i - 5); j <= Math.min(ref_chars_els.length - 1, ref_i + 5); j++) {
+                                $(ref_chars_els[j]).addClass("highlighted")
+                            }
+                        }
                         // Highlight corresponding characters in all candidates
                         output_block.find(".output_candidate").each(function () {
                             let tgt_chars = $(this).find(".tgt_char")
                             let tgt_i = Math.round(i / src_chars_els.length * tgt_chars.length)
+                            for (let j = Math.max(0, tgt_i - 5); j <= Math.min(tgt_chars.length - 1, tgt_i + 5); j++) {
+                                tgt_chars.eq(j).addClass("highlighted")
+                            }
+                        })
+                    }
+                })
+            })
+        }
+
+        // Reference character hover effects
+        if (!no_ref_char && item.ref) {
+            ref_chars_els.forEach((obj, i) => {
+                $(obj).on("mouseleave", function () {
+                    $(".src_char").removeClass("highlighted")
+                    $(".ref_char").removeClass("highlighted")
+                    $(".tgt_char").removeClass("highlighted")
+                })
+
+                $(obj).on("mouseenter", function () {
+                    $(".src_char").removeClass("highlighted")
+                    $(".tgt_char").removeClass("highlighted")
+                    if (settings_show_alignment) {
+                        // Highlight corresponding characters in source
+                        if (src_chars_els.length > 0) {
+                            let src_i = Math.round(i / ref_chars_els.length * src_chars_els.length)
+                            for (let j = Math.max(0, src_i - 5); j <= Math.min(src_chars_els.length - 1, src_i + 5); j++) {
+                                $(src_chars_els[j]).addClass("highlighted")
+                            }
+                        }
+                        // Highlight corresponding characters in all candidates
+                        output_block.find(".output_candidate").each(function () {
+                            let tgt_chars = $(this).find(".tgt_char")
+                            let tgt_i = Math.round(i / ref_chars_els.length * tgt_chars.length)
                             for (let j = Math.max(0, tgt_i - 5); j <= Math.min(tgt_chars.length - 1, tgt_i + 5); j++) {
                                 tgt_chars.eq(j).addClass("highlighted")
                             }
