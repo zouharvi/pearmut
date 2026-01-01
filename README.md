@@ -140,13 +140,8 @@ For multi-dimensional evaluation tasks (e.g., assessing fluency, naturalness, an
 }
 ```
 
-When `sliders` is specified:
-- The main "Score" slider is always shown first and labeled
-- Custom sliders appear below, each on its own row with a label
-- All sliders range from 0 to 100
-- All sliders (including Score) must be answered before proceeding
-- The Score value is stored in the `score` field, custom slider values in the `sliders` object
-
+Even when `sliders` is specified, the main "Score" slider is sitll shown and the others underneath with range from 0 to 100.
+All sliders (including Score) must be answered before proceeding
 This is useful for tasks like data quality evaluation where you want to assess multiple aspects independently.
 
 ### Custom Instructions
