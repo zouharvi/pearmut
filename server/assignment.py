@@ -16,21 +16,11 @@ from .utils import (
 
 
 def _get_instructions(tasks_data: dict, campaign_id: str) -> str:
-    """
-    Get instructions for the campaign.
-    If custom instructions are provided, use them.
-    Otherwise, use default instructions based on protocol.
-    Returns empty string if no instructions are found.
-    """
+    """Get instructions: custom if provided, else protocol default, else empty."""
     campaign_info = tasks_data[campaign_id]["info"]
-    
-    # Check if custom instructions are provided
     if "instructions" in campaign_info:
         return campaign_info["instructions"]
-    
-    # Fall back to protocol default instructions
-    protocol = campaign_info.get("protocol", "")
-    return PROTOCOL_INSTRUCTIONS.get(protocol, "")
+    return PROTOCOL_INSTRUCTIONS.get(campaign_info.get("protocol", ""), "")
 
 
 

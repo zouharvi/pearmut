@@ -124,6 +124,18 @@ The `shuffle` parameter in campaign `info` controls this behavior:
 }
 ```
 
+### Custom Instructions
+
+Set campaign-level instructions using the `instructions` field in `info`. Supports HTML. Defaults to protocol-specific instructions (DA: scoring, ESA: error spans + scoring, MQM: error spans + categories + scoring):
+```python
+{
+  "info": {
+    "protocol": "DA",
+    "instructions": "<p>Rate translation quality on a 0-100 scale.</p>"
+  }
+}
+```
+
 ### Pre-filled Error Spans (ESA<sup>AI</sup>)
 
 Include `error_spans` to pre-fill annotations that users can review, modify, or delete:
