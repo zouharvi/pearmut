@@ -66,7 +66,7 @@ class TestItemValidation:
             _add_single_campaign(campaign_file, True, "http://localhost:8001")
 
     def test_missing_src_key(self):
-        """Test that items without 'src' key fail validation."""
+        """Test that items without 'src' key are now allowed (src is optional)."""
         from pearmut.cli import _add_single_campaign
 
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -81,14 +81,14 @@ class TestItemValidation:
                     "data": [
                         [
                             [
-                                {"tgt": {"A": "hola"}}  # Missing 'src'
+                                {"tgt": {"A": "hola"}}  # Missing 'src' - now allowed
                             ]
                         ]
                     ]
                 }, f)
 
-            with pytest.raises(ValueError, match="must contain 'src' and 'tgt' keys"):
-                _add_single_campaign(campaign_file, False, "http://localhost:8001")
+            # This should NOT raise an error now since src is optional
+            _add_single_campaign(campaign_file, True, "http://localhost:8001")
 
     def test_missing_tgt_key(self):
         """Test that items without 'tgt' key fail validation."""
@@ -112,7 +112,7 @@ class TestItemValidation:
                     ]
                 }, f)
 
-            with pytest.raises(ValueError, match="must contain 'src' and 'tgt' keys"):
+            with pytest.raises(ValueError, match="must contain 'tgt' key"):
                 _add_single_campaign(campaign_file, False, "http://localhost:8001")
 
     def test_item_not_dict(self):
@@ -164,7 +164,7 @@ class TestItemValidation:
                 _add_single_campaign(campaign_file, False, "http://localhost:8001")
 
     def test_singlestream_missing_src(self):
-        """Test that single-stream items without 'src' fail validation."""
+        """Test that single-stream items without 'src' are now allowed (src is optional)."""
         from pearmut.cli import _add_single_campaign
 
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -179,13 +179,13 @@ class TestItemValidation:
                     },
                     "data": [
                         [
-                            {"tgt": {"A": "hola"}}  # Missing 'src'
+                            {"tgt": {"A": "hola"}}  # Missing 'src' - now allowed
                         ]
                     ]
                 }, f)
 
-            with pytest.raises(ValueError, match="must contain 'src' and 'tgt' keys"):
-                _add_single_campaign(campaign_file, False, "http://localhost:8001")
+            # This should NOT raise an error now since src is optional
+            _add_single_campaign(campaign_file, True, "http://localhost:8001")
 
     def test_extra_keys_allowed(self):
         """Test that extra keys beyond src/tgt are allowed."""
