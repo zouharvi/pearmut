@@ -3,6 +3,30 @@ This script creates small annotation campaigns, speed test, and bibliography stu
 """
 
 # %%
+import random
+import json
+import collections
+import numpy as np
+import statistics
+
+LANG2_TO_LANG3 = {
+    "cs": "ces",
+    "hi": "hin",
+    "ko": "kor",
+    "pl": "plk",
+    "es": "spa",
+    "en": "eng",
+    "de": "deu",
+    "sk": "slk",
+    "it": "ita",
+    "fa": "fas",
+    # Finnish & Norwegian = Czech just so each langauge is its own user
+    "fi": "fin",
+    "no": "nob",
+}
+
+
+# %%
 
 """
 ###################
@@ -13,8 +37,6 @@ This script creates small annotation campaigns, speed test, and bibliography stu
 # get English source data
 
 import subset2evaluate.utils
-import collections
-import json
 
 data_raw = subset2evaluate.utils.load_data_wmt(
     "wmt25", "en-cs_CZ", normalize=False, include_human=True, include_ref=True
@@ -55,24 +77,6 @@ Output the data in the same JSON format, just adding the translations into the "
 """
 
 # %%
-import random
-import json
-
-LANG2_TO_LANG3 = {
-    "cs": "ces",
-    "hi": "hin",
-    "ko": "kor",
-    "pl": "plk",
-    "es": "spa",
-    "en": "eng",
-    "de": "deu",
-    "sk": "slk",
-    "it": "ita",
-    "fa": "fas",
-    # Finnish & Norwegian = Czech just so each langauge is its own user
-    "fi": "fin",
-    "no": "nob",
-}
 
 
 def shuffled(lst, rng=random.Random()):
@@ -197,9 +201,6 @@ mv ~/Downloads/annotations.json ./scripts/abc_data/results/pearmut_raw.json
 """
 
 import csv
-import collections
-import json
-import statistics
 import glob
 import copy
 
@@ -282,7 +283,11 @@ for campaign_id, data in data.items():
         continue
     langs = campaign_id.removeprefix("abc_")
     for line in data:
-        if "item" not in line or line["user_id"].endswith("2") or line["user_id"].startswith("enko"):
+        if (
+            "item" not in line
+            or line["user_id"].endswith("2")
+            or line["user_id"].startswith("enko")
+        ):
             continue
 
         for item, annotation in zip(line["item"], line["annotation"]):
@@ -331,61 +336,46 @@ annotations_tool = {
     "appraise": data_appraise,
 }
 
-
 results = collections.defaultdict(lambda: collections.defaultdict(list))
 for user in responses_data["times"].keys():
     for tool in ["appraise", "pearmut"]:
-        src_len_avg = statistics.mean(
-            [len(item["src"]) for doc in annotations_tool[tool][user] for item in doc]
-        )
-        results["Time/item (s)"][tool].append(
-            statistics.mean(times_by_user[user][tool])
-        )
-        results["Time/char (ms)"][tool].append(
-            statistics.mean(
-                t
-                / sum(
-                    len(item["src"])
-                    for doc in annotations_tool[tool][user]
-                    for item in doc
-                )
-                * 1000
-                for t in times_by_user[user][tool]
+        results["Time/item (s)"][tool] += times_by_user[user][tool]
+        results["Time/char (ms)"][tool] += [
+            t
+            / sum(
+                len(item["src"]) for doc in annotations_tool[tool][user] for item in doc
             )
-        )
+            * 1000
+            for t in times_by_user[user][tool]
+        ]
 
         results["Time/error (s)"][tool].append(
             statistics.mean(times_by_user[user][tool])
             / statistics.mean(
-                # turn into expected errors per normalize segment length
-                len(item["error_spans"].get(model, [])) / len(item["src"]) * src_len_avg
-                for doc in annotations_tool[tool][user]
-                for item in doc
-                for model in item["error_spans"]
+                [
+                    len(item["error_spans"].get(model, []))
+                    for item in doc
+                    for model in item["error_spans"]
+                    for doc in annotations_tool[tool][user]
+                ]
             )
         )
 
         for model in ["A", "B", "C"]:
-            results[f"Model {model} score"][tool].append(
-                statistics.mean(
-                    item["score"][model]
-                    for doc in annotations_tool[tool][user]
-                    for item in doc
-                    if model in item["score"]
-                )
-            )
+            results[f"Model {model} score"][tool] += [
+                item["score"][model]
+                for doc in annotations_tool[tool][user]
+                for item in doc
+                if model in item["score"]
+            ]
 
         for model in ["A", "B", "C"]:
-            results[f"Model {model} errors/item"][tool].append(
-                statistics.mean(
-                    len(item["error_spans"].get(model, []))
-                    / len(item["src"])
-                    * src_len_avg
-                    for doc in annotations_tool[tool][user]
-                    for item in doc
-                    if model in item["error_spans"]
-                )
-            )
+            results[f"Model {model} errors/item"][tool] += [
+                len(item["error_spans"].get(model, []))
+                for doc in annotations_tool[tool][user]
+                for item in doc
+                if model in item["error_spans"]
+            ]
 
 # store qualitative responses
 for i, quality in enumerate(["Speed", "Clarity", "Effort"]):
@@ -395,14 +385,22 @@ for i, quality in enumerate(["Speed", "Clarity", "Effort"]):
                 float(responses_data["quality"][user][tool].split(",")[i])
             )
 
+
+    
 for quantity in results:
     print(f"[{quantity:<20}]", end=", ")
     for tool in ["appraise", "pearmut"]:
         avg = statistics.mean(results[quantity][tool])
-        if ">" in quantity:
-            print(f"[{avg:>10.2%}]", end=", ")
+        ci = scipy.stats.t.interval(
+            0.95,
+            len(results[quantity][tool]) - 1,
+            loc=avg,
+            scale=scipy.stats.sem(results[quantity][tool]),
+        )
+        ci = (ci[1] - ci[0]) / 2
+
         if "errors" in quantity:
-            print(f"[{avg:>10.1f}]", end=", ")
+            print(f"[{avg:>6.1f}]+ci[{ci:.2f}]", end=", ")
         elif "0 to 10" in quantity:
             avg_count = collections.Counter([x // 2 for x in results[quantity][tool]])
             print(
@@ -410,7 +408,7 @@ for quantity in results:
                 end=", ",
             )
         else:
-            print(f"[{avg:>10.2f}]", end=", ")
+            print(f"[{avg:>6.2f}]+ci[{ci:.2f}]", end=", ")
     print()
     if quantity in {
         "Model C errors/item",
@@ -461,10 +459,14 @@ for tool in ["pearmut", "appraise"]:
             for user in users
         ]
         cap = min([len(user_scores[i]) for i in range(len(users))])
-        corr = statistics.mean([
-            scipy.stats.pearsonr(user_scores[a][:cap], user_scores[b][:cap]).correlation
-            for a, b in itertools.combinations(range(len(users)), 2)
-        ])
+        corr = statistics.mean(
+            [
+                scipy.stats.pearsonr(
+                    user_scores[a][:cap], user_scores[b][:cap]
+                ).correlation
+                for a, b in itertools.combinations(range(len(users)), 2)
+            ]
+        )
         corrs.append(corr)
     print(f"{tool} group by model {statistics.mean(corrs):.3f}")
 
@@ -480,9 +482,7 @@ for tool in ["pearmut", "appraise"]:
     for user1, user2 in itertools.combinations(users, 2):
         common_items = set(user_items[user1].keys()) & set(user_items[user2].keys())
         for doc_id in common_items:
-            user_scores = [
-                user_items[user][doc_id] for user in [user1, user2]
-            ]
+            user_scores = [user_items[user][doc_id] for user in [user1, user2]]
             corr = scipy.stats.kendalltau(user_scores[0], user_scores[1]).correlation
             if np.isnan(corr):
                 corr = 1
@@ -531,14 +531,16 @@ for i, (ax, line) in enumerate(zip(axs, data)):
     # userid on the right side
     if line["user_id"] != prev_user_id:
         ax.text(
-            XLIM+1, 1,
+            XLIM + 1,
+            1,
             line["user_id"].replace("enfi", "encs").replace("enno", "encs"),
             verticalalignment="center",
             fontsize=8,
         )
         prev_user_id = line["user_id"]
     ax.text(
-        XLIM-5, 1,
+        XLIM - 5,
+        1,
         line["actions"][0]["model"],
         verticalalignment="center",
         fontsize=8,
@@ -555,7 +557,7 @@ for i, (ax, line) in enumerate(zip(axs, data)):
 
         ax.scatter(
             [time_total],
-            [2-action["index"]],
+            [2 - action["index"]],
             **style,
             marker=".",
             s=70,
@@ -570,7 +572,7 @@ for i, (ax, line) in enumerate(zip(axs, data)):
     ax.set_yticks([])
     ax.spines[["top", "right", "left", "bottom"]].set_visible(False)
 
-    if i %2 == 0:
+    if i % 2 == 0:
         ax.set_facecolor("#ccc")
 
 plt.tight_layout(pad=0)
@@ -665,7 +667,6 @@ def measure_average_response(
         scale=scipy.stats.sem(response_times),
     )
     print(f"  ±{(ci[1]-ci[0])/2*1000:.1f}ms (99% CI)")
-
 
 
 appraise_csrf_cookie = input()
