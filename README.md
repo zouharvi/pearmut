@@ -124,6 +124,31 @@ The `shuffle` parameter in campaign `info` controls this behavior:
 }
 ```
 
+### Custom Score Sliders
+
+For multi-dimensional evaluation tasks (e.g., assessing fluency, naturalness, and interestingness separately), you can define custom sliders alongside the default Score slider:
+
+```python
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "ESA",
+    "sliders": ["Fluency", "Naturalness", "Interestingness"]  # Optional custom sliders
+  },
+  "campaign_id": "my_campaign",
+  "data": [...]
+}
+```
+
+When `sliders` is specified:
+- The main "Score" slider is always shown first and labeled
+- Custom sliders appear below, each on its own row with a label
+- All sliders range from 0 to 100
+- All sliders (including Score) must be answered before proceeding
+- The Score value is stored in the `score` field, custom slider values in the `sliders` object
+
+This is useful for tasks like data quality evaluation where you want to assess multiple aspects independently.
+
 ### Custom Instructions
 
 Set campaign-level instructions using the `instructions` field in `info` (supports HTML).
