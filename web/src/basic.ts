@@ -19,6 +19,7 @@ import {
     contentToCharSpans,
     isSpanComplete,
     computeWordBoundaries,
+    detectTextDirection,
 } from './utils';
 
 // Check if frozen mode is enabled (view-only, no annotations)
@@ -266,6 +267,10 @@ async function display_next_payload(response: DataPayload) {
         let no_src_char = !item.src || isMediaContent(item.src)
         let no_ref_char = !item.ref || isMediaContent(item.ref)
 
+        // Detect text direction for source and reference
+        let src_dir = item.src && !no_src_char ? detectTextDirection(item.src) : 'ltr'
+        let ref_dir = item.ref && !no_ref_char ? detectTextDirection(item.ref) : 'ltr'
+
         // Build character spans for source and reference
         let src_chars = ""
         if (item.src) {
@@ -279,10 +284,12 @@ async function display_next_payload(response: DataPayload) {
         // Build source and reference boxes - only if they exist
         let srcRefBoxes = ""
         if (item.src) {
-            srcRefBoxes += `<div class="output_src">${src_chars}</div>`
+            let src_style = src_dir === 'rtl' ? ' style="direction: rtl;"' : ''
+            srcRefBoxes += `<div class="output_src"${src_style}>${src_chars}</div>`
         }
         if (item.ref) {
-            srcRefBoxes += `<div class="output_ref">${ref_chars}</div>`
+            let ref_style = ref_dir === 'rtl' ? ' style="direction: rtl;"' : ''
+            srcRefBoxes += `<div class="output_ref"${ref_style}>${ref_chars}</div>`
         }
 
         let output_block = $(`
@@ -304,11 +311,13 @@ async function display_next_payload(response: DataPayload) {
 
         for (const [model, tgt] of Object.entries(item.tgt)) {
             let no_tgt_char = isMediaContent(tgt)
+            let tgt_dir = !no_tgt_char ? detectTextDirection(tgt) : 'ltr'
             let tgt_chars = no_tgt_char ? tgt : (contentToCharSpans(tgt, "tgt_char") + (protocol_error_spans ? ' <span class="tgt_char char_missing">[missing]</span>' : ""))
+            let tgt_style = tgt_dir === 'rtl' ? ' style="direction: rtl;"' : ''
 
             let candidate_block = $(`
             <div class="output_candidate" data-candidate="${model}" data-model="${model}">
-              <div class="output_tgt">${tgt_chars}</div>
+              <div class="output_tgt"${tgt_style}>${tgt_chars}</div>
               ${_slider_html(item_i, model, response.info.sliders)}
             </div>
             `)

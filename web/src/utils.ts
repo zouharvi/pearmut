@@ -538,6 +538,29 @@ export function isMediaContent(content: string): boolean {
 }
 
 /**
+ * Detect text direction based on Unicode Bidirectional Algorithm
+ * Returns 'rtl' if the first strong directional character is RTL, otherwise 'ltr'
+ */
+export function detectTextDirection(text: string): 'rtl' | 'ltr' {
+    // RTL character ranges: Hebrew, Arabic, Syriac, Thaana, N'Ko, Samaritan
+    const rtlRegex = /[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFC]/
+    // LTR character ranges: Latin, Cyrillic, Greek
+    const ltrRegex = /[A-Za-z\u00C0-\u024F\u0400-\u04FF\u0370-\u03FF]/
+    
+    // Check first strong directional character
+    for (const char of text) {
+        if (rtlRegex.test(char)) {
+            return 'rtl'
+        }
+        if (ltrRegex.test(char)) {
+            return 'ltr'
+        }
+    }
+    
+    return 'ltr'
+}
+
+/**
  * Convert text content to character spans with line break handling
  */
 export function contentToCharSpans(content: string, className: string): string {
