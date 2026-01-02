@@ -20,20 +20,8 @@ def load_progress_data(warn: str | None = None):
 
 
 def save_progress_data(data):
-    # Convert sets to lists for JSON serialization
-    def convert_sets(obj):
-        if isinstance(obj, dict):
-            return {k: convert_sets(v) for k, v in obj.items()}
-        elif isinstance(obj, list):
-            return [convert_sets(item) for item in obj]
-        elif isinstance(obj, set):
-            return list(obj)
-        else:
-            return obj
-    
-    serializable_data = convert_sets(data)
     with open(f"{ROOT}/data/progress.json", "w") as f:
-        json.dump(serializable_data, f, indent=2)
+        json.dump(data, f, indent=2)
 
 
 _logs = {}
