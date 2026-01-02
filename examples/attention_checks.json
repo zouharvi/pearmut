@@ -1,7 +1,8 @@
 {
   "info": {
     "assignment": "task-based",
-    "protocol": "ESA"
+    "protocol": "ESA",
+    "shuffle": false
   },
   "campaign_id": "example_attention_checks",
   "data": [

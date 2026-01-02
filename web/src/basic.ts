@@ -10,7 +10,7 @@ import {
     createSpanToolbox,
     updateToolboxPosition,
     Validation,
-    validateContrastiveResponse,
+    validateResponse,
     hasAllowSkip,
     DataGoodbye,
     ProtocolInfo,
@@ -829,8 +829,8 @@ async function performValidation(): Promise<Array<boolean> | null> {
             if (validations[item_ij] == undefined) {
                 continue
             }
-            // Use validateContrastiveResponse to support score_greaterthan conditions
-            const result = validateContrastiveResponse(response_log[item_ij], validations[item_ij]!, model)
+            // Use validateResponse to support score_greaterthan conditions
+            const result = validateResponse(response_log[item_ij], validations[item_ij]!, model)
 
 
             // if we fail and there's a message, prevent loading next item and show warning

@@ -382,19 +382,25 @@ function spanMatches(userSpan: ErrorSpan, validationSpan: ValidationErrorSpan): 
 }
 
 /**
- * Validate user responses against validation rules
- * Returns validation result with failed items
- * TODO: merge with validateContrastiveResponse since everything is Contrastive
+ * Validate a response dictionary with score comparison support
+ * @param responses - Record of responses for all models
+ * @param validations - Record of validation rules for all models
+ * @param model - Model name being validated
+ * @returns true if validation passes, false otherwise
  */
 export function validateResponse(
-    response: Response,
-    validation: Validation,
+    responses: Record<string, Response>,
+    validations: Record<string, Validation>,
+    model: string
 ): boolean {
+    const response = responses[model];
+    const validation = validations[model];
+    
     if (!validation) {
-        return true
+        return true;
     }
 
-    // Validate score if specified
+    // Validate score range if specified
     if (validation.score !== undefined) {
         const [minScore, maxScore] = validation.score;
         if (response.score === null || response.score < minScore || response.score > maxScore) {
@@ -413,34 +419,7 @@ export function validateResponse(
         }
     }
 
-    return true
-}
-
-/**
- * Validate a response dictionary with score comparison support
- * @param responses - Record of responses for all models
- * @param validations - Record of validation rules for all models
- * @param model - Model name being validated
- * @returns true if validation passes, false otherwise
- */
-export function validateContrastiveResponse(
-    responses: Record<string, Response>,
-    validations: Record<string, Validation>,
-    model: string
-): boolean {
-    const response = responses[model];
-    const validation = validations[model];
-    
-    if (!validation) {
-        return true;
-    }
-
-    // First, perform standard validation (score range and error spans)
-    if (!validateResponse(response, validation)) {
-        return false;
-    }
-
-    // Check score_greaterthan condition if specified
+    // Validate score_greaterthan condition if specified
     if (validation.score_greaterthan !== undefined) {
         const otherModel = validation.score_greaterthan as string;
         
