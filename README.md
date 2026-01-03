@@ -128,7 +128,7 @@ The `shuffle` parameter in campaign `info` controls this behavior:
 
 ### Custom Score Sliders
 
-For multi-dimensional evaluation tasks (e.g., assessing fluency, naturalness, and interestingness separately), you can define custom sliders alongside the default Score slider:
+For multi-dimensional evaluation tasks (e.g., assessing fluency, naturalness, and interestingness separately), you can define custom sliders instead of the default Score slider:
 
 ```python
 {
@@ -142,8 +142,8 @@ For multi-dimensional evaluation tasks (e.g., assessing fluency, naturalness, an
 }
 ```
 
-Even when `sliders` is specified, the main "Score" slider is sitll shown and the others underneath with range from 0 to 100.
-All sliders (including Score) must be answered before proceeding
+When `sliders` is specified, only the custom sliders are shown with range from 0 to 100.
+All sliders must be answered before proceeding.
 This is useful for tasks like data quality evaluation where you want to assess multiple aspects independently.
 
 ### Custom Instructions
