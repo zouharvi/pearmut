@@ -19,9 +19,10 @@ def _clear_test_logs():
     """Clear in-memory log cache and delete test log files for clean test state."""
     import os
     import glob
+    from pearmut.utils import ROOT
     _logs.clear()
     # Also delete any test log files
-    for log_file in glob.glob("data/outputs/*.jsonl"):
+    for log_file in glob.glob(f"{ROOT}/data/outputs/*.jsonl"):
         try:
             os.remove(log_file)
         except OSError:

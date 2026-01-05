@@ -474,6 +474,26 @@ def _reset_user_time(progress_data: dict, campaign_id: str, user_id: str) -> Non
     progress_data[campaign_id][user_id]["validations"] = {}
 
 
+def _get_user_annotated_items(campaign_id: str, user_id: str) -> set[int]:
+    """
+    Get the set of item indices that a specific user has annotated.
+    
+    Args:
+        campaign_id: The campaign identifier
+        user_id: The user identifier
+        
+    Returns:
+        Set of item indices (item_i) that the user has annotated
+    """
+    log = get_db_log(campaign_id)
+    user_items = set()
+    for entry in log:
+        if entry.get("user_id") == user_id and entry.get("annotation") != RESET_MARKER:
+            if (item_i := entry.get("item_i")) is not None:
+                user_items.add(item_i)
+    return user_items
+
+
 def reset_task(
     campaign_id: str,
     user_id: str,
@@ -498,12 +518,7 @@ def reset_task(
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "single-stream":
         # Find all items that this user has annotated
-        log = get_db_log(campaign_id)
-        user_items = set()
-        for entry in log:
-            if entry.get("user_id") == user_id and entry.get("annotation") != RESET_MARKER:
-                if (item_i := entry.get("item_i")) is not None:
-                    user_items.add(item_i)
+        user_items = _get_user_annotated_items(campaign_id, user_id)
         
         # Save reset markers only for items this user has touched
         for item_i in user_items:
@@ -522,12 +537,7 @@ def reset_task(
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "dynamic":
         # Find all items that this user has annotated
-        log = get_db_log(campaign_id)
-        user_items = set()
-        for entry in log:
-            if entry.get("user_id") == user_id and entry.get("annotation") != RESET_MARKER:
-                if (item_i := entry.get("item_i")) is not None:
-                    user_items.add(item_i)
+        user_items = _get_user_annotated_items(campaign_id, user_id)
         
         # Save reset markers only for items this user has touched
         for item_i in user_items:
