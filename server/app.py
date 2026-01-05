@@ -280,6 +280,50 @@ async def _reset_task(request: ResetTaskRequest):
     return response
 
 
+class PurgeCampaignRequest(BaseModel):
+    campaign_id: str
+    token: str
+
+
+@app.post("/purge-campaign")
+async def _purge_campaign(request: PurgeCampaignRequest):
+    global progress_data, tasks_data
+    
+    campaign_id = request.campaign_id
+    token = request.token
+
+    if campaign_id not in progress_data:
+        return JSONResponse(content="Unknown campaign ID", status_code=400)
+    if token != tasks_data[campaign_id]["token"]:
+        return JSONResponse(content="Invalid token", status_code=400)
+
+    # Unlink assets if they exist
+    destination = tasks_data[campaign_id].get("info", {}).get("assets", {}).get("destination")
+    if destination:
+        symlink_path = f"{ROOT}/data/{destination}".rstrip("/")
+        if os.path.islink(symlink_path):
+            os.remove(symlink_path)
+    
+    # Remove task file
+    task_file = f"{ROOT}/data/tasks/{campaign_id}.json"
+    if os.path.exists(task_file):
+        os.remove(task_file)
+    
+    # Remove output file
+    output_file = f"{ROOT}/data/outputs/{campaign_id}.jsonl"
+    if os.path.exists(output_file):
+        os.remove(output_file)
+    
+    # Remove from in-memory data structures
+    del tasks_data[campaign_id]
+    del progress_data[campaign_id]
+    
+    # Save updated progress data
+    save_progress_data(progress_data)
+    
+    return JSONResponse(content="ok", status_code=200)
+
+
 @app.get("/download-annotations")
 async def _download_annotations(
     campaign_id: list[str] = Query(),
