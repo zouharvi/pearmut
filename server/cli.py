@@ -10,10 +10,11 @@ import urllib.parse
 
 import psutil
 
-from .utils import ROOT, load_progress_data, save_progress_data
+from .utils import ROOT, TOKEN_MAIN, load_progress_data, save_progress_data
 
 os.makedirs(f"{ROOT}/data/tasks", exist_ok=True)
 load_progress_data(warn=None)
+
 
 
 def _run(args_unknown):
@@ -33,21 +34,22 @@ def _run(args_unknown):
     args = args.parse_args(args_unknown)
 
     # print access dashboard URL for all campaigns
-    if tasks_data:
-        dashboard_url = (
-            args.server
-            + "/dashboard.html?"
-            + "&".join(
-                [
-                    f"campaign_id={urllib.parse.quote_plus(campaign_id)}&token={campaign_data["token"]}"
-                    for campaign_id, campaign_data in tasks_data.items()
-                ]
-            )
+    dashboard_url = (
+        args.server
+        + "/dashboard.html?"
+        + f"token_main={TOKEN_MAIN}"
+        + "".join(
+            [
+                f"&campaign_id={urllib.parse.quote_plus(campaign_id)}&token={campaign_data["token"]}"
+                for campaign_id, campaign_data in tasks_data.items()
+            ]
         )
-        print(
-            "\033[92mNow serving Pearmut, use the following URL to access the everything-dashboard:\033[0m"
-        )
-        print("🍐", dashboard_url + "\n", flush=True)
+    )
+    print(
+        "\033[92mNow serving Pearmut, use the following URL to access the everything-dashboard:\033[0m"
+    )
+    print("🍐", dashboard_url + "\n", flush=True)
+
 
     # disable startup message
     uvicorn.config.LOGGING_CONFIG["loggers"]["uvicorn.error"]["level"] = "WARNING"

@@ -17,6 +17,7 @@ from .results_export import (
 )
 from .utils import (
     ROOT,
+    TOKEN_MAIN,
     check_validation_threshold,
     load_progress_data,
     save_db_payload,
@@ -288,7 +289,7 @@ class PurgeCampaignRequest(BaseModel):
 @app.post("/purge-campaign")
 async def _purge_campaign(request: PurgeCampaignRequest):
     global progress_data, tasks_data
-    
+
     campaign_id = request.campaign_id
     token = request.token
 
@@ -298,57 +299,69 @@ async def _purge_campaign(request: PurgeCampaignRequest):
         return JSONResponse(content="Invalid token", status_code=400)
 
     # Unlink assets if they exist
-    destination = tasks_data[campaign_id].get("info", {}).get("assets", {}).get("destination")
+    destination = (
+        tasks_data[campaign_id].get("info", {}).get("assets", {}).get("destination")
+    )
     if destination:
         symlink_path = f"{ROOT}/data/{destination}".rstrip("/")
         if os.path.islink(symlink_path):
             os.remove(symlink_path)
-    
+
     # Remove task file
     task_file = f"{ROOT}/data/tasks/{campaign_id}.json"
     if os.path.exists(task_file):
         os.remove(task_file)
-    
+
     # Remove output file
     output_file = f"{ROOT}/data/outputs/{campaign_id}.jsonl"
     if os.path.exists(output_file):
         os.remove(output_file)
-    
+
     # Remove from in-memory data structures
     del tasks_data[campaign_id]
     del progress_data[campaign_id]
-    
+
     # Save updated progress data
     save_progress_data(progress_data)
-    
+
     return JSONResponse(content="ok", status_code=200)
 
 
 class AddCampaignRequest(BaseModel):
     campaign_data: dict[str, Any]
+    token_main: str
 
 
 @app.post("/add-campaign")
 async def _add_campaign(request: AddCampaignRequest):
     global progress_data, tasks_data
-    
+
     from .cli import _add_single_campaign
-    
+
+    if request.token_main != TOKEN_MAIN:
+        return JSONResponse(
+            content={"error": "Invalid main token. Use the latest one."},
+            status_code=400,
+        )
+
     try:
         server = f"{os.environ.get('PEARMUT_SERVER_URL', 'http://localhost:8001')}"
         _add_single_campaign(request.campaign_data, overwrite=False, server=server)
-        
-        campaign_id = request.campaign_data['campaign_id']
+
+        campaign_id = request.campaign_data["campaign_id"]
         with open(f"{ROOT}/data/tasks/{campaign_id}.json", "r") as f:
             tasks_data[campaign_id] = json.load(f)
-        
+
         progress_data = load_progress_data(warn=None)
-        
-        return JSONResponse(content={
-            "status": "ok",
-            "campaign_id": campaign_id,
-            "token": tasks_data[campaign_id]["token"]
-        }, status_code=200)
+
+        return JSONResponse(
+            content={
+                "status": "ok",
+                "campaign_id": campaign_id,
+                "token": tasks_data[campaign_id]["token"],
+            },
+            status_code=200,
+        )
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=400)
 

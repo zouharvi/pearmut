@@ -1,11 +1,13 @@
+import hashlib
 import json
 import os
+import random
 
 ROOT = "."
 
 # Sentinel value to indicate a task reset - masks all prior annotations
 RESET_MARKER = "__RESET__"
-
+TOKEN_MAIN = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
 
 def load_progress_data(warn: str | None = None):
     if not os.path.exists(f"{ROOT}/data/progress.json"):

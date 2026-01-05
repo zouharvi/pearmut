@@ -667,7 +667,6 @@ def measure_average_response(
     )
     print(f"  ±{(ci[1]-ci[0])/2*1000:.1f}ms (99% CI)")
 
-
 appraise_csrf_cookie = input()
 pearmut_token_ensk = input()
 
@@ -780,6 +779,16 @@ measure_average_response_chill(
 measure_average_response_chill(
     url="https://alani-unpleadable-vindicatedly.ngrok-free.dev/campaign-status/abc24/",
     method="get",
+    iterations=100,
+)
+
+with open("abc_data/pearmut/ende.json", "r") as f:
+    campaign_data = json.load(f)
+
+measure_average_response_chill(
+    url="https://pearmut.ngrok.io/add-campaign",
+    method="post",
+    payload={"campaign_data": campaign_data},
     iterations=100,
 )
 

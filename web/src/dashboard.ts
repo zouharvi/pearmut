@@ -6,6 +6,7 @@ let searchParams = new URLSearchParams(window.location.search)
 
 let campaign_ids = searchParams.getAll("campaign_id")
 let tokens = searchParams.getAll("token")
+let tokenMain = searchParams.get("token_main") || ""
 
 // verify that tokens length is either 0 or same as campaign_ids length
 if (tokens.length != 0 && tokens.length != campaign_ids.length) {
@@ -374,7 +375,7 @@ $("#campaign_file_input").on("change", async function (event: JQuery.ChangeEvent
         const response = await $.ajax({
             url: `/add-campaign`,
             method: "POST",
-            data: JSON.stringify({ campaign_data: campaignData }),
+            data: JSON.stringify({ campaign_data: campaignData, token_main: tokenMain }),
             contentType: "application/json",
             dataType: "json",
         });

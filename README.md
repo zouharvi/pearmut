@@ -432,6 +432,8 @@ Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouh
 
 # Changelog
 
+- v1.0.2
+  - Fix `MAIN_TOKEN` vulnerability
 - v1.0.1
   - Support RTL languages
   - Add boxes for references
