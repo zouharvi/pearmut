@@ -1,0 +1,26 @@
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "DA",
+    "sliders": [
+      {"name": "Fluency", "min": 0, "max": 5, "step": 1},
+      {"name": "Adequacy", "min": 0, "max": 100, "step": 1}
+    ]
+  },
+  "campaign_id": "example_likert_custom",
+  "data": [
+    [
+      [
+        {
+          "item_id": "en-cs_CZ_#_news_#_sample_#_0",
+          "src": "This is a sample sentence for testing custom sliders.",
+          "tgt": {
+            "ModelA": "Toto je vzorová věta pro testování vlastních posuvníků.",
+            "ModelB": "Tohle je ukázkova věta k testování přizpůsobenych posuvníku."
+          },
+          "instructions": "Evaluate translation quality using custom scales."
+        }
+      ]
+    ]
+  ]
+}
