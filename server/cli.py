@@ -189,13 +189,27 @@ def _shuffle_campaign_data(campaign_data, rng):
             shuffle_document(doc)
 
 
-def _add_single_campaign_data(campaign_data, overwrite, server):
+def _add_single_campaign(data_file, overwrite, server):
     """
-    Add a single campaign from campaign data dictionary.
+    Add a single campaign from a JSON data file or campaign data dictionary.
     """
     import random
 
     import wonderwords
+
+    # Handle both file path and dictionary input
+    if isinstance(data_file, str):
+        with open(data_file, 'r') as f:
+            campaign_data = json.load(f)
+    else:
+        campaign_data = data_file
+
+    if "campaign_id" not in campaign_data:
+        raise ValueError("Campaign data must contain 'campaign_id' field.")
+    if "info" not in campaign_data:
+        raise ValueError("Campaign data must contain 'info' field.")
+    if "data" not in campaign_data:
+        raise ValueError("Campaign data must contain 'data' field.")
 
     with open(f"{ROOT}/data/progress.json", "r") as f:
         progress_data = json.load(f)
@@ -206,10 +220,6 @@ def _add_single_campaign_data(campaign_data, overwrite, server):
             "Use -o to overwrite."
         )
 
-    if "info" not in campaign_data:
-        raise ValueError("Campaign data must contain 'info' field.")
-    if "data" not in campaign_data:
-        raise ValueError("Campaign data must contain 'data' field.")
     if "assignment" not in campaign_data["info"]:
         raise ValueError("Campaign 'info' must contain 'assignment' field.")
     
@@ -479,15 +489,6 @@ def _add_single_campaign_data(campaign_data, overwrite, server):
         # point to the protocol URL
         print(f'🧑 {server}/{user_val["url"]}')
     print()
-
-
-def _add_single_campaign(data_file, overwrite, server):
-    """
-    Add a single campaign from a JSON data file.
-    """
-    with open(data_file, 'r') as f:
-        campaign_data = json.load(f)
-    return _add_single_campaign_data(campaign_data, overwrite, server)
 
 
 def _add_campaign(args_unknown):

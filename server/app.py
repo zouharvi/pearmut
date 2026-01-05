@@ -332,23 +332,12 @@ class AddCampaignRequest(BaseModel):
 async def _add_campaign(request: AddCampaignRequest):
     global progress_data, tasks_data
     
-    from .cli import _add_single_campaign_data
+    from .cli import _add_single_campaign
     
     try:
-        # Validate required fields
-        if "campaign_id" not in request.campaign_data:
-            return JSONResponse(content={"error": "Missing required field: campaign_id"}, status_code=400)
-        if "info" not in request.campaign_data:
-            return JSONResponse(content={"error": "Missing required field: info"}, status_code=400)
-        if "data" not in request.campaign_data:
-            return JSONResponse(content={"error": "Missing required field: data"}, status_code=400)
-        
-        # Use the same server URL as we're currently running
         server = f"{os.environ.get('PEARMUT_SERVER_URL', 'http://localhost:8001')}"
-        # Note: overwrite=False to prevent accidental overwrites from web UI
-        _add_single_campaign_data(request.campaign_data, overwrite=False, server=server)
+        _add_single_campaign(request.campaign_data, overwrite=False, server=server)
         
-        # Reload the campaign data
         campaign_id = request.campaign_data['campaign_id']
         with open(f"{ROOT}/data/tasks/{campaign_id}.json", "r") as f:
             tasks_data[campaign_id] = json.load(f)

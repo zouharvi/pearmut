@@ -362,9 +362,15 @@ $("#campaign_file_input").on("change", async function (event: JQuery.ChangeEvent
 
     try {
         const fileContent = await file.text();
-        const campaignData = JSON.parse(fileContent);
+        let campaignData;
+        try {
+            campaignData = JSON.parse(fileContent);
+        } catch (e) {
+            notify("Error: Invalid JSON file");
+            $(this).val('');
+            return;
+        }
 
-        // Upload the campaign
         const response = await $.ajax({
             url: `/add-campaign`,
             method: "POST",
@@ -375,16 +381,14 @@ $("#campaign_file_input").on("change", async function (event: JQuery.ChangeEvent
 
         notify(`Campaign ${response.campaign_id} added successfully!`);
         
-        // Redirect to the updated dashboard URL with the new campaign
         const url = new URL(window.location.href);
         url.searchParams.append("campaign_id", response.campaign_id);
         url.searchParams.append("token", response.token);
         window.location.href = url.toString();
     } catch (error) {
-        const errorMsg = (error as any)?.responseJSON?.error || (error as any)?.responseText || (error as any)?.statusText || "An unknown error occurred";
-        notify("Error adding campaign: " + errorMsg);
+        const errorMsg = (error as any)?.responseJSON?.error || "Error adding campaign";
+        notify(errorMsg);
     }
     
-    // Reset the file input
     $(this).val('');
 });
