@@ -347,8 +347,8 @@ def _add_single_campaign(data_file, overwrite, server):
     
     # Validate sliders structure if present
     if "sliders" in campaign_data["info"]:
-        if not all(isinstance(s, dict) and all(k in s for k in ("name", "min", "max", "step")) for s in campaign_data["info"]["sliders"]):
-            raise ValueError("Each slider must be a dict with 'name', 'min', 'max', and 'step' keys")
+        if not all(isinstance(s, dict) and all(k in s for k in ("name", "min", "max", "step")) and isinstance(s.get("min"), (int, float)) and isinstance(s.get("max"), (int, float)) and isinstance(s.get("step"), (int, float)) and s["min"] <= s["max"] and s["step"] > 0 for s in campaign_data["info"]["sliders"]):
+            raise ValueError("Each slider must be a dict with 'name', 'min', 'max', and 'step' keys, where min/max/step are numeric, min <= max, and step > 0")
 
     # Remove output file when overwriting (after all validations pass)
     if overwrite and campaign_data['campaign_id'] in progress_data:

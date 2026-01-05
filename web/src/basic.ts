@@ -167,11 +167,10 @@ function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): 
     
     // Add custom sliders
     for (const slider of sliders) {
-        const range = slider.max - slider.min
         html += `
           <div class="slider_container">
             <label class="slider_name">${slider.name}</label>
-            <input type="range" min="${slider.min}" max="${slider.max}" step="${slider.step}" value="-1" id="response_${item_i}_${model}_${slider.name}" data-slider="${slider.name}">
+            <input type="range" min="${slider.min}" max="${slider.max}" step="${slider.step}" value="${slider.min - 1}" id="response_${item_i}_${model}_${slider.name}" data-slider="${slider.name}">
             <span class="slider_label" data-slider="${slider.name}">❓/${slider.max}</span>
           </div>
         `
