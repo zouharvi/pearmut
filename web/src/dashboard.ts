@@ -211,10 +211,9 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         el.find(".purge-campaign-btn").on("click", function () {
             // Create a custom dialog to ask user to choose between purge and reset
             const action = prompt(
-                `What would you like to do with campaign "${campaign_id}"?\n\n` +
+                `What would you like to do with campaign ${campaign_id}?\n\n` +
                 `Type "purge" to remove the campaign completely (all data will be deleted).\n` +
-                `Type "reset" to reset all user accounts (data will be preserved, progress will be reset).\n\n` +
-                `Enter your choice (purge/reset):`,
+                `Type "reset" to reset all user accounts (data will be preserved, progress will be reset).`,
                 "reset"
             );
 
@@ -227,7 +226,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
 
             if (actionLower === "purge") {
                 // Confirm purge action
-                if (!confirm(`Are you absolutely sure you want to PURGE campaign "${campaign_id}"?\n\nThis will:\n- Remove the campaign completely\n- Delete all collected data\n- Cannot be undone\n\nType OK to confirm.`)) {
+                if (!confirm(`Are you absolutely sure you want to purge campaign ${campaign_id}?\n\nThis will:\n- Remove the campaign completely\n- Delete all collected data\n- Cannot be undone\n- Campaign will disappear from dashboard`)) {
                     return;
                 }
 
@@ -270,7 +269,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 });
             } else if (actionLower === "reset") {
                 // Confirm reset action
-                if (!confirm(`Are you sure you want to RESET all accounts in campaign "${campaign_id}"?\n\nThis will:\n- Reset progress for all users\n- Preserve all collected data\n- Users will annotate new data\n\nThis action cannot be undone.`)) {
+                if (!confirm(`Are you sure you want to reset all accounts in campaign ${campaign_id}?\n\nThis will:\n- Reset progress for all users\n- Preserve all collected data\n- Users will annotate new data\n\nThis action cannot be easily undone.`)) {
                     return;
                 }
 
