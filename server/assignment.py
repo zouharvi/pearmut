@@ -527,10 +527,10 @@ def reset_task(
                 {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
             )
         
-        # Reset all users' progress (shared pool)
-        num_items = len(tasks_data[campaign_id]["data"])
+        # Reset only the touched items in all users' progress (shared pool)
         for uid in progress_data[campaign_id]:
-            progress_data[campaign_id][uid]["progress"] = [False] * num_items
+            for item_i in user_items:
+                progress_data[campaign_id][uid]["progress"][item_i] = False
         
         # Reset only the specified user's time
         _reset_user_time(progress_data, campaign_id, user_id)
@@ -546,10 +546,10 @@ def reset_task(
                 {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
             )
         
-        # Reset all users' progress (shared pool, use lists to track models)
-        num_items = len(tasks_data[campaign_id]["data"])
+        # Reset only the touched items in all users' progress (shared pool, use lists to track models)
         for uid in progress_data[campaign_id]:
-            progress_data[campaign_id][uid]["progress"] = [[] for _ in range(num_items)]
+            for item_i in user_items:
+                progress_data[campaign_id][uid]["progress"][item_i] = []
         
         # Reset only the specified user's time
         _reset_user_time(progress_data, campaign_id, user_id)
