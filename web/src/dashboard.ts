@@ -378,8 +378,6 @@ $("#campaign_file_input").on("change", async function (event: JQuery.ChangeEvent
             contentType: "application/json",
             dataType: "json",
         });
-
-        notify(`Campaign ${response.campaign_id} added successfully!`);
         
         const url = new URL(window.location.href);
         url.searchParams.append("campaign_id", response.campaign_id);
