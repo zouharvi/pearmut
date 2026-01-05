@@ -6,11 +6,18 @@ export function notify(message: string): void {
      * The notification disappears after 4 seconds.
      * @param message - The message to be displayed in the notification.
      **/
+    const existingNotifications = $('.notification');
+    let topPosition = 10;
+    existingNotifications.each(function() {
+        topPosition += $(this).outerHeight(true) || 0;
+    });
+    
     const notification = $('<div></div>')
+        .addClass('notification')
         .html(message)
         .css({
             position: 'fixed',
-            top: '10px',
+            top: topPosition + 'px',
             left: '50%',
             transform: 'translateX(-50%)',
             backgroundColor: 'rgba(0, 0, 0, 0.8)',
