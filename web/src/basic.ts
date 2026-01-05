@@ -14,6 +14,7 @@ import {
     hasAllowSkip,
     DataGoodbye,
     ProtocolInfo,
+    SliderConfig,
     displayGoodbyeScreen,
     isMediaContent,
     contentToCharSpans,
@@ -150,12 +151,20 @@ function cleanupPreviousItem(): void {
 // Constant for the default score slider name
 const DEFAULT_SCORE_SLIDER = "Score"
 
-function _slider_html(item_i: number, model: string, sliders?: string[]): string {
+// Helper to extract slider properties from config
+function getSliderProps(config: SliderConfig): { name: string, min: number, max: number, step: number } {
+    if (typeof config === 'string') {
+        return { name: config, min: 0, max: 100, step: 1 }
+    }
+    return config
+}
+
+function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): string {
     // If no custom sliders, use default single slider
     if (!sliders || sliders.length === 0) {
         return `
         <div class="output_response">
-          <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}">
+          <input type="range" min="0" max="100" value="-1" step="1" id="response_${item_i}_${model}">
           <span class="slider_label">❓/100</span>
         </div>
         `
@@ -165,12 +174,13 @@ function _slider_html(item_i: number, model: string, sliders?: string[]): string
     let html = '<div class="output_response">'
     
     // Add custom sliders
-    for (const slider of sliders) {
+    for (const sliderConfig of sliders) {
+        const { name, min, max, step } = getSliderProps(sliderConfig)
         html += `
           <div class="slider_container">
-            <label class="slider_name">${slider}</label>
-            <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}_${slider}" data-slider="${slider}">
-            <span class="slider_label" data-slider="${slider}">❓/100</span>
+            <label class="slider_name">${name}</label>
+            <input type="range" min="${min}" max="${max}" value="-1" step="${step}" id="response_${item_i}_${model}_${name}" data-slider="${name}">
+            <span class="slider_label" data-slider="${name}">❓/${max}</span>
           </div>
         `
     }
@@ -218,8 +228,9 @@ async function display_next_payload(response: DataPayload) {
                 }
                 // Initialize all custom slider values to null
                 if (hasCustomSliders) {
-                    for (const slider of response.info.sliders!) {
-                        result[model].sliders![slider] = null
+                    for (const sliderConfig of response.info.sliders!) {
+                        const sliderName = typeof sliderConfig === 'string' ? sliderConfig : sliderConfig.name
+                        result[model].sliders![sliderName] = null
                     }
                 }
             }
@@ -559,9 +570,10 @@ async function display_next_payload(response: DataPayload) {
             
             if (hasCustomSliders) {
                 // Multiple sliders mode (no Score slider when custom sliders are defined)
-                const allSliderNames = response.info.sliders!
+                const allSliderConfigs = response.info.sliders!
                 
-                for (const sliderName of allSliderNames) {
+                for (const sliderConfig of allSliderConfigs) {
+                    const { name: sliderName, max } = getSliderProps(sliderConfig)
                     let slider = candidate_block.find(`input[data-slider="${sliderName}"]`)
                     let label = candidate_block.find(`.slider_label[data-slider="${sliderName}"]`)
                     
@@ -570,7 +582,7 @@ async function display_next_payload(response: DataPayload) {
                         if (frozenMode) return
 
                         let val = parseInt((<HTMLInputElement>this).value)
-                        label.text(`${val}/100`)
+                        label.text(`${val}/${max}`)
 
                         // Store in sliders field
                         if (response_log[item_i][model].sliders![sliderName] == null) {
@@ -586,7 +598,7 @@ async function display_next_payload(response: DataPayload) {
                         if (frozenMode) return
 
                         let val = parseInt((<HTMLInputElement>this).value)
-                        label.text(`${val}/100`)
+                        label.text(`${val}/${max}`)
                         
                         // Store in sliders field
                         response_log[item_i][model].sliders![sliderName] = val
@@ -606,7 +618,7 @@ async function display_next_payload(response: DataPayload) {
                     
                     if (existingScore != null) {
                         slider.val(existingScore)
-                        label.text(`${existingScore}/100`)
+                        label.text(`${existingScore}/${max}`)
                         response_log[item_i][model].sliders![sliderName] = existingScore
                     }
                 }

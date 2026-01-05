@@ -123,23 +123,25 @@ The `shuffle` parameter in campaign `info` controls this behavior:
 
 ### Custom Score Sliders
 
-For multi-dimensional evaluation tasks (e.g., assessing fluency, naturalness, and interestingness separately), you can define custom sliders instead of the default Score slider:
+For multi-dimensional evaluation tasks (e.g., assessing fluency, naturalness, and interestingness separately), you can define custom sliders instead of the default Score slider. Sliders can be simple names (default 0-100 scale) or objects with custom min, max, and step values:
 
 ```python
 {
   "info": {
     "assignment": "task-based",
     "protocol": "ESA",
-    "sliders": ["Fluency", "Naturalness", "Interestingness"]  # Optional custom sliders
+    "sliders": [
+      {"name": "Fluency", "min": 0, "max": 5, "step": 1},
+      {"name": "Adequacy", "min": 0, "max": 100, "step": 1},
+      "Naturalness"  # Simple string uses default 0-100 scale
+    ]
   },
   "campaign_id": "my_campaign",
   "data": [...]
 }
 ```
 
-When `sliders` is specified, only the custom sliders are shown with range from 0 to 100.
-All sliders must be answered before proceeding.
-This is useful for tasks like data quality evaluation where you want to assess multiple aspects independently.
+When `sliders` is specified, only the custom sliders are shown. All sliders must be answered before proceeding. The simple string format defaults to min=0, max=100, step=1, making it backward compatible with the previous format.
 
 ### Custom Instructions
 
