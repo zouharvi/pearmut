@@ -1,4 +1,5 @@
 import collections
+import copy
 import random
 import statistics
 from typing import Any
@@ -545,11 +546,16 @@ def reset_task(
                 campaign_id,
                 {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
             )
+
+        progress_data_user = copy.deepcopy(progress_data[campaign_id][user_id]["progress"])
         
         # Reset only the touched items in all users' progress (shared pool, use lists to track models)
         for uid in progress_data[campaign_id]:
             for item_i in user_items:
-                progress_data[campaign_id][uid]["progress"][item_i] = []
+                progress_data[campaign_id][uid]["progress"][item_i] = [
+                    x for x in progress_data[campaign_id][uid]["progress"][item_i]
+                    if x not in progress_data_user[item_i]
+                ]
         
         # Reset only the specified user's time
         _reset_user_time(progress_data, campaign_id, user_id)
