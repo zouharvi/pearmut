@@ -497,29 +497,51 @@ def reset_task(
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "single-stream":
-        # Save reset markers for all items (shared pool)
-        num_items = len(tasks_data[campaign_id]["data"])
-        for item_i in range(num_items):
+        # Find all items that this user has annotated
+        log = get_db_log(campaign_id)
+        user_items = set()
+        for entry in log:
+            if entry.get("user_id") == user_id and entry.get("annotation") != RESET_MARKER:
+                if (item_i := entry.get("item_i")) is not None:
+                    user_items.add(item_i)
+        
+        # Save reset markers only for items this user has touched
+        for item_i in user_items:
             save_db_payload(
                 campaign_id,
-                {"user_id": None, "item_i": item_i, "annotation": RESET_MARKER},
+                {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
             )
-        # for single-stream reset all progress
+        
+        # Reset all users' progress (shared pool)
+        num_items = len(tasks_data[campaign_id]["data"])
         for uid in progress_data[campaign_id]:
             progress_data[campaign_id][uid]["progress"] = [False] * num_items
+        
+        # Reset only the specified user's time
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "dynamic":
-        # Save reset markers for all items (shared pool like single-stream)
-        num_items = len(tasks_data[campaign_id]["data"])
-        for item_i in range(num_items):
+        # Find all items that this user has annotated
+        log = get_db_log(campaign_id)
+        user_items = set()
+        for entry in log:
+            if entry.get("user_id") == user_id and entry.get("annotation") != RESET_MARKER:
+                if (item_i := entry.get("item_i")) is not None:
+                    user_items.add(item_i)
+        
+        # Save reset markers only for items this user has touched
+        for item_i in user_items:
             save_db_payload(
                 campaign_id,
-                {"user_id": None, "item_i": item_i, "annotation": RESET_MARKER},
+                {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
             )
-        # for dynamic reset all progress (use sets to track models)
+        
+        # Reset all users' progress (shared pool, use lists to track models)
+        num_items = len(tasks_data[campaign_id]["data"])
         for uid in progress_data[campaign_id]:
             progress_data[campaign_id][uid]["progress"] = [[] for _ in range(num_items)]
+        
+        # Reset only the specified user's time
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
     else:
