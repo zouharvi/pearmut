@@ -440,6 +440,7 @@ Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouh
   - Support custom sliders
   - Purge/reset whole tasks from dashboard
   - Fix resetting individual users in single-stream/dynamic
+  - Fix notification stacking
   - Add campaigns from dashboard
 - v0.3.3
   - Rename `doc_id` to `item_id`
