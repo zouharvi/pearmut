@@ -189,16 +189,13 @@ def _shuffle_campaign_data(campaign_data, rng):
             shuffle_document(doc)
 
 
-def _add_single_campaign(data_file, overwrite, server):
+def _add_single_campaign_data(campaign_data, overwrite, server):
     """
-    Add a single campaign from a JSON data file.
+    Add a single campaign from campaign data dictionary.
     """
     import random
 
     import wonderwords
-
-    with open(data_file, 'r') as f:
-        campaign_data = json.load(f)
 
     with open(f"{ROOT}/data/progress.json", "r") as f:
         progress_data = json.load(f)
@@ -482,6 +479,15 @@ def _add_single_campaign(data_file, overwrite, server):
         # point to the protocol URL
         print(f'🧑 {server}/{user_val["url"]}')
     print()
+
+
+def _add_single_campaign(data_file, overwrite, server):
+    """
+    Add a single campaign from a JSON data file.
+    """
+    with open(data_file, 'r') as f:
+        campaign_data = json.load(f)
+    return _add_single_campaign_data(campaign_data, overwrite, server)
 
 
 def _add_campaign(args_unknown):

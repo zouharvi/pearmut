@@ -350,3 +350,41 @@ if (tokens.length == 0) {
     $("#download_progress").attr("href", `/download-progress?${campaign_ids.map((id, i) => `campaign_id=${encodeURIComponent(id)}&${tokens[i] ? `token=${encodeURIComponent(tokens[i])}` : ''}`).join('&')}`)
 }
 $("#download_annotations").attr("href", `/download-annotations?${campaign_ids.map((id, i) => `campaign_id=${encodeURIComponent(id)}&${tokens[i] ? `token=${encodeURIComponent(tokens[i])}` : ''}`).join('&')}`)
+
+// Add campaign upload functionality
+$("#add_campaign").on("click", function () {
+    $("#campaign_file_input").trigger("click");
+});
+
+$("#campaign_file_input").on("change", async function (event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+        const fileContent = await file.text();
+        const campaignData = JSON.parse(fileContent);
+
+        // Upload the campaign
+        const response = await $.ajax({
+            url: `/add-campaign`,
+            method: "POST",
+            data: JSON.stringify({ campaign_data: campaignData }),
+            contentType: "application/json",
+            dataType: "json",
+        });
+
+        notify(`Campaign ${response.campaign_id} added successfully!`);
+        
+        // Redirect to the updated dashboard URL with the new campaign
+        const url = new URL(window.location.href);
+        url.searchParams.append("campaign_id", response.campaign_id);
+        url.searchParams.append("token", response.token);
+        window.location.href = url.toString();
+    } catch (error: any) {
+        const errorMsg = error?.responseJSON?.error || error?.responseText || error?.statusText || "An unknown error occurred";
+        notify("Error adding campaign: " + errorMsg);
+    }
+    
+    // Reset the file input
+    $(this).val('');
+});
