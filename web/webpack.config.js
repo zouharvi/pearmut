@@ -49,7 +49,7 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: "style.css",
+        filename: "[name].css",
       }),
       new HtmlWebpackPlugin({
         template: './src/index.html',

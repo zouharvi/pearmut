@@ -1,4 +1,5 @@
 import './style.css';
+import 'notifyx/style.css';
 import { notify } from "./utils"
 import $ from 'jquery';
 
