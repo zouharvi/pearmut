@@ -476,8 +476,8 @@ export type DataGoodbye = {
     instructions_goodbye?: string,
 }
 
-// Slider definition can be a simple name or an object with scale parameters
-export type SliderConfig = string | {
+// Slider definition with custom scale parameters
+export type SliderConfig = {
     name: string,
     min: number,
     max: number,
@@ -488,7 +488,7 @@ export type SliderConfig = string | {
 export type ProtocolInfo = {
     protocol: "DA" | "ESA" | "MQM",
     item_i: number,
-    sliders?: SliderConfig[],  // Optional custom slider names or configurations
+    sliders?: SliderConfig[],  // Optional custom slider configurations
     instructions?: string,
 }
 

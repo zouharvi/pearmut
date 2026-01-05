@@ -151,11 +151,8 @@ function cleanupPreviousItem(): void {
 // Constant for the default score slider name
 const DEFAULT_SCORE_SLIDER = "Score"
 
-// Helper to extract slider properties from config
+// Helper to validate and extract slider properties from config
 function getSliderProps(config: SliderConfig): { name: string, min: number, max: number, step: number } {
-    if (typeof config === 'string') {
-        return { name: config, min: 0, max: 100, step: 1 }
-    }
     // Validate object config has required properties
     if (!config.name || typeof config.name !== 'string') {
         throw new Error('Slider config must have a valid name')
