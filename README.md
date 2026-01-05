@@ -438,6 +438,7 @@ Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouh
   - Add custom score sliders for multi-dimensional evaluation
   - Make instructions customizable and protocol-dependent
   - Support custom sliders
+  - Purge/reset whole tasks from dashboard
 - v0.3.3
   - Rename `doc_id` to `item_id`
   - Add Typst, LaTeX, and PDF export for model ranking tables. Hide them by default.

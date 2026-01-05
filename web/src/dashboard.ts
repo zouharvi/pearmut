@@ -127,6 +127,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 ${campaign_id} 
                 <a href="${dashboard_url}">🔗</a>
                 <a class="show-ranking-btn">⚖️</a>
+                ${token !== null ? '<a class="purge-campaign-btn" style="cursor: pointer;">🗑️</a>' : ''}
                 </h3>
             </div>
             <div class="dashboard-content">
@@ -204,6 +205,102 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
 
         $content.show();
     });
+
+    // Add event listener for purge/reset campaign button
+    if (token !== null) {
+        el.find(".purge-campaign-btn").on("click", function () {
+            // Create a custom dialog to ask user to choose between purge and reset
+            const action = prompt(
+                `What would you like to do with campaign ${campaign_id}?\n\n` +
+                `Type "purge" to remove the campaign completely (all data will be deleted).\n` +
+                `Type "reset" to reset all user accounts (data will be preserved, progress will be reset).`,
+                "reset"
+            );
+
+            if (action === null) {
+                // User cancelled
+                return;
+            }
+
+            const actionLower = action.toLowerCase().trim();
+
+            if (actionLower === "purge") {
+                // Confirm purge action
+                if (!confirm(`Are you absolutely sure you want to purge campaign ${campaign_id}?\n\nThis will:\n- Remove the campaign completely\n- Delete all collected data\n- Cannot be undone\n- Campaign will disappear from dashboard`)) {
+                    return;
+                }
+
+                $.ajax({
+                    url: `/purge-campaign`,
+                    method: "POST",
+                    data: JSON.stringify({ "campaign_id": campaign_id, "token": token }),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: () => {
+                        notify(`Campaign ${campaign_id} has been purged.`);
+                        // Remove campaign from URL and reload
+                        const url = new URL(window.location.href);
+                        const params = new URLSearchParams(url.search);
+                        const campaignIds = params.getAll("campaign_id");
+                        const tokens = params.getAll("token");
+                        
+                        // Find and remove this campaign
+                        const index = campaignIds.indexOf(campaign_id);
+                        if (index > -1) {
+                            campaignIds.splice(index, 1);
+                            tokens.splice(index, 1);
+                        }
+                        
+                        // Rebuild URL
+                        url.search = "";
+                        campaignIds.forEach((id, i) => {
+                            url.searchParams.append("campaign_id", id);
+                            if (tokens[i]) {
+                                url.searchParams.append("token", tokens[i]);
+                            }
+                        });
+                        
+                        window.location.href = url.toString();
+                    },
+                    error: (XMLHttpRequest) => {
+                        const errorMsg = XMLHttpRequest.responseJSON?.error || XMLHttpRequest.responseText || XMLHttpRequest.statusText || "An unknown error occurred";
+                        notify("Error purging campaign: " + errorMsg);
+                    },
+                });
+            } else if (actionLower === "reset") {
+                // Confirm reset action
+                if (!confirm(`Are you sure you want to reset all accounts in campaign ${campaign_id}?\n\nThis will:\n- Reset progress for all users\n- Preserve all collected data\n- Users will annotate new data\n\nThis action cannot be easily undone.`)) {
+                    return;
+                }
+
+                // Reset all users
+                let resetPromises = [];
+                for (let user_id in data) {
+                    resetPromises.push(
+                        $.ajax({
+                            url: `/reset-task`,
+                            method: "POST",
+                            data: JSON.stringify({ "campaign_id": campaign_id, "user_id": user_id, "token": token }),
+                            contentType: "application/json",
+                            dataType: "json",
+                        })
+                    );
+                }
+
+                Promise.all(resetPromises)
+                    .then(() => {
+                        notify(`All accounts in campaign ${campaign_id} have been reset.`);
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        const errorMsg = error?.responseJSON?.error || error?.responseText || error?.statusText || "An unknown error occurred";
+                        notify("Error resetting accounts: " + errorMsg);
+                    });
+            } else {
+                notify("Invalid choice. Please enter 'purge' or 'reset'.");
+            }
+        });
+    }
 
     if (token != null) {
         el.find(".reset-task").on("click", function () {
