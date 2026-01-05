@@ -324,6 +324,35 @@ async def _purge_campaign(request: PurgeCampaignRequest):
     return JSONResponse(content="ok", status_code=200)
 
 
+class AddCampaignRequest(BaseModel):
+    campaign_data: dict[str, Any]
+
+
+@app.post("/add-campaign")
+async def _add_campaign(request: AddCampaignRequest):
+    global progress_data, tasks_data
+    
+    from .cli import _add_single_campaign
+    
+    try:
+        server = f"{os.environ.get('PEARMUT_SERVER_URL', 'http://localhost:8001')}"
+        _add_single_campaign(request.campaign_data, overwrite=False, server=server)
+        
+        campaign_id = request.campaign_data['campaign_id']
+        with open(f"{ROOT}/data/tasks/{campaign_id}.json", "r") as f:
+            tasks_data[campaign_id] = json.load(f)
+        
+        progress_data = load_progress_data(warn=None)
+        
+        return JSONResponse(content={
+            "status": "ok",
+            "campaign_id": campaign_id,
+            "token": tasks_data[campaign_id]["token"]
+        }, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=400)
+
+
 @app.get("/download-annotations")
 async def _download_annotations(
     campaign_id: list[str] = Query(),
