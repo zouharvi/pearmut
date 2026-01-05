@@ -273,7 +273,7 @@ All items must contain outputs from all models for this assignment type to work 
 **How it works:**
 1. Initial phase: Each model gets `dynamic_first` annotations with fully random contrastive evaluation
 2. Dynamic phase: After the initial phase, top `dynamic_top` models (by average score) are identified
-3. Contrastive evaluatoin: From the top N models, `dynamic_contrastive_models` models are randomly selected for each item
+3. Contrastive evaluation: From the top N models, `dynamic_contrastive_models` models are randomly selected for each item
 4. Item prioritization: Items with the least annotations for the selected models are prioritized
 5. Backoff: With probability `dynamic_backoff`, uniform random selection is used instead to maintain exploration
 
@@ -437,6 +437,7 @@ Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouh
   - Add boxes for references
   - Add custom score sliders for multi-dimensional evaluation
   - Make instructions customizable and protocol-dependent
+  - Support custom sliders
 - v0.3.3
   - Rename `doc_id` to `item_id`
   - Add Typst, LaTeX, and PDF export for model ranking tables. Hide them by default.
