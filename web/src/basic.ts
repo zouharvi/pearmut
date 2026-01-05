@@ -118,8 +118,8 @@ function check_unlock() {
     let all_done = response_log.every(doc_responses =>
         Object.values(doc_responses).every(r => {
             if (r.sliders) {
-                // Custom sliders mode: all sliders must be non-null
-                return Object.values(r.sliders).every(val => val !== null) && r.score !== null
+                // Custom sliders mode: all sliders must be non-null (no score required)
+                return Object.values(r.sliders).every(val => val !== null)
             } else {
                 // Single score mode: the score must be set
                 return r.score != null
@@ -161,17 +161,8 @@ function _slider_html(item_i: number, model: string, sliders?: string[]): string
         `
     }
     
-    // Generate multiple sliders with labels
+    // Generate multiple sliders with labels (no Score slider when custom sliders are defined)
     let html = '<div class="output_response">'
-    
-    // Add Score slider first, always present
-    html += `
-      <div class="slider_container">
-        <label class="slider_name">${DEFAULT_SCORE_SLIDER}</label>
-        <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}_${DEFAULT_SCORE_SLIDER}" data-slider="${DEFAULT_SCORE_SLIDER}">
-        <span class="slider_label" data-slider="${DEFAULT_SCORE_SLIDER}">❓/100</span>
-      </div>
-    `
     
     // Add custom sliders
     for (const slider of sliders) {
@@ -567,8 +558,8 @@ async function display_next_payload(response: DataPayload) {
             const hasCustomSliders = response.info.sliders && response.info.sliders.length > 0
             
             if (hasCustomSliders) {
-                // Multiple sliders mode
-                const allSliderNames = [DEFAULT_SCORE_SLIDER, ...response.info.sliders!]
+                // Multiple sliders mode (no Score slider when custom sliders are defined)
+                const allSliderNames = response.info.sliders!
                 
                 for (const sliderName of allSliderNames) {
                     let slider = candidate_block.find(`input[data-slider="${sliderName}"]`)
@@ -581,21 +572,12 @@ async function display_next_payload(response: DataPayload) {
                         let val = parseInt((<HTMLInputElement>this).value)
                         label.text(`${val}/100`)
 
-                        // Store in appropriate field
-                        if (sliderName === DEFAULT_SCORE_SLIDER) {
-                            if (response_log[item_i][model].score == null) {
-                                response_log[item_i][model].score = val
-                                has_unsaved_work = true
-                                check_unlock()
-                                action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
-                            }
-                        } else {
-                            if (response_log[item_i][model].sliders![sliderName] == null) {
-                                response_log[item_i][model].sliders![sliderName] = val
-                                has_unsaved_work = true
-                                check_unlock()
-                                action_log.push({ "time": Date.now() / 1000, "action": sliderName, "index": item_i, "model": model, "value": val })
-                            }
+                        // Store in sliders field
+                        if (response_log[item_i][model].sliders![sliderName] == null) {
+                            response_log[item_i][model].sliders![sliderName] = val
+                            has_unsaved_work = true
+                            check_unlock()
+                            action_log.push({ "time": Date.now() / 1000, "action": sliderName, "index": item_i, "model": model, "value": val })
                         }
                     })
                     
@@ -606,14 +588,9 @@ async function display_next_payload(response: DataPayload) {
                         let val = parseInt((<HTMLInputElement>this).value)
                         label.text(`${val}/100`)
                         
-                        // Store in appropriate field
-                        if (sliderName === DEFAULT_SCORE_SLIDER) {
-                            response_log[item_i][model].score = val
-                            action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
-                        } else {
-                            response_log[item_i][model].sliders![sliderName] = val
-                            action_log.push({ "time": Date.now() / 1000, "action": sliderName, "index": item_i, "model": model, "value": val })
-                        }
+                        // Store in sliders field
+                        response_log[item_i][model].sliders![sliderName] = val
+                        action_log.push({ "time": Date.now() / 1000, "action": sliderName, "index": item_i, "model": model, "value": val })
                         has_unsaved_work = true
                         check_unlock()
                     })
@@ -625,20 +602,12 @@ async function display_next_payload(response: DataPayload) {
 
                     // Pre-fill score from payload_existing if available
                     let existingScore: number | null = null
-                    if (sliderName === DEFAULT_SCORE_SLIDER) {
-                        existingScore = response.payload_existing?.annotation[item_i]?.[model]?.score ?? null
-                    } else {
-                        existingScore = response.payload_existing?.annotation[item_i]?.[model]?.sliders?.[sliderName] ?? null
-                    }
+                    existingScore = response.payload_existing?.annotation[item_i]?.[model]?.sliders?.[sliderName] ?? null
                     
                     if (existingScore != null) {
                         slider.val(existingScore)
                         label.text(`${existingScore}/100`)
-                        if (sliderName === DEFAULT_SCORE_SLIDER) {
-                            response_log[item_i][model].score = existingScore
-                        } else {
-                            response_log[item_i][model].sliders![sliderName] = existingScore
-                        }
+                        response_log[item_i][model].sliders![sliderName] = existingScore
                     }
                 }
             } else {
