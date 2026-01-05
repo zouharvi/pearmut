@@ -156,6 +156,19 @@ function getSliderProps(config: SliderConfig): { name: string, min: number, max:
     if (typeof config === 'string') {
         return { name: config, min: 0, max: 100, step: 1 }
     }
+    // Validate object config has required properties
+    if (!config.name || typeof config.name !== 'string') {
+        throw new Error('Slider config must have a valid name')
+    }
+    if (typeof config.min !== 'number' || typeof config.max !== 'number' || typeof config.step !== 'number') {
+        throw new Error('Slider config min, max, and step must be numbers')
+    }
+    if (config.min >= config.max) {
+        throw new Error(`Slider config for "${config.name}": min (${config.min}) must be less than max (${config.max})`)
+    }
+    if (config.step <= 0) {
+        throw new Error(`Slider config for "${config.name}": step must be positive`)
+    }
     return config
 }
 
@@ -229,7 +242,7 @@ async function display_next_payload(response: DataPayload) {
                 // Initialize all custom slider values to null
                 if (hasCustomSliders) {
                     for (const sliderConfig of response.info.sliders!) {
-                        const sliderName = typeof sliderConfig === 'string' ? sliderConfig : sliderConfig.name
+                        const { name: sliderName } = getSliderProps(sliderConfig)
                         result[model].sliders![sliderName] = null
                     }
                 }
