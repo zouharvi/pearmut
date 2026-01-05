@@ -1,6 +1,5 @@
 """Tests for CLI functionality."""
 
-import json
 import os
 import random
 import tempfile

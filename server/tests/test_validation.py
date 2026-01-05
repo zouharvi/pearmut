@@ -1,8 +1,5 @@
 """Tests for campaign data validation."""
 
-import json
-import os
-import tempfile
 
 import pytest
 
