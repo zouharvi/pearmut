@@ -14,6 +14,7 @@ import {
     hasAllowSkip,
     DataGoodbye,
     ProtocolInfo,
+    SliderConfig,
     displayGoodbyeScreen,
     isMediaContent,
     contentToCharSpans,
@@ -150,7 +151,7 @@ function cleanupPreviousItem(): void {
 // Constant for the default score slider name
 const DEFAULT_SCORE_SLIDER = "Score"
 
-function _slider_html(item_i: number, model: string, sliders?: string[]): string {
+function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): string {
     // If no custom sliders, use default single slider
     if (!sliders || sliders.length === 0) {
         return `
@@ -168,9 +169,9 @@ function _slider_html(item_i: number, model: string, sliders?: string[]): string
     for (const slider of sliders) {
         html += `
           <div class="slider_container">
-            <label class="slider_name">${slider}</label>
-            <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}_${slider}" data-slider="${slider}">
-            <span class="slider_label" data-slider="${slider}">❓/100</span>
+            <label class="slider_name">${slider.name}</label>
+            <input type="range" min="${slider.min}" max="${slider.max}" step="${slider.step}" value="${slider.min - 1}" id="response_${item_i}_${model}_${slider.name}" data-slider="${slider.name}">
+            <span class="slider_label" data-slider="${slider.name}">❓/${slider.max}</span>
           </div>
         `
     }
@@ -219,7 +220,7 @@ async function display_next_payload(response: DataPayload) {
                 // Initialize all custom slider values to null
                 if (hasCustomSliders) {
                     for (const slider of response.info.sliders!) {
-                        result[model].sliders![slider] = null
+                        result[model].sliders![slider.name] = null
                     }
                 }
             }
@@ -559,9 +560,11 @@ async function display_next_payload(response: DataPayload) {
             
             if (hasCustomSliders) {
                 // Multiple sliders mode (no Score slider when custom sliders are defined)
-                const allSliderNames = response.info.sliders!
+                const allSliders = response.info.sliders!
                 
-                for (const sliderName of allSliderNames) {
+                for (const sliderConfig of allSliders) {
+                    const sliderName = sliderConfig.name
+                    const sliderMax = sliderConfig.max
                     let slider = candidate_block.find(`input[data-slider="${sliderName}"]`)
                     let label = candidate_block.find(`.slider_label[data-slider="${sliderName}"]`)
                     
@@ -570,7 +573,7 @@ async function display_next_payload(response: DataPayload) {
                         if (frozenMode) return
 
                         let val = parseInt((<HTMLInputElement>this).value)
-                        label.text(`${val}/100`)
+                        label.text(`${val}/${sliderMax}`)
 
                         // Store in sliders field
                         if (response_log[item_i][model].sliders![sliderName] == null) {
@@ -586,7 +589,7 @@ async function display_next_payload(response: DataPayload) {
                         if (frozenMode) return
 
                         let val = parseInt((<HTMLInputElement>this).value)
-                        label.text(`${val}/100`)
+                        label.text(`${val}/${sliderMax}`)
                         
                         // Store in sliders field
                         response_log[item_i][model].sliders![sliderName] = val
@@ -606,7 +609,7 @@ async function display_next_payload(response: DataPayload) {
                     
                     if (existingScore != null) {
                         slider.val(existingScore)
-                        label.text(`${existingScore}/100`)
+                        label.text(`${existingScore}/${sliderMax}`)
                         response_log[item_i][model].sliders![sliderName] = existingScore
                     }
                 }

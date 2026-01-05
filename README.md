@@ -123,23 +123,24 @@ The `shuffle` parameter in campaign `info` controls this behavior:
 
 ### Custom Score Sliders
 
-For multi-dimensional evaluation tasks (e.g., assessing fluency, naturalness, and interestingness separately), you can define custom sliders instead of the default Score slider:
+For multi-dimensional evaluation tasks (e.g., assessing fluency on a Likert scale), you can define custom sliders with specific ranges and steps:
 
 ```python
 {
   "info": {
     "assignment": "task-based",
     "protocol": "ESA",
-    "sliders": ["Fluency", "Naturalness", "Interestingness"]  # Optional custom sliders
+    "sliders": [
+      {"name": "Fluency", "min": 0, "max": 5, "step": 1},
+      {"name": "Adequacy", "min": 0, "max": 100, "step": 1}
+    ]
   },
   "campaign_id": "my_campaign",
   "data": [...]
 }
 ```
 
-When `sliders` is specified, only the custom sliders are shown with range from 0 to 100.
-All sliders must be answered before proceeding.
-This is useful for tasks like data quality evaluation where you want to assess multiple aspects independently.
+When `sliders` is specified, only the custom sliders are shown. Each slider must have `name`, `min`, `max`, and `step` properties. All sliders must be answered before proceeding.
 
 ### Custom Instructions
 
@@ -272,7 +273,7 @@ All items must contain outputs from all models for this assignment type to work 
 **How it works:**
 1. Initial phase: Each model gets `dynamic_first` annotations with fully random contrastive evaluation
 2. Dynamic phase: After the initial phase, top `dynamic_top` models (by average score) are identified
-3. Contrastive evaluatoin: From the top N models, `dynamic_contrastive_models` models are randomly selected for each item
+3. Contrastive evaluation: From the top N models, `dynamic_contrastive_models` models are randomly selected for each item
 4. Item prioritization: Items with the least annotations for the selected models are prioritized
 5. Backoff: With probability `dynamic_backoff`, uniform random selection is used instead to maintain exploration
 
@@ -436,6 +437,7 @@ Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouh
   - Add boxes for references
   - Add custom score sliders for multi-dimensional evaluation
   - Make instructions customizable and protocol-dependent
+  - Support custom sliders
 - v0.3.3
   - Rename `doc_id` to `item_id`
   - Add Typst, LaTeX, and PDF export for model ranking tables. Hide them by default.

@@ -476,11 +476,19 @@ export type DataGoodbye = {
     instructions_goodbye?: string,
 }
 
+// Slider configuration type
+export type SliderConfig = {
+    name: string,
+    min: number,
+    max: number,
+    step: number,
+}
+
 // Shared protocol info type
 export type ProtocolInfo = {
     protocol: "DA" | "ESA" | "MQM",
     item_i: number,
-    sliders?: string[],  // Optional custom slider names
+    sliders?: SliderConfig[],  // Optional custom slider configurations
     instructions?: string,
 }
 
