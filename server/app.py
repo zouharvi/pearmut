@@ -335,8 +335,17 @@ async def _add_campaign(request: AddCampaignRequest):
     from .cli import _add_single_campaign_data
     
     try:
+        # Validate required fields
+        if "campaign_id" not in request.campaign_data:
+            return JSONResponse(content={"error": "Missing required field: campaign_id"}, status_code=400)
+        if "info" not in request.campaign_data:
+            return JSONResponse(content={"error": "Missing required field: info"}, status_code=400)
+        if "data" not in request.campaign_data:
+            return JSONResponse(content={"error": "Missing required field: data"}, status_code=400)
+        
         # Use the same server URL as we're currently running
         server = f"{os.environ.get('PEARMUT_SERVER_URL', 'http://localhost:8001')}"
+        # Note: overwrite=False to prevent accidental overwrites from web UI
         _add_single_campaign_data(request.campaign_data, overwrite=False, server=server)
         
         # Reload the campaign data

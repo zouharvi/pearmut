@@ -356,8 +356,8 @@ $("#add_campaign").on("click", function () {
     $("#campaign_file_input").trigger("click");
 });
 
-$("#campaign_file_input").on("change", async function (event: any) {
-    const file = event.target.files[0];
+$("#campaign_file_input").on("change", async function (event: JQuery.ChangeEvent) {
+    const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
 
     try {
@@ -380,8 +380,8 @@ $("#campaign_file_input").on("change", async function (event: any) {
         url.searchParams.append("campaign_id", response.campaign_id);
         url.searchParams.append("token", response.token);
         window.location.href = url.toString();
-    } catch (error: any) {
-        const errorMsg = error?.responseJSON?.error || error?.responseText || error?.statusText || "An unknown error occurred";
+    } catch (error) {
+        const errorMsg = (error as any)?.responseJSON?.error || (error as any)?.responseText || (error as any)?.statusText || "An unknown error occurred";
         notify("Error adding campaign: " + errorMsg);
     }
     
