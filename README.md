@@ -440,6 +440,7 @@ Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouh
   - Support custom sliders
   - Purge/reset whole tasks from dashboard
   - Fix resetting individual users in single-stream/dynamic
+  - Fix notification stacking
 - v0.3.3
   - Rename `doc_id` to `item_id`
   - Add Typst, LaTeX, and PDF export for model ranking tables. Hide them by default.

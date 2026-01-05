@@ -6,12 +6,11 @@ export function notify(message: string): void {
      * The notification disappears after 4 seconds.
      * @param message - The message to be displayed in the notification.
      **/
-    const existingNotifications = $('.notification');
     let topPosition = 10;
-    existingNotifications.each(function() {
-        topPosition += $(this).outerHeight(true) || 0;
+    $('.notification').each(function () {
+        topPosition += 10 + ($(this).outerHeight(true) || 0);
     });
-    
+
     const notification = $('<div></div>')
         .addClass('notification')
         .html(message)
@@ -28,9 +27,15 @@ export function notify(message: string): void {
         })
         .appendTo('body');
 
-    setTimeout(() => {
+    setTimeout(async () => {
         notification.remove();
-    }, 4000);
+        
+        let topPosition = 10;
+        $('.notification').each(function () {
+            $(this).css('top', topPosition + 'px');
+            topPosition += 10 + ($(this).outerHeight(true) || 0);
+        });
+    }, 5000);
 }
 
 // Shared types for error span annotation
@@ -51,10 +56,10 @@ export function isSpanComplete(span: ErrorSpan, protocol_error_categories: boole
 }
 
 // Validation types for tutorial/attention checks
-export type ValidationErrorSpan = { 
+export type ValidationErrorSpan = {
     start_i?: number | [number, number],  // exact value or range [min, max]
     end_i?: number | [number, number],    // exact value or range [min, max]
-    severity?: string 
+    severity?: string
 }
 export type Validation = {
     warning?: string,  // Warning message to display on failure (attention check mode)
@@ -63,8 +68,8 @@ export type Validation = {
     error_spans?: Array<ValidationErrorSpan>,  // Expected error spans
     allow_skip?: boolean  // Show skip tutorial button
 }
-export type ValidationResult = { 
-    valid: boolean, 
+export type ValidationResult = {
+    valid: boolean,
     failed_items: number[],  // indices of failed items
 }
 
@@ -151,7 +156,7 @@ export function redrawProgress(current_i: number | null, progress: Array<boolean
 
     // Attach click handlers if callback is provided
     if (onItemClick) {
-        $("#progress span").on("click", function() {
+        $("#progress span").on("click", function () {
             const index = parseInt($(this).data("index"))
             onItemClick(index)
         })
@@ -186,11 +191,11 @@ export function createSpanToolbox(
     </div>
     </div>
     `)
-    
+
     for (let category1 of Object.keys(MQM_ERROR_CATEGORIES)) {
         toolbox.find("select").eq(0).append(`<option value="${category1}">${category1}</option>`)
     }
-    
+
     // select one category handler
     toolbox.find("select").eq(0).on("change", function () {
         if (frozenMode) return
@@ -213,7 +218,7 @@ export function createSpanToolbox(
             error_span.category = `${cat1}`
         }
     })
-    
+
     toolbox.find("select").eq(1).on("change", function () {
         if (frozenMode) return
         let cat1 = toolbox.find("select").eq(0).val() as string
@@ -225,7 +230,7 @@ export function createSpanToolbox(
             error_span.category = `${cat1}/${cat2}`
         }
     })
-    
+
     if (!protocol_error_categories) {
         // only MQM has neutral severity
         toolbox.find(".error_neutral").remove()
@@ -233,7 +238,7 @@ export function createSpanToolbox(
         toolbox.find(".span_toolbox_esa").css("border-right", "")
         toolbox.find(".span_toolbox_esa").css("margin-right", "-5px")
     }
-    
+
     // handle delete button
     toolbox.find(".error_delete").on("click", () => {
         if (frozenMode) return
@@ -248,7 +253,7 @@ export function createSpanToolbox(
         }
         onDelete()
     })
-    
+
     // handle severity buttons
     toolbox.find(".error_neutral").on("click", () => {
         if (frozenMode) return
@@ -260,7 +265,7 @@ export function createSpanToolbox(
         }
         error_span.severity = "neutral"
     })
-    
+
     toolbox.find(".error_minor").on("click", () => {
         if (frozenMode) return
         for (let j = left_i; j <= right_i; j++) {
@@ -271,7 +276,7 @@ export function createSpanToolbox(
         }
         error_span.severity = "minor"
     })
-    
+
     toolbox.find(".error_major").on("click", () => {
         if (frozenMode) return
         for (let j = left_i; j <= right_i; j++) {
@@ -282,16 +287,16 @@ export function createSpanToolbox(
         }
         error_span.severity = "major"
     })
-    
+
     // Restore category from error_span if it exists (for previously saved annotations)
     if (protocol_error_categories && error_span.category && error_span.category.includes("/")) {
         const [cat1, cat2] = error_span.category.split("/")
         const cat1_select = toolbox.find("select").eq(0)
         const cat2_select = toolbox.find("select").eq(1)
-        
+
         // Set the first dropdown
         cat1_select.val(cat1)
-        
+
         // Populate and set the second dropdown
         cat2_select.empty()
         const subcats = MQM_ERROR_CATEGORIES[cat1]
@@ -306,7 +311,7 @@ export function createSpanToolbox(
         // Handle case where only category is set (no subcategory yet)
         const cat1_select = toolbox.find("select").eq(0)
         cat1_select.val(error_span.category)
-        
+
         // Populate the second dropdown but don't select anything yet
         const cat2_select = toolbox.find("select").eq(1)
         cat2_select.empty()
@@ -327,7 +332,7 @@ export function createSpanToolbox(
         toolbox.find(".error_major").prop("disabled", true)
         toolbox.find("select").prop("disabled", true)
     }
-    
+
     return toolbox
 }
 
@@ -337,11 +342,11 @@ export function createSpanToolbox(
 export function updateToolboxPosition(toolbox: JQuery<HTMLElement>, charEl: JQuery<HTMLElement>): void {
     const position = charEl.position();
     if (!position) return;
-    
+
     const toolboxHeight = toolbox.innerHeight() || 0;
     const toolboxWidth = toolbox.innerWidth() || 0;
     const windowWidth = $(window).width() || 900;
-    
+
     let topPosition = position.top - toolboxHeight;
     let leftPosition = position.left;
     // make sure it's not getting out of screen
@@ -402,7 +407,7 @@ export function validateResponse(
 ): boolean {
     const response = responses[model];
     const validation = validations[model];
-    
+
     if (!validation) {
         return true;
     }
@@ -414,7 +419,7 @@ export function validateResponse(
             return false
         }
     }
-    
+
     // Validate error spans if specified
     if (validation.error_spans !== undefined && validation.error_spans.length > 0) {
         // Each expected span must be matched by at least one user span
@@ -429,20 +434,20 @@ export function validateResponse(
     // Validate score_greaterthan condition if specified
     if (validation.score_greaterthan !== undefined) {
         const otherModel = validation.score_greaterthan as string;
-        
+
         // Validate the other model exists in responses
         if (!responses[otherModel]) {
             console.error(`Invalid score_greaterthan model: ${otherModel}`);
             return false;
         }
-        
+
         const otherScore = responses[otherModel].score;
         // Both scores must be set (not null) to perform comparison
         // Null scores indicate the user hasn't provided a score yet
         if (response.score === null || otherScore === null) {
             return false;
         }
-        
+
         // Verify this model's score is strictly greater than the other
         if (response.score <= otherScore) {
             return false;
@@ -505,7 +510,7 @@ export type ProtocolInfo = {
 export function displayGoodbyeScreen(response: DataGoodbye, navigate_to_item: (i: number) => void): void {
     // Use instructions_goodbye if provided, otherwise use default message
     // Note: instructions_goodbye may contain arbitrary HTML including variables that are replaced server-side
-    
+
     $("#output_div").html(`
     <div class='white-box' style='width: max-content'>
     <h2>🎉 All done, thank you for your annotations!</h2>
@@ -525,10 +530,10 @@ export function displayGoodbyeScreen(response: DataGoodbye, navigate_to_item: (i
  * Check if content is a media tag (audio, video, img, iframe)
  */
 export function isMediaContent(content: string): boolean {
-    return content.startsWith("<audio ") || 
-           content.startsWith("<video ") || 
-           content.startsWith("<img ") || 
-           content.startsWith("<iframe ")
+    return content.startsWith("<audio ") ||
+        content.startsWith("<video ") ||
+        content.startsWith("<img ") ||
+        content.startsWith("<iframe ")
 }
 
 /**
@@ -540,7 +545,7 @@ export function detectTextDirection(text: string): 'rtl' | 'ltr' {
     const rtlRegex = /[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFC]/
     // LTR character ranges: Latin, Cyrillic, Greek
     const ltrRegex = /[A-Za-z\u00C0-\u024F\u0400-\u04FF\u0370-\u03FF]/
-    
+
     // Check first strong directional character
     for (const char of text) {
         if (rtlRegex.test(char)) {
@@ -550,7 +555,7 @@ export function detectTextDirection(text: string): 'rtl' | 'ltr' {
             return 'ltr'
         }
     }
-    
+
     return 'ltr'
 }
 
@@ -569,7 +574,7 @@ export function contentToCharSpans(content: string, className: string): string {
 const is_alphanum = /^\p{L}|\p{N}$/u
 export function computeWordBoundaries(content: string[]): Array<[number, number]> {
     const boundaries: Array<[number, number]> = []
-    
+
     for (let i = 0; i < content.length; i++) {
         // non-alphanumeric characters are their own words
         if (!is_alphanum.test(content[i])) {
@@ -577,14 +582,14 @@ export function computeWordBoundaries(content: string[]): Array<[number, number]
         } else {
             // Find the end of this word that's all alphanumeric
             let word_start = i
-            while (i < content.length - 1 && is_alphanum.test(content[i+1])) {
+            while (i < content.length - 1 && is_alphanum.test(content[i + 1])) {
                 i++;
             }
-            for(let j = word_start; j <= i; j++) {
+            for (let j = word_start; j <= i; j++) {
                 boundaries.push([word_start, i])
             }
         }
     }
-    
+
     return boundaries
 }
