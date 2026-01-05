@@ -344,6 +344,11 @@ def _add_single_campaign(data_file, overwrite, server):
     if "protocol" not in campaign_data["info"]:
         campaign_data["info"]["protocol"] = "ESA"
         print("Warning: 'protocol' not specified in campaign info. Defaulting to 'ESA'.")
+    
+    # Validate sliders structure if present
+    if "sliders" in campaign_data["info"]:
+        if not all(isinstance(s, dict) and all(k in s for k in ("name", "min", "max", "step")) for s in campaign_data["info"]["sliders"]):
+            raise ValueError("Each slider must be a dict with 'name', 'min', 'max', and 'step' keys")
 
     # Remove output file when overwriting (after all validations pass)
     if overwrite and campaign_data['campaign_id'] in progress_data:
