@@ -16,8 +16,18 @@ from pearmut.utils import (
 
 
 def _clear_test_logs():
-    """Clear in-memory log cache for clean test state."""
+    """Clear in-memory log cache and delete test log files for clean test state."""
+    import glob
+    import os
+
+    from pearmut.utils import ROOT
     _logs.clear()
+    # Also delete any test log files
+    for log_file in glob.glob(f"{ROOT}/data/outputs/*.jsonl"):
+        try:
+            os.remove(log_file)
+        except OSError:
+            pass
 
 
 class TestTaskBased:
@@ -411,7 +421,8 @@ class TestSingleStream:
         assert 'correct_token' in content
 
     def test_reset_task_resets_all_users(self):
-        """Test that single-stream reset_task resets progress for all users."""
+        """Test that single-stream reset_task resets only touched items for all users."""
+        _clear_test_logs()
         tasks_data = {
             "campaign1": {
                 "info": {
@@ -421,35 +432,79 @@ class TestSingleStream:
                     [{"src": "a", "tgt": "b"}],
                     [{"src": "c", "tgt": "d"}],
                     [{"src": "e", "tgt": "f"}],
+                    [{"src": "g", "tgt": "h"}],
                 ]
             }
         }
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True, True, False],
+                    "progress": [True, True, False, True],
                     "time": 50.0,
                     "time_start": 1000,
                     "time_end": 2000,
+                    "validations": {},
                 },
                 "user2": {
-                    "progress": [True, True, False],
+                    "progress": [True, True, True, False],
                     "time": 75.0,
                     "time_start": 1100,
                     "time_end": 2100,
+                    "validations": {},
                 }
             }
         }
+        # Add annotations for user1 on items 0 and 1
+        save_db_payload("campaign1", {
+            "user_id": "user1",
+            "item_i": 0,
+            "annotation": {"score": 80}
+        })
+        save_db_payload("campaign1", {
+            "user_id": "user1",
+            "item_i": 1,
+            "annotation": {"score": 90}
+        })
+        # Add annotation for user2 on item 0 and 2
+        save_db_payload("campaign1", {
+            "user_id": "user2",
+            "item_i": 0,
+            "annotation": {"score": 70}
+        })
+        save_db_payload("campaign1", {
+            "user_id": "user2",
+            "item_i": 2,
+            "annotation": {"score": 85}
+        })
+        
         reset_task("campaign1", "user1", tasks_data, progress_data)
-        # Both users' progress should be reset
+        
+        # Only items touched by user1 (0 and 1) should be reset for all users
+        # Items 2 and 3 should remain unchanged
         assert progress_data["campaign1"]["user1"]["progress"] == [
-            False, False, False]
+            False, False, False, True]
         assert progress_data["campaign1"]["user2"]["progress"] == [
-            False, False, False]
+            False, False, True, False]
         # Only user1's time should be reset
         assert progress_data["campaign1"]["user1"]["time"] == 0.0
         assert progress_data["campaign1"]["user1"]["time_start"] is None
         assert progress_data["campaign1"]["user2"]["time"] == 75.0
+        
+        # Verify reset markers were added only for user1's items (0 and 1)
+        items_user1_0 = get_db_log_item("campaign1", "user1", 0)
+        items_user1_1 = get_db_log_item("campaign1", "user1", 1)
+        assert len(items_user1_0) == 0  # Masked by reset marker
+        assert len(items_user1_1) == 0  # Masked by reset marker
+        
+        # User2's annotation on item 0 should still be visible (different user_id)
+        items_user2_0 = get_db_log_item("campaign1", "user2", 0)
+        assert len(items_user2_0) == 1
+        assert items_user2_0[0]["annotation"] == {"score": 70}
+        
+        # User2's annotation on item 2 should still be visible (user1 didn't touch it)
+        items_user2_2 = get_db_log_item("campaign1", "user2", 2)
+        assert len(items_user2_2) == 1
+        assert items_user2_2[0]["annotation"] == {"score": 85}
 
     def test_update_progress_updates_all_users(self):
         """Test that single-stream update_progress updates all users."""
@@ -944,7 +999,8 @@ class TestDynamic:
         assert progress_data["campaign1"]["user2"]["progress"][0] == list()
 
     def test_reset_task_resets_all_users(self):
-        """Test that dynamic reset_task resets progress for all users."""
+        """Test that dynamic reset_task resets only touched items for all users."""
+        _clear_test_logs()
         tasks_data = {
             "campaign1": {
                 "info": {
@@ -954,32 +1010,76 @@ class TestDynamic:
                     [{"src": "a", "tgt": {"model1": "b"}}],
                     [{"src": "c", "tgt": {"model1": "d"}}],
                     [{"src": "e", "tgt": {"model1": "f"}}],
+                    [{"src": "g", "tgt": {"model1": "h"}}],
                 ]
             }
         }
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [{"model1"}, {"model1"}, list()],
+                    "progress": [{"model1"}, {"model1"}, list(), {"model1"}],
                     "time": 50.0,
                     "time_start": 1000,
                     "time_end": 2000,
+                    "validations": {},
                 },
                 "user2": {
-                    "progress": [{"model1"}, {"model1"}, list()],
+                    "progress": [{"model1"}, {"model1"}, {"model1"}, list()],
                     "time": 75.0,
                     "time_start": 1100,
                     "time_end": 2100,
+                    "validations": {},
                 }
             }
         }
+        # Add annotations for user1 on items 0 and 1
+        save_db_payload("campaign1", {
+            "user_id": "user1",
+            "item_i": 0,
+            "annotation": [{"model1": {"score": 80}}]
+        })
+        save_db_payload("campaign1", {
+            "user_id": "user1",
+            "item_i": 1,
+            "annotation": [{"model1": {"score": 90}}]
+        })
+        # Add annotation for user2 on item 0 and 2
+        save_db_payload("campaign1", {
+            "user_id": "user2",
+            "item_i": 0,
+            "annotation": [{"model1": {"score": 70}}]
+        })
+        save_db_payload("campaign1", {
+            "user_id": "user2",
+            "item_i": 2,
+            "annotation": [{"model1": {"score": 85}}]
+        })
+        
         reset_task("campaign1", "user1", tasks_data, progress_data)
-        # Both users' progress should be reset to empty lists
+        
+        # Only items touched by user1 (0 and 1) should be reset for all users
+        # Items 2 and 3 should remain unchanged
         assert progress_data["campaign1"]["user1"]["progress"] == [
-            list(), list(), list()]
+            list(), list(), list(), {"model1"}]
         assert progress_data["campaign1"]["user2"]["progress"] == [
-            list(), list(), list()]
+            list(), list(), {"model1"}, list()]
         # Only user1's time should be reset
         assert progress_data["campaign1"]["user1"]["time"] == 0.0
         assert progress_data["campaign1"]["user1"]["time_start"] is None
         assert progress_data["campaign1"]["user2"]["time"] == 75.0
+        
+        # Verify reset markers were added only for user1's items (0 and 1)
+        items_user1_0 = get_db_log_item("campaign1", "user1", 0)
+        items_user1_1 = get_db_log_item("campaign1", "user1", 1)
+        assert len(items_user1_0) == 0  # Masked by reset marker
+        assert len(items_user1_1) == 0  # Masked by reset marker
+        
+        # User2's annotation on item 0 should still be visible (different user_id)
+        items_user2_0 = get_db_log_item("campaign1", "user2", 0)
+        assert len(items_user2_0) == 1
+        assert items_user2_0[0]["annotation"] == [{"model1": {"score": 70}}]
+        
+        # User2's annotation on item 2 should still be visible (user1 didn't touch it)
+        items_user2_2 = get_db_log_item("campaign1", "user2", 2)
+        assert len(items_user2_2) == 1
+        assert items_user2_2[0]["annotation"] == [{"model1": {"score": 85}}]
