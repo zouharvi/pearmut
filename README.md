@@ -422,7 +422,7 @@ Run on public server or tunnel local port to public IP/domain and run locally.
 If you use this work in your paper, please cite as following.
 ```bibtex
 @misc{zouhar2026pearmut,
-  author = {Zouhar, Vilém},
+  author = {Zouhar, Vilém and Kocmi, Tom},
   title = {Pearmut: Human Evaluation of Translation Made Trivial},
   year = {2026}
 }
