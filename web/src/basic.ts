@@ -151,18 +151,20 @@ function cleanupPreviousItem(): void {
 
 // Constant for the default score slider name
 const DEFAULT_SCORE_SLIDER = "Score"
+const SHOW_TEXT_FIELD_LABEL = "✏️ Show text field"
+const HIDE_TEXT_FIELD_LABEL = "✏️ Hide text field"
 
-function _textfield_html(item_i: number, model: string, mode: string | null | undefined, prefillText: string = ""): string {
+function _textfield_html(item_i: number, model: string, mode: string | null | undefined): string {
     if (!mode) return ""  // null or undefined - don't show textfield
     
     if (mode === "hidden") {
         return `
-        <button class="textfield_toggle" id="textfield_toggle_${item_i}_${model}">✏️ Show text field</button>
-        <textarea class="output_textfield" id="textfield_${item_i}_${model}" style="display: none;" placeholder="Enter your translation or post-edited text here...">${prefillText}</textarea>
+        <button class="textfield_toggle" id="textfield_toggle_${item_i}_${model}">${SHOW_TEXT_FIELD_LABEL}</button>
+        <textarea class="output_textfield" id="textfield_${item_i}_${model}" style="display: none;" placeholder="Enter your translation or post-edited text here..."></textarea>
         `
     } else if (mode === "visible" || mode === "prefilled") {
         return `
-        <textarea class="output_textfield" id="textfield_${item_i}_${model}" placeholder="Enter your translation or post-edited text here...">${prefillText}</textarea>
+        <textarea class="output_textfield" id="textfield_${item_i}_${model}" placeholder="Enter your translation or post-edited text here..."></textarea>
         `
     }
     
@@ -326,15 +328,12 @@ async function display_next_payload(response: DataPayload) {
             let tgt_dir = !no_tgt_char ? detectTextDirection(tgt) : 'ltr'
             let tgt_chars = no_tgt_char ? tgt : (contentToCharSpans(tgt, "tgt_char") + (protocol_error_spans ? ' <span class="tgt_char char_missing">[missing]</span>' : ""))
             let tgt_style = tgt_dir === 'rtl' ? ' style="direction: rtl;"' : ''
-            
-            // Determine prefill text for textfield
-            let textfieldPrefill = response.info.textfield === "prefilled" ? tgt : ""
 
             let candidate_block = $(`
             <div class="output_candidate" data-candidate="${model}" data-model="${model}">
               <div class="output_tgt"${tgt_style}>${tgt_chars}</div>
               ${_slider_html(item_i, model, response.info.sliders)}
-              ${_textfield_html(item_i, model, response.info.textfield, textfieldPrefill)}
+              ${_textfield_html(item_i, model, response.info.textfield)}
             </div>
             `)
 
@@ -687,15 +686,21 @@ async function display_next_payload(response: DataPayload) {
                 const textfield = candidate_block.find(`#textfield_${item_i}_${model}`)
                 const toggle = candidate_block.find(`#textfield_toggle_${item_i}_${model}`)
                 
+                // Pre-fill with model output if mode is "prefilled"
+                if (response.info.textfield === "prefilled") {
+                    textfield.val(tgt)
+                    response_log[item_i][model].textfield = tgt
+                }
+                
                 // Handle toggle button for "hidden" mode
                 if (response.info.textfield === "hidden") {
                     toggle.on("click", function () {
                         if (textfield.is(":visible")) {
                             textfield.hide()
-                            toggle.text("✏️ Show text field")
+                            toggle.text(SHOW_TEXT_FIELD_LABEL)
                         } else {
                             textfield.show()
-                            toggle.text("✏️ Hide text field")
+                            toggle.text(HIDE_TEXT_FIELD_LABEL)
                         }
                     })
                 }
@@ -716,7 +721,7 @@ async function display_next_payload(response: DataPayload) {
                     textfield.prop("disabled", true)
                 }
                 
-                // Pre-fill textfield from payload_existing if available
+                // Pre-fill textfield from payload_existing if available (overrides prefilled mode)
                 const existingTextfield = response.payload_existing?.annotation[item_i]?.[model]?.textfield
                 if (existingTextfield != null) {
                     textfield.val(existingTextfield)
