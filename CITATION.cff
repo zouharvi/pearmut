@@ -6,7 +6,7 @@ authors:
 - family-names: "Kocmi"
   given-names: "Tom"
 title: "Pearmut: Human Evaluation of Translation Made Trivial"
-url: "https://github.com/zouharvi/pearmut"
+url: "https://arxiv.org/abs/2601.02933"
 
 preferred-citation:
   type: generic
@@ -16,4 +16,5 @@ preferred-citation:
   - family-names: "Kocmi"
     given-names: "Tom"
   title: "Pearmut: Human Evaluation of Translation Made Trivial"
+  url: "https://arxiv.org/abs/2601.02933"
   year: 2026
