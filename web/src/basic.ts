@@ -687,6 +687,7 @@ async function display_next_payload(response: DataPayload) {
                 const toggle = candidate_block.find(`#textfield_toggle_${item_i}_${model}`)
                 
                 // Pre-fill with model output if mode is "prefilled"
+                // Note: tgt is from trusted campaign data, jQuery .val() safely escapes any content
                 if (response.info.textfield === "prefilled") {
                     textfield.val(tgt)
                     response_log[item_i][model].textfield = tgt
