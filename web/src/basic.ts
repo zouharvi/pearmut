@@ -120,6 +120,8 @@ function check_unlock() {
         Object.values(doc_responses).every(r => {
             if (r.sliders) {
                 // Custom sliders mode: all sliders must be non-null (no score required)
+                // Note: when sliders is {} (empty, from sliders: []), Object.values returns []
+                // and every() returns true (vacuous truth), allowing immediate progression
                 return Object.values(r.sliders).every(val => val !== null)
             } else {
                 // Single score mode: the score must be set
@@ -152,8 +154,13 @@ function cleanupPreviousItem(): void {
 const DEFAULT_SCORE_SLIDER = "Score"
 
 function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): string {
-    // If no custom sliders, use default single slider
-    if (!sliders || sliders.length === 0) {
+    // If sliders is explicitly an empty array, show no sliders
+    if (sliders && sliders.length === 0) {
+        return '<div class="output_response"></div>'
+    }
+    
+    // If no custom sliders specified (undefined), use default single slider
+    if (!sliders) {
         return `
         <div class="output_response">
           <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}">
@@ -211,14 +218,15 @@ async function display_next_payload(response: DataPayload) {
         response_log = data.map(item => {
             const result: DocumentResponse = {}
             for (const model of Object.keys(item.tgt)) {
-                const hasCustomSliders = response.info.sliders && response.info.sliders.length > 0
+                // Check if custom sliders are defined (including empty array)
+                const hasCustomSliders = response.info.sliders !== undefined
                 result[model] = {
                     "score": null,
                     "sliders": hasCustomSliders ? {} : undefined,
                     "error_spans": [],
                 }
                 // Initialize all custom slider values to null
-                if (hasCustomSliders) {
+                if (response.info.sliders && response.info.sliders.length > 0) {
                     for (const slider of response.info.sliders!) {
                         result[model].sliders![slider.name] = null
                     }
@@ -557,6 +565,7 @@ async function display_next_payload(response: DataPayload) {
 
             // Setup slider(s) for this model
             const hasCustomSliders = response.info.sliders && response.info.sliders.length > 0
+            const hasNoSliders = response.info.sliders !== undefined && response.info.sliders.length === 0
             
             if (hasCustomSliders) {
                 // Multiple sliders mode (no Score slider when custom sliders are defined)
@@ -613,8 +622,8 @@ async function display_next_payload(response: DataPayload) {
                         response_log[item_i][model].sliders![sliderName] = existingScore
                     }
                 }
-            } else {
-                // Single slider mode
+            } else if (!hasNoSliders) {
+                // Single slider mode (default Score slider)
                 let slider = candidate_block.find("input[type='range']")
                 let label = candidate_block.find(".slider_label")
                 slider.on("click input", function () {

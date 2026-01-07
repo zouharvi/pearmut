@@ -133,6 +133,12 @@
       display: none;
     }
 
+    /* Hide anchors when no sliders (empty div) */
+    .output_response:empty::before,
+    .output_response:empty::after {
+      display: none;
+    }
+
     .output_response::before {
       left: calc(33% - 18px);
     }
