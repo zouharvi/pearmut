@@ -502,6 +502,7 @@ export type ProtocolInfo = {
     item_i: number,
     sliders?: SliderConfig[],  // Optional custom slider configurations
     instructions?: string,
+    textfield?: null | "hidden" | "visible" | "prefilled",  // Optional textfield mode
 }
 
 /**

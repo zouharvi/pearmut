@@ -142,6 +142,25 @@ For multi-dimensional evaluation tasks (e.g., assessing fluency on a Likert scal
 
 When `sliders` is specified, only the custom sliders are shown. Each slider must have `name`, `min`, `max`, and `step` properties. All sliders must be answered before proceeding.
 
+### Textfield for Post-editing/Translation
+
+Enable a textfield for post-editing or translation tasks using the `textfield` parameter in `info`. The textfield content is stored in annotations alongside scores and error spans.
+
+```python
+{
+  "info": {
+    "protocol": "DA",
+    "textfield": "prefilled"  # Options: null, "hidden", "visible", "prefilled"
+  }
+}
+```
+
+**Textfield modes:**
+- `null` or omitted: No textfield (default)
+- `"hidden"`: Textfield hidden by default, shown by clicking a button
+- `"visible"`: Textfield always visible
+- `"prefilled"`: Textfield visible and pre-filled with model output for post-editing
+
 ### Custom Instructions
 
 Set campaign-level instructions using the `instructions` field in `info` (supports HTML).
@@ -434,6 +453,7 @@ Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouh
 
 - v1.0.2
   - Fix `MAIN_TOKEN` vulnerability
+  - Add textfields for translation and post-editing
 - v1.0.1
   - Support RTL languages
   - Add boxes for references

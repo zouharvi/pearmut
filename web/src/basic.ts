@@ -31,7 +31,8 @@ const frozenMode = searchParams.has("frozen")
 type CandidateResponse = { 
     score: number | null,  // Main score, always present
     sliders?: Record<string, number | null>,  // Optional custom sliders
-    error_spans: Array<ErrorSpan> 
+    error_spans: Array<ErrorSpan>,
+    textfield?: string | null,  // Optional textfield content
 }
 // Response for a document with multiple models - keyed by model name
 type DocumentResponse = Record<string, CandidateResponse>
@@ -150,8 +151,22 @@ function cleanupPreviousItem(): void {
     $(window).off('resize.toolbox')
 }
 
-// Constant for the default score slider name
-const DEFAULT_SCORE_SLIDER = "Score"
+function _textfield_html(item_i: number, model: string, mode: string | null | undefined): string {
+    if (!mode) return ""  // null or undefined - don't show textfield
+    
+    if (mode === "hidden") {
+        return `
+        <button class="textfield_toggle" id="textfield_toggle_${item_i}_${model}">✏️</button>
+        <textarea class="output_textfield" id="textfield_${item_i}_${model}" style="display: none;" placeholder="Type here..."></textarea>
+        `
+    } else if (mode === "visible" || mode === "prefilled") {
+        return `
+        <textarea class="output_textfield" id="textfield_${item_i}_${model}" placeholder="Type here..."></textarea>
+        `
+    }
+    
+    return ""
+}
 
 function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): string {
     // If sliders is explicitly an empty array, show no sliders
@@ -204,6 +219,7 @@ async function display_next_payload(response: DataPayload) {
                     "score": r.score,
                     "sliders": r.sliders ? {...r.sliders} : undefined,
                     "error_spans": r.error_spans ? [...r.error_spans] : [],
+                    "textfield": r.textfield ?? null,
                 }
             }
             return result
@@ -224,6 +240,7 @@ async function display_next_payload(response: DataPayload) {
                     "score": null,
                     "sliders": hasCustomSliders ? {} : undefined,
                     "error_spans": [],
+                    "textfield": null,
                 }
                 // Initialize all custom slider values to null
                 if (response.info.sliders && response.info.sliders.length > 0) {
@@ -319,6 +336,7 @@ async function display_next_payload(response: DataPayload) {
             <div class="output_candidate" data-candidate="${model}" data-model="${model}">
               <div class="output_tgt"${tgt_style}>${tgt_chars}</div>
               ${_slider_html(item_i, model, response.info.sliders)}
+              ${_textfield_html(item_i, model, response.info.textfield)}
             </div>
             `)
 
@@ -664,6 +682,53 @@ async function display_next_payload(response: DataPayload) {
                     slider.val(existingScore)
                     label.text(`${existingScore}/100`)
                     response_log[item_i][model].score = existingScore
+                }
+            }
+            
+            // Setup textfield if enabled
+            if (response.info.textfield) {
+                const textfield = candidate_block.find(`#textfield_${item_i}_${model}`)
+                const toggle = candidate_block.find(`#textfield_toggle_${item_i}_${model}`)
+                
+                // Pre-fill with model output if mode is "prefilled"
+                // Note: tgt is from trusted campaign data, jQuery .val() safely escapes any content
+                if (response.info.textfield === "prefilled") {
+                    textfield.val(tgt)
+                    response_log[item_i][model].textfield = tgt
+                }
+                
+                // Handle toggle button for "hidden" mode
+                if (response.info.textfield === "hidden") {
+                    toggle.on("click", function () {
+                        if (textfield.is(":visible")) {
+                            textfield.hide()
+                        } else {
+                            textfield.show()
+                        }
+                    })
+                }
+                
+                // Handle textfield input
+                textfield.on("input", function () {
+                    // In frozen mode, do not allow changing textfield
+                    if (frozenMode) return
+                    
+                    let val = (<HTMLTextAreaElement>this).value
+                    response_log[item_i][model].textfield = val
+                    has_unsaved_work = true
+                    action_log.push({ "time": Date.now() / 1000, "action": "textfield", "index": item_i, "model": model, "value": val })
+                })
+                
+                // Disable textfield in frozen mode
+                if (frozenMode) {
+                    textfield.prop("disabled", true)
+                }
+                
+                // Pre-fill textfield from payload_existing if available (overrides prefilled mode)
+                const existingTextfield = response.payload_existing?.annotation[item_i]?.[model]?.textfield
+                if (existingTextfield != null) {
+                    textfield.val(existingTextfield)
+                    response_log[item_i][model].textfield = existingTextfield
                 }
             }
         }
