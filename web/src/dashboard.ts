@@ -352,6 +352,11 @@ if (tokens.length == 0) {
 }
 $("#download_annotations").attr("href", `/download-annotations?${campaign_ids.map((id, i) => `campaign_id=${encodeURIComponent(id)}&${tokens[i] ? `token=${encodeURIComponent(tokens[i])}` : ''}`).join('&')}`)
 
+// add campaign requires main token
+if (tokenMain == "") {
+    $("#add_campaign").attr("disabled", "true")
+}
+
 // Add campaign upload functionality
 $("#add_campaign").on("click", function () {
     $("#campaign_file_input").trigger("click");
