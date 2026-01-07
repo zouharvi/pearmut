@@ -710,11 +710,14 @@ async function display_next_payload(response: DataPayload) {
                 }
                 
                 // Handle textfield input with debouncing to reduce log volume
+                let lastLoggedValue = response_log[item_i][model].textfield
+                
                 const logTextfieldInput = debounce(() => {
                     const val = textfield.val() as string
-                    response_log[item_i][model].textfield = val
-                    has_unsaved_work = true
-                    action_log.push({ "time": Date.now() / 1000, "action": "textfield", "index": item_i, "model": model, "value": val })
+                    if (lastLoggedValue !== val) {
+                        action_log.push({ "time": Date.now() / 1000, "action": "textfield", "index": item_i, "model": model, "value": val })
+                        lastLoggedValue = val
+                    }
                 }, 500)
                 
                 textfield.on("input", function () {
@@ -733,9 +736,10 @@ async function display_next_payload(response: DataPayload) {
                     if (frozenMode) return
                     
                     let val = (<HTMLTextAreaElement>this).value
-                    // Only log if value has changed (avoid duplicate with debounced log)
-                    if (response_log[item_i][model].textfield === val) {
+                    // Log final value if it hasn't been logged yet
+                    if (lastLoggedValue !== val) {
                         action_log.push({ "time": Date.now() / 1000, "action": "textfield", "index": item_i, "model": model, "value": val })
+                        lastLoggedValue = val
                     }
                 })
                 
