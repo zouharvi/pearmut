@@ -1,4 +1,4 @@
-# 🍐Pearmut &nbsp; &nbsp; [![PyPi version](https://badgen.net/pypi/v/pearmut/)](https://pypi.org/project/pearmut) [![PyPI download/month](https://img.shields.io/pypi/dm/pearmut.svg)](https://pypi.python.org/pypi/pearmut/) [![PyPi license](https://badgen.net/pypi/license/pearmut/)](https://pypi.org/project/pearmut/) [![build status](https://github.com/zouharvi/pearmut/actions/workflows/test.yml/badge.svg)](https://github.com/zouharvi/pearmut/actions/workflows/test.yml)
+# 🍐Pearmut &nbsp; &nbsp; [![PyPi version](https://badgen.net/pypi/v/pearmut/)](https://pypi.org/project/pearmut) [![PyPI download/month](https://img.shields.io/pypi/dm/pearmut.svg)](https://pypi.python.org/pypi/pearmut/) [![PyPi license](https://badgen.net/pypi/license/pearmut/)](https://pypi.org/project/pearmut/) [![build status](https://github.com/zouharvi/pearmut/actions/workflows/test.yml/badge.svg)](https://github.com/zouharvi/pearmut/actions/workflows/test.yml) [![arXiv](https://img.shields.io/badge/arXiv-2601.02933-b31b1b.svg?style=flat)](https://arxiv.org/abs/2601.02933)
 
 **Platform for Evaluation and Reviewing of Multilingual Tasks**: Evaluate model outputs for translation and NLP tasks with support for multimodal data (text, video, audio, images) and multiple annotation protocols ([DA](https://aclanthology.org/N15-1124/), [ESA](https://aclanthology.org/2024.wmt-1.131/), [ESA<sup>AI</sup>](https://aclanthology.org/2025.naacl-long.255/), [MQM](https://doi.org/10.1162/tacl_a_00437), and more!).
 
@@ -441,9 +441,13 @@ Run on public server or tunnel local port to public IP/domain and run locally.
 If you use this work in your paper, please cite as following.
 ```bibtex
 @misc{zouhar2026pearmut,
-  author = {Zouhar, Vilém and Kocmi, Tom},
-  title = {Pearmut: Human Evaluation of Translation Made Trivial},
-  year = {2026}
+      title={Pearmut: Human Evaluation of Translation Made Trivial}, 
+      author={Vilém Zouhar and Tom Kocmi},
+      year={2026},
+      eprint={2601.02933},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2601.02933}, 
 }
 ```
 

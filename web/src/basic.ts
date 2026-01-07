@@ -21,6 +21,7 @@ import {
     isSpanComplete,
     computeWordBoundaries,
     detectTextDirection,
+    debounce,
 } from './utils';
 
 // Check if frozen mode is enabled (view-only, no annotations)
@@ -708,7 +709,12 @@ async function display_next_payload(response: DataPayload) {
                     })
                 }
                 
-                // Handle textfield input
+                // Handle textfield input with debouncing to reduce log volume
+                const logTextfieldInput = debounce(() => {
+                    const val = textfield.val() as string
+                    action_log.push({ "time": Date.now() / 1000, "action": "textfield", "index": item_i, "model": model, "value": val })
+                }, 500)
+                
                 textfield.on("input", function () {
                     // In frozen mode, do not allow changing textfield
                     if (frozenMode) return
@@ -716,7 +722,8 @@ async function display_next_payload(response: DataPayload) {
                     let val = (<HTMLTextAreaElement>this).value
                     response_log[item_i][model].textfield = val
                     has_unsaved_work = true
-                    action_log.push({ "time": Date.now() / 1000, "action": "textfield", "index": item_i, "model": model, "value": val })
+                    // Log with debounce to avoid excessive logging during typing
+                    logTextfieldInput()
                 })
                 
                 // Disable textfield in frozen mode
