@@ -120,6 +120,8 @@ function check_unlock() {
         Object.values(doc_responses).every(r => {
             if (r.sliders) {
                 // Custom sliders mode: all sliders must be non-null (no score required)
+                // Note: when sliders is {} (empty, from sliders: []), Object.values returns []
+                // and every() returns true (vacuous truth), allowing immediate progression
                 return Object.values(r.sliders).every(val => val !== null)
             } else {
                 // Single score mode: the score must be set
