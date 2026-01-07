@@ -151,22 +151,17 @@ function cleanupPreviousItem(): void {
     $(window).off('resize.toolbox')
 }
 
-// Constant for the default score slider name
-const DEFAULT_SCORE_SLIDER = "Score"
-const SHOW_TEXT_FIELD_LABEL = "✏️ Show text field"
-const HIDE_TEXT_FIELD_LABEL = "✏️ Hide text field"
-
 function _textfield_html(item_i: number, model: string, mode: string | null | undefined): string {
     if (!mode) return ""  // null or undefined - don't show textfield
     
     if (mode === "hidden") {
         return `
-        <button class="textfield_toggle" id="textfield_toggle_${item_i}_${model}">${SHOW_TEXT_FIELD_LABEL}</button>
-        <textarea class="output_textfield" id="textfield_${item_i}_${model}" style="display: none;" placeholder="Enter your translation or post-edited text here..."></textarea>
+        <button class="textfield_toggle" id="textfield_toggle_${item_i}_${model}">✏️</button>
+        <textarea class="output_textfield" id="textfield_${item_i}_${model}" style="display: none;" placeholder="Type here..."></textarea>
         `
     } else if (mode === "visible" || mode === "prefilled") {
         return `
-        <textarea class="output_textfield" id="textfield_${item_i}_${model}" placeholder="Enter your translation or post-edited text here..."></textarea>
+        <textarea class="output_textfield" id="textfield_${item_i}_${model}" placeholder="Type here..."></textarea>
         `
     }
     
@@ -707,10 +702,8 @@ async function display_next_payload(response: DataPayload) {
                     toggle.on("click", function () {
                         if (textfield.is(":visible")) {
                             textfield.hide()
-                            toggle.text(SHOW_TEXT_FIELD_LABEL)
                         } else {
                             textfield.show()
-                            toggle.text(HIDE_TEXT_FIELD_LABEL)
                         }
                     })
                 }
