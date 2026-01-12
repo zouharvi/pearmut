@@ -1,7 +1,8 @@
 {
     "info": {
         "assignment": "task-based",
-        "protocol": "ESA"
+        "protocol": "ESA",
+        "textfield": "hidden"
     },
     "campaign_id": "example_contrastive",
     "data": [
