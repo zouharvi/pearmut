@@ -433,7 +433,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
             "time_end": None,
             "time": 0,
             "url": (
-                f"{campaign_data['info'].get("template", "annotate")}.html"
+                f"{campaign_data['info'].get('template', 'annotate')}.html"
                 f"?campaign_id={urllib.parse.quote_plus(campaign_data['campaign_id'])}"
                 f"&user_id={user_id}"
             ),
