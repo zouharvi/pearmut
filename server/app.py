@@ -2,9 +2,9 @@ import json
 import os
 from typing import Any
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import JSONResponse, Response, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -430,6 +430,23 @@ if not os.path.exists(static_dir + "index.html"):
     raise FileNotFoundError(
         "Static directory not found. Please build the frontend first."
     )
+
+# Redirect routes for clean URLs
+@app.get("/annotate")
+async def redirect_annotate(request: Request):
+    """Redirect /annotate to /annotate.html preserving query parameters"""
+    query_string = str(request.query_params)
+    url = "/annotate.html" + (f"?{query_string}" if query_string else "")
+    return RedirectResponse(url=url, status_code=301)
+
+
+@app.get("/dashboard")
+async def redirect_dashboard(request: Request):
+    """Redirect /dashboard to /dashboard.html preserving query parameters"""
+    query_string = str(request.query_params)
+    url = "/dashboard.html" + (f"?{query_string}" if query_string else "")
+    return RedirectResponse(url=url, status_code=301)
+
 
 # Mount user assets from data/assets/
 assets_dir = f"{ROOT}/data/assets"
