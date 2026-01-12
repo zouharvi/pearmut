@@ -152,12 +152,24 @@ function cleanupPreviousItem(): void {
     $(window).off('resize.toolbox')
 }
 
-function _textfield_html(item_i: number, model: string, mode: string | null | undefined): string {
+function _textfield_button_html(item_i: number, model: string, mode: string | null | undefined): string {
     if (!mode) return ""  // null or undefined - don't show textfield
     
     if (mode === "hidden") {
         return `
         <button class="textfield_toggle" id="textfield_toggle_${item_i}_${model}">✏️</button>
+        `
+    }
+    
+    return ""
+}
+
+
+function _textfield_html(item_i: number, model: string, mode: string | null | undefined): string {
+    if (!mode) return ""  // null or undefined - don't show textfield
+    
+    if (mode === "hidden") {
+        return `
         <textarea class="output_textfield" id="textfield_${item_i}_${model}" style="display: none;" placeholder="Type here..."></textarea>
         `
     } else if (mode === "visible" || mode === "prefilled") {
@@ -337,9 +349,11 @@ async function display_next_payload(response: DataPayload) {
             <div class="output_candidate" data-candidate="${model}" data-model="${model}">
               <div class="output_tgt"${tgt_style}>${tgt_chars}</div>
               ${_slider_html(item_i, model, response.info.sliders)}
-              ${_textfield_html(item_i, model, response.info.textfield)}
             </div>
             `)
+
+            candidate_block.find(".output_response").prepend(_textfield_button_html(item_i, model, response.info.textfield))
+            candidate_block.append(_textfield_html(item_i, model, response.info.textfield))
 
             output_block.find(".output_srctgt").append(candidate_block)
 
