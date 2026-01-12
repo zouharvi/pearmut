@@ -9,7 +9,7 @@ module.exports = (env, argv) => {
   return {
     entry: {
       index: './src/index.ts',
-      basic: './src/basic.ts',
+      annotate: './src/annotate.ts',
       dashboard: './src/dashboard.ts',
     },
     output: {
@@ -58,9 +58,9 @@ module.exports = (env, argv) => {
         hash: true,
       }),
       new HtmlWebpackPlugin({
-        template: './src/basic.html',
-        filename: 'basic.html',
-        chunks: ['basic'],
+        template: './src/annotate.html',
+        filename: 'annotate.html',
+        chunks: ['annotate'],
         hash: true,
       }),
       new HtmlWebpackPlugin({

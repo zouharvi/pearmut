@@ -671,7 +671,7 @@ appraise_csrf_cookie = input()
 pearmut_token_ensk = input()
 
 measure_average_response(
-    url="http://localhost:8001/basic.html",
+    url="http://localhost:8001/annotate.html",
     method="get",
     iterations=100,
 )
@@ -731,7 +731,7 @@ def measure_average_response_chill(*args, **kwargs):
 
 
 measure_average_response_chill(
-    url="https://pearmut.ngrok.io/basic.html",
+    url="https://pearmut.ngrok.io/annotate.html",
     method="get",
     iterations=100,
 )

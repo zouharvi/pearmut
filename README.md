@@ -430,7 +430,7 @@ pearmut run
 2. Add build rule to `webpack.config.js`
 3. Reference as `info->template` in campaign JSON
 
-See [web/src/basic.ts](web/src/basic.ts) for example.
+See [web/src/annotate.ts](web/src/annotate.ts) for example.
 
 ### Deployment
 
