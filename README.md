@@ -458,6 +458,8 @@ Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouh
 - v1.0.2
   - Fix `MAIN_TOKEN` vulnerability
   - Add textfields for translation and post-editing
+  - Rename default annotation protocol from `basic.html` to `annotate` (without `.html` suffix).
+  - Default `dashboard.html` is `dashboard`, though `.html` also works.
 - v1.0.1
   - Support RTL languages
   - Add boxes for references

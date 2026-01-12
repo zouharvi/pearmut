@@ -36,7 +36,7 @@ def _run(args_unknown):
     # print access dashboard URL for all campaigns
     dashboard_url = (
         args.server
-        + "/dashboard.html?"
+        + "/dashboard?"
         + f"token_main={TOKEN_MAIN}"
         + "".join(
             [
