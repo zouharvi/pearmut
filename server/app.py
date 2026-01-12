@@ -4,7 +4,7 @@ from typing import Any
 
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -430,6 +430,17 @@ if not os.path.exists(static_dir + "index.html"):
     raise FileNotFoundError(
         "Static directory not found. Please build the frontend first."
     )
+
+# Serve HTML files directly without redirect
+@app.get("/annotate")
+async def serve_annotate():
+    return FileResponse(static_dir + "annotate.html")
+
+
+@app.get("/dashboard")
+async def serve_dashboard():
+    return FileResponse(static_dir + "dashboard.html")
+
 
 # Mount user assets from data/assets/
 assets_dir = f"{ROOT}/data/assets"

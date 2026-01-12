@@ -399,7 +399,7 @@ Customize the goodbye message shown to users when they complete all annotations 
   - **Score**: Numeric quality rating (0-100)
   - **Error Spans**: Text highlights marking errors with severity (`minor`, `major`)
   - **Error Categories**: MQM taxonomy labels for errors
-- **Template**: The annotation interface type. The `basic` template supports comparing multiple outputs simultaneously.
+- **Template**: The annotation interface type. The `annotate` template supports comparing multiple outputs simultaneously.
 - **Assignment**: The method for distributing items to users:
   - **Task-based**: Each user has predefined items
   - **Single-stream**: Users draw from a shared pool with random assignment
@@ -430,7 +430,7 @@ pearmut run
 2. Add build rule to `webpack.config.js`
 3. Reference as `info->template` in campaign JSON
 
-See [web/src/basic.ts](web/src/basic.ts) for example.
+See [web/src/annotate.ts](web/src/annotate.ts) for example.
 
 ### Deployment
 
@@ -458,6 +458,8 @@ Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouh
 - v1.0.2
   - Fix `MAIN_TOKEN` vulnerability
   - Add textfields for translation and post-editing
+  - Rename default annotation protocol from `basic.html` to `annotate` (without `.html` suffix).
+  - Default `dashboard.html` is `dashboard`, though `.html` also works.
 - v1.0.1
   - Support RTL languages
   - Add boxes for references

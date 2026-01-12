@@ -39,7 +39,7 @@ def compute_model_scores(campaign_id):
     # Compute model scores from annotations
     model_scores = collections.defaultdict(dict)
 
-    # Iterate through all tasks to find items with 'models' field (basic template)
+    # Iterate through all tasks to find items with 'models' field (annotate template)
     log = get_db_log(campaign_id)
     for entry in log:
         if "item" not in entry or "annotation" not in entry:

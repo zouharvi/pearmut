@@ -36,7 +36,7 @@ def _run(args_unknown):
     # print access dashboard URL for all campaigns
     dashboard_url = (
         args.server
-        + "/dashboard.html?"
+        + "/dashboard?"
         + f"token_main={TOKEN_MAIN}"
         + "".join(
             [
@@ -92,7 +92,7 @@ def _validate_item_structure(items):
         if "ref" in item and not isinstance(item["ref"], str):
             raise ValueError("Item 'ref' must be a string")
 
-        # Validate tgt is a dictionary (basic template with model names)
+        # Validate tgt is a dictionary (annotate template with model names)
         if isinstance(item["tgt"], str):
             # String not allowed - suggest using dictionary (don't include user input to prevent injection)
             raise ValueError(
@@ -240,7 +240,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
     if "assignment" not in campaign_data["info"]:
         raise ValueError("Campaign 'info' must contain 'assignment' field.")
 
-    # Template defaults to "basic" if not specified
+    # Template defaults to "annotate" if not specified
     assignment = campaign_data["info"]["assignment"]
     # use random words for identifying users
     rng = random.Random()
@@ -433,7 +433,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
             "time_end": None,
             "time": 0,
             "url": (
-                f"{campaign_data['info'].get("template", "basic")}.html"
+                f"{campaign_data['info'].get('template', 'annotate')}"
                 f"?campaign_id={urllib.parse.quote_plus(campaign_data['campaign_id'])}"
                 f"&user_id={user_id}"
             ),
