@@ -503,6 +503,7 @@ export type ProtocolInfo = {
     sliders?: SliderConfig[],  // Optional custom slider configurations
     instructions?: string,
     textfield?: null | "hidden" | "visible" | "prefilled",  // Optional textfield mode
+    model_names_visible?: boolean,  // Show model names on top of each block
 }
 
 /**

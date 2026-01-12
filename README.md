@@ -121,6 +121,21 @@ The `shuffle` parameter in campaign `info` controls this behavior:
 }
 ```
 
+### Showing Model Names
+
+By default, model names are hidden to avoid biasing annotators. To display model names on top of each output block, set `model_names_visible` to `true`:
+```python
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "ESA",
+    "model_names_visible": true  # Default: false. Set to true to show model names.
+  },
+  "campaign_id": "my_campaign",
+  "data": [...]
+}
+```
+
 ### Custom Score Sliders
 
 For multi-dimensional evaluation tasks (e.g., assessing fluency on a Likert scale), you can define custom sliders with specific ranges and steps:

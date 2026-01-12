@@ -148,7 +148,7 @@ def get_i_item_taskbased(
             | {
                 k: v
                 for k, v in data_all[campaign_id]["info"].items()
-                if k in {"protocol", "sliders", "textfield"}
+                if k in {"protocol", "sliders", "textfield", "model_names_visible"}
             },
             "payload": data_all[campaign_id]["data"][user_id][item_i],
         }
@@ -195,7 +195,7 @@ def get_i_item_singlestream(
             | {
                 k: v
                 for k, v in data_all[campaign_id]["info"].items()
-                if k in {"protocol", "sliders", "textfield"}
+                if k in {"protocol", "sliders", "textfield", "model_names_visible"}
             },
             "payload": data_all[campaign_id]["data"][item_i],
         }
@@ -242,7 +242,7 @@ def get_next_item_taskbased(
             | {
                 k: v
                 for k, v in data_all[campaign_id]["info"].items()
-                if k in {"protocol", "sliders", "textfield"}
+                if k in {"protocol", "sliders", "textfield", "model_names_visible"}
             },
             "payload": data_all[campaign_id]["data"][user_id][item_i],
         }
@@ -298,7 +298,7 @@ def get_next_item_singlestream(
             | {
                 k: v
                 for k, v in data_all[campaign_id]["info"].items()
-                if k in {"protocol", "sliders", "textfield"}
+                if k in {"protocol", "sliders", "textfield", "model_names_visible"}
             },
             "payload": data_all[campaign_id]["data"][item_i],
         }
@@ -459,7 +459,7 @@ def get_next_item_dynamic(
             | {
                 k: v
                 for k, v in campaign_data["info"].items()
-                if k in {"protocol", "sliders", "textfield"}
+                if k in {"protocol", "sliders", "textfield", "model_names_visible"}
             },
             "payload": pruned_item,
         },
