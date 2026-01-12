@@ -399,7 +399,7 @@ Customize the goodbye message shown to users when they complete all annotations 
   - **Score**: Numeric quality rating (0-100)
   - **Error Spans**: Text highlights marking errors with severity (`minor`, `major`)
   - **Error Categories**: MQM taxonomy labels for errors
-- **Template**: The annotation interface type. The `basic` template supports comparing multiple outputs simultaneously.
+- **Template**: The annotation interface type. The `annotate` template supports comparing multiple outputs simultaneously.
 - **Assignment**: The method for distributing items to users:
   - **Task-based**: Each user has predefined items
   - **Single-stream**: Users draw from a shared pool with random assignment
