@@ -345,15 +345,18 @@ async function display_next_payload(response: DataPayload) {
             let tgt_chars = no_tgt_char ? tgt : (contentToCharSpans(tgt, "tgt_char") + (protocol_error_spans ? ' <span class="tgt_char char_missing">[missing]</span>' : ""))
             let tgt_style = tgt_dir === 'rtl' ? ' style="direction: rtl;"' : ''
 
-            let model_name_html = response.info.model_names_visible ? `<div class="model_name">${model}</div>` : ''
-
             let candidate_block = $(`
             <div class="output_candidate" data-candidate="${model}" data-model="${model}">
-              ${model_name_html}
               <div class="output_tgt"${tgt_style}>${tgt_chars}</div>
               ${_slider_html(item_i, model, response.info.sliders)}
             </div>
             `)
+
+            // Add model name at the top of the candidate block if enabled
+            if (response.info.model_names_visible) {
+                let model_name_div = $('<div class="model_name"></div>').text(model)
+                candidate_block.prepend(model_name_div)
+            }
 
             candidate_block.find(".output_response").prepend(_textfield_button_html(item_i, model, response.info.textfield))
             candidate_block.append(_textfield_html(item_i, model, response.info.textfield))
