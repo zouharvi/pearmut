@@ -3,7 +3,7 @@
         "assignment": "task-based",
         "protocol": "ESA",
         "textfield": "hidden",
-        "model_names_visible": true
+        "show_model_names": true
     },
     "campaign_id": "example_contrastive",
     "data": [

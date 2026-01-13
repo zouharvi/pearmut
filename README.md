@@ -123,13 +123,13 @@ The `shuffle` parameter in campaign `info` controls this behavior:
 
 ### Showing Model Names
 
-By default, model names are hidden to avoid biasing annotators. To display model names on top of each output block, set `model_names_visible` to `true`:
+By default, model names are hidden to avoid biasing annotators. To display model names on top of each output block, set `show_model_names` to `true`:
 ```python
 {
   "info": {
     "assignment": "task-based",
     "protocol": "ESA",
-    "model_names_visible": true  # Default: false. Set to true to show model names.
+    "show_model_names": true  # Default: false.
   },
   "campaign_id": "my_campaign",
   "data": [...]
@@ -475,6 +475,7 @@ Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouh
   - Add textfields for translation and post-editing
   - Rename default annotation protocol from `basic.html` to `annotate` (without `.html` suffix).
   - Default `dashboard.html` is `dashboard`, though `.html` also works.
+  - Add `show_model_names` flag
 - v1.0.1
   - Support RTL languages
   - Add boxes for references

@@ -353,7 +353,7 @@ async function display_next_payload(response: DataPayload) {
             `)
 
             // Add model name at the top of the candidate block if enabled
-            if (response.info.model_names_visible) {
+            if (response.info.show_model_names) {
                 let model_name_div = $('<div class="model_name"></div>').text(model)
                 candidate_block.prepend(model_name_div)
             }
