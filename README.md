@@ -471,7 +471,7 @@ Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouh
 # Changelog
 
 - v1.0.2
-  - Fix `MAIN_TOKEN` vulnerability
+  - Fix `token_main` vulnerability
   - Add textfields for translation and post-editing
   - Rename default annotation protocol from `basic.html` to `annotate` (without `.html` suffix).
   - Default `dashboard.html` is `dashboard`, though `.html` also works.
