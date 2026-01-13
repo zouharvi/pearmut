@@ -582,6 +582,7 @@ def main():
     # enforce that only one pearmut process is running using file lock
     lock_file = f"{ROOT}/data/.lock"
     try:
+        # Keep file descriptor open to maintain lock for process lifetime
         lock_fd = open(lock_file, "a+")
         fcntl.flock(lock_fd.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         lock_fd.seek(0)
@@ -596,7 +597,7 @@ def main():
             print("You can't run multiple instances of Pearmut in the same directory.")
             if pid:
                 print(f"Another instance (PID {pid}) is holding the lock.")
-        except:
+        except (FileNotFoundError, PermissionError, OSError):
             print("You can't run multiple instances of Pearmut in the same directory.")
         exit(1)
 
