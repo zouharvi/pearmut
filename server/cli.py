@@ -3,12 +3,12 @@ Command-line interface for managing and running the Pearmut server.
 """
 
 import argparse
+import atexit
+import fcntl
 import hashlib
 import json
 import os
 import urllib.parse
-
-import psutil
 
 from .utils import ROOT, TOKEN_MAIN, load_progress_data, save_progress_data
 
@@ -18,6 +18,29 @@ load_progress_data(warn=None)
 
 
 def _run(args_unknown):
+    # Acquire lock before starting server
+    lock_file = f"{ROOT}/data/.lock"
+    try:
+        lock_fd = open(lock_file, "a+")
+        fcntl.flock(lock_fd.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        lock_fd.seek(0)
+        lock_fd.truncate()
+        lock_fd.write(str(os.getpid()))
+        lock_fd.flush()
+    except BlockingIOError:
+        try:
+            with open(lock_file, "r") as f:
+                pid = f.read().strip()
+            print("You can't run multiple instances of Pearmut in the same directory.")
+            if pid:
+                print(f"Another instance (PID {pid}) is holding the lock.")
+        except (FileNotFoundError, PermissionError, OSError):
+            print("You can't run multiple instances of Pearmut in the same directory.")
+        exit(1)
+
+    # Register cleanup to remove lock file on exit
+    atexit.register(lambda: os.path.exists(lock_file) and os.remove(lock_file))
+
     import uvicorn
 
     from .app import app, tasks_data
@@ -579,13 +602,6 @@ def main():
         nargs="?",
     )
     args, args_unknown = args.parse_known_args()
-
-    # enforce that only one pearmut process is running
-    for p in psutil.process_iter():
-        if "pearmut" == p.name() and p.pid != os.getpid():
-            print("Exit all running pearmut processes before running more commands.")
-            print(p)
-            exit(1)
 
     if args.command == "run":
         _run(args_unknown)
