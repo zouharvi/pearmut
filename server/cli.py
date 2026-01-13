@@ -17,6 +17,26 @@ load_progress_data(warn=None)
 
 
 def _run(args_unknown):
+    # Acquire lock before starting server
+    lock_file = f"{ROOT}/data/.lock"
+    try:
+        lock_fd = open(lock_file, "a+")
+        fcntl.flock(lock_fd.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        lock_fd.seek(0)
+        lock_fd.truncate()
+        lock_fd.write(str(os.getpid()))
+        lock_fd.flush()
+    except BlockingIOError:
+        try:
+            with open(lock_file, "r") as f:
+                pid = f.read().strip()
+            print("You can't run multiple instances of Pearmut in the same directory.")
+            if pid:
+                print(f"Another instance (PID {pid}) is holding the lock.")
+        except (FileNotFoundError, PermissionError, OSError):
+            print("You can't run multiple instances of Pearmut in the same directory.")
+        exit(1)
+
     import uvicorn
 
     from .app import app, tasks_data
@@ -578,28 +598,6 @@ def main():
         nargs="?",
     )
     args, args_unknown = args.parse_known_args()
-
-    # enforce that only one pearmut process is running using file lock
-    lock_file = f"{ROOT}/data/.lock"
-    try:
-        # Keep file descriptor open to maintain lock for process lifetime
-        lock_fd = open(lock_file, "a+")
-        fcntl.flock(lock_fd.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-        lock_fd.seek(0)
-        lock_fd.truncate()
-        lock_fd.write(str(os.getpid()))
-        lock_fd.flush()
-    except BlockingIOError:
-        # Try to read the PID of the locking process
-        try:
-            with open(lock_file, "r") as f:
-                pid = f.read().strip()
-            print("You can't run multiple instances of Pearmut in the same directory.")
-            if pid:
-                print(f"Another instance (PID {pid}) is holding the lock.")
-        except (FileNotFoundError, PermissionError, OSError):
-            print("You can't run multiple instances of Pearmut in the same directory.")
-        exit(1)
 
     if args.command == "run":
         _run(args_unknown)
