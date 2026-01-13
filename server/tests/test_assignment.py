@@ -999,7 +999,7 @@ class TestDynamic:
         assert progress_data["campaign1"]["user2"]["progress"][0] == list()
 
     def test_reset_task_resets_all_users(self):
-        """Test that dynamic reset_task resets only touched items for all users."""
+        """Test that dynamic reset_task returns error (not supported)."""
         _clear_test_logs()
         tasks_data = {
             "campaign1": {
@@ -1032,54 +1032,17 @@ class TestDynamic:
                 }
             }
         }
-        # Add annotations for user1 on items 0 and 1
-        save_db_payload("campaign1", {
-            "user_id": "user1",
-            "item_i": 0,
-            "annotation": [{"model1": {"score": 80}}]
-        })
-        save_db_payload("campaign1", {
-            "user_id": "user1",
-            "item_i": 1,
-            "annotation": [{"model1": {"score": 90}}]
-        })
-        # Add annotation for user2 on item 0 and 2
-        save_db_payload("campaign1", {
-            "user_id": "user2",
-            "item_i": 0,
-            "annotation": [{"model1": {"score": 70}}]
-        })
-        save_db_payload("campaign1", {
-            "user_id": "user2",
-            "item_i": 2,
-            "annotation": [{"model1": {"score": 85}}]
-        })
         
-        reset_task("campaign1", "user1", tasks_data, progress_data)
+        # Dynamic assignment should not support reset
+        response = reset_task("campaign1", "user1", tasks_data, progress_data)
+        assert response.status_code == 400
+        content = response.body.decode()
+        assert "not supported" in content.lower()
         
-        # Only items touched by user1 (0 and 1) should be reset for all users
-        # Items 2 and 3 should remain unchanged
+        # Verify progress was not changed
         assert progress_data["campaign1"]["user1"]["progress"] == [
-            list(), list(), list(), {"model1"}]
+            {"model1"}, {"model1"}, list(), {"model1"}]
         assert progress_data["campaign1"]["user2"]["progress"] == [
-            list(), list(), {"model1"}, list()]
-        # Only user1's time should be reset
-        assert progress_data["campaign1"]["user1"]["time"] == 0.0
-        assert progress_data["campaign1"]["user1"]["time_start"] is None
+            {"model1"}, {"model1"}, {"model1"}, list()]
+        assert progress_data["campaign1"]["user1"]["time"] == 50.0
         assert progress_data["campaign1"]["user2"]["time"] == 75.0
-        
-        # Verify reset markers were added only for user1's items (0 and 1)
-        items_user1_0 = get_db_log_item("campaign1", "user1", 0)
-        items_user1_1 = get_db_log_item("campaign1", "user1", 1)
-        assert len(items_user1_0) == 0  # Masked by reset marker
-        assert len(items_user1_1) == 0  # Masked by reset marker
-        
-        # User2's annotation on item 0 should still be visible (different user_id)
-        items_user2_0 = get_db_log_item("campaign1", "user2", 0)
-        assert len(items_user2_0) == 1
-        assert items_user2_0[0]["annotation"] == [{"model1": {"score": 70}}]
-        
-        # User2's annotation on item 2 should still be visible (user1 didn't touch it)
-        items_user2_2 = get_db_log_item("campaign1", "user2", 2)
-        assert len(items_user2_2) == 1
-        assert items_user2_2[0]["annotation"] == [{"model1": {"score": 85}}]

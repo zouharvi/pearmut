@@ -1,5 +1,4 @@
 import collections
-import copy
 import random
 import statistics
 from typing import Any
@@ -504,9 +503,15 @@ def reset_task(
     """
     Reset the task progress for the user in the specified campaign.
     Saves a reset marker to mask existing annotations.
+    
+    Note: Dynamic assignment does not support user-level deletion.
     """
     assignment = tasks_data[campaign_id]["info"]["assignment"]
-    if assignment == "task-based":
+    if assignment == "dynamic":
+        return JSONResponse(
+            content="User-level deletion is not supported for dynamic assignments", status_code=400
+        )
+    elif assignment == "task-based":
         # Save reset marker for this user to mask existing annotations
         num_items = len(tasks_data[campaign_id]["data"][user_id])
         for item_i in range(num_items):
@@ -532,30 +537,6 @@ def reset_task(
         for uid in progress_data[campaign_id]:
             for item_i in user_items:
                 progress_data[campaign_id][uid]["progress"][item_i] = False
-        
-        # Reset only the specified user's time
-        _reset_user_time(progress_data, campaign_id, user_id)
-        return JSONResponse(content="ok", status_code=200)
-    elif assignment == "dynamic":
-        # Find all items that this user has annotated
-        user_items = _get_user_annotated_items(campaign_id, user_id)
-        
-        # Save reset markers only for items this user has touched
-        for item_i in user_items:
-            save_db_payload(
-                campaign_id,
-                {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
-            )
-
-        progress_data_user = copy.deepcopy(progress_data[campaign_id][user_id]["progress"])
-        
-        # Reset only the touched items in all users' progress (shared pool, use lists to track models)
-        for uid in progress_data[campaign_id]:
-            for item_i in user_items:
-                progress_data[campaign_id][uid]["progress"][item_i] = [
-                    x for x in progress_data[campaign_id][uid]["progress"][item_i]
-                    if x not in progress_data_user[item_i]
-                ]
         
         # Reset only the specified user's time
         _reset_user_time(progress_data, campaign_id, user_id)

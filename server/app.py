@@ -193,7 +193,11 @@ async def _dashboard_data(request: DashboardDataRequest):
         progress_new[user_id] = entry
 
     return JSONResponse(
-        content={"data": progress_new, "validation_threshold": validation_threshold},
+        content={
+            "data": progress_new,
+            "validation_threshold": validation_threshold,
+            "assignment": assignment,
+        },
         status_code=200,
     )
 
