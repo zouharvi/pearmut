@@ -352,6 +352,12 @@ async function display_next_payload(response: DataPayload) {
             </div>
             `)
 
+            // Add model name at the top of the candidate block if enabled
+            if (response.info.model_names_visible) {
+                let model_name_div = $('<div class="model_name"></div>').text(model)
+                candidate_block.prepend(model_name_div)
+            }
+
             candidate_block.find(".output_response").prepend(_textfield_button_html(item_i, model, response.info.textfield))
             candidate_block.append(_textfield_html(item_i, model, response.info.textfield))
 

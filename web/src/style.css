@@ -63,6 +63,14 @@ label {
     margin-bottom: 30pt;
 }
 
+.model_name {
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 5px;
+    padding: 2px 0;
+}
+
 /* Character hover and highlighting */
 .tgt_char:hover {
     background-color: #ccc;
