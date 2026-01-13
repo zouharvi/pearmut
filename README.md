@@ -476,6 +476,7 @@ Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouh
   - Rename default annotation protocol from `basic.html` to `annotate` (without `.html` suffix).
   - Default `dashboard.html` is `dashboard`, though `.html` also works.
   - Add `show_model_names` flag
+  - Allow multiple concurrent Pearmut instances to be running on the same machine on different ports and in different directories
 - v1.0.1
   - Support RTL languages
   - Add boxes for references
