@@ -103,7 +103,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
             &nbsp;&nbsp;
             <a href="${data[user_id]["url"]}&frozen" title="View only (frozen)">👁️</a>`
         
-        // Only show delete button if not dynamic assignment
+        // Hide delete button for dynamic assignments - deletion not supported due to shared data pool
         if (assignment !== "dynamic") {
             html += `
             &nbsp;&nbsp;

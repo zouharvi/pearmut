@@ -510,7 +510,7 @@ def reset_task(
     assignment = tasks_data[campaign_id]["info"]["assignment"]
     if assignment == "dynamic":
         return JSONResponse(
-            content="Reset not supported for dynamic assignment", status_code=400
+            content="User-level deletion is not supported for dynamic assignments", status_code=400
         )
     elif assignment == "task-based":
         # Save reset marker for this user to mask existing annotations
