@@ -3,6 +3,7 @@ Command-line interface for managing and running the Pearmut server.
 """
 
 import argparse
+import atexit
 import fcntl
 import hashlib
 import json
@@ -36,6 +37,9 @@ def _run(args_unknown):
         except (FileNotFoundError, PermissionError, OSError):
             print("You can't run multiple instances of Pearmut in the same directory.")
         exit(1)
+
+    # Register cleanup to remove lock file on exit
+    atexit.register(lambda: os.path.exists(lock_file) and os.remove(lock_file))
 
     import uvicorn
 
