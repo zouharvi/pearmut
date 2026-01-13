@@ -39,14 +39,7 @@ def _run(args_unknown):
         exit(1)
 
     # Register cleanup to remove lock file on exit
-    def cleanup_lock():
-        try:
-            if os.path.exists(lock_file):
-                os.remove(lock_file)
-        except OSError:
-            pass  # Ignore errors during cleanup
-    
-    atexit.register(cleanup_lock)
+    atexit.register(lambda: os.path.exists(lock_file) and os.remove(lock_file))
 
     import uvicorn
 
