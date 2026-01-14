@@ -833,6 +833,23 @@ async function display_next_payload(response: DataPayload) {
     // trigger once to reposition toolboxes
     $(window).trigger('resize.toolbox')
     check_unlock()
+
+    // Attach event listeners to multimedia elements for logging
+    $("#output_div audio, #output_div video").each(function() {
+        const element = this as HTMLMediaElement
+        const $parent = $(element).closest('.output_src, .output_ref, .output_tgt')
+        const context = $parent.hasClass('output_src') ? 'src' : 
+                       $parent.hasClass('output_ref') ? 'ref' : 
+                       $parent.closest('.output_candidate').attr('data-model') || 'unknown'
+        
+        $(element).on('play', () => {
+            action_log.push({ "time": Date.now() / 1000, "action": "media_play", "src": element.src, "context": context })
+        })
+        
+        $(element).on('seeked', () => {
+            action_log.push({ "time": Date.now() / 1000, "action": "media_seek", "src": element.src, "context": context, "currentTime": element.currentTime })
+        })
+    })
 }
 
 
