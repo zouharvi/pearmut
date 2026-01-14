@@ -834,7 +834,8 @@ async function display_next_payload(response: DataPayload) {
     $(window).trigger('resize.toolbox')
     check_unlock()
 
-    // Attach event listeners to multimedia elements for logging
+    // Attach event listeners to multimedia elements for logging (no overhead if no audio/video present)
+    // Note: Elements are removed when output_div is cleared, so no explicit cleanup needed
     $("#output_div audio, #output_div video").each(function() {
         const element = this as HTMLMediaElement
         const $parent = $(element).closest('.output_src, .output_ref, .output_tgt')
