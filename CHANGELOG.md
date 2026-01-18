@@ -1,0 +1,65 @@
+
+# Changelog
+
+- v1.0.2
+  - Fix `token_main` vulnerability
+  - Add textfields for translation and post-editing
+  - Rename default annotation protocol from `basic.html` to `annotate` (without `.html` suffix).
+  - Default `dashboard.html` is `dashboard`, though `.html` also works.
+  - Add `show_model_names` flag
+  - Allow multiple concurrent Pearmut instances to be running on the same machine on different ports and in different directories
+- v1.0.1
+  - Support RTL languages
+  - Add boxes for references
+  - Add custom score sliders for multi-dimensional evaluation
+  - Make instructions customizable and protocol-dependent
+  - Support custom sliders
+  - Purge/reset whole tasks from dashboard
+  - Fix resetting individual users in single-stream/dynamic
+  - Fix notification stacking
+  - Add campaigns from dashboard
+- v0.3.3
+  - Rename `doc_id` to `item_id`
+  - Add Typst, LaTeX, and PDF export for model ranking tables. Hide them by default.
+  - Add dynamic assignment type with contrastive model comparison
+  - Add `instructions_goodbye` field with variable substitution
+  - Add visual anchors at 33% and 66% on sliders
+  - Add German→English ESA tutorial with attention checks
+  - Validate document model consistency before shuffle
+  - Fix UI block on any interaction
+- v0.3.2
+  - Revert seeding of user IDs
+  - Set ESA (Error Span Annotation) as default
+  - Update server IP address configuration
+  - Show approximate alignment by default
+  - Unify pointwise and listwise interfaces into `basic`
+  - Refactor protocol configuration (breaking change)
+- v0.2.11
+  - Add comment field in settings panel
+  - Add `score_gt` validation for listwise comparisons
+  - Add Content-Disposition headers for proper download filenames
+  - Add model results display to dashboard with rankings
+  - Add campaign file structure validation
+  - Purge command now unlinks assets
+- v0.2.6
+  - Add frozen annotation links feature for view-only mode
+  - Add word-level annotation mode toggle for error spans
+  - Add `[missing]` token support
+  - Improve frontend speed and cleanup toolboxes on item load
+  - Host assets via symlinks
+  - Add validation threshold for success/fail tokens
+  - Implement reset masking for annotations
+  - Allow pre-defined user IDs and tokens in campaign data
+- v0.1.1
+  - Set server defaults and add VM launch scripts
+  - Add warning dialog when navigating away with unsaved work
+  - Add tutorial validation support for pointwise and listwise
+  - Add ability to preview existing annotations via progress bar
+  - Add support for ESA<sup>AI</sup> pre-filled error_spans
+  - Rename pairwise to listwise and update layout
+  - Implement single-stream assignment type
+- v0.0.3
+  - Support multimodal inputs and outputs
+  - Add dashboard
+  - Implement ESA (Error Span Annotation) and MQM support
+
