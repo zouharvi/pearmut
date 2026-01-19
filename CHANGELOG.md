@@ -1,6 +1,8 @@
 
 # Changelog
 
+- v1.0.3 (unreleased)
+  - Log media actions
 - v1.0.2
   - Fix `token_main` vulnerability
   - Add textfields for translation and post-editing

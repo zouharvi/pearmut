@@ -29,7 +29,7 @@ const searchParams = new URLSearchParams(window.location.search)
 const frozenMode = searchParams.has("frozen")
 
 // Each model has its own response
-type CandidateResponse = { 
+type CandidateResponse = {
     score: number | null,  // Main score, always present
     sliders?: Record<string, number | null>,  // Optional custom sliders
     error_spans: Array<ErrorSpan>,
@@ -154,20 +154,20 @@ function cleanupPreviousItem(): void {
 
 function _textfield_button_html(item_i: number, model: string, mode: string | null | undefined): string {
     if (!mode) return ""  // null or undefined - don't show textfield
-    
+
     if (mode === "hidden") {
         return `
         <button class="textfield_toggle" id="textfield_toggle_${item_i}_${model}">✏️</button>
         `
     }
-    
+
     return ""
 }
 
 
 function _textfield_html(item_i: number, model: string, mode: string | null | undefined): string {
     if (!mode) return ""  // null or undefined - don't show textfield
-    
+
     if (mode === "hidden") {
         return `
         <textarea class="output_textfield" id="textfield_${item_i}_${model}" style="display: none;" placeholder="Type here..."></textarea>
@@ -177,7 +177,7 @@ function _textfield_html(item_i: number, model: string, mode: string | null | un
         <textarea class="output_textfield" id="textfield_${item_i}_${model}" placeholder="Type here..."></textarea>
         `
     }
-    
+
     return ""
 }
 
@@ -186,7 +186,7 @@ function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): 
     if (sliders && sliders.length === 0) {
         return '<div class="output_response"></div>'
     }
-    
+
     // If no custom sliders specified (undefined), use default single slider
     if (!sliders) {
         return `
@@ -196,10 +196,10 @@ function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): 
         </div>
         `
     }
-    
+
     // Generate multiple sliders with labels (no Score slider when custom sliders are defined)
     let html = '<div class="output_response">'
-    
+
     // Add custom sliders
     for (const slider of sliders) {
         html += `
@@ -210,7 +210,7 @@ function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): 
           </div>
         `
     }
-    
+
     html += '</div>'
     return html
 }
@@ -230,7 +230,7 @@ async function display_next_payload(response: DataPayload) {
             for (const [model, r] of Object.entries(docResponses)) {
                 result[model] = {
                     "score": r.score,
-                    "sliders": r.sliders ? {...r.sliders} : undefined,
+                    "sliders": r.sliders ? { ...r.sliders } : undefined,
                     "error_spans": r.error_spans ? [...r.error_spans] : [],
                     "textfield": r.textfield ?? null,
                 }
@@ -380,7 +380,7 @@ async function display_next_payload(response: DataPayload) {
             if (!no_tgt_char) {
                 tgt_chars_objs.forEach((obj, i) => {
                     let is_missing = (i == missing_i)
-                    
+
                     // leaving target character
                     $(obj.el).on("mouseleave", function () {
                         $(".src_char").removeClass("highlighted")
@@ -471,13 +471,13 @@ async function display_next_payload(response: DataPayload) {
                                 // check if we're not overlapping
                                 let left_i = Math.min(state_i, i)
                                 let right_i = Math.max(state_i, i)
-                                
+
                                 // Expand to word boundaries if word-level mode is enabled
                                 if (settings_word_level && !is_missing && state_i != missing_i) {
                                     left_i = tgt_chars_objs[left_i].word_start
                                     right_i = tgt_chars_objs[right_i].word_end
                                 }
-                                
+
                                 state_i = null
                                 $(".src_char").removeClass("highlighted")
                                 candidate_block.find(".tgt_char").removeClass("highlighted")
@@ -590,7 +590,7 @@ async function display_next_payload(response: DataPayload) {
                         }
                     })
                     $(window).on('resize.toolbox', () => updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el)))
-                    
+
                     for (let j = left_i; j <= right_i; j++) {
                         $(tgt_chars_objs[j].el).addClass(error_span.severity ? `error_${error_span.severity}` : "error_unknown")
                         tgt_chars_objs[j].toolbox = toolbox
@@ -605,17 +605,17 @@ async function display_next_payload(response: DataPayload) {
             // Setup slider(s) for this model
             const hasCustomSliders = response.info.sliders && response.info.sliders.length > 0
             const hasNoSliders = response.info.sliders !== undefined && response.info.sliders.length === 0
-            
+
             if (hasCustomSliders) {
                 // Multiple sliders mode (no Score slider when custom sliders are defined)
                 const allSliders = response.info.sliders!
-                
+
                 for (const sliderConfig of allSliders) {
                     const sliderName = sliderConfig.name
                     const sliderMax = sliderConfig.max
                     let slider = candidate_block.find(`input[data-slider="${sliderName}"]`)
                     let label = candidate_block.find(`.slider_label[data-slider="${sliderName}"]`)
-                    
+
                     slider.on("click input", function () {
                         // In frozen mode, do not allow changing scores
                         if (frozenMode) return
@@ -631,14 +631,14 @@ async function display_next_payload(response: DataPayload) {
                             action_log.push({ "time": Date.now() / 1000, "action": sliderName, "index": item_i, "model": model, "value": val })
                         }
                     })
-                    
+
                     slider.on("change", function () {
                         // In frozen mode, do not allow changing scores
                         if (frozenMode) return
 
                         let val = parseInt((<HTMLInputElement>this).value)
                         label.text(`${val}/${sliderMax}`)
-                        
+
                         // Store in sliders field
                         response_log[item_i][model].sliders![sliderName] = val
                         action_log.push({ "time": Date.now() / 1000, "action": sliderName, "index": item_i, "model": model, "value": val })
@@ -654,7 +654,7 @@ async function display_next_payload(response: DataPayload) {
                     // Pre-fill score from payload_existing if available
                     let existingScore: number | null = null
                     existingScore = response.payload_existing?.annotation[item_i]?.[model]?.sliders?.[sliderName] ?? null
-                    
+
                     if (existingScore != null) {
                         slider.val(existingScore)
                         label.text(`${existingScore}/${sliderMax}`)
@@ -705,19 +705,19 @@ async function display_next_payload(response: DataPayload) {
                     response_log[item_i][model].score = existingScore
                 }
             }
-            
+
             // Setup textfield if enabled
             if (response.info.textfield) {
                 const textfield = candidate_block.find(`#textfield_${item_i}_${model}`)
                 const toggle = candidate_block.find(`#textfield_toggle_${item_i}_${model}`)
-                
+
                 // Pre-fill with model output if mode is "prefilled"
                 // Note: tgt is from trusted campaign data, jQuery .val() safely escapes any content
                 if (response.info.textfield === "prefilled") {
                     textfield.val(tgt)
                     response_log[item_i][model].textfield = tgt
                 }
-                
+
                 // Handle toggle button for "hidden" mode
                 if (response.info.textfield === "hidden") {
                     toggle.on("click", function () {
@@ -728,29 +728,29 @@ async function display_next_payload(response: DataPayload) {
                         }
                     })
                 }
-                
+
                 // Handle textfield input with debouncing to reduce log volume
                 const logTextfieldInput = debounce(() => {
                     const val = textfield.val() as string
                     action_log.push({ "time": Date.now() / 1000, "action": "textfield", "index": item_i, "model": model, "value": val })
                 }, 500)
-                
+
                 textfield.on("input", function () {
                     // In frozen mode, do not allow changing textfield
                     if (frozenMode) return
-                    
+
                     let val = (<HTMLTextAreaElement>this).value
                     response_log[item_i][model].textfield = val
                     has_unsaved_work = true
                     // Log with debounce to avoid excessive logging during typing
                     logTextfieldInput()
                 })
-                
+
                 // Disable textfield in frozen mode
                 if (frozenMode) {
                     textfield.prop("disabled", true)
                 }
-                
+
                 // Pre-fill textfield from payload_existing if available (overrides prefilled mode)
                 const existingTextfield = response.payload_existing?.annotation[item_i]?.[model]?.textfield
                 if (existingTextfield != null) {
@@ -836,19 +836,25 @@ async function display_next_payload(response: DataPayload) {
 
     // Attach event listeners to multimedia elements for logging (no overhead if no audio/video present)
     // Note: Elements are removed when output_div is cleared, so no explicit cleanup needed
-    $("#output_div audio, #output_div video").each(function() {
+    $("#output_div audio, #output_div video").each(function () {
         const element = this as HTMLMediaElement
         const $parent = $(element).closest('.output_src, .output_ref, .output_tgt')
-        const context = $parent.hasClass('output_src') ? 'src' : 
-                       $parent.hasClass('output_ref') ? 'ref' : 
-                       $parent.closest('.output_candidate').attr('data-model') || 'unknown'
-        
+        const context = (
+            $parent.hasClass('output_src') ? 'src' :
+                $parent.hasClass('output_ref') ? 'ref' :
+                    $parent.closest('.output_candidate').attr('data-model') || 'unknown'
+        )
+
         $(element).on('play', () => {
-            action_log.push({ "time": Date.now() / 1000, "action": "media_play", "src": element.src, "context": context })
+            action_log.push({ "time": Date.now() / 1000, "action": "media_play", "media_src": element.src, "model": context, "media_time": element.currentTime })
         })
-        
+
+        $(element).on('pause', () => {
+            action_log.push({ "time": Date.now() / 1000, "action": "media_pause", "media_src": element.src, "model": context, "media_time": element.currentTime })
+        })
+
         $(element).on('seeked', () => {
-            action_log.push({ "time": Date.now() / 1000, "action": "media_seek", "src": element.src, "context": context, "currentTime": element.currentTime })
+            action_log.push({ "time": Date.now() / 1000, "action": "media_seek", "media_src": element.src, "model": context, "media_time": element.currentTime })
         })
     })
 }
@@ -915,7 +921,7 @@ async function performValidation(): Promise<Array<boolean> | null> {
     for (let item_ij = 0; item_ij < response_log.length; item_ij++) {
         let results_local = []
         const modelNames = Object.keys(response_log[item_ij])
-        
+
         for (let model of modelNames) {
             if (validations[item_ij] == undefined) {
                 continue
@@ -970,7 +976,7 @@ $("#button_next").on("click", async function () {
         // @ts-ignore
         payload_local["validations"] = validationResult
     }
-    
+
     // Include comment if provided
     const comment = $("#settings_comment").val() as string
     if (comment && comment.trim() !== "") {
@@ -979,7 +985,7 @@ $("#button_next").on("click", async function () {
         // Clear comment after submission
         $("#settings_comment").val("")
     }
-    
+
     let outcome = await log_response(payload_local, payload!.info.item_i)
     if (outcome == null || outcome == false) {
         notify("Error submitting the annotations. Please try again.")
