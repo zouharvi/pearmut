@@ -2,7 +2,12 @@ body {
     margin: 0;
     padding: 0;
     background: linear-gradient(135deg, #b9e2a1 0%, #e7e2cf 100%);
-    background-attachment: fixed;
+
+    /* never rescale for phone */
+    text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    -moz-text-size-adjust: none;
 }
 
 * {

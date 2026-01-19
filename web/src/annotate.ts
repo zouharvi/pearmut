@@ -325,7 +325,7 @@ async function display_next_payload(response: DataPayload) {
         let output_block = $(`
         <div class="output_block">
           <span class="instructions_message"></span>
-          <div class="output_srctgt">
+          <div class="output_item">
             ${srcRefBoxes}
           </div>
         </div>
@@ -361,7 +361,7 @@ async function display_next_payload(response: DataPayload) {
             candidate_block.find(".output_response").prepend(_textfield_button_html(item_i, model, response.info.textfield))
             candidate_block.append(_textfield_html(item_i, model, response.info.textfield))
 
-            output_block.find(".output_srctgt").append(candidate_block)
+            output_block.find(".output_item").append(candidate_block)
 
             // Setup character-level interactions for this model's output
             // Compute word boundaries for the target text
@@ -519,12 +519,13 @@ async function display_next_payload(response: DataPayload) {
                                 check_unlock()
 
                                 // handle hover on toolbox
-                                toolbox.on("mouseenter", function () {
+                                toolbox.on("mouseenter focusin contextmenu", function (e) {
+                                    if (e.type === "contextmenu") e.preventDefault();
                                     toolbox.css("display", "block")
                                     check_unlock()
                                 })
                                 // handle hover on toolbox
-                                toolbox.on("mouseleave", function () {
+                                toolbox.on("mouseleave focusout", function () {
                                     // hide if severity is set for ESA or both severity and category are set for MQM
                                     if (error_span.severity != null && (!protocol_error_categories || (error_span.category != null && error_span.category?.includes("/")))) {
                                         toolbox.css("display", "none")

@@ -3,17 +3,18 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=900px">
+  <meta name="viewport" content="width=810px">
   <title>Pearmut Evaluation</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <style>
-    .output_srctgt {
+    .output_item {
       display: flex;
       width: calc(100% - 10px);
       padding-right: 10px;
     }
 
-    .output_src, .output_ref {
+    .output_src,
+    .output_ref {
       display: inline-block;
       flex: 1;
       box-sizing: border-box;
@@ -36,7 +37,8 @@
       margin-bottom: 10px;
     }
 
-    .output_tgt, .output_textfield {
+    .output_tgt,
+    .output_textfield {
       width: calc(100% - 20px);
       background-color: #fffc;
       padding: 10px;
@@ -98,15 +100,17 @@
 
     /* on displays with less than 1000px - stack vertically */
     @media (max-width: 1000px) {
+
+      .output_src,
+      .output_ref,
       .output_candidate {
         display: block;
         width: 100%;
         margin-right: 0;
       }
 
-      .output_tgt, .output_textfield {
-        display: block;
-        width: calc(100% - 20px);
+      .output_item {
+        flex-direction: column;
       }
     }
 
@@ -172,7 +176,7 @@
 
 <body>
   <div
-    style="max-width: 1600px; min-width: 900px; margin-left: auto; margin-right: auto; margin-top: 20px; padding-left: 10px;">
+    style="max-width: 1600px; min-width: 800px; margin-left: auto; margin-right: auto; margin-top: 20px; padding-left: 10px;">
     <div class="white-box" style="margin-right: 10px; background-color: #e7e2cf; padding: 5px 15px 5px 5px;">
 
       <span id="instructions_global" style="display: inline-block; font-size: 11pt; width: calc(100% - 175px);">
