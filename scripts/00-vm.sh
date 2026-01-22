@@ -15,3 +15,6 @@ ngrok authtoken YOUR_NGROK_AUTH_TOKEN_HERE
 
 nohup ngrok http --url=pearmut.ngrok.io 8001 1>ngrok.out 2>ngrok.err &
 nohup pearmut run --port 8001 --server https://pearmut.ngrok.io 1>pearmut.out 2>pearmut.err &
+
+ngrok http --url=pearmut.ngrok.io 8001
+pearmut run --port 8001 --server https://pearmut.ngrok.io

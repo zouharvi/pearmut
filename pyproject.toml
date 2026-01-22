@@ -31,7 +31,7 @@ Repository = "https://github.com/zouharvi/pearmut"
 Issues = "https://github.com/zouharvi/pearmut/issues"
 
 [tool.setuptools]
-package-dir = { "pearmut" = "server" }
+package-dir = { pearmut = "server" }
 packages = ["pearmut"]
 
 [build-system]
