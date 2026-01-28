@@ -178,7 +178,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 for (let result of resultsData) {
                     tableHtml += `
                         <tr>
-                            <td style="${result.sig_better_than_next ? "border-bottom: 1pt solid black;" : ""}">${result.model}</td>
+                            <td style="${result.sig_better_than_next ? "border-bottom: 1pt dashed black;" : ""}">${result.model}</td>
                             <td>${result.score.toFixed(1)}</td>
                             <td>${result.count}</td>
                         </tr>`;
