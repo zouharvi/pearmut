@@ -265,6 +265,49 @@ The `score_greaterthan` field specifies the index of the candidate that must hav
 See [examples/tutorial/esa_deen.json](examples/tutorial/esa_deen.json) for a mock campaign with a fully prepared ESA tutorial.
 To use it, simply extract the `data` attribute and prefix it to each task in your campaign.
 
+#### Universal Tutorial Items with `data_welcome`
+
+Use `data_welcome` to add tutorial or introduction items that appear first for all users, regardless of assignment type (task-based, single-stream, or dynamic):
+
+```python
+{
+  "campaign_id": "translation_task",
+  "info": {
+    "assignment": "single-stream",  # works with any assignment type
+    "protocol": "ESA",
+    "users": 10
+  },
+  "data_welcome": [
+    {
+      "src": "The dog ran outside.",
+      "tgt": {"A": "Der Hund lief nach draußen."},
+      "instructions": "<b>Tutorial:</b> Rate this perfect translation 95-100.",
+      "validation": {
+        "A": {
+          "warning": "Please score 95-100",
+          "score": [95, 100],
+          "allow_skip": true
+        }
+      }
+    },
+    {
+      "src": "The cat stayed inside.",
+      "tgt": {"A": "Die Katze blieb drinnen."},
+      "instructions": "<b>Tutorial 2:</b> Another example..."
+    }
+  ],
+  "data": [
+    // Regular annotation items follow...
+  ]
+}
+```
+
+Welcome items are:
+- Automatically prepended to all user tasks (task-based) or the shared pool (single-stream/dynamic)
+- Given item IDs `welcome_0`, `welcome_1`, etc. (regardless of any existing `item_id` field)
+- Included in progress tracking so users can navigate back to them
+- Counted toward task completion like regular items
+
 ### Single-stream Assignment
 
 All annotators draw from a shared pool with random assignment:
