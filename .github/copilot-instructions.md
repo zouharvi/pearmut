@@ -51,6 +51,13 @@ pearmut run
 - Web builds must succeed before committing frontend changes
 - Tests in `server/tests/` must pass
 
+## Style Guide
+
+- Write minimal, elegant code—no unnecessary fluff
+- Prioritize maintainability and readability
+- Keep functions focused and concise
+- Avoid over-engineering solutions
+
 ## Key Facts
 
 - Backend in Python with FastAPI, frontend in TypeScript
