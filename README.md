@@ -269,11 +269,11 @@ To use it, simply extract the `data` attribute and prefix it to each task in you
 
 Use `data_welcome` to add tutorial or introduction items that appear first for all users, regardless of assignment type (task-based, single-stream, or dynamic):
 
-```python
+```json
 {
   "campaign_id": "translation_task",
   "info": {
-    "assignment": "single-stream",  # works with any assignment type
+    "assignment": "single-stream",
     "protocol": "ESA",
     "users": 10
   },
@@ -297,7 +297,7 @@ Use `data_welcome` to add tutorial or introduction items that appear first for a
     }
   ],
   "data": [
-    // Regular annotation items follow...
+    [{"item_id": "item_1", "src": "Regular item", "tgt": {"A": "Translation"}}]
   ]
 }
 ```
