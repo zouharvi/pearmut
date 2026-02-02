@@ -273,6 +273,25 @@ def _add_single_campaign(campaign_data, overwrite, server):
     users_spec = campaign_data["info"].get("users")
     user_tokens = {}  # user_id -> {"pass": ..., "fail": ...}
 
+    # Validate and process data_welcome if present
+    data_welcome = campaign_data.get("data_welcome", [])
+    if data_welcome:
+        if not isinstance(data_welcome, list):
+            raise ValueError("'data_welcome' must be a list of items.")
+        # Validate welcome items structure - each should be an item dict
+        for doc_i, item in enumerate(data_welcome):
+            if not isinstance(item, dict):
+                raise ValueError(f"Welcome item {doc_i} must be a dictionary")
+            try:
+                _validate_item_structure([item])
+            except ValueError as e:
+                raise ValueError(f"Welcome item {doc_i}: {e}")
+        # Set item_id to welcome_0, welcome_1, etc.
+        for i, item in enumerate(data_welcome):
+            item["item_id"] = f"welcome_{i}"
+        # Wrap each item in a document (list) for consistency with data structure
+        data_welcome_docs = [[item] for item in data_welcome]
+
     if assignment == "task-based":
         tasks = campaign_data["data"]
         if not isinstance(tasks, list):
@@ -415,6 +434,15 @@ def _add_single_campaign(campaign_data, overwrite, server):
         output_file = f"{ROOT}/data/outputs/{campaign_data['campaign_id']}.jsonl"
         if os.path.exists(output_file):
             os.remove(output_file)
+
+    # Prepend welcome items to data if present
+    if data_welcome:
+        if assignment == "task-based":
+            # For task-based, prepend welcome documents to each user's task list
+            tasks = [data_welcome_docs + task for task in tasks]
+        elif assignment in ["single-stream", "dynamic"]:
+            # For single-stream and dynamic, prepend to shared data list
+            tasks = data_welcome_docs + tasks
 
     # For task-based, data is a dict mapping user_id -> tasks
     # For single-stream and dynamic, data is a flat list (shared among all users)
