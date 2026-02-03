@@ -394,9 +394,9 @@ Customize the goodbye message shown to users when they complete all annotations 
 
 ### Prolific Integration
 
-Use task-based assignment with Prolific. For each task, generate a unique URL and upload links to Prolific's interface. Add redirect to `instructions_goodbye`:
+Use task-based assignment with Prolific. For each task, Pearmut generates a unique URL which can be uploaded to Prolific's interface. Add redirect (on completion) to `instructions_goodbye`:
 ```json
-"instructions_goodbye": "<a href='https://app.prolific.com/submissions/complete?cc=YOUR_CODE'>Click here to return to Prolific</a>"
+"instructions_goodbye": "<a href='https://app.prolific.com/submissions/complete?cc=${TOKEN}'>Click here to return to Prolific</a>"
 ```
 
 ## Terminology
