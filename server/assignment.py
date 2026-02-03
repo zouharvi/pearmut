@@ -122,7 +122,7 @@ def get_i_item_taskbased(
     """
     user_progress = progress_data[campaign_id][user_id]
     progress_welcome = user_progress.get("progress_welcome", [])
-    
+
     # Convert welcome_X string to integer index
     actual_index = item_i
     if isinstance(item_i, str) and item_i.startswith("welcome_"):
@@ -178,7 +178,7 @@ def get_i_item_singlestream(
     """
     user_progress = progress_data[campaign_id][user_id]
     progress_welcome = user_progress.get("progress_welcome", [])
-    
+
     # Convert welcome_X string to integer index
     actual_index = item_i
     is_welcome_item = isinstance(item_i, str) and item_i.startswith("welcome_")
@@ -235,13 +235,13 @@ def get_next_item_taskbased(
     """
     user_progress = progress_data[campaign_id][user_id]
     progress_welcome = user_progress.get("progress_welcome", [])
-    
+
     # Check if there are incomplete welcome items first
     if progress_welcome and not all(progress_welcome):
         # Find first incomplete welcome item
         item_i = next(i for i, v in enumerate(progress_welcome) if not v)
         item_id = f"welcome_{item_i}"
-        
+
         # try to get existing annotations if any
         items_existing = get_db_log_item(campaign_id, user_id, item_id)
         payload_existing = None
@@ -251,7 +251,7 @@ def get_next_item_taskbased(
             payload_existing = {"annotation": latest_item["annotation"]}
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
-        
+
         return JSONResponse(
             content={
                 "status": "ok",
@@ -272,7 +272,7 @@ def get_next_item_taskbased(
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
         )
-    
+
     # All welcome items complete, proceed with regular items
     if all(user_progress["progress"]):
         return _completed_response(data_all, progress_data, campaign_id, user_id)
@@ -329,13 +329,13 @@ def get_next_item_singlestream(
     user_progress = progress_data[campaign_id][user_id]
     progress = user_progress["progress"]
     progress_welcome = user_progress.get("progress_welcome", [])
-    
+
     # Check if there are incomplete welcome items first - must complete all before proceeding
     if progress_welcome and not all(progress_welcome):
         # Find first incomplete welcome item (sequential, not random)
         item_i = next(i for i, v in enumerate(progress_welcome) if not v)
         item_id = f"welcome_{item_i}"
-        
+
         # try to get existing annotations if any
         # note the user_id since welcome items are per-user
         items_existing = get_db_log_item(campaign_id, user_id, item_id)
@@ -346,7 +346,7 @@ def get_next_item_singlestream(
             payload_existing = {"annotation": latest_item["annotation"]}
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
-        
+
         return JSONResponse(
             content={
                 "status": "ok",
@@ -432,13 +432,13 @@ def get_next_item_dynamic(
     user_progress = progress_data[campaign_id][user_id]
     campaign_data = tasks_data[campaign_id]
     progress_welcome = user_progress.get("progress_welcome", [])
-    
+
     # Check if there are incomplete welcome items first - must complete all before proceeding
     if progress_welcome and not all(progress_welcome):
         # Find first incomplete welcome item (sequential)
         item_i = next(i for i, v in enumerate(progress_welcome) if not v)
         item_id = f"welcome_{item_i}"
-        
+
         # try to get existing annotations if any
         # note the user_id since welcome items are per-user
         items_existing = get_db_log_item(campaign_id, user_id, item_id)
@@ -449,7 +449,7 @@ def get_next_item_dynamic(
             payload_existing = {"annotation": latest_item["annotation"]}
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
-        
+
         return JSONResponse(
             content={
                 "status": "ok",
@@ -619,11 +619,11 @@ def _reset_user_time(progress_data: dict, campaign_id: str, user_id: str) -> Non
 def _get_user_annotated_items(campaign_id: str, user_id: str) -> set[int]:
     """
     Get the set of item indices that a specific user has annotated.
-    
+
     Args:
         campaign_id: The campaign identifier
         user_id: The user identifier
-        
+
     Returns:
         Set of item indices (item_i) that the user has annotated
     """
@@ -645,7 +645,7 @@ def reset_task(
     """
     Reset the task progress for the user in the specified campaign.
     Saves a reset marker to mask existing annotations.
-    
+
     Note: Dynamic assignment does not support user-level deletion.
     """
     assignment = tasks_data[campaign_id]["info"]["assignment"]
@@ -667,19 +667,19 @@ def reset_task(
     elif assignment == "single-stream":
         # Find all items that this user has annotated
         user_items = _get_user_annotated_items(campaign_id, user_id)
-        
+
         # Save reset markers only for items this user has touched
         for item_i in user_items:
             save_db_payload(
                 campaign_id,
                 {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
             )
-        
+
         # Reset only the touched items in all users' progress (shared pool)
         for uid in progress_data[campaign_id]:
             for item_i in user_items:
                 progress_data[campaign_id][uid]["progress"][item_i] = False
-        
+
         # Reset only the specified user's time
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
@@ -706,7 +706,7 @@ def update_progress(
         # Update only this user's progress_welcome (not shared)
         progress_data[campaign_id][user_id]["progress_welcome"][welcome_index] = True
         return JSONResponse(content={"status": "ok"}, status_code=200)
-    
+
     assignment = tasks_data[campaign_id]["info"]["assignment"]
     if assignment == "task-based":
         # even if it's already set it should be fine
