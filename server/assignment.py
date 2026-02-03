@@ -398,7 +398,13 @@ def get_next_item_singlestream(
         )
 
     # All welcome items complete, proceed with regular items
-    if all(progress):
+    # Check if user reached items_per_user limit (if specified)
+    items_per_user = data_all[campaign_id]["info"].get("items_per_user")
+    if items_per_user is not None:
+        completed_count = sum(1 for v in progress if v)
+        if completed_count >= items_per_user:
+            return _completed_response(data_all, progress_data, campaign_id, user_id)
+    elif all(progress):
         return _completed_response(data_all, progress_data, campaign_id, user_id)
 
     # find a random incomplete item
@@ -503,9 +509,17 @@ def get_next_item_dynamic(
     # Get all unique models in the campaign (all items must have all models)
     all_models = list(set(campaign_data["data"][0][0]["tgt"].keys()))
 
-    # Check if completed (all models completed for all items)
+    # Check if completed
+    # First check if items_per_user limit is reached
+    items_per_user = campaign_data["info"].get("items_per_user")
+    if items_per_user is not None:
+        # Count items where at least one model has been annotated
+        completed_count = sum(1 for v in user_progress["progress"] if len(v) > 0)
+        if completed_count >= items_per_user:
+            return _completed_response(tasks_data, progress_data, campaign_id, user_id)
+    # Otherwise check if all models completed for all items
     # NOTE: this will rarely trigger but we don't have a good way to know when to end anyway for now
-    if all(len(v) == len(all_models) for v in user_progress["progress"]):
+    elif all(len(v) == len(all_models) for v in user_progress["progress"]):
         return _completed_response(tasks_data, progress_data, campaign_id, user_id)
 
     # Get configuration parameters

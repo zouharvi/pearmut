@@ -581,6 +581,77 @@ class TestSingleStream:
         assert '"item_i":2' in content
         assert '"src":"e"' in content
 
+    def test_items_per_user_triggers_goodbye(self):
+        """Test that single-stream with items_per_user shows goodbye after specified items."""
+        tasks_data = {
+            "campaign1": {
+                "info": {
+                    "assignment": "single-stream",
+                    "items_per_user": 2,
+                },
+                "data": [
+                    [{"src": "a", "tgt": "b"}],
+                    [{"src": "c", "tgt": "d"}],
+                    [{"src": "e", "tgt": "f"}],
+                    [{"src": "g", "tgt": "h"}],
+                ]
+            }
+        }
+        progress_data = {
+            "campaign1": {
+                "user1": {
+                    "progress": [True, False, True, False],
+                    "progress_welcome": [],
+                    "time": 100,
+                    "token_correct": "correct_token",
+                    "token_incorrect": "wrong_token",
+                }
+            }
+        }
+        # User has completed 2 items (indices 0 and 2), should get goodbye
+        response = get_next_item("campaign1", "user1",
+                                 tasks_data, progress_data)
+        assert response.status_code == 200
+        content = response.body.decode()
+        assert '"status":"goodbye"' in content
+        assert 'correct_token' in content
+
+    def test_items_per_user_continues_before_limit(self):
+        """Test that single-stream continues returning items before items_per_user limit."""
+        tasks_data = {
+            "campaign1": {
+                "info": {
+                    "assignment": "single-stream",
+                    "items_per_user": 3,
+                },
+                "data": [
+                    [{"src": "a", "tgt": "b"}],
+                    [{"src": "c", "tgt": "d"}],
+                    [{"src": "e", "tgt": "f"}],
+                    [{"src": "g", "tgt": "h"}],
+                ]
+            }
+        }
+        progress_data = {
+            "campaign1": {
+                "user1": {
+                    "progress": [True, False, True, False],
+                    "progress_welcome": [],
+                    "time": 100,
+                    "token_correct": "correct_token",
+                    "token_incorrect": "wrong_token",
+                }
+            }
+        }
+        # User has completed 2 items, limit is 3, should get next item
+        response = get_next_item("campaign1", "user1",
+                                 tasks_data, progress_data)
+        assert response.status_code == 200
+        content = response.body.decode()
+        assert '"status":"ok"' in content
+        # Should return one of the incomplete items (1 or 3)
+        assert '"item_i":1' in content or '"item_i":3' in content
+
 class TestResetMasking:
     """Tests for reset masking functionality."""
 
@@ -1069,3 +1140,79 @@ class TestDynamic:
             {"model1"}, {"model1"}, {"model1"}, list()]
         assert progress_data["campaign1"]["user1"]["time"] == 50.0
         assert progress_data["campaign1"]["user2"]["time"] == 75.0
+
+    def test_items_per_user_triggers_goodbye(self):
+        """Test that dynamic with items_per_user shows goodbye after specified items."""
+        tasks_data = {
+            "campaign1": {
+                "info": {
+                    "assignment": "dynamic",
+                    "items_per_user": 2,
+                    "dynamic_top": 1,
+                    "dynamic_first": 2,
+                },
+                "data": [
+                    [{"src": "a", "tgt": {"model1": "b", "model2": "c"}}],
+                    [{"src": "d", "tgt": {"model1": "e", "model2": "f"}}],
+                    [{"src": "g", "tgt": {"model1": "h", "model2": "i"}}],
+                    [{"src": "j", "tgt": {"model1": "k", "model2": "l"}}],
+                ]
+            }
+        }
+        progress_data = {
+            "campaign1": {
+                "user1": {
+                    "progress": [["model1"], list(), ["model2"], list()],
+                    "progress_welcome": [],
+                    "time": 100,
+                    "token_correct": "correct_token",
+                    "token_incorrect": "wrong_token",
+                }
+            }
+        }
+        # User has completed 2 items (indices 0 and 2 have annotations), should get goodbye
+        response = get_next_item("campaign1", "user1",
+                                 tasks_data, progress_data)
+        assert response.status_code == 200
+        content = response.body.decode()
+        assert '"status":"goodbye"' in content
+        assert 'correct_token' in content
+
+    def test_items_per_user_continues_before_limit(self):
+        """Test that dynamic continues returning items before items_per_user limit."""
+        tasks_data = {
+            "campaign1": {
+                "info": {
+                    "assignment": "dynamic",
+                    "items_per_user": 3,
+                    "dynamic_top": 1,
+                    "dynamic_first": 2,
+                },
+                "data": [
+                    [{"src": "a", "tgt": {"model1": "b", "model2": "c"}}],
+                    [{"src": "d", "tgt": {"model1": "e", "model2": "f"}}],
+                    [{"src": "g", "tgt": {"model1": "h", "model2": "i"}}],
+                    [{"src": "j", "tgt": {"model1": "k", "model2": "l"}}],
+                ]
+            }
+        }
+        progress_data = {
+            "campaign1": {
+                "user1": {
+                    "progress": [["model1"], list(), ["model2"], list()],
+                    "progress_welcome": [],
+                    "time": 100,
+                    "token_correct": "correct_token",
+                    "token_incorrect": "wrong_token",
+                }
+            }
+        }
+        # User has completed 2 items, limit is 3, should get next item
+        response = get_next_item("campaign1", "user1",
+                                 tasks_data, progress_data)
+        assert response.status_code == 200
+        content = response.body.decode()
+        assert '"status":"ok"' in content
+        # Should return an item
+        assert '"item_i"' in content
+

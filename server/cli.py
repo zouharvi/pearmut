@@ -329,6 +329,15 @@ def _add_single_campaign(campaign_data, overwrite, server):
             num_users = len(users_spec)
         else:
             raise ValueError("'users' must be an integer or a list.")
+        # Validate items_per_user if specified
+        if "items_per_user" in campaign_data["info"]:
+            items_per_user = campaign_data["info"]["items_per_user"]
+            if not isinstance(items_per_user, int) or items_per_user < 1:
+                raise ValueError("'items_per_user' must be a positive integer")
+            if items_per_user > len(tasks):
+                raise ValueError(
+                    f"'items_per_user' ({items_per_user}) cannot exceed total items ({len(tasks)})"
+                )
     elif assignment == "dynamic":
         tasks = campaign_data["data"]
         if users_spec is None:
@@ -374,6 +383,15 @@ def _add_single_campaign(campaign_data, overwrite, server):
                 assert (
                     item_models == all_models
                 ), "All items must have the same model outputs"
+        # Validate items_per_user if specified
+        if "items_per_user" in campaign_data["info"]:
+            items_per_user = campaign_data["info"]["items_per_user"]
+            if not isinstance(items_per_user, int) or items_per_user < 1:
+                raise ValueError("'items_per_user' must be a positive integer")
+            if items_per_user > len(tasks):
+                raise ValueError(
+                    f"'items_per_user' ({items_per_user}) cannot exceed total items ({len(tasks)})"
+                )
     else:
         raise ValueError(f"Unknown campaign assignment type: {assignment}")
 
