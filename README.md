@@ -267,46 +267,7 @@ To use it, simply extract the `data` attribute and prefix it to each task in you
 
 #### Universal Tutorial Items with `data_welcome`
 
-Use `data_welcome` to add tutorial or introduction items that appear first for all users, regardless of assignment type (task-based, single-stream, or dynamic):
-
-```json
-{
-  "campaign_id": "translation_task",
-  "info": {
-    "assignment": "single-stream",
-    "protocol": "ESA",
-    "users": 10
-  },
-  "data_welcome": [
-    {
-      "src": "The dog ran outside.",
-      "tgt": {"A": "Der Hund lief nach draußen."},
-      "instructions": "<b>Tutorial:</b> Rate this perfect translation 95-100.",
-      "validation": {
-        "A": {
-          "warning": "Please score 95-100",
-          "score": [95, 100],
-          "allow_skip": true
-        }
-      }
-    },
-    {
-      "src": "The cat stayed inside.",
-      "tgt": {"A": "Die Katze blieb drinnen."},
-      "instructions": "<b>Tutorial 2:</b> Another example..."
-    }
-  ],
-  "data": [
-    [{"item_id": "item_1", "src": "Regular item", "tgt": {"A": "Translation"}}]
-  ]
-}
-```
-
-Welcome items are:
-- Automatically prepended to all user tasks (task-based) or the shared pool (single-stream/dynamic)
-- Given item IDs `welcome_0`, `welcome_1`, etc. (regardless of any existing `item_id` field)
-- Included in progress tracking so users can navigate back to them
-- Counted toward task completion like regular items
+Use `data_welcome` to add tutorial items that users must complete before starting regular tasks. The structure is a list of documents (same as `data`). Welcome items have IDs `welcome_0`, `welcome_1`, etc. and are tracked separately via `progress_welcome`.
 
 ### Single-stream Assignment
 

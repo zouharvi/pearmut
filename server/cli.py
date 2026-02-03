@@ -277,20 +277,19 @@ def _add_single_campaign(campaign_data, overwrite, server):
     data_welcome = campaign_data.get("data_welcome", [])
     if data_welcome:
         if not isinstance(data_welcome, list):
-            raise ValueError("'data_welcome' must be a list of items.")
-        # Validate welcome items structure - each should be an item dict
-        for doc_i, item in enumerate(data_welcome):
-            if not isinstance(item, dict):
-                raise ValueError(f"Welcome item {doc_i} must be a dictionary")
+            raise ValueError("'data_welcome' must be a list of documents.")
+        # Validate welcome documents structure - each should be a list of items
+        for doc_i, doc in enumerate(data_welcome):
             try:
-                _validate_item_structure([item])
+                _validate_item_structure(doc)
             except ValueError as e:
-                raise ValueError(f"Welcome item {doc_i}: {e}")
-        # Set item_id to welcome_0, welcome_1, etc.
-        for i, item in enumerate(data_welcome):
-            item["item_id"] = f"welcome_{i}"
-        # Wrap each item in a document (list) for consistency with data structure
-        data_welcome_docs = [[item] for item in data_welcome]
+                raise ValueError(f"Welcome document {doc_i}: {e}")
+        # Set item_id to welcome_0, welcome_1, etc. for each item in each document
+        item_counter = 0
+        for doc in data_welcome:
+            for item in doc:
+                item["item_id"] = f"welcome_{item_counter}"
+                item_counter += 1
 
     if assignment == "task-based":
         tasks = campaign_data["data"]
@@ -435,15 +434,6 @@ def _add_single_campaign(campaign_data, overwrite, server):
         if os.path.exists(output_file):
             os.remove(output_file)
 
-    # Prepend welcome items to data if present
-    if data_welcome:
-        if assignment == "task-based":
-            # For task-based, prepend welcome documents to each user's task list
-            tasks = [data_welcome_docs + task for task in tasks]
-        elif assignment in ["single-stream", "dynamic"]:
-            # For single-stream and dynamic, prepend to shared data list
-            tasks = data_welcome_docs + tasks
-
     # For task-based, data is a dict mapping user_id -> tasks
     # For single-stream and dynamic, data is a flat list (shared among all users)
     if assignment == "task-based":
@@ -452,6 +442,10 @@ def _add_single_campaign(campaign_data, overwrite, server):
         }
     elif assignment in ["single-stream", "dynamic"]:
         campaign_data["data"] = tasks
+    
+    # Store data_welcome separately (don't prepend to data)
+    if data_welcome:
+        campaign_data["data_welcome"] = data_welcome
 
     # generate a token for dashboard access if not present
     if "token" not in campaign_data:
@@ -480,6 +474,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
                     )
                 )
             ),
+            "progress_welcome": [False] * len(data_welcome) if data_welcome else [],
             "time_start": None,
             "time_end": None,
             "time": 0,
