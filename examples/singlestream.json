@@ -5,6 +5,75 @@
     "protocol": "ESA"
   },
   "campaign_id": "example_singlestream",
+  "data_welcome": [
+    [
+      {
+        "item_id": "tutorial_1",
+        "src": "The quick brown fox jumps over the lazy dog.",
+        "tgt": {
+          "A": "Rychlá hnědá liška skáče přes líného psa.",
+          "B": "Hbitá hnědá liška přeskočila lenivého psa.",
+          "C": "Svižná hnědá liška skočila přes ospalého psa."
+        },
+        "instructions": "<b>Tutorial 1:</b> Compare these translations. 'Rychlá hnědá liška skáče přes líného psa.' is best: 80-90. 'Hbitá hnědá liška přeskočila lenivého psa.' has errors: 40-60. 'Svižná hnědá liška skočila přes ospalého psa.' is good: 70-80.",
+        "validation": {
+          "A": {
+            "warning": "Translation 'Rychlá hnědá liška skáče přes líného psa.' is best. Score 80-90.",
+            "score": [
+              80,
+              90
+            ],
+            "allow_skip": true
+          },
+          "B": {
+            "warning": "Translation 'Hbitá hnědá liška přeskočila lenivého psa.' has errors. Score 40-60.",
+            "score": [
+              40,
+              60
+            ],
+            "allow_skip": true
+          },
+          "C": {
+            "warning": "Translation 'Svižná hnědá liška skočila přes ospalého psa.' is good. Score 70-80.",
+            "score": [
+              70,
+              80
+            ],
+            "allow_skip": true
+          }
+        }
+      }
+    ],
+    [
+      {
+        "item_id": "tutorial_2",
+        "src": "Machine translation improves daily.",
+        "tgt": {
+          "A": "Strojový překlad se denně zlepšuje.",
+          "B": "Automatický překlad je každý den lepší."
+        },
+        "instructions": "<b>Tutorial 2:</b> Both are good. 'Strojový překlad se denně zlepšuje.': 85-95, 'Automatický překlad je každý den lepší.': 80-90.",
+        "validation": {
+          "A": {
+            "warning": "'Strojový překlad se denně zlepšuje.' is excellent. Score 85-95.",
+            "score": [
+              85,
+              95
+            ],
+            "allow_skip": true
+          },
+          "B": {
+            "warning": "Translation 'Automatický překlad je každý den lepší.' is good. Score 80-90.",
+            "score": [
+              80,
+              90
+            ],
+            "allow_skip": true
+          }
+        }
+      }
+    ]
+  ],
   "data": [
     [
       {

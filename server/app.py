@@ -49,7 +49,7 @@ for campaign_id in progress_data.keys():
 class LogResponseRequest(BaseModel):
     campaign_id: str
     user_id: str
-    item_i: int
+    item_i: int | str
     payload: dict[str, Any]
 
 
@@ -124,7 +124,7 @@ async def _get_next_item(request: NextItemRequest):
 class GetItemRequest(BaseModel):
     campaign_id: str
     user_id: str
-    item_i: int
+    item_i: int | str
 
 
 @app.post("/get-i-item")
@@ -376,7 +376,6 @@ async def _download_annotations(
     # NOTE: currently not checking tokens for progress download as it is non-destructive
     # token: list[str] = Query()
 ):
-
     output = {}
     for campaign_id in campaign_id:
         output_path = f"{ROOT}/data/outputs/{campaign_id}.jsonl"
@@ -403,7 +402,6 @@ async def _download_annotations(
 async def _download_progress(
     campaign_id: list[str] = Query(), token: list[str] = Query()
 ):
-
     if len(campaign_id) != len(token):
         return JSONResponse(
             content="Mismatched campaign_id and token count", status_code=400
@@ -434,6 +432,7 @@ if not os.path.exists(static_dir + "index.html"):
     raise FileNotFoundError(
         "Static directory not found. Please build the frontend first."
     )
+
 
 # Serve HTML files directly without redirect
 @app.get("/annotate")
