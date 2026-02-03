@@ -23,27 +23,6 @@ def _get_instructions(tasks_data: dict, campaign_id: str) -> str:
     return PROTOCOL_INSTRUCTIONS.get(campaign_info.get("protocol", ""), "")
 
 
-def _get_welcome_document(data_welcome: list, item_index: int) -> list:
-    """
-    Get a welcome document by flattened item index from data_welcome structure.
-    data_welcome is a list of documents, each document is a list of items.
-    item_index is the flattened index across all items in all documents.
-    Returns the document (list of items) containing the item at item_index.
-    """
-    current_index = 0
-    for doc in data_welcome:
-        if current_index <= item_index < current_index + len(doc):
-            # Found the right document
-            return doc
-        current_index += len(doc)
-    raise IndexError(f"Welcome item index {item_index} out of range")
-
-
-def _get_first_incomplete_welcome(progress_welcome: list) -> int:
-    """Get the index of the first incomplete welcome item."""
-    return next(i for i, v in enumerate(progress_welcome) if not v)
-
-
 
 def _completed_response(
     tasks_data: dict,
@@ -136,7 +115,7 @@ def get_i_item_taskbased(
     user_id: str,
     data_all: dict,
     progress_data: dict,
-    item_i,  # Can be int or str like "welcome_0"
+    item_i: int | str,  # Can be int or str like "welcome_0"
 ) -> JSONResponse:
     """
     Get specific item for task-based protocol.
@@ -144,52 +123,14 @@ def get_i_item_taskbased(
     user_progress = progress_data[campaign_id][user_id]
     progress_welcome = user_progress.get("progress_welcome", [])
     
-    # Check if it's a welcome item
+    # Convert welcome_X string to integer index
+    actual_index = item_i
     if isinstance(item_i, str) and item_i.startswith("welcome_"):
-        welcome_index = int(item_i.split("_")[1])
-        
-        # try to get existing annotations if any
-        items_existing = get_db_log_item(campaign_id, user_id, item_i)
-        payload_existing = None
-        if items_existing:
-            # get the latest ones
-            latest_item = items_existing[-1]
-            payload_existing = {"annotation": latest_item["annotation"]}
-            if "comment" in latest_item:
-                payload_existing["comment"] = latest_item["comment"]
-        
-        # Validate against total number of welcome items (not documents)
-        if welcome_index < 0 or welcome_index >= len(progress_welcome):
+        actual_index = int(item_i.split("_")[1])
+        # Validate against total number of welcome items
+        if actual_index < 0 or actual_index >= len(progress_welcome):
             return JSONResponse(content="Welcome item index out of range", status_code=400)
-        
-        # Get the welcome document containing this item
-        try:
-            welcome_doc = _get_welcome_document(data_all[campaign_id].get("data_welcome", []), welcome_index)
-        except IndexError:
-            return JSONResponse(content="Welcome item index out of range", status_code=400)
-        
-        return JSONResponse(
-            content={
-                "status": "ok",
-                "progress": user_progress["progress"],
-                "progress_welcome": progress_welcome,
-                "time": user_progress["time"],
-                "info": {
-                    "item_i": item_i,
-                    "instructions": _get_instructions(data_all, campaign_id),
-                }
-                | {
-                    k: v
-                    for k, v in data_all[campaign_id]["info"].items()
-                    if k in {"protocol", "sliders", "textfield", "show_model_names"}
-                },
-                "payload": welcome_doc,
-            }
-            | ({"payload_existing": payload_existing} if payload_existing else {}),
-            status_code=200,
-        )
 
-    # Regular item
     # try to get existing annotations if any
     items_existing = get_db_log_item(campaign_id, user_id, item_i)
     payload_existing = None
@@ -200,7 +141,7 @@ def get_i_item_taskbased(
         if "comment" in latest_item:
             payload_existing["comment"] = latest_item["comment"]
 
-    if item_i < 0 or item_i >= len(data_all[campaign_id]["data"][user_id]):
+    if actual_index < 0 or actual_index >= len(data_all[campaign_id]["data"][user_id]):
         return JSONResponse(content="Item index out of range", status_code=400)
 
     return JSONResponse(
@@ -218,7 +159,7 @@ def get_i_item_taskbased(
                 for k, v in data_all[campaign_id]["info"].items()
                 if k in {"protocol", "sliders", "textfield", "show_model_names"}
             },
-            "payload": data_all[campaign_id]["data"][user_id][item_i],
+            "payload": data_all[campaign_id]["data"][user_id][actual_index],
         }
         | ({"payload_existing": payload_existing} if payload_existing else {}),
         status_code=200,
@@ -230,7 +171,7 @@ def get_i_item_singlestream(
     user_id: str,
     data_all: dict,
     progress_data: dict,
-    item_i,  # Can be int or str like "welcome_0"
+    item_i: int | str,  # Can be int or str like "welcome_0"
 ) -> JSONResponse:
     """
     Get specific item for single-stream assignment.
@@ -238,55 +179,18 @@ def get_i_item_singlestream(
     user_progress = progress_data[campaign_id][user_id]
     progress_welcome = user_progress.get("progress_welcome", [])
     
-    # Check if it's a welcome item
-    if isinstance(item_i, str) and item_i.startswith("welcome_"):
-        welcome_index = int(item_i.split("_")[1])
-        
-        # try to get existing annotations if any (user_id since welcome is per-user)
-        items_existing = get_db_log_item(campaign_id, user_id, item_i)
-        payload_existing = None
-        if items_existing:
-            # get the latest ones
-            latest_item = items_existing[-1]
-            payload_existing = {"annotation": latest_item["annotation"]}
-            if "comment" in latest_item:
-                payload_existing["comment"] = latest_item["comment"]
-        
-        # Validate against total number of welcome items (not documents)
-        if welcome_index < 0 or welcome_index >= len(progress_welcome):
+    # Convert welcome_X string to integer index
+    actual_index = item_i
+    is_welcome_item = isinstance(item_i, str) and item_i.startswith("welcome_")
+    if is_welcome_item:
+        actual_index = int(item_i.split("_")[1])
+        # Validate against total number of welcome items
+        if actual_index < 0 or actual_index >= len(progress_welcome):
             return JSONResponse(content="Welcome item index out of range", status_code=400)
-        
-        # Get the welcome document containing this item
-        try:
-            welcome_doc = _get_welcome_document(data_all[campaign_id].get("data_welcome", []), welcome_index)
-        except IndexError:
-            return JSONResponse(content="Welcome item index out of range", status_code=400)
-        
-        return JSONResponse(
-            content={
-                "status": "ok",
-                "progress": user_progress["progress"],
-                "progress_welcome": progress_welcome,
-                "time": user_progress["time"],
-                "info": {
-                    "item_i": item_i,
-                    "instructions": _get_instructions(data_all, campaign_id),
-                }
-                | {
-                    k: v
-                    for k, v in data_all[campaign_id]["info"].items()
-                    if k in {"protocol", "sliders", "textfield", "show_model_names"}
-                },
-                "payload": welcome_doc,
-            }
-            | ({"payload_existing": payload_existing} if payload_existing else {}),
-            status_code=200,
-        )
 
-    # Regular item
     # try to get existing annotations if any
-    # note the None user_id since it is shared
-    items_existing = get_db_log_item(campaign_id, None, item_i)
+    # use user_id for welcome items (per-user), None for shared items
+    items_existing = get_db_log_item(campaign_id, user_id if is_welcome_item else None, item_i)
     payload_existing = None
     if items_existing:
         # get the latest ones
@@ -295,7 +199,7 @@ def get_i_item_singlestream(
         if "comment" in latest_item:
             payload_existing["comment"] = latest_item["comment"]
 
-    if item_i < 0 or item_i >= len(data_all[campaign_id]["data"]):
+    if actual_index < 0 or actual_index >= len(data_all[campaign_id]["data"]):
         return JSONResponse(content="Item index out of range", status_code=400)
 
     return JSONResponse(
@@ -313,7 +217,7 @@ def get_i_item_singlestream(
                 for k, v in data_all[campaign_id]["info"].items()
                 if k in {"protocol", "sliders", "textfield", "show_model_names"}
             },
-            "payload": data_all[campaign_id]["data"][item_i],
+            "payload": data_all[campaign_id]["data"][actual_index],
         }
         | ({"payload_existing": payload_existing} if payload_existing else {}),
         status_code=200,
@@ -334,10 +238,12 @@ def get_next_item_taskbased(
     
     # Check if there are incomplete welcome items first
     if progress_welcome and not all(progress_welcome):
-        item_i = _get_first_incomplete_welcome(progress_welcome)
+        # Find first incomplete welcome item
+        item_i = next(i for i, v in enumerate(progress_welcome) if not v)
+        item_id = f"welcome_{item_i}"
         
         # try to get existing annotations if any
-        items_existing = get_db_log_item(campaign_id, user_id, f"welcome_{item_i}")
+        items_existing = get_db_log_item(campaign_id, user_id, item_id)
         payload_existing = None
         if items_existing:
             # get the latest ones
@@ -353,7 +259,7 @@ def get_next_item_taskbased(
                 "progress_welcome": progress_welcome,
                 "time": user_progress["time"],
                 "info": {
-                    "item_i": f"welcome_{item_i}",
+                    "item_i": item_id,
                     "instructions": _get_instructions(data_all, campaign_id),
                 }
                 | {
@@ -361,7 +267,7 @@ def get_next_item_taskbased(
                     for k, v in data_all[campaign_id]["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": _get_welcome_document(data_all[campaign_id]["data_welcome"], item_i),
+                "payload": data_all[campaign_id]["data"][user_id][item_i],
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -427,11 +333,12 @@ def get_next_item_singlestream(
     # Check if there are incomplete welcome items first - must complete all before proceeding
     if progress_welcome and not all(progress_welcome):
         # Find first incomplete welcome item (sequential, not random)
-        item_i = _get_first_incomplete_welcome(progress_welcome)
+        item_i = next(i for i, v in enumerate(progress_welcome) if not v)
+        item_id = f"welcome_{item_i}"
         
         # try to get existing annotations if any
         # note the user_id since welcome items are per-user
-        items_existing = get_db_log_item(campaign_id, user_id, f"welcome_{item_i}")
+        items_existing = get_db_log_item(campaign_id, user_id, item_id)
         payload_existing = None
         if items_existing:
             # get the latest ones
@@ -447,7 +354,7 @@ def get_next_item_singlestream(
                 "progress": progress,
                 "progress_welcome": progress_welcome,
                 "info": {
-                    "item_i": f"welcome_{item_i}",
+                    "item_i": item_id,
                     "instructions": _get_instructions(data_all, campaign_id),
                 }
                 | {
@@ -455,7 +362,7 @@ def get_next_item_singlestream(
                     for k, v in data_all[campaign_id]["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": _get_welcome_document(data_all[campaign_id]["data_welcome"], item_i),
+                "payload": data_all[campaign_id]["data"][item_i],
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -529,11 +436,12 @@ def get_next_item_dynamic(
     # Check if there are incomplete welcome items first - must complete all before proceeding
     if progress_welcome and not all(progress_welcome):
         # Find first incomplete welcome item (sequential)
-        item_i = _get_first_incomplete_welcome(progress_welcome)
+        item_i = next(i for i, v in enumerate(progress_welcome) if not v)
+        item_id = f"welcome_{item_i}"
         
         # try to get existing annotations if any
         # note the user_id since welcome items are per-user
-        items_existing = get_db_log_item(campaign_id, user_id, f"welcome_{item_i}")
+        items_existing = get_db_log_item(campaign_id, user_id, item_id)
         payload_existing = None
         if items_existing:
             # get the latest ones
@@ -549,7 +457,7 @@ def get_next_item_dynamic(
                 "progress": user_progress["progress"],
                 "progress_welcome": progress_welcome,
                 "info": {
-                    "item_i": f"welcome_{item_i}",
+                    "item_i": item_id,
                     "instructions": _get_instructions(campaign_data, campaign_id),
                 }
                 | {
@@ -557,7 +465,7 @@ def get_next_item_dynamic(
                     for k, v in campaign_data["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": _get_welcome_document(campaign_data["data_welcome"], item_i),
+                "payload": campaign_data["data"][item_i],
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -786,7 +694,7 @@ def update_progress(
     user_id: str,
     tasks_data: dict,
     progress_data: dict,
-    item_i,  # Can be int or str like "welcome_0"
+    item_i: int | str,  # Can be int or str like "welcome_0"
     payload: Any,
 ) -> JSONResponse:
     """

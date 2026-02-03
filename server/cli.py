@@ -438,6 +438,13 @@ def _add_single_campaign(campaign_data, overwrite, server):
         if os.path.exists(output_file):
             os.remove(output_file)
 
+    # Prepend data_welcome to tasks if present
+    if data_welcome:
+        if assignment == "task-based":
+            tasks = [data_welcome + task for task in tasks]
+        elif assignment in ["single-stream", "dynamic"]:
+            tasks = data_welcome + tasks
+    
     # For task-based, data is a dict mapping user_id -> tasks
     # For single-stream and dynamic, data is a flat list (shared among all users)
     if assignment == "task-based":
@@ -446,10 +453,6 @@ def _add_single_campaign(campaign_data, overwrite, server):
         }
     elif assignment in ["single-stream", "dynamic"]:
         campaign_data["data"] = tasks
-    
-    # Store data_welcome separately (don't prepend to data)
-    if data_welcome:
-        campaign_data["data_welcome"] = data_welcome
 
     # generate a token for dashboard access if not present
     if "token" not in campaign_data:
@@ -478,7 +481,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
                     )
                 )
             ),
-            "progress_welcome": [False] * welcome_item_count,
+            "progress_welcome": [False] * welcome_item_count if welcome_item_count > 0 else [],
             "time_start": None,
             "time_end": None,
             "time": 0,
