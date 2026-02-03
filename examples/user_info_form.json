@@ -1,0 +1,41 @@
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "DA",
+    "instructions": "Please provide some information about yourself before we begin."
+  },
+  "campaign_id": "user_info_example",
+  "data_welcome": [
+    [
+      {
+        "text": "Welcome! Before you start the annotation task, please tell us a bit about yourself.",
+        "form": null
+      },
+      {
+        "text": "What is your native language?",
+        "form": "string"
+      },
+      {
+        "text": "How would you rate your expertise in the target language? (1-10)",
+        "form": "number"
+      },
+      {
+        "text": "What is your age?",
+        "form": "number"
+      }
+    ]
+  ],
+  "data": [
+    [
+      [
+        {
+          "item_id": "demo_1",
+          "src": "This is a sample source sentence.",
+          "tgt": {
+            "System-A": "This is a translation."
+          }
+        }
+      ]
+    ]
+  ]
+}
