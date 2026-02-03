@@ -1,0 +1,51 @@
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "MQM",
+    "mqm_categories": {
+      "": [],
+      "Fluency": [
+        "",
+        "Grammar",
+        "Spelling",
+        "Word order"
+      ],
+      "Adequacy": [
+        "",
+        "Mistranslation",
+        "Addition",
+        "Omission"
+      ],
+      "Terminology": [
+        "",
+        "Inconsistent terminology",
+        "Wrong term"
+      ],
+      "Style": []
+    }
+  },
+  "campaign_id": "example_custom_mqm",
+  "data": [
+    [
+      [
+        {
+          "item_id": "example_1",
+          "src": "The quick brown fox jumps over the lazy dog.",
+          "tgt": {
+            "ModelA": "Le renard brun rapide saute par-dessus le chien paresseux."
+          },
+          "instructions": "Evaluate translation quality using custom MQM taxonomy."
+        }
+      ],
+      [
+        {
+          "item_id": "example_2",
+          "src": "Machine translation has improved significantly in recent years.",
+          "tgt": {
+            "ModelB": "La traduction automatique s'est considérablement améliorée ces dernières années."
+          }
+        }
+      ]
+    ]
+  ]
+}

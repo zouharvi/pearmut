@@ -254,15 +254,15 @@ export function createSpanToolbox(
             let cat1 = (<HTMLSelectElement>this).value
             error_span.category = cat1
             cat2_select.empty()
-            let subcats = mqm_categories[cat1]
+            let cat2s = mqm_categories[cat1]
             cat2_select.prop("disabled", false)
-            for (let subcat of subcats) {
+            for (let subcat of cat2s) {
                 cat2_select.append(`<option value="${subcat}">${subcat}</option>`)
             }
             if (cat1 == "") {
                 cat2_select.prop("disabled", true)
                 error_span.category = ""
-            } else if (subcats.length == 0) {
+            } else if (cat2s.length == 0) {
                 // No subcategories - disable subcategory select and use category alone
                 cat2_select.prop("disabled", true)
                 error_span.category = `${cat1}/${cat1}`
@@ -321,10 +321,10 @@ export function createSpanToolbox(
 
         cat1_select.val(cat1)
 
-        let subcats = mqm_categories[cat1]
-        if (subcats && subcats.length > 0) {
+        let cat2s = mqm_categories[cat1]
+        if (cat2s && cat2s.length > 0) {
             cat2_select.empty().prop("disabled", false)
-            for (let subcat of subcats) {
+            for (let subcat of cat2s) {
                 cat2_select.append(`<option value="${subcat}">${subcat}</option>`)
             }
             if (cat2) cat2_select.val(cat2)
