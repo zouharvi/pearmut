@@ -451,7 +451,7 @@ class TestSingleStream:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": ["completed", "completed", None, "completed"],
+                    "progress": ["completed", None, "completed_foreign", "completed"],
                     "progress_welcome": [],
                     "time": 50.0,
                     "time_start": 1000,
@@ -459,7 +459,7 @@ class TestSingleStream:
                     "validations": {},
                 },
                 "user2": {
-                    "progress": ["completed", "completed", "completed", None],
+                    "progress": ["completed", None, "completed", "completed_foreign"],
                     "progress_welcome": [],
                     "time": 75.0,
                     "time_start": 1100,
