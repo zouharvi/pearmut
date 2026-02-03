@@ -243,6 +243,10 @@ def _shuffle_campaign_data(campaign_data, rng):
 
     def shuffle_document(doc):
         """Shuffle a single document (list of items) by reordering models in tgt dict."""
+        # Skip shuffling for form documents (they don't have tgt)
+        if doc and "text" in doc[0] and "form" in doc[0]:
+            return  # Form documents don't need shuffling
+
         # Validate that all items have the same models
         _validate_document_models(doc)
 
