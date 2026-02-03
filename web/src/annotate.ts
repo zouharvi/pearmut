@@ -896,8 +896,8 @@ function display_form(response: DataForm) {
     // Create form container
     const formContainer = $('<div class="form-container"></div>')
     
-    // Store form responses
-    const formResponses: Array<string | number | null> = new Array(response.payload.length).fill(null)
+    // Store form responses (using Array.from for clarity)
+    const formResponses: Array<string | number | null> = Array.from({ length: response.payload.length }, () => null)
 
     // Pre-fill if there are existing responses
     if (response.payload_existing?.annotation) {

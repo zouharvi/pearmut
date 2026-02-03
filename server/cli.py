@@ -118,7 +118,7 @@ def _validate_item_structure(items):
     if not isinstance(first_item, dict):
         raise ValueError("Each item must be a dictionary")
 
-    is_form_document = "text" in first_item and "form" in first_item
+    first_item_is_form = "text" in first_item and "form" in first_item
 
     for item in items:
         if not isinstance(item, dict):
@@ -126,10 +126,10 @@ def _validate_item_structure(items):
 
         # Check consistency: all items must be same type (form or evaluation)
         current_is_form = "text" in item and "form" in item
-        if current_is_form != is_form_document:
+        if current_is_form != first_item_is_form:
             raise ValueError("Document cannot mix form items and evaluation items")
 
-        if is_form_document:
+        if first_item_is_form:
             # Validate form item structure
             if "text" not in item:
                 raise ValueError("Form item must contain 'text' key")
