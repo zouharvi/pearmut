@@ -25,6 +25,7 @@ import {
     DocumentResponse,
     DataPayload,
     DataPayloadItem,
+    MQM_ERROR_CATEGORIES,
 } from './utils';
 
 // Check if frozen mode is enabled (view-only, no annotations)
@@ -55,6 +56,7 @@ const state = {
     // Protocol settings for check_unlock
     protocol_error_spans: false,
     protocol_error_categories: false,
+    mqm_categories: {} as { [key: string]: string[] },
 }
 
 // Prevent accidental refresh/navigation when there is ongoing work
@@ -427,7 +429,8 @@ function setupCandidateInteractions(
                                 state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
                                 state.has_unsaved_work = true
                             },
-                            frozenMode
+                            frozenMode,
+                            state.mqm_categories
                         )
 
                         $("body").append(toolbox)
@@ -497,7 +500,7 @@ function setupCandidateInteractions(
                 state.response_log[item_i][model].error_spans = state.response_log[item_i][model].error_spans.filter(s => s != error_span)
                 state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
                 state.has_unsaved_work = true
-            }, frozenMode)
+            }, frozenMode, state.mqm_categories)
             $("body").append(toolbox)
             toolbox.on("mouseenter", () => { toolbox.css("display", "block"); check_unlock() })
             toolbox.on("mouseleave", () => {
@@ -742,6 +745,9 @@ async function display_next_payload(response: DataPayload) {
 
     state.protocol_error_spans = response.info.protocol == "ESA" || response.info.protocol == "MQM"
     state.protocol_error_categories = response.info.protocol == "MQM"
+    
+    // Use custom MQM categories if provided, otherwise use default
+    state.mqm_categories = response.info.mqm_categories || MQM_ERROR_CATEGORIES
 
     // Set global instructions from payload
     if (response.info.instructions) {
