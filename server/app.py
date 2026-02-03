@@ -175,7 +175,6 @@ async def _dashboard_data(request: DashboardDataRequest):
 
     # For single-stream and dynamic, calculate user-specific and global progress
     user_finished_counts = {}
-    global_progress_count = 0
     
     if assignment in ["single-stream", "dynamic"]:
         # Get all annotations from the database
@@ -226,7 +225,6 @@ async def _dashboard_data(request: DashboardDataRequest):
                 reset_idx = user_item_last_reset_index.get((entry_user_id, entry_item_i), -1)
                 if idx > reset_idx:
                     global_items.add(entry_item_i)
-        global_progress_count = len(global_items)
 
     for user_id, user_val in progress_data[campaign_id].items():
         # shallow copy
@@ -250,7 +248,6 @@ async def _dashboard_data(request: DashboardDataRequest):
         # Add user-specific progress counts for single-stream and dynamic
         if assignment in ["single-stream", "dynamic"]:
             entry["finished_by_user"] = user_finished_counts.get(user_id, 0)
-            entry["global_progress"] = global_progress_count
 
         progress_new[user_id] = entry
 

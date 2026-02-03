@@ -64,25 +64,24 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         let welcome_count = 0
         let welcome_total = 0
         let progress_display = ''
-        
+
         if (data[user_id]["progress_welcome"]) {
             const welcome_progress = data[user_id]["progress_welcome"] as Array<boolean>
             welcome_count = welcome_progress.reduce((a, b) => a + (b ? 1 : 0), 0)
             welcome_total = welcome_progress.length
         }
-        
+
         // For single-stream and dynamic, show: finished_by_user/total+global
         // For task-based, show traditional format
         if (assignment === "single-stream" || assignment === "dynamic") {
             const finished_by_user = data[user_id]["finished_by_user"] || 0
-            const global_progress = data[user_id]["global_progress"] || 0
-            
+
             if (welcome_total > 0) {
                 // Show as "welcome_done/welcome_total+finished/total+global"
-                progress_display = `${welcome_count}/${welcome_total}+${finished_by_user}/${progress_total}+${global_progress}`
+                progress_display = `${welcome_count}/${welcome_total}+${finished_by_user}`
             } else {
                 // No welcome items, show as "finished/total+global"
-                progress_display = `${finished_by_user}/${progress_total}+${global_progress}`
+                progress_display = `${finished_by_user}`
             }
         } else {
             // Task-based: use traditional format
@@ -142,14 +141,14 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
             <a href="${data[user_id]["url"]}">🔗</a>
             &nbsp;&nbsp;
             <a href="${data[user_id]["url"]}&frozen" title="View only (frozen)">👁️</a>`
-        
+
         // Hide delete button for dynamic assignments - deletion not supported due to shared data pool
         if (assignment !== "dynamic") {
             html += `
             &nbsp;&nbsp;
             <span class="reset-task" user_id="${user_id}" ${token == null ? "disabled" : ""}>🗑️</span>`
         }
-        
+
         html += `</td>`
         html += '</tr>'
     }
@@ -229,7 +228,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                     </table>`;
 
                 $content.append(tableHtml);
-                
+
                 // Add export links with direct hrefs - no click handlers needed
                 // Only show if token is available
                 if (token) {
@@ -291,14 +290,14 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                         const params = new URLSearchParams(url.search);
                         const campaignIds = params.getAll("campaign_id");
                         const tokens = params.getAll("token");
-                        
+
                         // Find and remove this campaign
                         const index = campaignIds.indexOf(campaign_id);
                         if (index > -1) {
                             campaignIds.splice(index, 1);
                             tokens.splice(index, 1);
                         }
-                        
+
                         // Rebuild URL
                         url.search = "";
                         campaignIds.forEach((id, i) => {
@@ -307,7 +306,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                                 url.searchParams.append("token", tokens[i]);
                             }
                         });
-                        
+
                         window.location.href = url.toString();
                     },
                     error: (XMLHttpRequest) => {
@@ -431,7 +430,7 @@ $("#campaign_file_input").on("change", async function (event: JQuery.ChangeEvent
             contentType: "application/json",
             dataType: "json",
         });
-        
+
         const url = new URL(window.location.href);
         url.searchParams.append("campaign_id", response.campaign_id);
         url.searchParams.append("token", response.token);
@@ -440,6 +439,6 @@ $("#campaign_file_input").on("change", async function (event: JQuery.ChangeEvent
         const errorMsg = (error as any)?.responseJSON?.error || "Error adding campaign";
         notify(errorMsg);
     }
-    
+
     $(this).val('');
 });
