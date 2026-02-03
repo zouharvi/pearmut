@@ -10,7 +10,13 @@ import json
 import os
 import urllib.parse
 
-from .utils import ROOT, TOKEN_MAIN, load_progress_data, save_progress_data
+from .utils import (
+    ROOT,
+    TOKEN_MAIN,
+    is_form_document,
+    load_progress_data,
+    save_progress_data,
+)
 
 os.makedirs(f"{ROOT}/data/tasks", exist_ok=True)
 load_progress_data(warn=None)
@@ -244,7 +250,7 @@ def _shuffle_campaign_data(campaign_data, rng):
     def shuffle_document(doc):
         """Shuffle a single document (list of items) by reordering models in tgt dict."""
         # Skip shuffling for form documents (they don't have tgt)
-        if doc and "text" in doc[0] and "form" in doc[0]:
+        if is_form_document(doc):
             return  # Form documents don't need shuffling
 
         # Validate that all items have the same models

@@ -11,6 +11,7 @@ from .utils import (
     check_validation_threshold,
     get_db_log,
     get_db_log_item,
+    is_form_document,
     save_db_payload,
 )
 
@@ -22,15 +23,6 @@ CAMPAIGN_INFO_PUBLIC = {
     "show_model_names",
     "mqm_categories",
 }
-
-
-def _is_form_document(payload: list) -> bool:
-    """Check if a document payload contains form items instead of evaluation items."""
-    if not payload:
-        return False
-    # Check if first item has 'text' and 'form' keys (form item)
-    first_item = payload[0]
-    return "text" in first_item and "form" in first_item
 
 
 def _get_instructions(tasks_data: dict, campaign_id: str) -> str:
@@ -172,7 +164,7 @@ def get_i_item_taskbased(
         return JSONResponse(content="Item index out of range", status_code=400)
 
     payload = data_all[campaign_id]["data"][user_id][actual_index]
-    is_form = _is_form_document(payload)
+    is_form = is_form_document(payload)
 
     return JSONResponse(
         content={
@@ -244,7 +236,7 @@ def get_i_item_singlestream(
         return JSONResponse(content="Item index out of range", status_code=400)
 
     payload = data_all[campaign_id]["data"][actual_index]
-    is_form = _is_form_document(payload)
+    is_form = is_form_document(payload)
 
     return JSONResponse(
         content={
@@ -297,7 +289,7 @@ def get_next_item_taskbased(
                 payload_existing["comment"] = latest_item["comment"]
 
         payload = data_all[campaign_id]["data"][user_id][item_i]
-        is_form = _is_form_document(payload)
+        is_form = is_form_document(payload)
 
         return JSONResponse(
             content={
@@ -338,7 +330,7 @@ def get_next_item_taskbased(
             payload_existing["comment"] = latest_item["comment"]
 
     payload = data_all[campaign_id]["data"][user_id][item_i]
-    is_form = _is_form_document(payload)
+    is_form = is_form_document(payload)
 
     return JSONResponse(
         content={
@@ -398,7 +390,7 @@ def get_next_item_singlestream(
                 payload_existing["comment"] = latest_item["comment"]
 
         payload = data_all[campaign_id]["data"][item_i]
-        is_form = _is_form_document(payload)
+        is_form = is_form_document(payload)
 
         return JSONResponse(
             content={
@@ -441,7 +433,7 @@ def get_next_item_singlestream(
             payload_existing["comment"] = latest_item["comment"]
 
     payload = data_all[campaign_id]["data"][item_i]
-    is_form = _is_form_document(payload)
+    is_form = is_form_document(payload)
 
     return JSONResponse(
         content={

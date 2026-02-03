@@ -140,3 +140,12 @@ def check_validation_threshold(
     else:
         # Integer: count-based, pass if failed count <= threshold
         return failed_checks <= threshold
+
+
+def is_form_document(items):
+    """Check if a document contains form items instead of evaluation items."""
+    if not items:
+        return False
+    # Check if first item has 'text' and 'form' keys (form item)
+    first_item = items[0]
+    return "text" in first_item and "form" in first_item

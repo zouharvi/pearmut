@@ -955,8 +955,13 @@ function display_form(response: DataForm) {
         
         state.action_log.push({ "time": Date.now() / 1000, "action": "submit" })
 
-        // Build payload
-        const payload_local = {
+        // Build payload with proper typing
+        const payload_local: {
+            annotation: Array<string | number | null>,
+            actions: Array<any>,
+            item: Array<DataFormItem>,
+            comment?: string
+        } = {
             "annotation": formResponses,
             "actions": state.action_log,
             "item": response.payload,
@@ -965,8 +970,7 @@ function display_form(response: DataForm) {
         // Include comment if provided
         const comment = $("#settings_comment").val() as string
         if (comment && comment.trim() !== "") {
-            // @ts-ignore
-            payload_local["comment"] = comment.trim()
+            payload_local.comment = comment.trim()
             // Clear comment after submission
             $("#settings_comment").val("")
         }
@@ -1001,10 +1005,14 @@ function check_form_unlock(responses: Array<string | number | null>, payload: Ar
 
     // Check if all form fields (non-null form type) are filled
     for (let i = 0; i < payload.length; i++) {
-        if (payload[i].form !== null && (responses[i] === null || responses[i] === "")) {
-            $("#button_next").attr("disabled", "disabled")
-            $("#button_next").val("Next 🚧")
-            return
+        if (payload[i].form !== null) {
+            const response = responses[i]
+            // Check if response is null or empty string
+            if (response === null || response === "") {
+                $("#button_next").attr("disabled", "disabled")
+                $("#button_next").val("Next 🚧")
+                return
+            }
         }
     }
 
