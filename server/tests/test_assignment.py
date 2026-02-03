@@ -589,7 +589,7 @@ class TestSingleStream:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True, False, True, False],
+                    "progress": ["completed", None, "completed", None],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "correct_token",
@@ -623,7 +623,7 @@ class TestSingleStream:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True, False, True, False],
+                    "progress": ["completed", None, "completed", None],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "correct_token",
