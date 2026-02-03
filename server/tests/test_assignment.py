@@ -1104,7 +1104,7 @@ class TestDynamic:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": ["completed", "completed", None, "completed"],
+                    "progress": [{"model1": "completed"}, {"model1": "completed"}, {"model1": None}, {"model1": "completed"}],
                     "progress_welcome": [],
                     "time": 50.0,
                     "time_start": 1000,
@@ -1112,7 +1112,7 @@ class TestDynamic:
                     "validations": {},
                 },
                 "user2": {
-                    "progress": ["completed", "completed", "completed", None],
+                    "progress": [{"model1": "completed"}, {"model1": "completed"}, {"model1": "completed"}, {"model1": None}],
                     "progress_welcome": [],
                     "time": 75.0,
                     "time_start": 1100,
@@ -1130,9 +1130,9 @@ class TestDynamic:
         
         # Verify progress was not changed
         assert progress_data["campaign1"]["user1"]["progress"] == [
-            "completed", "completed", None, "completed"]
+            {"model1": "completed"}, {"model1": "completed"}, {"model1": None}, {"model1": "completed"}]
         assert progress_data["campaign1"]["user2"]["progress"] == [
-            "completed", "completed", "completed", None]
+            {"model1": "completed"}, {"model1": "completed"}, {"model1": "completed"}, {"model1": None}]
         assert progress_data["campaign1"]["user1"]["time"] == 50.0
         assert progress_data["campaign1"]["user2"]["time"] == 75.0
 
@@ -1157,7 +1157,7 @@ class TestDynamic:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [["model1"], list(), ["model2"], list()],
+                    "progress": [{"model1": "commpleted", "model2": None}, {"model1": None, "model2": None}, {"model1": None, "model2": "completed"}, {"model1": None, "model2": None}],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "correct_token",
