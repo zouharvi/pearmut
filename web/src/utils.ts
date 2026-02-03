@@ -241,7 +241,8 @@ export function createSpanToolbox(
     left_i: number,
     right_i: number,
     onDelete: () => void,
-    frozenMode: boolean = false
+    frozenMode: boolean = false,
+    mqm_categories: { [key: string]: string[] } = MQM_ERROR_CATEGORIES
 ): JQuery<HTMLElement> {
     let toolbox = $(`
     <div class='span_toolbox_parent'>
@@ -263,7 +264,7 @@ export function createSpanToolbox(
     let cat1_select = toolbox.find("select").eq(0)
     let cat2_select = toolbox.find("select").eq(1)
 
-    for (let category1 of Object.keys(MQM_ERROR_CATEGORIES)) {
+    for (let category1 of Object.keys(mqm_categories)) {
         cat1_select.append(`<option value="${category1}">${category1}</option>`)
     }
 
@@ -279,17 +280,18 @@ export function createSpanToolbox(
             let cat1 = (<HTMLSelectElement>this).value
             error_span.category = cat1
             cat2_select.empty()
-            let subcats = MQM_ERROR_CATEGORIES[cat1]
+            let cat2s = mqm_categories[cat1]
             cat2_select.prop("disabled", false)
-            for (let subcat of subcats) {
+            for (let subcat of cat2s) {
                 cat2_select.append(`<option value="${subcat}">${subcat}</option>`)
             }
             if (cat1 == "") {
                 cat2_select.prop("disabled", true)
                 error_span.category = ""
-            } else if (cat1 == "Other") {
+            } else if (cat2s.length == 0) {
+                // No subcategories - disable subcategory select and use category alone
                 cat2_select.prop("disabled", true)
-                error_span.category = "Other/Other"
+                error_span.category = `${cat1}/${cat1}`
             } else {
                 error_span.category = `${cat1}`
             }
@@ -299,7 +301,7 @@ export function createSpanToolbox(
         cat2_select.on("change", function () {
             let cat1 = cat1_select.val() as string
             let cat2 = (<HTMLSelectElement>this).value
-            if (cat2 == "" && cat1 != "Other") {
+            if (cat2 == "" && mqm_categories[cat1].length > 0) {
                 error_span.category = `${cat1}`
             } else {
                 error_span.category = `${cat1}/${cat2}`
@@ -337,18 +339,18 @@ export function createSpanToolbox(
         let cat1 = parts[0]
         let cat2 = parts.length > 1 ? parts[1] : null
 
-        // Handle case where category might not match explicitly if we only have cat1
-        if (!MQM_ERROR_CATEGORIES[cat1] && cat1 !== "Other" && error_span.category !== "") {
+        // Handle case where category might not exist in the taxonomy
+        if (mqm_categories[cat1] === undefined && cat1 !== "" && error_span.category !== "") {
             // fallback if string is exact match?
             cat1 = error_span.category
         }
 
         cat1_select.val(cat1)
 
-        let subcats = MQM_ERROR_CATEGORIES[cat1]
-        if (subcats && cat1 !== "Other") {
+        let cat2s = mqm_categories[cat1]
+        if (cat2s && cat2s.length > 0) {
             cat2_select.empty().prop("disabled", false)
-            for (let subcat of subcats) {
+            for (let subcat of cat2s) {
                 cat2_select.append(`<option value="${subcat}">${subcat}</option>`)
             }
             if (cat2) cat2_select.val(cat2)
@@ -527,6 +529,7 @@ export type ProtocolInfo = {
     instructions?: string,
     textfield?: null | "hidden" | "visible" | "prefilled",  // Optional textfield mode
     show_model_names?: boolean,  // Show model names on top of each block (default: false)
+    mqm_categories?: { [key: string]: string[] },  // Optional custom MQM categories
 }
 
 /**

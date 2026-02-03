@@ -1,0 +1,81 @@
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "MQM",
+    "mqm_categories": {
+      "General": [
+        "",
+        "Accuracy",
+        "Fluency"
+      ],
+      "Audio-specific": [
+        "",
+        "Inaudible",
+        "Background noise",
+        "Speaker overlap",
+        "Misinterpretation"
+      ],
+      "Style": [
+        "",
+        "Awkward",
+        "Embarassing"
+      ],
+      "Unknown": []
+    },
+    "instructions": "<b>Custom MQM/STEL Annotation</b><br>Please evaluate the following translations by identifying and categorizing errors according to our custom taxonomy:<br><ul><li><b>Accuracy</b>: Issues with mistranslation, additions, omissions, or untranslated text.</li><li><b>Fluency</b>: Grammar, punctuation, spelling, and word order issues.</li><li><b>Style</b>: Awkward phrasing or register/style mismatches.</li><li><b>Audio-specific</b>: For multimodal data, mark issues like background noise or speaker overlap.</li></ul>Assign a <b>severity</b> to each error and provide an <b>overall quality score</b> (0-100).",
+    "shuffle": false
+  },
+  "campaign_id": "example_custom_mqm2",
+  "data": [
+    [
+      [
+        {
+          "item_id": "example_1",
+          "src": "The quick brown fox jumps over the lazy dog.",
+          "tgt": {
+            "ModelA": "Le renard brun rapide saute par-dessus le chien paresseux."
+          },
+          "instructions": "<b>Welcome!</b> Please evaluate this first translation using the custom MQM taxonomy. Highlight any errors you find, select their category, and assign a severity."
+        },
+        {
+          "item_id": "example_2",
+          "src": "Machine translation has improved significantly in recent years.",
+          "tgt": {
+            "ModelB": "La traduction automatique s'est considérablement améliorée ces dernières années."
+          }
+        },
+        {
+          "item_id": "example_3",
+          "src": "The weather today is exceptionally sunny and warm.",
+          "tgt": {
+            "ModelA": "Le temps aujourd'hui est exceptionnellement ensoleillé et chaud."
+          }
+        }
+      ],
+      [
+        {
+          "item_id": "example_4",
+          "src": "She have several books on the table.",
+          "tgt": {
+            "ModelB": "Elle ont plusieurs livres sur la table."
+          }
+        },
+        {
+          "item_id": "example_5",
+          "src": "Background noise makes it hard to hear the speaker.",
+          "tgt": {
+            "ModelA": "Le bruit de fond rend difficile l'écoute de l'orateur."
+          },
+          "instructions": "Assign the <b>Audio-specific</b> category if the error is due to audio quality."
+        },
+        {
+          "item_id": "example_6",
+          "src": "The sun rises in the east.",
+          "tgt": {
+            "ModelA": "Le soleil se lève à l'ouest."
+          }
+        }
+      ]
+    ]
+  ]
+}

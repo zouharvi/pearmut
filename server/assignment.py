@@ -14,6 +14,9 @@ from .utils import (
     save_db_payload,
 )
 
+# Public campaign info fields that are sent to the client
+CAMPAIGN_INFO_PUBLIC = {"protocol", "sliders", "textfield", "show_model_names", "mqm_categories"}
+
 
 def _get_instructions(tasks_data: dict, campaign_id: str) -> str:
     """Get instructions: custom if provided, else protocol default, else empty."""
@@ -162,7 +165,7 @@ def get_i_item_taskbased(
             | {
                 k: v
                 for k, v in data_all[campaign_id]["info"].items()
-                if k in {"protocol", "sliders", "textfield", "show_model_names"}
+                if k in CAMPAIGN_INFO_PUBLIC
             },
             "payload": data_all[campaign_id]["data"][user_id][actual_index],
         }
@@ -224,7 +227,7 @@ def get_i_item_singlestream(
             | {
                 k: v
                 for k, v in data_all[campaign_id]["info"].items()
-                if k in {"protocol", "sliders", "textfield", "show_model_names"}
+                if k in CAMPAIGN_INFO_PUBLIC
             },
             "payload": data_all[campaign_id]["data"][actual_index],
         }
@@ -312,7 +315,7 @@ def get_next_item_taskbased(
             | {
                 k: v
                 for k, v in data_all[campaign_id]["info"].items()
-                if k in {"protocol", "sliders", "textfield", "show_model_names"}
+                if k in CAMPAIGN_INFO_PUBLIC
             },
             "payload": data_all[campaign_id]["data"][user_id][item_i],
         }
@@ -409,7 +412,7 @@ def get_next_item_singlestream(
             | {
                 k: v
                 for k, v in data_all[campaign_id]["info"].items()
-                if k in {"protocol", "sliders", "textfield", "show_model_names"}
+                if k in CAMPAIGN_INFO_PUBLIC
             },
             "payload": data_all[campaign_id]["data"][item_i],
         }
@@ -609,7 +612,7 @@ def get_next_item_dynamic(
             | {
                 k: v
                 for k, v in campaign_data["info"].items()
-                if k in {"protocol", "sliders", "textfield", "show_model_names"}
+                if k in CAMPAIGN_INFO_PUBLIC
             },
             "payload": pruned_item,
         },
