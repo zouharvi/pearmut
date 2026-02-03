@@ -311,10 +311,13 @@ All annotators draw from a shared pool with random assignment:
         # ESA: error spans and scores
         "protocol": "ESA",
         "users": 50,                           # number of annotators (can also be a list, see below)
+        "docs_per_user": 10,                   # optional: show goodbye after N documents per user
     },
     "data": [...], # list of all items (shared among all annotators)
 }
 ```
+
+Set `docs_per_user` to limit how many documents each user annotates before seeing the goodbye message (for single-stream, this is the number of documents).
 
 ### Dynamic Assignment
 
@@ -332,10 +335,13 @@ All items must contain outputs from all models for this assignment type to work 
         "dynamic_contrastive_models": 2,       # how many models to compare per item (optional, default: 1)
         "dynamic_first": 5,                    # annotations per model before dynamic kicks in (optional, default: 5)
         "dynamic_backoff": 0.1,                # probability of uniform sampling (optional, default: 0)
+        "docs_per_user": 20,                   # optional: show goodbye after N documents per user
     },
     "data": [...], # list of all items (shared among all annotators)
 }
 ```
+
+Set `docs_per_user` to limit how many documents each user annotates before seeing the goodbye message (for dynamic, this is roughly the number of documents × models).
 
 **How it works:**
 1. Initial phase: Each model gets `dynamic_first` annotations with fully random contrastive evaluation

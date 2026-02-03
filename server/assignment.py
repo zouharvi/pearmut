@@ -398,7 +398,12 @@ def get_next_item_singlestream(
         )
 
     # All welcome items complete, proceed with regular items
-    if all(v in {"completed", "completed_foreign"} for v in progress):
+    # Check if user reached docs_per_user limit (if specified)
+    if (docs_per_user := data_all[campaign_id]["info"].get("docs_per_user")) is not None:
+        completed_docs = sum(v == "completed" for v in progress if v)
+        if completed_docs >= docs_per_user:
+            return _completed_response(data_all, progress_data, campaign_id, user_id)
+    elif all(v in {"completed", "completed_foreign"} for v in progress):
         return _completed_response(data_all, progress_data, campaign_id, user_id)
 
     # find a random incomplete item
@@ -503,8 +508,15 @@ def get_next_item_dynamic(
     # Get all unique models in the campaign (all items must have all models)
     all_models = list(set(campaign_data["data"][0][0]["tgt"].keys()))
 
-    # Check if completed (all items completed)
-    if all(v in {"completed", "completed_foreign"} for mv in user_progress["progress"] for v in mv.values()):
+    # Check if completed
+    # First check if docs_per_user limit is reached
+    if (docs_per_user := campaign_data["info"].get("docs_per_user")) is not None:
+        # Count specifically number of annotations across models
+        completed_count = sum(v == "completed" for mv in user_progress["progress"] for v in mv.values())
+        if completed_count >= docs_per_user:
+            return _completed_response(tasks_data, progress_data, campaign_id, user_id)
+    # Otherwise check if all models completed for all items
+    elif all(v in {"completed", "completed_foreign"} for mv in user_progress["progress"] for v in mv.values()):
         return _completed_response(tasks_data, progress_data, campaign_id, user_id)
 
     # Get configuration parameters
