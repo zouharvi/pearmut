@@ -36,8 +36,8 @@ export async function get_next_item<T>(): Promise<T | null> {
     // wait for 5 seconds
     await new Promise(resolve => setTimeout(resolve, delay * 1000));
     delay *= 2
-    // if more than 2 minutes, give up
-    if (delay > 120) return null
+    // if more than 1 minute, give up
+    if (delay > 60) return null
   }
 }
 

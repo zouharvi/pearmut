@@ -680,7 +680,7 @@ async function display_next_payload(response: DataPayload) {
     // Cleanup toolboxes and handlers from previous item
     cleanupPreviousItem()
 
-    redrawProgress(response.info.item_i, response.progress, response.progress_welcome, navigate_to_item)
+    redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
 
     let data = response.payload

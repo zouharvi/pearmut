@@ -176,8 +176,8 @@ export const MQM_ERROR_CATEGORIES: { [key: string]: string[] } = {
  */
 export function redrawProgress(
     current_i: number | string | null,
-    progress: Array<boolean>,
     progress_welcome: Array<boolean> | undefined,
+    progress: Array<boolean>,
     onItemClick?: (i: number | string) => void
 ): void {
     // Combine progress_welcome and progress for display
@@ -545,7 +545,7 @@ export function displayGoodbyeScreen(response: DataGoodbye, navigate_to_item: (i
     <br>
     </div>
     `)
-    redrawProgress(null, response.progress, response.progress_welcome, navigate_to_item)
+    redrawProgress(null, response.progress_welcome, response.progress, navigate_to_item)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
     $("#button_next").prop("disabled", true)
     $("#button_next").val("Next 💯")
