@@ -398,6 +398,7 @@ Use task-based assignment with Prolific. For each task, Pearmut generates a uniq
 ```json
 "instructions_goodbye": "<a href='https://app.prolific.com/submissions/complete?cc=${TOKEN}'>Click here to return to Prolific</a>"
 ```
+The `${TOKEN}` is automatically replaced based on passing attention checks (see [Attention checks](#tutorial-and-attention-checks) and [Pre-defined tokens](#pre-defined-user-ids-and-tokens)).
 
 ## Terminology
 
