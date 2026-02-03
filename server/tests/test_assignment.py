@@ -61,8 +61,7 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"item_i":1' in content
@@ -93,8 +92,7 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -246,8 +244,7 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -281,8 +278,7 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -321,8 +317,7 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -356,8 +351,7 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -395,8 +389,7 @@ class TestSingleStream:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         # Should return item 1 or 2 (incomplete items)
@@ -425,8 +418,7 @@ class TestSingleStream:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -640,8 +632,7 @@ class TestSingleStream:
             }
         }
         # User has completed 2 items, limit is 3, should get next item
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"ok"' in content
@@ -1156,7 +1147,7 @@ class TestDynamic:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [{"model1": "commpleted", "model2": None}, {"model1": None, "model2": None}, {"model1": None, "model2": "completed"}, {"model1": None, "model2": None}],
+                    "progress": [{"model1": "completed", "model2": None}, {"model1": None, "model2": None}, {"model1": None, "model2": "completed"}, {"model1": None, "model2": None}],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "correct_token",
@@ -1165,8 +1156,7 @@ class TestDynamic:
             }
         }
         # User has completed 2 items (indices 0 and 2 have annotations), should get goodbye
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
