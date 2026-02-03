@@ -503,7 +503,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
                     # TODO: this should be a dictionary mapping from models to None/string
                     [list() for _ in range(len(campaign_data["data"]))]
                     if assignment == "dynamic"
-                    else (raise ValueError("Invalid assignment type"))
+                    else int("Invalid assignment type")
                 )
             ),
             "progress_welcome": [False] * welcome_item_count if welcome_item_count > 0 else [],

@@ -399,7 +399,7 @@ def get_next_item_singlestream(
 
     # All welcome items complete, proceed with regular items
     # Check if user reached docs_per_user limit (if specified)
-    if docs_per_user := data_all[campaign_id]["info"].get("docs_per_user") is not None:
+    if (docs_per_user := data_all[campaign_id]["info"].get("docs_per_user")) is not None:
         # TODO: clashes with refactor of storing progress as "completed"
         completed_count = sum(1 for v in progress if v)
         if completed_count >= docs_per_user:
@@ -511,7 +511,7 @@ def get_next_item_dynamic(
 
     # Check if completed
     # First check if docs_per_user limit is reached
-    if docs_per_user := campaign_data["info"].get("docs_per_user") is not None:
+    if (docs_per_user := campaign_data["info"].get("docs_per_user")) is not None:
         # TODO: clashes with refactor of storing progress as "completed"
         # TODO: count specifically number of annotations across models
         # XXXXX
