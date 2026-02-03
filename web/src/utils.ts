@@ -29,7 +29,7 @@ export function notify(message: string): void {
 
     setTimeout(async () => {
         notification.remove();
-        
+
         let topPosition = 10;
         $('.notification').each(function () {
             $(this).css('top', topPosition + 'px');
@@ -42,6 +42,38 @@ export function notify(message: string): void {
 export type ErrorSpan = { start_i: number, end_i: number, category: string | null, severity: string | null }
 export type Response = { score: number | null, error_spans: Array<ErrorSpan> }
 export type CharData = { el: JQuery<HTMLElement>, toolbox: JQuery<HTMLElement> | null, error_span: ErrorSpan | null, word_start: number, word_end: number }
+
+// Each model has its own response
+export type CandidateResponse = {
+    score: number | null,  // Main score, always present
+    sliders?: Record<string, number | null>,  // Optional custom sliders
+    error_spans: Array<ErrorSpan>,
+    textfield?: string | null,  // Optional textfield content
+}
+// Response for a document with multiple models - keyed by model name
+export type DocumentResponse = Record<string, CandidateResponse>
+
+export type DataPayloadItem = {
+    src?: string,  // Optional source text
+    ref?: string,  // Optional reference text
+    tgt: Record<string, string>,  // Dictionary of model->translation
+    checks?: any,
+    instructions?: string,
+    error_spans?: Record<string, Array<ErrorSpan>>,  // Pre-filled error spans keyed by model name
+    validation?: Record<string, Validation> | undefined,  // Validation rules keyed by model name
+}
+
+export type DataPayload = {
+    status: string,
+    progress: Array<boolean>,
+    time: number,
+    payload: Array<DataPayloadItem>,
+    payload_existing?: {
+        annotation: Array<DocumentResponse>,
+        comment?: string
+    },
+    info: ProtocolInfo
+}
 
 /**
  * Check if an error span is complete (has required fields set based on protocol).
@@ -164,6 +196,16 @@ export function redrawProgress(current_i: number | null, progress: Array<boolean
 }
 
 /**
+ * Helper function to update error classes on character elements.
+ */
+function updateErrorClass(objs: Array<CharData>, left_i: number, right_i: number, severity: string) {
+    for (let j = left_i; j <= right_i; j++) {
+        $(objs[j].el).removeClass("error_unknown error_neutral error_minor error_major")
+        $(objs[j].el).addClass(`error_${severity}`)
+    }
+}
+
+/**
  * Creates the span toolbox for error annotation
  */
 export function createSpanToolbox(
@@ -192,145 +234,99 @@ export function createSpanToolbox(
     </div>
     `)
 
+    let cat1_select = toolbox.find("select").eq(0)
+    let cat2_select = toolbox.find("select").eq(1)
+
     for (let category1 of Object.keys(MQM_ERROR_CATEGORIES)) {
-        toolbox.find("select").eq(0).append(`<option value="${category1}">${category1}</option>`)
+        cat1_select.append(`<option value="${category1}">${category1}</option>`)
     }
-
-    // select one category handler
-    toolbox.find("select").eq(0).on("change", function () {
-        if (frozenMode) return
-        let cat1 = (<HTMLSelectElement>this).value
-        error_span.category = cat1
-        let subcat_select = toolbox.find("select").eq(1)
-        subcat_select.empty()
-        let subcats = MQM_ERROR_CATEGORIES[cat1]
-        subcat_select.prop("disabled", false)
-        for (let subcat of subcats) {
-            subcat_select.append(`<option value="${subcat}">${subcat}</option>`)
-        }
-        if (cat1 == "") {
-            subcat_select.prop("disabled", true)
-            error_span.category = ""
-        } else if (cat1 == "Other") {
-            subcat_select.prop("disabled", true)
-            error_span.category = "Other/Other"
-        } else {
-            error_span.category = `${cat1}`
-        }
-    })
-
-    toolbox.find("select").eq(1).on("change", function () {
-        if (frozenMode) return
-        let cat1 = toolbox.find("select").eq(0).val() as string
-        let cat2 = (<HTMLSelectElement>this).value
-        // enforce both category and subcategory
-        if (cat2 == "" && cat1 != "Other") {
-            error_span.category = `${cat1}`
-        } else {
-            error_span.category = `${cat1}/${cat2}`
-        }
-    })
 
     if (!protocol_error_categories) {
-        // only MQM has neutral severity
         toolbox.find(".error_neutral").remove()
         toolbox.find(".span_toolbox_mqm").remove()
-        toolbox.find(".span_toolbox_esa").css("border-right", "")
-        toolbox.find(".span_toolbox_esa").css("margin-right", "-5px")
+        toolbox.find(".span_toolbox_esa").css({ "border-right": "", "margin-right": "-5px" })
     }
 
-    // handle delete button
-    toolbox.find(".error_delete").on("click", () => {
-        if (frozenMode) return
-        toolbox.remove()
-        for (let j = left_i; j <= right_i; j++) {
-            $(tgt_chars_objs[j].el).removeClass("error_unknown")
-            $(tgt_chars_objs[j].el).removeClass("error_neutral")
-            $(tgt_chars_objs[j].el).removeClass("error_minor")
-            $(tgt_chars_objs[j].el).removeClass("error_major")
-            tgt_chars_objs[j].toolbox = null
-            tgt_chars_objs[j].error_span = null
+    if (!frozenMode) {
+        // MQM Category Change
+        cat1_select.on("change", function () {
+            let cat1 = (<HTMLSelectElement>this).value
+            error_span.category = cat1
+            cat2_select.empty()
+            let subcats = MQM_ERROR_CATEGORIES[cat1]
+            cat2_select.prop("disabled", false)
+            for (let subcat of subcats) {
+                cat2_select.append(`<option value="${subcat}">${subcat}</option>`)
+            }
+            if (cat1 == "") {
+                cat2_select.prop("disabled", true)
+                error_span.category = ""
+            } else if (cat1 == "Other") {
+                cat2_select.prop("disabled", true)
+                error_span.category = "Other/Other"
+            } else {
+                error_span.category = `${cat1}`
+            }
+        })
+
+        // MQM Subcategory Change
+        cat2_select.on("change", function () {
+            let cat1 = cat1_select.val() as string
+            let cat2 = (<HTMLSelectElement>this).value
+            if (cat2 == "" && cat1 != "Other") {
+                error_span.category = `${cat1}`
+            } else {
+                error_span.category = `${cat1}/${cat2}`
+            }
+        })
+
+        // Delete
+        toolbox.find(".error_delete").on("click", () => {
+            toolbox.remove()
+            for (let j = left_i; j <= right_i; j++) {
+                $(tgt_chars_objs[j].el).removeClass("error_unknown error_neutral error_minor error_major")
+                tgt_chars_objs[j].toolbox = null
+                tgt_chars_objs[j].error_span = null
+            }
+            onDelete()
+        })
+
+        // Severity
+        const setSeverity = (sev: string) => {
+            updateErrorClass(tgt_chars_objs, left_i, right_i, sev)
+            error_span.severity = sev
         }
-        onDelete()
-    })
+        toolbox.find(".error_neutral").on("click", () => setSeverity("neutral"))
+        toolbox.find(".error_minor").on("click", () => setSeverity("minor"))
+        toolbox.find(".error_major").on("click", () => setSeverity("major"))
+    } else {
+        // Frozen mode disabling
+        toolbox.find(".error_delete, .error_neutral, .error_minor, .error_major").prop("disabled", true)
+        toolbox.find("select").prop("disabled", true)
+    }
 
-    // handle severity buttons
-    toolbox.find(".error_neutral").on("click", () => {
-        if (frozenMode) return
-        for (let j = left_i; j <= right_i; j++) {
-            $(tgt_chars_objs[j].el).removeClass("error_unknown")
-            $(tgt_chars_objs[j].el).removeClass("error_minor")
-            $(tgt_chars_objs[j].el).removeClass("error_major")
-            $(tgt_chars_objs[j].el).addClass("error_neutral")
+    // Restore State
+    if (protocol_error_categories && error_span.category) {
+        let parts = error_span.category.split("/")
+        let cat1 = parts[0]
+        let cat2 = parts.length > 1 ? parts[1] : null
+
+        // Handle case where category might not match explicitly if we only have cat1
+        if (!MQM_ERROR_CATEGORIES[cat1] && cat1 !== "Other" && error_span.category !== "") {
+            // fallback if string is exact match?
+            cat1 = error_span.category
         }
-        error_span.severity = "neutral"
-    })
 
-    toolbox.find(".error_minor").on("click", () => {
-        if (frozenMode) return
-        for (let j = left_i; j <= right_i; j++) {
-            $(tgt_chars_objs[j].el).removeClass("error_unknown")
-            $(tgt_chars_objs[j].el).removeClass("error_neutral")
-            $(tgt_chars_objs[j].el).removeClass("error_major")
-            $(tgt_chars_objs[j].el).addClass("error_minor")
-        }
-        error_span.severity = "minor"
-    })
-
-    toolbox.find(".error_major").on("click", () => {
-        if (frozenMode) return
-        for (let j = left_i; j <= right_i; j++) {
-            $(tgt_chars_objs[j].el).removeClass("error_unknown")
-            $(tgt_chars_objs[j].el).removeClass("error_neutral")
-            $(tgt_chars_objs[j].el).removeClass("error_minor")
-            $(tgt_chars_objs[j].el).addClass("error_major")
-        }
-        error_span.severity = "major"
-    })
-
-    // Restore category from error_span if it exists (for previously saved annotations)
-    if (protocol_error_categories && error_span.category && error_span.category.includes("/")) {
-        const [cat1, cat2] = error_span.category.split("/")
-        const cat1_select = toolbox.find("select").eq(0)
-        const cat2_select = toolbox.find("select").eq(1)
-
-        // Set the first dropdown
         cat1_select.val(cat1)
 
-        // Populate and set the second dropdown
-        cat2_select.empty()
-        const subcats = MQM_ERROR_CATEGORIES[cat1]
-        if (subcats) {
-            cat2_select.prop("disabled", false)
+        let subcats = MQM_ERROR_CATEGORIES[cat1]
+        if (subcats && cat1 !== "Other") {
+            cat2_select.empty().prop("disabled", false)
             for (let subcat of subcats) {
                 cat2_select.append(`<option value="${subcat}">${subcat}</option>`)
             }
-            cat2_select.val(cat2)
+            if (cat2) cat2_select.val(cat2)
         }
-    } else if (protocol_error_categories && error_span.category && error_span.category !== "") {
-        // Handle case where only category is set (no subcategory yet)
-        const cat1_select = toolbox.find("select").eq(0)
-        cat1_select.val(error_span.category)
-
-        // Populate the second dropdown but don't select anything yet
-        const cat2_select = toolbox.find("select").eq(1)
-        cat2_select.empty()
-        const subcats = MQM_ERROR_CATEGORIES[error_span.category]
-        if (subcats && error_span.category !== "Other") {
-            cat2_select.prop("disabled", false)
-            for (let subcat of subcats) {
-                cat2_select.append(`<option value="${subcat}">${subcat}</option>`)
-            }
-        }
-    }
-
-    // In frozen mode, disable all modification controls
-    if (frozenMode) {
-        toolbox.find(".error_delete").prop("disabled", true)
-        toolbox.find(".error_neutral").prop("disabled", true)
-        toolbox.find(".error_minor").prop("disabled", true)
-        toolbox.find(".error_major").prop("disabled", true)
-        toolbox.find("select").prop("disabled", true)
     }
 
     return toolbox
