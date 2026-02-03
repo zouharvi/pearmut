@@ -101,11 +101,11 @@ class TestItemValidation:
             _add_single_campaign(campaign_data, False, "http://localhost:8001")
 
     def test_item_not_dict(self):
-        """Test that non-dict items fail validation."""
+        """Test that string items (form items) are now valid."""
         from pearmut.cli import _add_single_campaign
 
         campaign_data = {
-            "campaign_id": "test_not_dict",
+            "campaign_id": "test_string_item",
             "info": {
                 "assignment": "task-based",
                 "template": "basic",
@@ -113,14 +113,14 @@ class TestItemValidation:
             "data": [
                 [
                     [
-                        "not a dict"  # Should be dict
+                        "<form><input name='test' required /></form>"  # String items are now valid (form items)
                     ]
                 ]
             ]
         }
 
-        with pytest.raises(ValueError, match="must be a dictionary"):
-            _add_single_campaign(campaign_data, False, "http://localhost:8001")
+        # This should now succeed instead of raising an error
+        _add_single_campaign(campaign_data, True, "http://localhost:8001")
 
     def test_document_not_list(self):
         """Test that non-list documents fail validation."""

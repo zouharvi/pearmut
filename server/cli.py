@@ -92,20 +92,25 @@ def _run(args_unknown):
 def _validate_item_structure(items):
     """
     Validate that items have the correct structure.
-    Items should be lists of dictionaries with 'tgt' and optionally 'src' and/or 'ref' keys.
+    Items should be lists of dictionaries with 'tgt' and optionally 'src' and/or 'ref' keys,
+    OR strings containing HTML for form items.
     The 'tgt' field should be a dictionary mapping model names to translations.
 
     Args:
-        items: List of item dictionaries to validate
+        items: List of item dictionaries or strings to validate
     """
     if not isinstance(items, list):
         raise ValueError("Items must be a list")
 
     for item in items:
+        # Allow string items (for form items)
+        if isinstance(item, str):
+            continue
+            
         if not isinstance(item, dict):
-            raise ValueError("Each item must be a dictionary with 'tgt' key")
+            raise ValueError("Each item must be a dictionary with 'tgt' key or a string")
         if "tgt" not in item:
-            raise ValueError("Each item must contain 'tgt' key")
+            raise ValueError("Each item must contain 'tgt' key (or be a string for form items)")
 
         # Validate src is a string if present
         if "src" in item and not isinstance(item["src"], str):
@@ -178,12 +183,27 @@ def _validate_document_models(doc):
     Raises:
         ValueError: If items have different model outputs
     """
-    # Get model names from the first item
-    first_item = doc[0]
-    first_models = set(first_item["tgt"].keys())
+    # Find the first non-form item to get model names
+    first_models = None
+    first_item_idx = None
+    for i, item in enumerate(doc):
+        # Skip form items (strings)
+        if isinstance(item, str):
+            continue
+        if "tgt" in item and isinstance(item["tgt"], dict):
+            first_models = set(item["tgt"].keys())
+            first_item_idx = i
+            break
+    
+    # If no items with tgt found, nothing to validate
+    if first_models is None:
+        return
 
     # Check all other items have the same model names
-    for i, item in enumerate(doc[1:], start=1):
+    for i, item in enumerate(doc):
+        # Skip form items (strings)
+        if isinstance(item, str):
+            continue
         if "tgt" not in item or not isinstance(item["tgt"], dict):
             continue
 
@@ -191,7 +211,7 @@ def _validate_document_models(doc):
         if item_models != first_models:
             raise ValueError(
                 f"Document contains items with different model outputs. "
-                f"Item 0 has models {sorted(first_models)}, but item {i} has models {sorted(item_models)}. "
+                f"Item {first_item_idx} has models {sorted(first_models)}, but item {i} has models {sorted(item_models)}. "
                 f"This is fine, but we can't shuffle (on by default). "
                 f"To fix this, set 'shuffle': false in the campaign 'info' section. "
             )
@@ -213,13 +233,25 @@ def _shuffle_campaign_data(campaign_data, rng):
         # Validate that all items have the same models
         _validate_document_models(doc)
 
-        # Get all model names from the first item's tgt dict
-        first_item = doc[0]
-        model_names = list(first_item["tgt"].keys())
+        # Find first non-form item to get model names
+        model_names = None
+        for item in doc:
+            if isinstance(item, str):
+                continue
+            if "tgt" in item and isinstance(item["tgt"], dict):
+                model_names = list(item["tgt"].keys())
+                break
+        
+        # If no items with tgt found, nothing to shuffle
+        if model_names is None:
+            return
+            
         rng.shuffle(model_names)
 
         # Reorder tgt dict for all items in the document
         for item in doc:
+            if isinstance(item, str):
+                continue
             if "tgt" in item and isinstance(item["tgt"], dict):
                 item["tgt"] = {model: item["tgt"][model] for model in model_names}
 
