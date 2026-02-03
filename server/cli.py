@@ -467,19 +467,12 @@ def _add_single_campaign(campaign_data, overwrite, server):
 
     user_progress = {
         user_id: {
-            # TODO: progress tracking could be based on the assignment type
+            # Progress tracking: None | "completed" for task-based,
+            # None | "completed" | "completed_foreign" for single-stream/dynamic
             "progress": (
-                [False] * len(campaign_data["data"][user_id])
+                [None] * len(campaign_data["data"][user_id])
                 if assignment == "task-based"
-                else (
-                    [False] * len(campaign_data["data"])
-                    if assignment == "single-stream"
-                    else (
-                        [list() for _ in range(len(campaign_data["data"]))]
-                        if assignment == "dynamic"
-                        else []
-                    )
-                )
+                else [None] * len(campaign_data["data"])
             ),
             "progress_welcome": [False] * welcome_item_count if welcome_item_count > 0 else [],
             "time_start": None,

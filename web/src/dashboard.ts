@@ -56,9 +56,11 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         </tr></thead>
         <tbody>`
     for (let user_id in data) {
-        // Calculate regular progress
-        let progress_count = (data[user_id]["progress"] as Array<boolean>).reduce((a, b) => a + (b ? 1 : 0), 0)
-        let progress_total = (data[user_id]["progress"] as Array<boolean>).length
+        const progress = data[user_id]["progress"] as Array<string | null>
+        const progress_total = progress.length
+        
+        // Calculate regular progress - count "completed" items
+        let progress_count = progress.filter(v => v === "completed").length
 
         // Calculate welcome progress separately
         let welcome_count = 0
@@ -75,13 +77,14 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         // For task-based, show traditional format
         if (assignment === "single-stream" || assignment === "dynamic") {
             const finished_by_user = data[user_id]["finished_by_user"] || 0
+            const global_progress = data[user_id]["global_progress"] || 0
 
             if (welcome_total > 0) {
                 // Show as "welcome_done/welcome_total+finished/total+global"
-                progress_display = `${welcome_count}/${welcome_total}+${finished_by_user}`
+                progress_display = `${welcome_count}/${welcome_total}+${finished_by_user}/${progress_total}+${global_progress}`
             } else {
                 // No welcome items, show as "finished/total+global"
-                progress_display = `${finished_by_user}`
+                progress_display = `${finished_by_user}/${progress_total}+${global_progress}`
             }
         } else {
             // Task-based: use traditional format
