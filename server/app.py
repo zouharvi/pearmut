@@ -16,8 +16,8 @@ from .results_export import (
     generate_typst_table,
 )
 from .utils import (
-    ROOT,
     RESET_MARKER,
+    ROOT,
     TOKEN_MAIN,
     check_validation_threshold,
     get_db_log,

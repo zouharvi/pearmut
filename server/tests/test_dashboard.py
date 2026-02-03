@@ -1,7 +1,5 @@
 """Tests for dashboard data endpoint."""
 
-import json
-
 from pearmut.app import app
 from pearmut.utils import RESET_MARKER, _logs, save_db_payload
 
