@@ -303,11 +303,11 @@ def get_next_item_taskbased(
         )
 
     # All welcome items complete, proceed with regular items
-    if all(user_progress["progress"]):
+    if all(v == "completed" for v in user_progress["progress"]):
         return _completed_response(data_all, progress_data, campaign_id, user_id)
 
     # find first incomplete item
-    item_i = min([i for i, v in enumerate(user_progress["progress"]) if not v])
+    item_i = min([i for i, v in enumerate(user_progress["progress"]) if v != "completed"])
 
     # try to get existing annotations if any
     items_existing = get_db_log_item(campaign_id, user_id, item_i)
@@ -400,15 +400,14 @@ def get_next_item_singlestream(
     # All welcome items complete, proceed with regular items
     # Check if user reached docs_per_user limit (if specified)
     if (docs_per_user := data_all[campaign_id]["info"].get("docs_per_user")) is not None:
-        # TODO: clashes with refactor of storing progress as "completed"
-        completed_count = sum(1 for v in progress if v)
-        if completed_count >= docs_per_user:
+        completed_docs = sum(v == "completed" for v in progress if v)
+        if completed_docs >= docs_per_user:
             return _completed_response(data_all, progress_data, campaign_id, user_id)
-    elif all(progress):
+    elif all(v in {"completed", "completed_foreign"} for v in progress):
         return _completed_response(data_all, progress_data, campaign_id, user_id)
 
     # find a random incomplete item
-    incomplete_indices = [i for i, v in enumerate(progress) if not v]
+    incomplete_indices = [i for i, v in enumerate(progress) if v not in {"completed", "completed_foreign"}]
     item_i = random.choice(incomplete_indices)
 
     # try to get existing annotations if any
@@ -457,8 +456,8 @@ def get_next_item_dynamic(
 
     In this mode, items are selected based on the current performance of models:
     1. Contrastive comparison: `dynamic_contrastive_models` models are randomly selected and shown per item
-    2. First phase: Each model gets `dynamic_first` annotations with fully random selection
-    3. After first phase: Top `dynamic_top` models are identified, K randomly selected from them
+    2. Warmup phase: Each model gets `dynamic_warmup` annotations with fully random selection
+    3. After warmup phase: Top `dynamic_top` models are identified, K randomly selected from them
     4. Items with least annotations for the selected models are prioritized
     5. With probability `dynamic_backoff`, uniformly random selection is used instead
     """
@@ -512,21 +511,17 @@ def get_next_item_dynamic(
     # Check if completed
     # First check if docs_per_user limit is reached
     if (docs_per_user := campaign_data["info"].get("docs_per_user")) is not None:
-        # TODO: clashes with refactor of storing progress as "completed"
-        # TODO: count specifically number of annotations across models
-        # XXXXX
-        # Count items where at least one model has been annotated
-        completed_count = sum(len(v) for v in user_progress["progress"])
+        # Count specifically number of annotations across models
+        completed_count = sum(v == "completed" for mv in user_progress["progress"] for v in mv.values())
         if completed_count >= docs_per_user:
             return _completed_response(tasks_data, progress_data, campaign_id, user_id)
     # Otherwise check if all models completed for all items
-    # NOTE: this will rarely trigger but we don't have a good way to know when to end anyway for now
-    elif all(len(v) == len(all_models) for v in user_progress["progress"]):
+    elif all(v in {"completed", "completed_foreign"} for mv in user_progress["progress"] for v in mv.values()):
         return _completed_response(tasks_data, progress_data, campaign_id, user_id)
 
     # Get configuration parameters
     dynamic_top = campaign_data["info"].get("dynamic_top", 2)
-    dynamic_first = campaign_data["info"].get("dynamic_first", 5)
+    dynamic_warmup = campaign_data["info"].get("dynamic_warmup", 5)
     dynamic_contrastive_models = campaign_data["info"].get(
         "dynamic_contrastive_models", 1
     )
@@ -546,18 +541,18 @@ def get_next_item_dynamic(
                     model_total_counts[model] += 1
 
     # Check if we're still in the first phase (collecting initial data)
-    in_first_phase = any(
-        model_total_counts.get(model, 0) < dynamic_first for model in all_models
+    in_warmup_phase = any(
+        model_total_counts.get(model, 0) < dynamic_warmup for model in all_models
     )
 
     # Select which models to show
-    if in_first_phase:
+    if in_warmup_phase:
         # First phase or backoff: select models that don't have enough annotations yet
         selected_models = random.sample(
             [
                 model
                 for model in all_models
-                if model_total_counts.get(model, 0) < dynamic_first
+                if model_total_counts.get(model, 0) < dynamic_warmup
             ],
             k=min(dynamic_contrastive_models, len(all_models)),
         )
@@ -591,20 +586,18 @@ def get_next_item_dynamic(
             top_models, k=min(dynamic_contrastive_models, len(top_models))
         )
 
-    # Find incomplete items for the selected models (items where not all selected models are done)
-    item_annotation_counts = {
-        i: sum(model in completed_models for model in selected_models)
-        for i, completed_models in enumerate(user_progress["progress"])
-    }
-
-    # Select item with minimum annotations (with random tiebreaking)
-    min_annotations = min(item_annotation_counts.values())
-    items_with_min = [
-        item_i
-        for item_i, count in item_annotation_counts.items()
-        if count == min_annotations
+    # Find incomplete items (None or completed_foreign status)
+    incomplete_indices = [
+        i for i, mv in enumerate(user_progress["progress"])
+        if not all(v in {"completed", "completed_foreign"} for v in mv.values())
     ]
-    item_i = random.choice(items_with_min)
+    
+    # If no incomplete items, user (and everyone) is done
+    if not incomplete_indices:
+        return _completed_response(tasks_data, progress_data, campaign_id, user_id)
+    
+    # Select a random incomplete item
+    item_i = random.choice(incomplete_indices)
 
     # Prune the payload to only include selected models
     original_item = campaign_data["data"][item_i]
@@ -708,7 +701,7 @@ def reset_task(
                 campaign_id,
                 {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
             )
-        progress_data[campaign_id][user_id]["progress"] = [False] * num_items
+        progress_data[campaign_id][user_id]["progress"] = [None] * num_items
         # Reset welcome items progress if it exists
         if "progress_welcome" in progress_data[campaign_id][user_id]:
             num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
@@ -718,26 +711,23 @@ def reset_task(
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "single-stream":
-        # Find all items that this user has annotated
-        user_items = _get_user_annotated_items(campaign_id, user_id)
-
-        # Separate welcome items from regular items
-        regular_items = {item for item in user_items if isinstance(item, int)}
+        # Find all items that this user has annotated (has "completed")
+        user_items_to_reset = [i for i, status in enumerate(progress_data[campaign_id][user_id]["progress"]) if status == "completed"]
 
         # Save reset markers for all items this user has touched
-        for item_i in user_items:
+        for item_i in user_items_to_reset:
             save_db_payload(
                 campaign_id,
                 {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
             )
 
-        # Reset only the touched regular items in all users' progress (shared pool)
+        # Reset the touched regular items in all users' progress (shared pool)
         for uid in progress_data[campaign_id]:
-            for item_i in regular_items:
-                progress_data[campaign_id][uid]["progress"][item_i] = False
+            for item_i in user_items_to_reset:
+                progress_data[campaign_id][uid]["progress"][item_i] = None
 
-        # Reset ALL welcome items progress for this user (per-user, not shared)
-        # We reset all welcome items, not just the ones touched, because they're per-user
+
+        # Reset all welcome items progress for this user (per-user, not shared)
         if "progress_welcome" in progress_data[campaign_id][user_id]:
             num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
             progress_data[campaign_id][user_id]["progress_welcome"] = [
@@ -773,27 +763,33 @@ def update_progress(
 
     assignment = tasks_data[campaign_id]["info"]["assignment"]
     if assignment == "task-based":
-        # even if it's already set it should be fine
-        progress_data[campaign_id][user_id]["progress"][item_i] = True
+        # Mark as completed for this user
+        progress_data[campaign_id][user_id]["progress"][item_i] = "completed"
         return JSONResponse(content={"status": "ok"}, status_code=200)
     elif assignment == "single-stream":
-        # progress all users
+        # Mark as completed for the current user, completed_foreign for others
         for uid in progress_data[campaign_id]:
-            progress_data[campaign_id][uid]["progress"][item_i] = True
+            current_status = progress_data[campaign_id][uid]["progress"][item_i]
+            if uid == user_id:
+                # User who completed it gets "completed"
+                progress_data[campaign_id][uid]["progress"][item_i] = "completed"
+            elif current_status is None:
+                # Other users get "completed_foreign" if not already completed
+                progress_data[campaign_id][uid]["progress"][item_i] = "completed_foreign"
+            # If already "completed", keep it as "completed"
         return JSONResponse(content="ok", status_code=200)
-    elif assignment == "dynamic":
-        # For dynamic, track which models were annotated
-        # Extract models from the payload annotation
-        annotated_models = []
-        if "annotation" in payload:
-            for annotation_item in payload.get("annotation", []):
-                if isinstance(annotation_item, dict):
-                    annotated_models.extend(annotation_item.keys())
-
-        # Update progress for all users (shared pool)
-        for uid in progress_data[campaign_id]:
-            # Add the newly annotated models
-            progress_data[campaign_id][uid]["progress"][item_i].extend(annotated_models)
+    if assignment == "dynamic":
+        # Mark as completed for the current user, completed_foreign for others
+        for model in payload["annotation"][0].keys():
+            for uid in progress_data[campaign_id]:
+                current_status = progress_data[campaign_id][uid]["progress"][item_i][model]
+                if uid == user_id:
+                    # User who completed it gets "completed"
+                    progress_data[campaign_id][uid]["progress"][item_i][model] = "completed"
+                elif current_status is None:
+                    # Other users get "completed_foreign" if not already completed
+                    progress_data[campaign_id][uid]["progress"][item_i][model] = "completed_foreign"
+                # If already "completed", keep it as "completed"
         return JSONResponse(content="ok", status_code=200)
     else:
         return JSONResponse(content="Unknown campaign assignment type", status_code=400)

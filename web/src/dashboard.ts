@@ -56,24 +56,45 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         </tr></thead>
         <tbody>`
     for (let user_id in data) {
-        // Calculate regular progress
-        let progress_count = (data[user_id]["progress"] as Array<boolean>).reduce((a, b) => a + (b ? 1 : 0), 0)
-        let progress_total = (data[user_id]["progress"] as Array<boolean>).length
+        const progress = data[user_id]["progress"] as Array<string | object>
+        const progress_total = progress.length
+
+        // Calculate regular progress - count "completed" items
+        let progress_count = progress.filter(v => v === "completed").length
+        if (assignment == "dynamic") {
+            progress_count = progress.map(l => Object.values(l).filter(v => v === "completed").length).reduce((a, b) => a + b, 0)
+        }
 
         // Calculate welcome progress separately
         let welcome_count = 0
         let welcome_total = 0
         let progress_display = ''
-        
+
         if (data[user_id]["progress_welcome"]) {
             const welcome_progress = data[user_id]["progress_welcome"] as Array<boolean>
             welcome_count = welcome_progress.reduce((a, b) => a + (b ? 1 : 0), 0)
             welcome_total = welcome_progress.length
-            // Show as "welcome_done/welcome_total+regular_done/regular_total"
-            progress_display = `${welcome_count}/${welcome_total}+${progress_count}/${progress_total}`
+        }
+
+        // For single-stream and dynamic, show: finished_by_user
+        // For task-based, show finished_by_user/total
+        if (assignment === "single-stream" || assignment === "dynamic") {
+            if (welcome_total > 0) {
+                // Show as "welcome_done/welcome_total+finished"
+                progress_display = `${welcome_count}/${welcome_total}+${progress_count}`
+            } else {
+                // No welcome items, show as "finished"
+                progress_display = `${progress_count}`
+            }
         } else {
-            // No welcome items, just show regular progress
-            progress_display = `${progress_count}/${progress_total}`
+            // Task-based: use traditional format
+            if (welcome_total > 0) {
+                // Show as "welcome_done/welcome_total+regular_done/regular_total"
+                progress_display = `${welcome_count}/${welcome_total}+${progress_count}/${progress_total}`
+            } else {
+                // No welcome items, just show regular progress
+                progress_display = `${progress_count}/${progress_total}`
+            }
         }
 
         // Calculate total for status determination
@@ -123,14 +144,14 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
             <a href="${data[user_id]["url"]}">🔗</a>
             &nbsp;&nbsp;
             <a href="${data[user_id]["url"]}&frozen" title="View only (frozen)">👁️</a>`
-        
+
         // Hide delete button for dynamic assignments - deletion not supported due to shared data pool
         if (assignment !== "dynamic") {
             html += `
             &nbsp;&nbsp;
             <span class="reset-task" user_id="${user_id}" ${token == null ? "disabled" : ""}>🗑️</span>`
         }
-        
+
         html += `</td>`
         html += '</tr>'
     }
@@ -210,7 +231,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                     </table>`;
 
                 $content.append(tableHtml);
-                
+
                 // Add export links with direct hrefs - no click handlers needed
                 // Only show if token is available
                 if (token) {
@@ -272,14 +293,14 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                         const params = new URLSearchParams(url.search);
                         const campaignIds = params.getAll("campaign_id");
                         const tokens = params.getAll("token");
-                        
+
                         // Find and remove this campaign
                         const index = campaignIds.indexOf(campaign_id);
                         if (index > -1) {
                             campaignIds.splice(index, 1);
                             tokens.splice(index, 1);
                         }
-                        
+
                         // Rebuild URL
                         url.search = "";
                         campaignIds.forEach((id, i) => {
@@ -288,7 +309,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                                 url.searchParams.append("token", tokens[i]);
                             }
                         });
-                        
+
                         window.location.href = url.toString();
                     },
                     error: (XMLHttpRequest) => {
@@ -412,7 +433,7 @@ $("#campaign_file_input").on("change", async function (event: JQuery.ChangeEvent
             contentType: "application/json",
             dataType: "json",
         });
-        
+
         const url = new URL(window.location.href);
         url.searchParams.append("campaign_id", response.campaign_id);
         url.searchParams.append("token", response.token);
@@ -421,6 +442,6 @@ $("#campaign_file_input").on("change", async function (event: JQuery.ChangeEvent
         const errorMsg = (error as any)?.responseJSON?.error || "Error adding campaign";
         notify(errorMsg);
     }
-    
+
     $(this).val('');
 });

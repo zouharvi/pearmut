@@ -53,7 +53,7 @@ class TestTaskBased:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True, False, False],
+                    "progress": ["completed", None, None],
                     "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
@@ -85,7 +85,7 @@ class TestTaskBased:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True],
+                    "progress": ["completed"],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "correct_token",
@@ -113,14 +113,14 @@ class TestTaskBased:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [False, False, False],
+                    "progress": [None, None, None],
                     "progress_welcome": [],
                 }
             }
         }
         update_progress("campaign1", "user1", tasks_data, progress_data, 1, {})
         assert progress_data["campaign1"]["user1"]["progress"] == [
-            False, True, False]
+            None, "completed", None]
 
     def test_reset_task_clears_progress(self):
         """Test that reset_task clears the progress."""
@@ -140,7 +140,7 @@ class TestTaskBased:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True, True],
+                    "progress": ["completed", "completed"],
                     "progress_welcome": [],
                     "time": 100.0,
                     "time_start": 1000,
@@ -150,7 +150,7 @@ class TestTaskBased:
         }
         reset_task("campaign1", "user1", tasks_data, progress_data)
         assert progress_data["campaign1"]["user1"]["progress"] == [
-            False, False]
+            None, None]
         assert progress_data["campaign1"]["user1"]["time"] == 0.0
         assert progress_data["campaign1"]["user1"]["time_start"] is None
         assert progress_data["campaign1"]["user1"]["time_end"] is None
@@ -174,7 +174,7 @@ class TestTaskBased:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True, False, False],
+                    "progress": ["completed", None, None],
                     "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
@@ -207,7 +207,7 @@ class TestTaskBased:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [False],
+                    "progress": [None],
                     "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
@@ -238,7 +238,7 @@ class TestTaskBased:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True],
+                    "progress": ["completed"],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "CORRECT_TOKEN",
@@ -273,7 +273,7 @@ class TestTaskBased:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True],
+                    "progress": ["completed"],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "MY_TOKEN",
@@ -310,7 +310,7 @@ class TestTaskBased:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True],
+                    "progress": ["completed"],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "PASS_TOKEN",
@@ -348,7 +348,7 @@ class TestTaskBased:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True],
+                    "progress": ["completed"],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "<b>MY_TOKEN</b>",
@@ -387,7 +387,7 @@ class TestSingleStream:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True, False, False],
+                    "progress": ["completed", None, None],
                     "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
@@ -417,7 +417,7 @@ class TestSingleStream:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True],
+                    "progress": ["completed"],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "correct_token",
@@ -451,7 +451,7 @@ class TestSingleStream:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True, True, False, True],
+                    "progress": ["completed", None, "completed_foreign", "completed"],
                     "progress_welcome": [],
                     "time": 50.0,
                     "time_start": 1000,
@@ -459,7 +459,7 @@ class TestSingleStream:
                     "validations": {},
                 },
                 "user2": {
-                    "progress": [True, True, True, False],
+                    "progress": ["completed", None, "completed", "completed_foreign"],
                     "progress_welcome": [],
                     "time": 75.0,
                     "time_start": 1100,
@@ -476,7 +476,7 @@ class TestSingleStream:
         })
         save_db_payload("campaign1", {
             "user_id": "user1",
-            "item_i": 1,
+            "item_i": 3,
             "annotation": {"score": 90}
         })
         # Add annotation for user2 on item 0 and 2
@@ -494,11 +494,10 @@ class TestSingleStream:
         reset_task("campaign1", "user1", tasks_data, progress_data)
         
         # Only items touched by user1 (0 and 1) should be reset for all users
-        # Items 2 and 3 should remain unchanged
-        assert progress_data["campaign1"]["user1"]["progress"] == [
-            False, False, False, True]
-        assert progress_data["campaign1"]["user2"]["progress"] == [
-            False, False, True, False]
+        assert progress_data["campaign1"]["user1"]["progress"] == [None, None, "completed_foreign", None]
+        # User2 completed item 0, so it stays "completed"
+        # User2 didn't complete item 1, so it becomes None
+        assert progress_data["campaign1"]["user2"]["progress"] == [None, None, "completed", None]
         # Only user1's time should be reset
         assert progress_data["campaign1"]["user1"]["time"] == 0.0
         assert progress_data["campaign1"]["user1"]["time_start"] is None
@@ -532,21 +531,20 @@ class TestSingleStream:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [False, False, False],
+                    "progress": [None, None, None],
                     "progress_welcome": [],
                 },
                 "user2": {
-                    "progress": [False, False, False],
+                    "progress": [None, None, None],
                     "progress_welcome": [],
                 }
             }
         }
         update_progress("campaign1", "user1", tasks_data, progress_data, 1, {})
-        # Both users should have item 1 marked as complete
-        assert progress_data["campaign1"]["user1"]["progress"] == [
-            False, True, False]
-        assert progress_data["campaign1"]["user2"]["progress"] == [
-            False, True, False]
+        # User1 completed item 1, so gets "completed"
+        # User2 gets "completed_foreign" since someone else completed it
+        assert progress_data["campaign1"]["user1"]["progress"] == [None, "completed", None]
+        assert progress_data["campaign1"]["user2"]["progress"] == [None, "completed_foreign", None]
 
     def test_get_i_item_returns_specific_item(self):
         """Test that single-stream get_i_item returns the requested item."""
@@ -565,7 +563,7 @@ class TestSingleStream:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [True, False, False],
+                    "progress": ["completed", None, None],
                     "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
@@ -574,8 +572,7 @@ class TestSingleStream:
             }
         }
         # Request item 2 specifically
-        response = get_i_item("campaign1", "user1",
-                              tasks_data, progress_data, 2)
+        response = get_i_item("campaign1", "user1", tasks_data, progress_data, 2)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"item_i":2' in content
@@ -770,7 +767,7 @@ class TestValidationThreshold:
             "campaign1": {
                 "user1": {
                     "validations": {
-                        0: [False, False, False],  # All failed
+                        0: [False, None, None],  # All failed
                     }
                 }
             }
@@ -838,7 +835,7 @@ class TestValidationThreshold:
             "campaign1": {
                 "user1": {
                     "validations": {
-                        0: [True, False, False],  # 2 failed
+                        0: [True, None, None],  # 2 failed
                     }
                 }
             }
@@ -846,7 +843,7 @@ class TestValidationThreshold:
         assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is True
 
         # 3 failures should fail
-        progress_data["campaign1"]["user1"]["validations"][0] = [False, False, False]
+        progress_data["campaign1"]["user1"]["validations"][0] = [False, None, None]
         assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is False
 
     def test_float_threshold_proportion_based(self):
@@ -872,7 +869,7 @@ class TestValidationThreshold:
         assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is True
 
         # 3/4 = 75% failed should fail
-        progress_data["campaign1"]["user1"]["validations"][0] = [False, False, False, True]
+        progress_data["campaign1"]["user1"]["validations"][0] = [None, None, None, "completed"]
         assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is False
 
     def test_float_threshold_zero_proportion_based(self):
@@ -999,7 +996,7 @@ class TestDynamic:
                     "assignment": "dynamic",
                     "shuffle": False,
                     "dynamic_top": 1,
-                    "dynamic_first": 2,
+                    "dynamic_warmup": 2,
                     "dynamic_backoff": 0,
                 },
                 "data": [
@@ -1012,7 +1009,7 @@ class TestDynamic:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [list(), list(), list()],
+                    "progress": [{"model1": None, "model2": None}, {"model1": None, "model2": None}, {"model1": None, "model2": None}],
                     "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
@@ -1020,8 +1017,7 @@ class TestDynamic:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         # Should return one of the incomplete items
@@ -1035,7 +1031,7 @@ class TestDynamic:
                     "assignment": "dynamic",
                     "shuffle": False,
                     "dynamic_top": 1,
-                    "dynamic_first": 2,
+                    "dynamic_warmup": 2,
                 },
                 "data": [
                     [{"src": "a", "tgt": {"model1": "b"}}],
@@ -1045,7 +1041,7 @@ class TestDynamic:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [{"model1"}],
+                    "progress": [{"model1": "completed", "model2": "completed"}],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "correct_token",
@@ -1053,8 +1049,7 @@ class TestDynamic:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -1072,11 +1067,11 @@ class TestDynamic:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [list(), list(), list()],
+                    "progress": [{"model1": None, "model2": None}, {"model1": None, "model2": None}, {"model1": None, "model2": None}],
                     "progress_welcome": [],
                 },
                 "user2": {
-                    "progress": [list(), list(), list()],
+                    "progress": [{"model1": None, "model2": None}, {"model1": None, "model2": None}, {"model1": None, "model2": None}],
                     "progress_welcome": [],
                 }
             }
@@ -1084,11 +1079,11 @@ class TestDynamic:
         # Simulate an annotation with model1
         payload = {"annotation": [{"model1": {"score": 5}}]}
         update_progress("campaign1", "user1", tasks_data, progress_data, 1, payload)
-        # Both users should have model1 tracked for item 1
-        assert "model1" in progress_data["campaign1"]["user1"]["progress"][1]
-        assert "model1" in progress_data["campaign1"]["user2"]["progress"][1]
-        assert progress_data["campaign1"]["user1"]["progress"][0] == list()
-        assert progress_data["campaign1"]["user2"]["progress"][0] == list()
+        # User1 completed item 1, user2 gets completed_foreign
+        assert progress_data["campaign1"]["user1"]["progress"][1]["model1"] == "completed"
+        assert progress_data["campaign1"]["user2"]["progress"][1]["model1"] == "completed_foreign"
+        assert progress_data["campaign1"]["user1"]["progress"][0]["model1"] is None
+        assert progress_data["campaign1"]["user2"]["progress"][0]["model1"] is None
 
     def test_reset_task_resets_all_users(self):
         """Test that dynamic reset_task returns error (not supported)."""
@@ -1109,7 +1104,7 @@ class TestDynamic:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [{"model1"}, {"model1"}, list(), {"model1"}],
+                    "progress": ["completed", "completed", None, "completed"],
                     "progress_welcome": [],
                     "time": 50.0,
                     "time_start": 1000,
@@ -1117,7 +1112,7 @@ class TestDynamic:
                     "validations": {},
                 },
                 "user2": {
-                    "progress": [{"model1"}, {"model1"}, {"model1"}, list()],
+                    "progress": ["completed", "completed", "completed", None],
                     "progress_welcome": [],
                     "time": 75.0,
                     "time_start": 1100,
@@ -1135,9 +1130,9 @@ class TestDynamic:
         
         # Verify progress was not changed
         assert progress_data["campaign1"]["user1"]["progress"] == [
-            {"model1"}, {"model1"}, list(), {"model1"}]
+            "completed", "completed", None, "completed"]
         assert progress_data["campaign1"]["user2"]["progress"] == [
-            {"model1"}, {"model1"}, {"model1"}, list()]
+            "completed", "completed", "completed", None]
         assert progress_data["campaign1"]["user1"]["time"] == 50.0
         assert progress_data["campaign1"]["user2"]["time"] == 75.0
 
