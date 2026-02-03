@@ -15,7 +15,13 @@ from .utils import (
 )
 
 # Public campaign info fields that are sent to the client
-CAMPAIGN_INFO_PUBLIC = {"protocol", "sliders", "textfield", "show_model_names", "mqm_categories"}
+CAMPAIGN_INFO_PUBLIC = {
+    "protocol",
+    "sliders",
+    "textfield",
+    "show_model_names",
+    "mqm_categories",
+}
 
 
 def _get_instructions(tasks_data: dict, campaign_id: str) -> str:
@@ -24,7 +30,6 @@ def _get_instructions(tasks_data: dict, campaign_id: str) -> str:
     if "instructions" in campaign_info:
         return campaign_info["instructions"]
     return PROTOCOL_INSTRUCTIONS.get(campaign_info.get("protocol", ""), "")
-
 
 
 def _completed_response(
@@ -133,11 +138,16 @@ def get_i_item_taskbased(
         actual_index = int(item_i.split("_")[1])
         # Validate against total number of welcome items
         if actual_index < 0 or actual_index >= len(progress_welcome):
-            return JSONResponse(content="Welcome item index out of range", status_code=400)
+            return JSONResponse(
+                content="Welcome item index out of range", status_code=400
+            )
     else:
         # Prevent accessing regular items unless all welcome items are complete
         if not all(progress_welcome):
-            return JSONResponse(content="Complete all welcome items before accessing regular items", status_code=400)
+            return JSONResponse(
+                content="Complete all welcome items before accessing regular items",
+                status_code=400,
+            )
 
     # try to get existing annotations if any
     items_existing = get_db_log_item(campaign_id, user_id, item_i)
@@ -194,15 +204,22 @@ def get_i_item_singlestream(
         actual_index = int(item_i.split("_")[1])
         # Validate against total number of welcome items
         if actual_index < 0 or actual_index >= len(progress_welcome):
-            return JSONResponse(content="Welcome item index out of range", status_code=400)
+            return JSONResponse(
+                content="Welcome item index out of range", status_code=400
+            )
     else:
         # Prevent accessing regular items unless all welcome items are complete
         if not all(progress_welcome):
-            return JSONResponse(content="Complete all welcome items before accessing regular items", status_code=400)
+            return JSONResponse(
+                content="Complete all welcome items before accessing regular items",
+                status_code=400,
+            )
 
     # try to get existing annotations if any
     # use user_id for welcome items (per-user), None for shared items
-    items_existing = get_db_log_item(campaign_id, user_id if is_welcome_item else None, item_i)
+    items_existing = get_db_log_item(
+        campaign_id, user_id if is_welcome_item else None, item_i
+    )
     payload_existing = None
     if items_existing:
         # get the latest ones
@@ -664,7 +681,8 @@ def reset_task(
     assignment = tasks_data[campaign_id]["info"]["assignment"]
     if assignment == "dynamic":
         return JSONResponse(
-            content="User-level deletion is not supported for dynamic assignments", status_code=400
+            content="User-level deletion is not supported for dynamic assignments",
+            status_code=400,
         )
     elif assignment == "task-based":
         # Save reset marker for this user to mask existing annotations
@@ -678,7 +696,9 @@ def reset_task(
         # Reset welcome items progress if it exists
         if "progress_welcome" in progress_data[campaign_id][user_id]:
             num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
-            progress_data[campaign_id][user_id]["progress_welcome"] = [False] * num_welcome
+            progress_data[campaign_id][user_id]["progress_welcome"] = [
+                False
+            ] * num_welcome
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "single-stream":
@@ -686,7 +706,6 @@ def reset_task(
         user_items = _get_user_annotated_items(campaign_id, user_id)
 
         # Separate welcome items from regular items
-        welcome_items = {item for item in user_items if isinstance(item, str) and item.startswith("welcome_")}
         regular_items = {item for item in user_items if isinstance(item, int)}
 
         # Save reset markers for all items this user has touched
@@ -705,7 +724,9 @@ def reset_task(
         # We reset all welcome items, not just the ones touched, because they're per-user
         if "progress_welcome" in progress_data[campaign_id][user_id]:
             num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
-            progress_data[campaign_id][user_id]["progress_welcome"] = [False] * num_welcome
+            progress_data[campaign_id][user_id]["progress_welcome"] = [
+                False
+            ] * num_welcome
 
         # Reset only the specified user's time
         _reset_user_time(progress_data, campaign_id, user_id)
