@@ -76,6 +76,26 @@ export type DataPayload = {
     info: ProtocolInfo
 }
 
+// Form item type for collecting user information
+export type DataFormItem = {
+    text: string,  // The question or label for the form field
+    form: null | "number" | "string",  // Form field type (null = instructions only)
+}
+
+// Form response type - contains multiple form items
+export type DataForm = {
+    status: string,
+    progress: Array<boolean>,
+    progress_welcome?: Array<boolean>,  // Optional welcome progress
+    time: number,
+    payload: Array<DataFormItem>,
+    payload_existing?: {
+        annotation: Array<string | number | null>,  // Previous form responses
+        comment?: string
+    },
+    info: ProtocolInfo
+}
+
 /**
  * Check if an error span is complete (has required fields set based on protocol).
  * For MQM protocol, category must contain "/" to indicate both main category and subcategory are set.

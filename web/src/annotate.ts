@@ -13,6 +13,8 @@ import {
     validateResponse,
     hasAllowSkip,
     DataGoodbye,
+    DataForm,
+    DataFormItem,
     ProtocolInfo,
     SliderConfig,
     displayGoodbyeScreen,
@@ -872,8 +874,147 @@ async function display_next_payload(response: DataPayload) {
     })
 }
 
+// Display form for collecting user information
+function display_form(response: DataForm) {
+    // Clear previous content and state
+    $("#output_div").empty()
+    state.response_log = []
+    state.validations = []
+    state.output_blocks = []
 
-let payload: DataPayload | null = null
+    redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
+    $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
+
+    // Display instructions if present
+    if (response.info.instructions) {
+        $("#instructions").html(response.info.instructions)
+        $("#instructions").show()
+    } else {
+        $("#instructions").hide()
+    }
+
+    // Create form container
+    const formContainer = $('<div class="form-container"></div>')
+    
+    // Store form responses
+    const formResponses: Array<string | number | null> = new Array(response.payload.length).fill(null)
+
+    // Pre-fill if there are existing responses
+    if (response.payload_existing?.annotation) {
+        response.payload_existing.annotation.forEach((value, i) => {
+            formResponses[i] = value
+        })
+    }
+
+    // Create form fields
+    response.payload.forEach((item, index) => {
+        const fieldDiv = $('<div class="form-field"></div>')
+        
+        // Add the text/label
+        const label = $(`<div class="form-label">${item.text}</div>`)
+        fieldDiv.append(label)
+
+        // Add input field based on form type
+        if (item.form === "string") {
+            const input = $('<input type="text" class="form-input" />')
+            if (formResponses[index] !== null) {
+                input.val(String(formResponses[index]))
+            }
+            input.on('input', function() {
+                formResponses[index] = $(this).val() as string
+                state.has_unsaved_work = true
+                check_form_unlock(formResponses, response.payload)
+            })
+            fieldDiv.append(input)
+        } else if (item.form === "number") {
+            const input = $('<input type="number" class="form-input" />')
+            if (formResponses[index] !== null) {
+                input.val(Number(formResponses[index]))
+            }
+            input.on('input', function() {
+                const val = $(this).val()
+                formResponses[index] = val === "" ? null : Number(val)
+                state.has_unsaved_work = true
+                check_form_unlock(formResponses, response.payload)
+            })
+            fieldDiv.append(input)
+        }
+        // If item.form is null, it's just text/instructions - no input field
+
+        formContainer.append(fieldDiv)
+    })
+
+    $("#output_div").append(formContainer)
+
+    // Set up submit button
+    $("#button_next").off("click")
+    $("#button_next").on("click", async function () {
+        // Disable button during submission
+        $("#button_next").attr("disabled", "disabled")
+        $("#button_next").val("Next 📶")
+        
+        state.action_log.push({ "time": Date.now() / 1000, "action": "submit" })
+
+        // Build payload
+        const payload_local = {
+            "annotation": formResponses,
+            "actions": state.action_log,
+            "item": response.payload,
+        }
+
+        // Include comment if provided
+        const comment = $("#settings_comment").val() as string
+        if (comment && comment.trim() !== "") {
+            // @ts-ignore
+            payload_local["comment"] = comment.trim()
+            // Clear comment after submission
+            $("#settings_comment").val("")
+        }
+
+        // Log the form responses
+        let outcome = await log_response(payload_local, response.info.item_i)
+        
+        if (outcome == null || outcome == false) {
+            notify("Error submitting the form. Please try again.")
+            $("#button_next").removeAttr("disabled")
+            check_form_unlock(formResponses, response.payload)
+            return
+        }
+
+        state.has_unsaved_work = false
+        state.action_log = []
+
+        // Move to next item
+        display_next_item()
+    })
+
+    check_form_unlock(formResponses, response.payload)
+}
+
+// Check if form can be submitted (all required fields filled)
+function check_form_unlock(responses: Array<string | number | null>, payload: Array<DataFormItem>) {
+    if (frozenMode) {
+        $("#button_next").attr("disabled", "disabled")
+        $("#button_next").val("Next 🔒")
+        return
+    }
+
+    // Check if all form fields (non-null form type) are filled
+    for (let i = 0; i < payload.length; i++) {
+        if (payload[i].form !== null && (responses[i] === null || responses[i] === "")) {
+            $("#button_next").attr("disabled", "disabled")
+            $("#button_next").val("Next 🚧")
+            return
+        }
+    }
+
+    // All required fields are filled
+    $("#button_next").removeAttr("disabled")
+    $("#button_next").val("Next ✓")
+}
+
+
+let payload: DataPayload | DataForm | null = null
 
 async function navigate_to_item(item_i: number | string) {
     // Warn if there's unsaved work
@@ -884,7 +1025,7 @@ async function navigate_to_item(item_i: number | string) {
     }
 
     // Fetch and display a specific item by index
-    let response = await get_i_item<DataPayload | DataGoodbye>(item_i)
+    let response = await get_i_item<DataPayload | DataGoodbye | DataForm>(item_i)
     state.has_unsaved_work = false
 
     if (response == null) {
@@ -894,6 +1035,9 @@ async function navigate_to_item(item_i: number | string) {
 
     if (response.status == "goodbye") {
         displayGoodbyeScreen(response as DataGoodbye, navigate_to_item)
+    } else if (response.status == "form") {
+        payload = response as DataForm
+        display_form(response as DataForm)
     } else if (response.status == "ok") {
         payload = response as DataPayload
         display_next_payload(response as DataPayload)
@@ -903,7 +1047,7 @@ async function navigate_to_item(item_i: number | string) {
 }
 
 async function display_next_item() {
-    let response = await get_next_item<DataPayload | DataGoodbye>()
+    let response = await get_next_item<DataPayload | DataGoodbye | DataForm>()
     state.has_unsaved_work = false
 
     if (response == null) {
@@ -913,6 +1057,9 @@ async function display_next_item() {
 
     if (response.status == "goodbye") {
         displayGoodbyeScreen(response as DataGoodbye, navigate_to_item)
+    } else if (response.status == "form") {
+        payload = response as DataForm
+        display_form(response as DataForm)
     } else if (response.status == "ok") {
         payload = response as DataPayload
         display_next_payload(response as DataPayload)

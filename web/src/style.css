@@ -250,3 +250,35 @@ input[type="button"].error_delete:hover {
 .char_missing {
     font-family: monospace;
 }
+
+/* Form styling */
+.form-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.form-field {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-size: 14pt;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 12pt;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}

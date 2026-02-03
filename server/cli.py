@@ -92,8 +92,11 @@ def _run(args_unknown):
 def _validate_item_structure(items):
     """
     Validate that items have the correct structure.
-    Items should be lists of dictionaries with 'tgt' and optionally 'src' and/or 'ref' keys.
-    The 'tgt' field should be a dictionary mapping model names to translations.
+    Items can be either:
+    1. Evaluation items: dictionaries with 'tgt' and optionally 'src' and/or 'ref' keys
+    2. Form items: dictionaries with 'text' and 'form' keys
+
+    A document must contain either all evaluation items or all form items (not mixed).
 
     Args:
         items: List of item dictionaries to validate
@@ -101,68 +104,98 @@ def _validate_item_structure(items):
     if not isinstance(items, list):
         raise ValueError("Items must be a list")
 
+    if not items:
+        raise ValueError("Items list cannot be empty")
+
+    # Check if first item is a form item or evaluation item
+    first_item = items[0]
+    if not isinstance(first_item, dict):
+        raise ValueError("Each item must be a dictionary")
+
+    is_form_document = "text" in first_item and "form" in first_item
+
     for item in items:
         if not isinstance(item, dict):
-            raise ValueError("Each item must be a dictionary with 'tgt' key")
-        if "tgt" not in item:
-            raise ValueError("Each item must contain 'tgt' key")
+            raise ValueError("Each item must be a dictionary")
 
-        # Validate src is a string if present
-        if "src" in item and not isinstance(item["src"], str):
-            raise ValueError("Item 'src' must be a string")
+        # Check consistency: all items must be same type (form or evaluation)
+        current_is_form = "text" in item and "form" in item
+        if current_is_form != is_form_document:
+            raise ValueError("Document cannot mix form items and evaluation items")
 
-        # Validate ref is a string if present
-        if "ref" in item and not isinstance(item["ref"], str):
-            raise ValueError("Item 'ref' must be a string")
-
-        # Validate tgt is a dictionary (annotate template with model names)
-        if isinstance(item["tgt"], str):
-            # String not allowed - suggest using dictionary (don't include user input to prevent injection)
-            raise ValueError(
-                'Item \'tgt\' must be a dictionary mapping model names to translations. For single translation, use {"default": "your_translation"}'
-            )
-        elif isinstance(item["tgt"], dict):
-            # Dictionary mapping model names to translations
-            # Validate that model names don't contain only numbers (JavaScript ordering issue)
-            for model_name, translation in item["tgt"].items():
-                if not isinstance(model_name, str):
-                    raise ValueError("Model names in 'tgt' dictionary must be strings")
-                if model_name.isdigit():
-                    raise ValueError(
-                        f"Model name '{model_name}' cannot be only numeric digits (would cause issues in JS/TS)"
-                    )
-                if not isinstance(translation, str):
-                    raise ValueError(
-                        f"Translation for model '{model_name}' must be a string"
-                    )
+        if is_form_document:
+            # Validate form item structure
+            if "text" not in item:
+                raise ValueError("Form item must contain 'text' key")
+            if "form" not in item:
+                raise ValueError("Form item must contain 'form' key")
+            if not isinstance(item["text"], str):
+                raise ValueError("Form item 'text' must be a string")
+            if item["form"] not in [None, "number", "string"]:
+                raise ValueError(
+                    "Form item 'form' must be null, 'number', or 'string'"
+                )
         else:
-            raise ValueError(
-                "Item 'tgt' must be a dictionary mapping model names to translations"
-            )
+            # Validate evaluation item structure
+            if "tgt" not in item:
+                raise ValueError("Each item must contain 'tgt' key")
 
-        # Validate error_spans structure if present
-        if "error_spans" in item:
-            if not isinstance(item["error_spans"], dict):
-                raise ValueError(
-                    "'error_spans' must be a dictionary mapping model names to error span lists"
-                )
-            for model_name, spans in item["error_spans"].items():
-                if not isinstance(spans, list):
-                    raise ValueError(
-                        f"Error spans for model '{model_name}' must be a list"
-                    )
+            # Validate src is a string if present
+            if "src" in item and not isinstance(item["src"], str):
+                raise ValueError("Item 'src' must be a string")
 
-        # Validate validation structure if present
-        if "validation" in item:
-            if not isinstance(item["validation"], dict):
+            # Validate ref is a string if present
+            if "ref" in item and not isinstance(item["ref"], str):
+                raise ValueError("Item 'ref' must be a string")
+
+            # Validate tgt is a dictionary (annotate template with model names)
+            if isinstance(item["tgt"], str):
+                # String not allowed - suggest using dictionary (don't include user input to prevent injection)
                 raise ValueError(
-                    "'validation' must be a dictionary mapping model names to validation rules"
+                    'Item \'tgt\' must be a dictionary mapping model names to translations. For single translation, use {"default": "your_translation"}'
                 )
-            for model_name, val_rule in item["validation"].items():
-                if not isinstance(val_rule, dict):
+            elif isinstance(item["tgt"], dict):
+                # Dictionary mapping model names to translations
+                # Validate that model names don't contain only numbers (JavaScript ordering issue)
+                for model_name, translation in item["tgt"].items():
+                    if not isinstance(model_name, str):
+                        raise ValueError("Model names in 'tgt' dictionary must be strings")
+                    if model_name.isdigit():
+                        raise ValueError(
+                            f"Model name '{model_name}' cannot be only numeric digits (would cause issues in JS/TS)"
+                        )
+                    if not isinstance(translation, str):
+                        raise ValueError(
+                            f"Translation for model '{model_name}' must be a string"
+                        )
+            else:
+                raise ValueError(
+                    "Item 'tgt' must be a dictionary mapping model names to translations"
+                )
+
+            # Validate error_spans structure if present
+            if "error_spans" in item:
+                if not isinstance(item["error_spans"], dict):
                     raise ValueError(
-                        f"Validation rule for model '{model_name}' must be a dictionary"
+                        "'error_spans' must be a dictionary mapping model names to error span lists"
                     )
+                for model_name, spans in item["error_spans"].items():
+                    if not isinstance(spans, list):
+                        raise ValueError(
+                            f"Error spans for model '{model_name}' must be a list"
+                        )
+
+            # Validate validation structure if present
+            if "validation" in item:
+                if not isinstance(item["validation"], dict):
+                    raise ValueError(
+                        "'validation' must be a dictionary mapping model names to validation rules"
+                    )
+                for model_name, val_rule in item["validation"].items():
+                    if not isinstance(val_rule, dict):
+                        raise ValueError(
+                            f"Validation rule for model '{model_name}' must be a dictionary"
+                        )
 
 
 def _validate_document_models(doc):

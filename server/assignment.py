@@ -24,6 +24,15 @@ CAMPAIGN_INFO_PUBLIC = {
 }
 
 
+def _is_form_document(payload: list) -> bool:
+    """Check if a document payload contains form items instead of evaluation items."""
+    if not payload:
+        return False
+    # Check if first item has 'text' and 'form' keys (form item)
+    first_item = payload[0]
+    return "text" in first_item and "form" in first_item
+
+
 def _get_instructions(tasks_data: dict, campaign_id: str) -> str:
     """Get instructions: custom if provided, else protocol default, else empty."""
     campaign_info = tasks_data[campaign_id]["info"]
@@ -162,9 +171,12 @@ def get_i_item_taskbased(
     if actual_index < 0 or actual_index >= len(data_all[campaign_id]["data"][user_id]):
         return JSONResponse(content="Item index out of range", status_code=400)
 
+    payload = data_all[campaign_id]["data"][user_id][actual_index]
+    is_form = _is_form_document(payload)
+
     return JSONResponse(
         content={
-            "status": "ok",
+            "status": "form" if is_form else "ok",
             "progress": user_progress["progress"],
             "progress_welcome": progress_welcome,
             "time": user_progress["time"],
@@ -177,7 +189,7 @@ def get_i_item_taskbased(
                 for k, v in data_all[campaign_id]["info"].items()
                 if k in CAMPAIGN_INFO_PUBLIC
             },
-            "payload": data_all[campaign_id]["data"][user_id][actual_index],
+            "payload": payload,
         }
         | ({"payload_existing": payload_existing} if payload_existing else {}),
         status_code=200,
@@ -231,9 +243,12 @@ def get_i_item_singlestream(
     if actual_index < 0 or actual_index >= len(data_all[campaign_id]["data"]):
         return JSONResponse(content="Item index out of range", status_code=400)
 
+    payload = data_all[campaign_id]["data"][actual_index]
+    is_form = _is_form_document(payload)
+
     return JSONResponse(
         content={
-            "status": "ok",
+            "status": "form" if is_form else "ok",
             "progress": user_progress["progress"],
             "progress_welcome": progress_welcome,
             "time": user_progress["time"],
@@ -246,7 +261,7 @@ def get_i_item_singlestream(
                 for k, v in data_all[campaign_id]["info"].items()
                 if k in CAMPAIGN_INFO_PUBLIC
             },
-            "payload": data_all[campaign_id]["data"][actual_index],
+            "payload": payload,
         }
         | ({"payload_existing": payload_existing} if payload_existing else {}),
         status_code=200,
@@ -281,9 +296,12 @@ def get_next_item_taskbased(
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
 
+        payload = data_all[campaign_id]["data"][user_id][item_i]
+        is_form = _is_form_document(payload)
+
         return JSONResponse(
             content={
-                "status": "ok",
+                "status": "form" if is_form else "ok",
                 "progress": user_progress["progress"],
                 "progress_welcome": progress_welcome,
                 "time": user_progress["time"],
@@ -296,7 +314,7 @@ def get_next_item_taskbased(
                     for k, v in data_all[campaign_id]["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": data_all[campaign_id]["data"][user_id][item_i],
+                "payload": payload,
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -319,9 +337,12 @@ def get_next_item_taskbased(
         if "comment" in latest_item:
             payload_existing["comment"] = latest_item["comment"]
 
+    payload = data_all[campaign_id]["data"][user_id][item_i]
+    is_form = _is_form_document(payload)
+
     return JSONResponse(
         content={
-            "status": "ok",
+            "status": "form" if is_form else "ok",
             "progress": user_progress["progress"],
             "progress_welcome": progress_welcome,
             "time": user_progress["time"],
@@ -376,9 +397,12 @@ def get_next_item_singlestream(
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
 
+        payload = data_all[campaign_id]["data"][item_i]
+        is_form = _is_form_document(payload)
+
         return JSONResponse(
             content={
-                "status": "ok",
+                "status": "form" if is_form else "ok",
                 "time": user_progress["time"],
                 "progress": progress,
                 "progress_welcome": progress_welcome,
@@ -391,7 +415,7 @@ def get_next_item_singlestream(
                     for k, v in data_all[campaign_id]["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": data_all[campaign_id]["data"][item_i],
+                "payload": payload,
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -416,9 +440,12 @@ def get_next_item_singlestream(
         if "comment" in latest_item:
             payload_existing["comment"] = latest_item["comment"]
 
+    payload = data_all[campaign_id]["data"][item_i]
+    is_form = _is_form_document(payload)
+
     return JSONResponse(
         content={
-            "status": "ok",
+            "status": "form" if is_form else "ok",
             "time": user_progress["time"],
             "progress": progress,
             "progress_welcome": progress_welcome,
@@ -431,7 +458,7 @@ def get_next_item_singlestream(
                 for k, v in data_all[campaign_id]["info"].items()
                 if k in CAMPAIGN_INFO_PUBLIC
             },
-            "payload": data_all[campaign_id]["data"][item_i],
+            "payload": payload,
         }
         | ({"payload_existing": payload_existing} if payload_existing else {}),
         status_code=200,
