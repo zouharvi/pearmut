@@ -606,8 +606,7 @@ class TestSingleStream:
             }
         }
         # User has completed 2 items (indices 0 and 2), should get goodbye
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -1194,7 +1193,7 @@ class TestDynamic:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [["model1"], list(), ["model2"], list()],
+                    "progress": [{"model1": "completed", "model2": None}, {"model1": None, "model2": None}, {"model1": "completed", "model2": None}, {"model1": None, "model2": None}],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "correct_token",
@@ -1203,8 +1202,7 @@ class TestDynamic:
             }
         }
         # User has completed 2 items, limit is 3, should get next item
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"ok"' in content
