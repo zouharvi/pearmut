@@ -4,6 +4,7 @@
 - v1.0.3 (unreleased)
   - Log media actions
   - Add basic mobile support
+  - Add custom MQM taxonomy support
 - v1.0.2
   - Fix `token_main` vulnerability
   - Add textfields for translation and post-editing
