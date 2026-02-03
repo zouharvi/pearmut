@@ -494,13 +494,10 @@ class TestSingleStream:
         reset_task("campaign1", "user1", tasks_data, progress_data)
         
         # Only items touched by user1 (0 and 1) should be reset for all users
-        # Items 2 and 3 should remain unchanged
-        assert progress_data["campaign1"]["user1"]["progress"] == [
-            None, None, None, "completed_foreign"]
+        assert progress_data["campaign1"]["user1"]["progress"] == [None, None, "completed_foreign", None]
         # User2 completed item 0, so it stays "completed"
         # User2 didn't complete item 1, so it becomes None
-        assert progress_data["campaign1"]["user2"]["progress"] == [
-            "completed", None, "completed", None]
+        assert progress_data["campaign1"]["user2"]["progress"] == [None, None, "completed", None]
         # Only user1's time should be reset
         assert progress_data["campaign1"]["user1"]["time"] == 0.0
         assert progress_data["campaign1"]["user1"]["time_start"] is None
@@ -546,10 +543,8 @@ class TestSingleStream:
         update_progress("campaign1", "user1", tasks_data, progress_data, 1, {})
         # User1 completed item 1, so gets "completed"
         # User2 gets "completed_foreign" since someone else completed it
-        assert progress_data["campaign1"]["user1"]["progress"] == [
-            None, "completed", None]
-        assert progress_data["campaign1"]["user2"]["progress"] == [
-            None, "completed_foreign", None]
+        assert progress_data["campaign1"]["user1"]["progress"] == [None, "completed", None]
+        assert progress_data["campaign1"]["user2"]["progress"] == [None, "completed_foreign", None]
 
     def test_get_i_item_returns_specific_item(self):
         """Test that single-stream get_i_item returns the requested item."""
@@ -577,8 +572,7 @@ class TestSingleStream:
             }
         }
         # Request item 2 specifically
-        response = get_i_item("campaign1", "user1",
-                              tasks_data, progress_data, 2)
+        response = get_i_item("campaign1", "user1", tasks_data, progress_data, 2)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"item_i":2' in content

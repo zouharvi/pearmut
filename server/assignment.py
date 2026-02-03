@@ -712,7 +712,7 @@ def reset_task(
         # Reset the touched regular items in all users' progress (shared pool)
         for uid in progress_data[campaign_id]:
             for item_i in user_items_to_reset:
-                progress_data[campaign_id][uid]["progress"][item_i] = None     
+                progress_data[campaign_id][uid]["progress"][item_i] = None
 
 
         # Reset all welcome items progress for this user (per-user, not shared)
