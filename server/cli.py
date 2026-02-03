@@ -236,24 +236,24 @@ def _shuffle_campaign_data(campaign_data, rng):
             shuffle_document(doc)
 
 
-def _validate_items_per_user(campaign_data, num_items):
+def _validate_docs_per_user(campaign_data, num_items):
     """
-    Validate items_per_user parameter if present.
+    Validate docs_per_user parameter if present.
 
     Args:
         campaign_data: The campaign data dictionary
         num_items: Total number of items in the campaign
 
     Raises:
-        ValueError: If items_per_user is invalid
+        ValueError: If docs_per_user is invalid
     """
-    if "items_per_user" in campaign_data["info"]:
-        items_per_user = campaign_data["info"]["items_per_user"]
-        if not isinstance(items_per_user, int) or items_per_user < 1:
-            raise ValueError("'items_per_user' must be a positive integer")
-        if items_per_user > num_items:
+    if "docs_per_user" in campaign_data["info"]:
+        docs_per_user = campaign_data["info"]["docs_per_user"]
+        if not isinstance(docs_per_user, int) or docs_per_user < 1:
+            raise ValueError("'docs_per_user' must be a positive integer")
+        if docs_per_user > num_items:
             raise ValueError(
-                f"'items_per_user' ({items_per_user}) cannot exceed total items ({num_items})"
+                f"'docs_per_user' ({docs_per_user}) cannot exceed total items ({num_items})"
             )
 
 
@@ -350,8 +350,8 @@ def _add_single_campaign(campaign_data, overwrite, server):
             num_users = len(users_spec)
         else:
             raise ValueError("'users' must be an integer or a list.")
-        # Validate items_per_user if specified
-        _validate_items_per_user(campaign_data, len(tasks))
+        # Validate docs_per_user if specified
+        _validate_docs_per_user(campaign_data, len(tasks))
     elif assignment == "dynamic":
         tasks = campaign_data["data"]
         if users_spec is None:
@@ -397,8 +397,8 @@ def _add_single_campaign(campaign_data, overwrite, server):
                 assert (
                     item_models == all_models
                 ), "All items must have the same model outputs"
-        # Validate items_per_user if specified
-        _validate_items_per_user(campaign_data, len(tasks))
+        # Validate docs_per_user if specified
+        _validate_docs_per_user(campaign_data, len(tasks))
     else:
         raise ValueError(f"Unknown campaign assignment type: {assignment}")
 
@@ -499,11 +499,11 @@ def _add_single_campaign(campaign_data, overwrite, server):
                 else (
                     [False] * len(campaign_data["data"])
                     if assignment == "single-stream"
-                    else (
-                        [list() for _ in range(len(campaign_data["data"]))]
-                        if assignment == "dynamic"
-                        else []
-                    )
+                    else 
+                    # TODO: this should be a dictionary mapping from models to None/string
+                    [list() for _ in range(len(campaign_data["data"]))]
+                    if assignment == "dynamic"
+                    else (raise ValueError("Invalid assignment type"))
                 )
             ),
             "progress_welcome": [False] * welcome_item_count if welcome_item_count > 0 else [],

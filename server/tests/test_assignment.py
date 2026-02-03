@@ -581,13 +581,13 @@ class TestSingleStream:
         assert '"item_i":2' in content
         assert '"src":"e"' in content
 
-    def test_items_per_user_triggers_goodbye(self):
-        """Test that single-stream with items_per_user shows goodbye after specified items."""
+    def test_docs_per_user_triggers_goodbye(self):
+        """Test that single-stream with docs_per_user shows goodbye after specified items."""
         tasks_data = {
             "campaign1": {
                 "info": {
                     "assignment": "single-stream",
-                    "items_per_user": 2,
+                    "docs_per_user": 2,
                 },
                 "data": [
                     [{"src": "a", "tgt": "b"}],
@@ -616,13 +616,13 @@ class TestSingleStream:
         assert '"status":"goodbye"' in content
         assert 'correct_token' in content
 
-    def test_items_per_user_continues_before_limit(self):
-        """Test that single-stream continues returning items before items_per_user limit."""
+    def test_docs_per_user_continues_before_limit(self):
+        """Test that single-stream continues returning items before docs_per_user limit."""
         tasks_data = {
             "campaign1": {
                 "info": {
                     "assignment": "single-stream",
-                    "items_per_user": 3,
+                    "docs_per_user": 3,
                 },
                 "data": [
                     [{"src": "a", "tgt": "b"}],
@@ -1141,13 +1141,13 @@ class TestDynamic:
         assert progress_data["campaign1"]["user1"]["time"] == 50.0
         assert progress_data["campaign1"]["user2"]["time"] == 75.0
 
-    def test_items_per_user_triggers_goodbye(self):
-        """Test that dynamic with items_per_user shows goodbye after specified items."""
+    def test_docs_per_user_triggers_goodbye(self):
+        """Test that dynamic with docs_per_user shows goodbye after specified items."""
         tasks_data = {
             "campaign1": {
                 "info": {
                     "assignment": "dynamic",
-                    "items_per_user": 2,
+                    "docs_per_user": 2,
                     "dynamic_top": 1,
                     "dynamic_first": 2,
                 },
@@ -1178,13 +1178,13 @@ class TestDynamic:
         assert '"status":"goodbye"' in content
         assert 'correct_token' in content
 
-    def test_items_per_user_continues_before_limit(self):
-        """Test that dynamic continues returning items before items_per_user limit."""
+    def test_docs_per_user_continues_before_limit(self):
+        """Test that dynamic continues returning items before docs_per_user limit."""
         tasks_data = {
             "campaign1": {
                 "info": {
                     "assignment": "dynamic",
-                    "items_per_user": 3,
+                    "docs_per_user": 3,
                     "dynamic_top": 1,
                     "dynamic_first": 2,
                 },

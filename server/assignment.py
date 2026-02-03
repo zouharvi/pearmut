@@ -398,11 +398,11 @@ def get_next_item_singlestream(
         )
 
     # All welcome items complete, proceed with regular items
-    # Check if user reached items_per_user limit (if specified)
-    items_per_user = data_all[campaign_id]["info"].get("items_per_user")
-    if items_per_user is not None:
+    # Check if user reached docs_per_user limit (if specified)
+    if docs_per_user := data_all[campaign_id]["info"].get("docs_per_user") is not None:
+        # TODO: clashes with refactor of storing progress as "completed"
         completed_count = sum(1 for v in progress if v)
-        if completed_count >= items_per_user:
+        if completed_count >= docs_per_user:
             return _completed_response(data_all, progress_data, campaign_id, user_id)
     elif all(progress):
         return _completed_response(data_all, progress_data, campaign_id, user_id)
@@ -510,12 +510,14 @@ def get_next_item_dynamic(
     all_models = list(set(campaign_data["data"][0][0]["tgt"].keys()))
 
     # Check if completed
-    # First check if items_per_user limit is reached
-    items_per_user = campaign_data["info"].get("items_per_user")
-    if items_per_user is not None:
+    # First check if docs_per_user limit is reached
+    if docs_per_user := campaign_data["info"].get("docs_per_user") is not None:
+        # TODO: clashes with refactor of storing progress as "completed"
+        # TODO: count specifically number of annotations across models
+        # XXXXX
         # Count items where at least one model has been annotated
-        completed_count = sum(1 for v in user_progress["progress"] if len(v) > 0)
-        if completed_count >= items_per_user:
+        completed_count = sum(len(v) for v in user_progress["progress"])
+        if completed_count >= docs_per_user:
             return _completed_response(tasks_data, progress_data, campaign_id, user_id)
     # Otherwise check if all models completed for all items
     # NOTE: this will rarely trigger but we don't have a good way to know when to end anyway for now
