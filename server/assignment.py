@@ -121,15 +121,20 @@ def get_i_item_taskbased(
     Get specific item for task-based protocol.
     """
     user_progress = progress_data[campaign_id][user_id]
-    progress_welcome = user_progress.get("progress_welcome", [])
+    progress_welcome = user_progress["progress_welcome"]
 
     # Convert welcome_X string to integer index
     actual_index = item_i
-    if isinstance(item_i, str) and item_i.startswith("welcome_"):
+    is_welcome_item = isinstance(item_i, str) and item_i.startswith("welcome_")
+    if is_welcome_item:
         actual_index = int(item_i.split("_")[1])
         # Validate against total number of welcome items
         if actual_index < 0 or actual_index >= len(progress_welcome):
             return JSONResponse(content="Welcome item index out of range", status_code=400)
+    else:
+        # Prevent accessing regular items unless all welcome items are complete
+        if not all(progress_welcome):
+            return JSONResponse(content="Complete all welcome items before accessing regular items", status_code=400)
 
     # try to get existing annotations if any
     items_existing = get_db_log_item(campaign_id, user_id, item_i)
@@ -177,7 +182,7 @@ def get_i_item_singlestream(
     Get specific item for single-stream assignment.
     """
     user_progress = progress_data[campaign_id][user_id]
-    progress_welcome = user_progress.get("progress_welcome", [])
+    progress_welcome = user_progress["progress_welcome"]
 
     # Convert welcome_X string to integer index
     actual_index = item_i
@@ -187,6 +192,10 @@ def get_i_item_singlestream(
         # Validate against total number of welcome items
         if actual_index < 0 or actual_index >= len(progress_welcome):
             return JSONResponse(content="Welcome item index out of range", status_code=400)
+    else:
+        # Prevent accessing regular items unless all welcome items are complete
+        if not all(progress_welcome):
+            return JSONResponse(content="Complete all welcome items before accessing regular items", status_code=400)
 
     # try to get existing annotations if any
     # use user_id for welcome items (per-user), None for shared items
@@ -234,7 +243,7 @@ def get_next_item_taskbased(
     Get the next item for task-based assignment.
     """
     user_progress = progress_data[campaign_id][user_id]
-    progress_welcome = user_progress.get("progress_welcome", [])
+    progress_welcome = user_progress["progress_welcome"]
 
     # Check if there are incomplete welcome items first
     if not all(progress_welcome):
@@ -328,7 +337,7 @@ def get_next_item_singlestream(
     """
     user_progress = progress_data[campaign_id][user_id]
     progress = user_progress["progress"]
-    progress_welcome = user_progress.get("progress_welcome", [])
+    progress_welcome = user_progress["progress_welcome"]
 
     # Check if there are incomplete welcome items first - must complete all before proceeding
     if not all(progress_welcome):
@@ -431,7 +440,7 @@ def get_next_item_dynamic(
 
     user_progress = progress_data[campaign_id][user_id]
     campaign_data = tasks_data[campaign_id]
-    progress_welcome = user_progress.get("progress_welcome", [])
+    progress_welcome = user_progress["progress_welcome"]
 
     # Check if there are incomplete welcome items first - must complete all before proceeding
     if not all(progress_welcome):

@@ -56,9 +56,17 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         </tr></thead>
         <tbody>`
     for (let user_id in data) {
-        // sum
+        // Calculate progress including welcome items
         let progress_count = (data[user_id]["progress"] as Array<boolean>).reduce((a, b) => a + (b ? 1 : 0), 0)
         let progress_total = (data[user_id]["progress"] as Array<boolean>).length
+
+        // Add welcome progress if it exists
+        if (data[user_id]["progress_welcome"]) {
+            const welcome_progress = data[user_id]["progress_welcome"] as Array<boolean>
+            progress_count += welcome_progress.reduce((a, b) => a + (b ? 1 : 0), 0)
+            progress_total += welcome_progress.length
+        }
+
         let threshold_passed = data[user_id]["threshold_passed"]
         let status = ''
         if (data[user_id]["time"] == 0)

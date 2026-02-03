@@ -81,7 +81,7 @@ export async function log_response(payload: any, item_i: number | null): Promise
   }
 }
 
-export async function get_i_item<T>(item_i: number): Promise<T | null> {
+export async function get_i_item<T>(item_i: number | string): Promise<T | null> {
   /* Fetch a specific item by index for the user from the server. */
   let user_id = searchParams.get("user_id");
   let campaign_id = searchParams.get("campaign_id");
