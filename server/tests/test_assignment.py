@@ -496,7 +496,7 @@ class TestSingleStream:
         # Only items touched by user1 (0 and 1) should be reset for all users
         # Items 2 and 3 should remain unchanged
         assert progress_data["campaign1"]["user1"]["progress"] == [
-            None, None, None, "completed"]
+            None, None, None, "completed_foreign"]
         # User2 completed item 0, so it stays "completed"
         # User2 didn't complete item 1, so it becomes None
         assert progress_data["campaign1"]["user2"]["progress"] == [
