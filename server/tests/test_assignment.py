@@ -931,7 +931,7 @@ class TestDynamic:
                     "assignment": "dynamic",
                     "shuffle": False,
                     "dynamic_top": 1,
-                    "dynamic_first": 2,
+                    "dynamic_warmup": 2,
                     "dynamic_backoff": 0,
                 },
                 "data": [
@@ -967,7 +967,7 @@ class TestDynamic:
                     "assignment": "dynamic",
                     "shuffle": False,
                     "dynamic_top": 1,
-                    "dynamic_first": 2,
+                    "dynamic_warmup": 2,
                 },
                 "data": [
                     [{"src": "a", "tgt": {"model1": "b"}}],

@@ -56,11 +56,14 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         </tr></thead>
         <tbody>`
     for (let user_id in data) {
-        const progress = data[user_id]["progress"] as Array<string | null>
+        const progress = data[user_id]["progress"] as Array<string | object>
         const progress_total = progress.length
-        
+
         // Calculate regular progress - count "completed" items
         let progress_count = progress.filter(v => v === "completed").length
+        if (assignment == "dynamic") {
+            progress_count = progress.map(l => Object.values(l).filter(v => v === "completed").length).reduce((a, b) => a + b, 0)
+        }
 
         // Calculate welcome progress separately
         let welcome_count = 0
@@ -73,18 +76,15 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
             welcome_total = welcome_progress.length
         }
 
-        // For single-stream and dynamic, show: finished_by_user/total+global
-        // For task-based, show traditional format
+        // For single-stream and dynamic, show: finished_by_user
+        // For task-based, show finished_by_user/total
         if (assignment === "single-stream" || assignment === "dynamic") {
-            const finished_by_user = data[user_id]["finished_by_user"] || 0
-            const global_progress = data[user_id]["global_progress"] || 0
-
             if (welcome_total > 0) {
-                // Show as "welcome_done/welcome_total+finished/total+global"
-                progress_display = `${welcome_count}/${welcome_total}+${finished_by_user}/${progress_total}+${global_progress}`
+                // Show as "welcome_done/welcome_total+finished"
+                progress_display = `${welcome_count}/${welcome_total}+${progress_count}`
             } else {
-                // No welcome items, show as "finished/total+global"
-                progress_display = `${finished_by_user}/${progress_total}+${global_progress}`
+                // No welcome items, show as "finished"
+                progress_display = `${progress_count}`
             }
         } else {
             // Task-based: use traditional format

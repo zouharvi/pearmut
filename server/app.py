@@ -178,19 +178,12 @@ async def _dashboard_data(request: DashboardDataRequest):
             all(v) for v in list(entry.get("validations", {}).values())
         ]
 
-        # For single-stream and dynamic, calculate finished and global counts from progress
-        if assignment in ["single-stream", "dynamic"]:
-            progress = entry["progress"]
-            # Count user's completed items
-            finished_by_user = sum(1 for status in progress if status == "completed")
-            # Count global completed items (completed or completed_foreign)
-            global_progress = sum(1 for status in progress if status in ["completed", "completed_foreign"])
-            
-            entry["finished_by_user"] = finished_by_user
-            entry["global_progress"] = global_progress
-
         # Add threshold pass/fail status (only when user is complete)
-        if all(v == "completed" for v in entry["progress"]):
+        if (
+            tasks_data[campaign_id]["info"]["assignment"] != "dynamic" and all(v in {"completed", "completed_foreign"} for v in entry["progress"])
+        ) or (
+            tasks_data[campaign_id]["info"]["assignment"] == "dynamic" and all(v in {"completed", "completed_foreign"} for l in entry["progress"] for v in l)
+        ):
             entry["threshold_passed"] = check_validation_threshold(
                 tasks_data, progress_data, campaign_id, user_id
             )
