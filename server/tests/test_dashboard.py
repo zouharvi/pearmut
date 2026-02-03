@@ -55,7 +55,6 @@ class TestDashboardData:
         }
 
         # Mock the app's global state
-        app.state = type("State", (), {})()
         import pearmut.app as app_module
 
         app_module.tasks_data = tasks_data
