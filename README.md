@@ -14,6 +14,7 @@
   - [Assignment Types](#assignment-types)
 - [Advanced Features](#advanced-features)
   - [Pre-filled Error Spans (ESA<sup>AI</sup>)](#pre-filled-error-spans-esaai)
+  - [Custom MQM Taxonomy](#custom-mqm-taxonomy)
   - [Tutorial and Attention Checks](#tutorial-and-attention-checks)
   - [Pre-defined User IDs and Tokens](#pre-defined-user-ids-and-tokens)
   - [Multimodal Annotations](#multimodal-annotations)
@@ -176,6 +177,33 @@ Enable a textfield for post-editing or translation tasks using the `textfield` p
 - `"hidden"`: Textfield hidden by default, shown by clicking a button
 - `"visible"`: Textfield always visible
 - `"prefilled"`: Textfield visible and pre-filled with model output for post-editing
+
+### Custom MQM Taxonomy
+
+For MQM protocol campaigns, you can define a custom error taxonomy instead of using the default MQM categories. Specify `mqm_categories` in the campaign `info` section as a dictionary mapping main categories to lists of subcategories:
+
+
+```python
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "MQM",
+    "mqm_categories": {
+      "": [],                          # Empty selection option
+      "General": ["", "Accuracy", "Fluency"],
+      "Audio-specific": ["", "Inaudible", "Background noise", "Speaker overlap", "Misinterpretation"],
+      "Style": ["", "Awkward", "Embarassing"],
+      "Unknown": []                    # Category with no subcategories
+    }
+  },
+  "campaign_id": "custom_mqm_example",
+  "data": [...]
+}
+```
+
+If `mqm_categories` is not provided, the default MQM taxonomy will be used. The empty string key `""` provides an unselected state in the dropdown. Categories with empty subcategory lists (e.g., `"Style": []`) do not require a subcategory selection.
+
+See [examples/custom_mqm.json](examples/custom_mqm.json) for a complete example.
 
 ### Custom Instructions
 
