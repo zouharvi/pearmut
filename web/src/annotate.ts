@@ -258,6 +258,17 @@ function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): 
     return html
 }
 
+/**
+ * Check if a response is a form item response (not a DocumentResponse)
+ */
+function isFormItemResponse(response: DocumentResponse | FormItemResponse): boolean {
+    if (typeof response !== 'object' || Object.keys(response).length === 0) {
+        return true
+    }
+    const firstValue = Object.values(response)[0]
+    return typeof firstValue !== 'object' || !('error_spans' in firstValue)
+}
+
 async function display_next_payload(response: DataPayload) {
     // Cleanup toolboxes and handlers from previous item
     cleanupPreviousItem()
@@ -270,12 +281,8 @@ async function display_next_payload(response: DataPayload) {
     if (response.payload_existing) {
         response_log = response.payload_existing.annotation.map(docResponses => {
             // Check if it's a form item response
-            if (typeof docResponses === 'object' && !Array.isArray(docResponses)) {
-                const values = Object.values(docResponses)
-                // If it's a simple object without error_spans, treat as FormItemResponse
-                if (values.length === 0 || (values[0] && typeof values[0] !== 'object') || !('error_spans' in values[0])) {
-                    return docResponses as FormItemResponse
-                }
+            if (isFormItemResponse(docResponses)) {
+                return docResponses as FormItemResponse
             }
             // Otherwise it's a DocumentResponse
             const result: DocumentResponse = {}
@@ -299,7 +306,7 @@ async function display_next_payload(response: DataPayload) {
         response_log = data.map(item => {
             // Check if item is a form item (string)
             if (isFormItem(item)) {
-                return {} as FormItemResponse  // Will be filled when form is submitted
+                return {} as FormItemResponse  // Will be filled when Next button is clicked
             }
             // Regular annotation item
             const result: DocumentResponse = {}
@@ -1006,12 +1013,8 @@ async function performValidation(): Promise<Array<boolean> | null> {
         const itemResponse = response_log[item_ij]
         
         // Skip form items - they don't need validation
-        if (typeof itemResponse === 'object' && Object.keys(itemResponse).length > 0) {
-            const firstValue = Object.values(itemResponse)[0]
-            if (typeof firstValue !== 'object' || !('error_spans' in firstValue)) {
-                // This is a form item, skip validation
-                continue
-            }
+        if (isFormItemResponse(itemResponse)) {
+            continue
         }
         
         const modelNames = Object.keys(itemResponse)
@@ -1056,10 +1059,8 @@ $("#button_next").on("click", async function () {
         // Update response_log with form data
         let formIndex = 0
         for (let i = 0; i < response_log.length; i++) {
-            // Check if this is a form item response (empty object initially)
-            if (Object.keys(response_log[i]).length === 0 || 
-                (typeof response_log[i] === 'object' && !Array.isArray(response_log[i]) && 
-                 Object.values(response_log[i]).every(v => typeof v !== 'object' || !('error_spans' in v)))) {
+            // Check if this is a form item response
+            if (isFormItemResponse(response_log[i])) {
                 if (formIndex < formData.length) {
                     response_log[i] = formData[formIndex]
                     formIndex++
