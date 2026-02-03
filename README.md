@@ -181,6 +181,7 @@ Enable a textfield for post-editing or translation tasks using the `textfield` p
 
 For MQM protocol campaigns, you can define a custom error taxonomy instead of using the default MQM categories. Specify `mqm_categories` in the campaign `info` section as a dictionary mapping main categories to lists of subcategories:
 
+
 ```python
 {
   "info": {
@@ -188,10 +189,10 @@ For MQM protocol campaigns, you can define a custom error taxonomy instead of us
     "protocol": "MQM",
     "mqm_categories": {
       "": [],                          # Empty selection option
-      "Fluency": ["", "Grammar", "Spelling", "Word order"],
-      "Adequacy": ["", "Mistranslation", "Addition", "Omission"],
-      "Terminology": ["", "Inconsistent terminology", "Wrong term"],
-      "Style": []                      # Category with no subcategories
+      "General": ["", "Accuracy", "Fluency"],
+      "Audio-specific": ["", "Inaudible", "Background noise", "Speaker overlap", "Misinterpretation"],
+      "Style": ["", "Awkward", "Embarassing"],
+      "Unknown": []                    # Category with no subcategories
     }
   },
   "campaign_id": "custom_mqm_example",
