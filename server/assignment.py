@@ -402,7 +402,7 @@ def get_next_item_singlestream(
         return _completed_response(data_all, progress_data, campaign_id, user_id)
 
     # find a random incomplete item
-    incomplete_indices = [i for i, v in enumerate(progress) if not v in {"completed", "completed_foreign"}]
+    incomplete_indices = [i for i, v in enumerate(progress) if v not in {"completed", "completed_foreign"}]
     item_i = random.choice(incomplete_indices)
 
     # try to get existing annotations if any
@@ -504,7 +504,7 @@ def get_next_item_dynamic(
     all_models = list(set(campaign_data["data"][0][0]["tgt"].keys()))
 
     # Check if completed (all items completed)
-    if all(v in {"completed", "completed_foreign"} for l in user_progress["progress"] for v in l.values()):
+    if all(v in {"completed", "completed_foreign"} for mv in user_progress["progress"] for v in mv.values()):
         return _completed_response(tasks_data, progress_data, campaign_id, user_id)
 
     # Get configuration parameters
@@ -576,8 +576,8 @@ def get_next_item_dynamic(
 
     # Find incomplete items (None or completed_foreign status)
     incomplete_indices = [
-        i for i, l in enumerate(user_progress["progress"])
-        if not all(v in {"completed", "completed_foreign"} for v in l.values())
+        i for i, mv in enumerate(user_progress["progress"])
+        if not all(v in {"completed", "completed_foreign"} for v in mv.values())
     ]
     
     # If no incomplete items, user (and everyone) is done

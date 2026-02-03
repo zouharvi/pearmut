@@ -182,7 +182,7 @@ async def _dashboard_data(request: DashboardDataRequest):
         if (
             tasks_data[campaign_id]["info"]["assignment"] != "dynamic" and all(v in {"completed", "completed_foreign"} for v in entry["progress"])
         ) or (
-            tasks_data[campaign_id]["info"]["assignment"] == "dynamic" and all(v in {"completed", "completed_foreign"} for l in entry["progress"] for v in l)
+            tasks_data[campaign_id]["info"]["assignment"] == "dynamic" and all(v in {"completed", "completed_foreign"} for mv in entry["progress"] for v in mv.values())
         ):
             entry["threshold_passed"] = check_validation_threshold(
                 tasks_data, progress_data, campaign_id, user_id
