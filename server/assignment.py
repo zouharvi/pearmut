@@ -512,8 +512,8 @@ def get_next_item_dynamic(
     # First check if docs_per_user limit is reached
     if (docs_per_user := campaign_data["info"].get("docs_per_user")) is not None:
         # Count specifically number of annotations across models
-        completed_count = sum(v == "completed" for mv in user_progress["progress"] for v in mv.values())
-        if completed_count >= docs_per_user:
+        completed_docs = sum(v == "completed" for mv in user_progress["progress"] for v in mv.values())
+        if completed_docs >= docs_per_user:
             return _completed_response(tasks_data, progress_data, campaign_id, user_id)
     # Otherwise check if all models completed for all items
     elif all(v in {"completed", "completed_foreign"} for mv in user_progress["progress"] for v in mv.values()):
