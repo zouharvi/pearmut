@@ -23,9 +23,9 @@ def _get_instructions(tasks_data: dict, campaign_id: str) -> str:
     return PROTOCOL_INSTRUCTIONS.get(campaign_info.get("protocol", ""), "")
 
 
-def _get_welcome_item(data_welcome: list, item_index: int) -> list:
+def _get_welcome_document(data_welcome: list, item_index: int) -> list:
     """
-    Get a welcome item by flattened index from data_welcome structure.
+    Get a welcome document by flattened item index from data_welcome structure.
     data_welcome is a list of documents, each document is a list of items.
     item_index is the flattened index across all items in all documents.
     Returns the document (list of items) containing the item at item_index.
@@ -37,6 +37,11 @@ def _get_welcome_item(data_welcome: list, item_index: int) -> list:
             return doc
         current_index += len(doc)
     raise IndexError(f"Welcome item index {item_index} out of range")
+
+
+def _get_first_incomplete_welcome(progress_welcome: list) -> int:
+    """Get the index of the first incomplete welcome item."""
+    return next(i for i, v in enumerate(progress_welcome) if not v)
 
 
 
@@ -159,7 +164,7 @@ def get_i_item_taskbased(
         
         # Get the welcome document containing this item
         try:
-            welcome_doc = _get_welcome_item(data_all[campaign_id].get("data_welcome", []), welcome_index)
+            welcome_doc = _get_welcome_document(data_all[campaign_id].get("data_welcome", []), welcome_index)
         except IndexError:
             return JSONResponse(content="Welcome item index out of range", status_code=400)
         
@@ -253,7 +258,7 @@ def get_i_item_singlestream(
         
         # Get the welcome document containing this item
         try:
-            welcome_doc = _get_welcome_item(data_all[campaign_id].get("data_welcome", []), welcome_index)
+            welcome_doc = _get_welcome_document(data_all[campaign_id].get("data_welcome", []), welcome_index)
         except IndexError:
             return JSONResponse(content="Welcome item index out of range", status_code=400)
         
@@ -329,7 +334,7 @@ def get_next_item_taskbased(
     
     # Check if there are incomplete welcome items first
     if progress_welcome and not all(progress_welcome):
-        item_i = min([i for i, v in enumerate(progress_welcome) if not v])
+        item_i = _get_first_incomplete_welcome(progress_welcome)
         
         # try to get existing annotations if any
         items_existing = get_db_log_item(campaign_id, user_id, f"welcome_{item_i}")
@@ -356,7 +361,7 @@ def get_next_item_taskbased(
                     for k, v in data_all[campaign_id]["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": _get_welcome_item(data_all[campaign_id]["data_welcome"], item_i),
+                "payload": _get_welcome_document(data_all[campaign_id]["data_welcome"], item_i),
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -422,7 +427,7 @@ def get_next_item_singlestream(
     # Check if there are incomplete welcome items first - must complete all before proceeding
     if progress_welcome and not all(progress_welcome):
         # Find first incomplete welcome item (sequential, not random)
-        item_i = min([i for i, v in enumerate(progress_welcome) if not v])
+        item_i = _get_first_incomplete_welcome(progress_welcome)
         
         # try to get existing annotations if any
         # note the user_id since welcome items are per-user
@@ -450,7 +455,7 @@ def get_next_item_singlestream(
                     for k, v in data_all[campaign_id]["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": _get_welcome_item(data_all[campaign_id]["data_welcome"], item_i),
+                "payload": _get_welcome_document(data_all[campaign_id]["data_welcome"], item_i),
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -524,7 +529,7 @@ def get_next_item_dynamic(
     # Check if there are incomplete welcome items first - must complete all before proceeding
     if progress_welcome and not all(progress_welcome):
         # Find first incomplete welcome item (sequential)
-        item_i = min([i for i, v in enumerate(progress_welcome) if not v])
+        item_i = _get_first_incomplete_welcome(progress_welcome)
         
         # try to get existing annotations if any
         # note the user_id since welcome items are per-user
@@ -552,7 +557,7 @@ def get_next_item_dynamic(
                     for k, v in campaign_data["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": _get_welcome_item(campaign_data["data_welcome"], item_i),
+                "payload": _get_welcome_document(campaign_data["data_welcome"], item_i),
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
