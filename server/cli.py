@@ -275,11 +275,14 @@ def _add_single_campaign(campaign_data, overwrite, server):
 
     # Validate and process data_welcome if present
     data_welcome = campaign_data.get("data_welcome", [])
+    welcome_item_count = 0
     if data_welcome:
         if not isinstance(data_welcome, list):
             raise ValueError("'data_welcome' must be a list of documents.")
         # Validate welcome documents structure - each should be a list of items
         for doc_i, doc in enumerate(data_welcome):
+            if not isinstance(doc, list):
+                raise ValueError(f"Welcome document {doc_i} must be a list of items.")
             try:
                 _validate_item_structure(doc)
             except ValueError as e:
@@ -290,6 +293,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
             for item in doc:
                 item["item_id"] = f"welcome_{item_counter}"
                 item_counter += 1
+        welcome_item_count = item_counter
 
     if assignment == "task-based":
         tasks = campaign_data["data"]
@@ -474,7 +478,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
                     )
                 )
             ),
-            "progress_welcome": [False] * len(data_welcome) if data_welcome else [],
+            "progress_welcome": [False] * welcome_item_count,
             "time_start": None,
             "time_end": None,
             "time": 0,

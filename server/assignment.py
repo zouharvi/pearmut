@@ -23,6 +23,22 @@ def _get_instructions(tasks_data: dict, campaign_id: str) -> str:
     return PROTOCOL_INSTRUCTIONS.get(campaign_info.get("protocol", ""), "")
 
 
+def _get_welcome_item(data_welcome: list, item_index: int) -> list:
+    """
+    Get a welcome item by flattened index from data_welcome structure.
+    data_welcome is a list of documents, each document is a list of items.
+    item_index is the flattened index across all items in all documents.
+    Returns the document (list of items) containing the item at item_index.
+    """
+    current_index = 0
+    for doc in data_welcome:
+        if current_index <= item_index < current_index + len(doc):
+            # Found the right document
+            return doc
+        current_index += len(doc)
+    raise IndexError(f"Welcome item index {item_index} out of range")
+
+
 
 def _completed_response(
     tasks_data: dict,
@@ -137,7 +153,14 @@ def get_i_item_taskbased(
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
         
-        if welcome_index < 0 or welcome_index >= len(data_all[campaign_id].get("data_welcome", [])):
+        # Validate against total number of welcome items (not documents)
+        if welcome_index < 0 or welcome_index >= len(progress_welcome):
+            return JSONResponse(content="Welcome item index out of range", status_code=400)
+        
+        # Get the welcome document containing this item
+        try:
+            welcome_doc = _get_welcome_item(data_all[campaign_id].get("data_welcome", []), welcome_index)
+        except IndexError:
             return JSONResponse(content="Welcome item index out of range", status_code=400)
         
         return JSONResponse(
@@ -155,7 +178,7 @@ def get_i_item_taskbased(
                     for k, v in data_all[campaign_id]["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": data_all[campaign_id]["data_welcome"][welcome_index],
+                "payload": welcome_doc,
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -224,7 +247,14 @@ def get_i_item_singlestream(
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
         
-        if welcome_index < 0 or welcome_index >= len(data_all[campaign_id].get("data_welcome", [])):
+        # Validate against total number of welcome items (not documents)
+        if welcome_index < 0 or welcome_index >= len(progress_welcome):
+            return JSONResponse(content="Welcome item index out of range", status_code=400)
+        
+        # Get the welcome document containing this item
+        try:
+            welcome_doc = _get_welcome_item(data_all[campaign_id].get("data_welcome", []), welcome_index)
+        except IndexError:
             return JSONResponse(content="Welcome item index out of range", status_code=400)
         
         return JSONResponse(
@@ -242,7 +272,7 @@ def get_i_item_singlestream(
                     for k, v in data_all[campaign_id]["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": data_all[campaign_id]["data_welcome"][welcome_index],
+                "payload": welcome_doc,
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -326,7 +356,7 @@ def get_next_item_taskbased(
                     for k, v in data_all[campaign_id]["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": data_all[campaign_id]["data_welcome"][item_i],
+                "payload": _get_welcome_item(data_all[campaign_id]["data_welcome"], item_i),
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -420,7 +450,7 @@ def get_next_item_singlestream(
                     for k, v in data_all[campaign_id]["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": data_all[campaign_id]["data_welcome"][item_i],
+                "payload": _get_welcome_item(data_all[campaign_id]["data_welcome"], item_i),
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -522,7 +552,7 @@ def get_next_item_dynamic(
                     for k, v in campaign_data["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": campaign_data["data_welcome"][item_i],
+                "payload": _get_welcome_item(campaign_data["data_welcome"], item_i),
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
