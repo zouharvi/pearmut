@@ -610,3 +610,101 @@ export function debounce(fn: Function, delay: number): (...args: any[]) => void 
         timer = window.setTimeout(() => fn(...args), delay)
     }
 }
+
+/**
+ * Type definition for form item response
+ */
+export type FormResponse = Record<string, string | boolean>
+
+/**
+ * Check if an item is a form item (simple string)
+ */
+export function isFormItem(item: any): boolean {
+    return typeof item === 'string'
+}
+
+/**
+ * Render a form item in the output div
+ * @param formHtml - HTML string containing the form
+ * @param itemIndex - Index of the item in the document
+ * @returns jQuery element containing the form
+ */
+export function renderFormItem(formHtml: string, itemIndex: number): JQuery<HTMLElement> {
+    const formBlock = $(`
+        <div class="output_block form-item" data-item-index="${itemIndex}">
+            <div class="form-content">
+                ${formHtml}
+            </div>
+        </div>
+    `)
+    return formBlock
+}
+
+/**
+ * Collect form data from all form items in the current view
+ * @returns Array of form responses, one per form item
+ */
+export function collectFormData(): Array<FormResponse> {
+    const formResponses: Array<FormResponse> = []
+    
+    $(".output_block.form-item").each(function() {
+        const formData: FormResponse = {}
+        const formBlock = $(this)
+        
+        // Collect all input fields
+        formBlock.find("input, select, textarea").each(function() {
+            const element = $(this)
+            const name = element.attr("name")
+            
+            if (!name) return
+            
+            const type = element.attr("type")
+            if (type === "checkbox") {
+                formData[name] = element.is(":checked")
+            } else if (type === "radio") {
+                if (element.is(":checked")) {
+                    formData[name] = element.val() as string
+                }
+            } else {
+                formData[name] = element.val() as string
+            }
+        })
+        
+        formResponses.push(formData)
+    })
+    
+    return formResponses
+}
+
+/**
+ * Check if all required form fields are filled
+ * @returns true if all required fields are filled, false otherwise
+ */
+export function areFormFieldsComplete(): boolean {
+    let allComplete = true
+    
+    $(".output_block.form-item").each(function() {
+        const formBlock = $(this)
+        
+        // Check all required fields
+        formBlock.find("input[required], select[required], textarea[required]").each(function() {
+            const element = $(this)
+            const type = element.attr("type")
+            
+            if (type === "checkbox" || type === "radio") {
+                const name = element.attr("name")
+                // For radio/checkbox, at least one with the same name should be checked
+                if (name && formBlock.find(`input[name="${name}"]:checked`).length === 0) {
+                    allComplete = false
+                }
+            } else {
+                const value = element.val()
+                if (!value || (typeof value === 'string' && value.trim() === '')) {
+                    allComplete = false
+                }
+            }
+        })
+    })
+    
+    return allComplete
+}

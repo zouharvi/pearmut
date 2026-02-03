@@ -22,6 +22,11 @@ import {
     computeWordBoundaries,
     detectTextDirection,
     debounce,
+    isFormItem,
+    renderFormItem,
+    collectFormData,
+    areFormFieldsComplete,
+    FormResponse,
 } from './utils';
 
 // Check if frozen mode is enabled (view-only, no annotations)
@@ -38,21 +43,27 @@ type CandidateResponse = {
 // Response for a document with multiple models - keyed by model name
 type DocumentResponse = Record<string, CandidateResponse>
 
+// Form item response type
+type FormItemResponse = FormResponse
+
+// Item can be either a regular annotation item or a form item (string)
+type PayloadItem = {
+    src?: string,  // Optional source text
+    ref?: string,  // Optional reference text
+    tgt: Record<string, string>,  // Dictionary of model->translation
+    checks?: any,
+    instructions?: string,
+    error_spans?: Record<string, Array<ErrorSpan>>,  // Pre-filled error spans keyed by model name
+    validation?: Record<string, Validation> | undefined,  // Validation rules keyed by model name
+} | string  // Form item is just a string containing HTML
+
 type DataPayload = {
     status: string,
     progress: Array<boolean>,
     time: number,
-    payload: Array<{
-        src?: string,  // Optional source text
-        ref?: string,  // Optional reference text
-        tgt: Record<string, string>,  // Dictionary of model->translation
-        checks?: any,
-        instructions?: string,
-        error_spans?: Record<string, Array<ErrorSpan>>,  // Pre-filled error spans keyed by model name
-        validation?: Record<string, Validation> | undefined,  // Validation rules keyed by model name
-    }>,
+    payload: Array<PayloadItem>,
     payload_existing?: {
-        annotation: Array<DocumentResponse>,
+        annotation: Array<DocumentResponse | FormItemResponse>,
         comment?: string
     },
     info: ProtocolInfo
@@ -66,7 +77,7 @@ function getErrorSpansForModel(error_spans: Record<string, Array<ErrorSpan>> | u
     return error_spans[model] || []
 }
 
-let response_log: Array<DocumentResponse> = []
+let response_log: Array<DocumentResponse | FormItemResponse> = []
 let action_log: Array<any> = []
 let validations: Array<Record<string, Validation> | undefined> = []
 let output_blocks: Array<JQuery<HTMLElement>> = []
@@ -102,15 +113,37 @@ function check_unlock() {
         return
     }
 
+    // Check if there are any form items with required fields
+    if ($(".output_block.form-item").length > 0) {
+        if (!areFormFieldsComplete()) {
+            $("#button_next").attr("disabled", "disabled")
+            $("#button_next").val("Next 🚧")
+            return
+        }
+        // If we only have form items, enable the button
+        if ($(".output_candidate").length === 0) {
+            $("#button_next").removeAttr("disabled")
+            $("#button_next").val("Next ✅")
+            return
+        }
+    }
+
     // Check if all error spans are complete (have required severity and category based on protocol)
     if (protocol_error_spans || protocol_error_categories) {
         for (const doc_responses of response_log) {
-            for (const r of Object.values(doc_responses)) {
-                for (const span of r.error_spans) {
-                    if (!isSpanComplete(span, protocol_error_categories)) {
-                        $("#button_next").attr("disabled", "disabled")
-                        $("#button_next").val("Next 🚧")
-                        return
+            // Skip form item responses
+            if (typeof doc_responses === 'object' && !Array.isArray(doc_responses)) {
+                // Check if it's a DocumentResponse (has model keys with CandidateResponse values)
+                const values = Object.values(doc_responses)
+                if (values.length > 0 && values[0] && typeof values[0] === 'object' && 'error_spans' in values[0]) {
+                    for (const r of values as CandidateResponse[]) {
+                        for (const span of r.error_spans) {
+                            if (!isSpanComplete(span, protocol_error_categories)) {
+                                $("#button_next").attr("disabled", "disabled")
+                                $("#button_next").val("Next 🚧")
+                                return
+                            }
+                        }
                     }
                 }
             }
@@ -118,19 +151,29 @@ function check_unlock() {
     }
 
     // Check if all scores are set
-    let all_done = response_log.every(doc_responses =>
-        Object.values(doc_responses).every(r => {
-            if (r.sliders) {
-                // Custom sliders mode: all sliders must be non-null (no score required)
-                // Note: when sliders is {} (empty, from sliders: []), Object.values returns []
-                // and every() returns true (vacuous truth), allowing immediate progression
-                return Object.values(r.sliders).every(val => val !== null)
-            } else {
-                // Single score mode: the score must be set
-                return r.score != null
+    let all_done = response_log.every(doc_responses => {
+        // Form items don't need scores
+        if (typeof doc_responses === 'object' && !Array.isArray(doc_responses)) {
+            const values = Object.values(doc_responses)
+            // Empty object or FormItemResponse (doesn't have error_spans)
+            if (values.length === 0 || (values[0] && typeof values[0] !== 'object') || !('error_spans' in values[0])) {
+                return true
             }
-        })
-    )
+            // DocumentResponse - check scores
+            return values.every((r: any) => {
+                if (r.sliders) {
+                    // Custom sliders mode: all sliders must be non-null (no score required)
+                    // Note: when sliders is {} (empty, from sliders: []), Object.values returns []
+                    // and every() returns true (vacuous truth), allowing immediate progression
+                    return Object.values(r.sliders).every(val => val !== null)
+                } else {
+                    // Single score mode: the score must be set
+                    return r.score != null
+                }
+            })
+        }
+        return true
+    })
     if (!all_done) {
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Next 🚧")
@@ -226,13 +269,22 @@ async function display_next_payload(response: DataPayload) {
     // Initialize response log - use payload_existing if available
     if (response.payload_existing) {
         response_log = response.payload_existing.annotation.map(docResponses => {
+            // Check if it's a form item response
+            if (typeof docResponses === 'object' && !Array.isArray(docResponses)) {
+                const values = Object.values(docResponses)
+                // If it's a simple object without error_spans, treat as FormItemResponse
+                if (values.length === 0 || (values[0] && typeof values[0] !== 'object') || !('error_spans' in values[0])) {
+                    return docResponses as FormItemResponse
+                }
+            }
+            // Otherwise it's a DocumentResponse
             const result: DocumentResponse = {}
             for (const [model, r] of Object.entries(docResponses)) {
                 result[model] = {
-                    "score": r.score,
-                    "sliders": r.sliders ? { ...r.sliders } : undefined,
-                    "error_spans": r.error_spans ? [...r.error_spans] : [],
-                    "textfield": r.textfield ?? null,
+                    "score": (r as any).score,
+                    "sliders": (r as any).sliders ? { ...(r as any).sliders } : undefined,
+                    "error_spans": (r as any).error_spans ? [...(r as any).error_spans] : [],
+                    "textfield": (r as any).textfield ?? null,
                 }
             }
             return result
@@ -245,8 +297,13 @@ async function display_next_payload(response: DataPayload) {
         }
     } else {
         response_log = data.map(item => {
+            // Check if item is a form item (string)
+            if (isFormItem(item)) {
+                return {} as FormItemResponse  // Will be filled when form is submitted
+            }
+            // Regular annotation item
             const result: DocumentResponse = {}
-            for (const model of Object.keys(item.tgt)) {
+            for (const model of Object.keys((item as any).tgt)) {
                 // Check if custom sliders are defined (including empty array)
                 const hasCustomSliders = response.info.sliders !== undefined
                 result[model] = {
@@ -266,7 +323,7 @@ async function display_next_payload(response: DataPayload) {
         })
         $("#settings_comment").val("")
     }
-    validations = data.map(item => item.validation)
+    validations = data.map(item => isFormItem(item) ? undefined : (item as Exclude<PayloadItem, string>).validation)
     output_blocks = []
     action_log = [{ "time": Date.now() / 1000, "action": "load" }]
     has_unsaved_work = false
@@ -293,31 +350,49 @@ async function display_next_payload(response: DataPayload) {
 
     for (let item_i = 0; item_i < data.length; item_i++) {
         let item = data[item_i]
+        
+        // Check if this is a form item (simple string)
+        if (isFormItem(item)) {
+            const formBlock = renderFormItem(item as string, item_i)
+            $("#output_div").append(formBlock)
+            output_blocks.push(formBlock)
+            
+            // Add event listeners to form fields to trigger check_unlock
+            formBlock.find("input, select, textarea").on("change input", () => {
+                check_unlock()
+            })
+            
+            continue  // Skip regular item rendering
+        }
+        
+        // Cast to regular item type
+        const regularItem = item as Exclude<PayloadItem, string>
+        
         // character-level stuff won't work on media tags
-        let no_src_char = !item.src || isMediaContent(item.src)
-        let no_ref_char = !item.ref || isMediaContent(item.ref)
+        let no_src_char = !regularItem.src || isMediaContent(regularItem.src)
+        let no_ref_char = !regularItem.ref || isMediaContent(regularItem.ref)
 
         // Detect text direction for source and reference
-        let src_dir = item.src && !no_src_char ? detectTextDirection(item.src) : 'ltr'
-        let ref_dir = item.ref && !no_ref_char ? detectTextDirection(item.ref) : 'ltr'
+        let src_dir = regularItem.src && !no_src_char ? detectTextDirection(regularItem.src) : 'ltr'
+        let ref_dir = regularItem.ref && !no_ref_char ? detectTextDirection(regularItem.ref) : 'ltr'
 
         // Build character spans for source and reference
         let src_chars = ""
-        if (item.src) {
-            src_chars = no_src_char ? item.src : contentToCharSpans(item.src, "src_char")
+        if (regularItem.src) {
+            src_chars = no_src_char ? regularItem.src : contentToCharSpans(regularItem.src, "src_char")
         }
         let ref_chars = ""
-        if (item.ref) {
-            ref_chars = no_ref_char ? item.ref : contentToCharSpans(item.ref, "ref_char")
+        if (regularItem.ref) {
+            ref_chars = no_ref_char ? regularItem.ref : contentToCharSpans(regularItem.ref, "ref_char")
         }
 
         // Build source and reference boxes - only if they exist
         let srcRefBoxes = ""
-        if (item.src) {
+        if (regularItem.src) {
             let src_style = src_dir === 'rtl' ? ' style="direction: rtl;"' : ''
             srcRefBoxes += `<div class="output_src"${src_style}>${src_chars}</div>`
         }
-        if (item.ref) {
+        if (regularItem.ref) {
             let ref_style = ref_dir === 'rtl' ? ' style="direction: rtl;"' : ''
             srcRefBoxes += `<div class="output_ref"${ref_style}>${ref_chars}</div>`
         }
@@ -331,15 +406,18 @@ async function display_next_payload(response: DataPayload) {
         </div>
         `)
 
-        if (item.instructions) {
-            output_block.find(".instructions_message").html(item.instructions)
+        if (regularItem.instructions) {
+            output_block.find(".instructions_message").html(regularItem.instructions)
         }
 
         // Add each model's output
-        let src_chars_els = no_src_char || !item.src ? [] : output_block.find(".src_char").toArray()
-        let ref_chars_els = no_ref_char || !item.ref ? [] : output_block.find(".ref_char").toArray()
+        let src_chars_els = no_src_char || !regularItem.src ? [] : output_block.find(".src_char").toArray()
+        let ref_chars_els = no_ref_char || !regularItem.ref ? [] : output_block.find(".ref_char").toArray()
 
-        for (const [model, tgt] of Object.entries(item.tgt)) {
+        for (const [model, tgt] of Object.entries(regularItem.tgt)) {
+            // Type-safe accessor for response_log in this regular item context
+            const currentResponse = response_log[item_i] as DocumentResponse
+            
             let no_tgt_char = isMediaContent(tgt)
             let tgt_dir = !no_tgt_char ? detectTextDirection(tgt) : 'ltr'
             let tgt_chars = no_tgt_char ? tgt : (contentToCharSpans(tgt, "tgt_char") + (protocol_error_spans ? ' <span class="tgt_char char_missing">[missing]</span>' : ""))
@@ -489,7 +567,7 @@ async function display_next_payload(response: DataPayload) {
                                     "severity": null,
                                 }
 
-                                if (response_log[item_i][model].error_spans.some(span => {
+                                if (currentResponse[model].error_spans.some(span => {
                                     return (
                                         (left_i <= span.start_i && right_i >= span.start_i) ||
                                         (left_i <= span.end_i && right_i >= span.end_i)
@@ -508,7 +586,7 @@ async function display_next_payload(response: DataPayload) {
                                     right_i,
                                     () => {
                                         // onDelete callback
-                                        response_log[item_i][model].error_spans = response_log[item_i][model].error_spans.filter(span => span != error_span)
+                                        currentResponse[model].error_spans = currentResponse[model].error_spans.filter(span => span != error_span)
                                         action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
                                         has_unsaved_work = true
                                     },
@@ -538,7 +616,7 @@ async function display_next_payload(response: DataPayload) {
                                 updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el))
 
                                 // store error span
-                                response_log[item_i][model].error_spans.push(error_span)
+                                currentResponse[model].error_spans.push(error_span)
                                 action_log.push({ "time": Date.now() / 1000, "action": "create_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
                                 has_unsaved_work = true
                                 for (let j = left_i; j <= right_i; j++) {
@@ -548,7 +626,7 @@ async function display_next_payload(response: DataPayload) {
                                 }
                             } else {
                                 // check if we are in existing span
-                                if (response_log[item_i][model].error_spans.some(span => i >= span.start_i && i <= span.end_i)) {
+                                if (currentResponse[model].error_spans.some(span => i >= span.start_i && i <= span.end_i)) {
                                     notify("Cannot create overlapping error spans")
                                     $(".src_char").removeClass("highlighted")
                                     candidate_block.find(".tgt_char").removeClass("highlighted")
@@ -562,24 +640,25 @@ async function display_next_payload(response: DataPayload) {
                 })
             }
 
-            // Load error spans - use payload_existing if available, otherwise use item.error_spans
-            const existingErrorSpans = response.payload_existing?.annotation[item_i]?.[model]?.error_spans
-            const candidateSpans = existingErrorSpans || getErrorSpansForModel(item.error_spans, model)
+            // Load error spans - use payload_existing if available, otherwise use regularItem.error_spans
+            const existingAnnotation = response.payload_existing?.annotation[item_i]
+            const existingErrorSpans = existingAnnotation && typeof existingAnnotation === 'object' && model in existingAnnotation ? (existingAnnotation as any)[model]?.error_spans : undefined
+            const candidateSpans = existingErrorSpans || getErrorSpansForModel(regularItem.error_spans, model)
 
             if (!no_tgt_char && (protocol_error_spans || protocol_error_categories) && candidateSpans.length > 0) {
                 // Only reset if loading from payload_existing (to avoid duplicating pre-filled spans)
                 if (existingErrorSpans) {
-                    response_log[item_i][model].error_spans = []
+                    currentResponse[model].error_spans = []
                 }
 
                 for (const prefilled of candidateSpans) {
                     const left_i = prefilled.start_i, right_i = prefilled.end_i
                     if (left_i < 0 || right_i >= tgt_chars_objs.length || left_i > right_i) continue
                     let error_span: ErrorSpan = { ...prefilled }
-                    response_log[item_i][model].error_spans.push(error_span)
+                    currentResponse[model].error_spans.push(error_span)
 
                     let toolbox = createSpanToolbox(protocol_error_categories, error_span, tgt_chars_objs, left_i, right_i, () => {
-                        response_log[item_i][model].error_spans = response_log[item_i][model].error_spans.filter(s => s != error_span)
+                        currentResponse[model].error_spans = currentResponse[model].error_spans.filter(s => s != error_span)
                         action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
                         has_unsaved_work = true
                     }, frozenMode)
@@ -625,8 +704,8 @@ async function display_next_payload(response: DataPayload) {
                         label.text(`${val}/${sliderMax}`)
 
                         // Store in sliders field
-                        if (response_log[item_i][model].sliders![sliderName] == null) {
-                            response_log[item_i][model].sliders![sliderName] = val
+                        if (currentResponse[model].sliders![sliderName] == null) {
+                            currentResponse[model].sliders![sliderName] = val
                             has_unsaved_work = true
                             check_unlock()
                             action_log.push({ "time": Date.now() / 1000, "action": sliderName, "index": item_i, "model": model, "value": val })
@@ -641,7 +720,7 @@ async function display_next_payload(response: DataPayload) {
                         label.text(`${val}/${sliderMax}`)
 
                         // Store in sliders field
-                        response_log[item_i][model].sliders![sliderName] = val
+                        currentResponse[model].sliders![sliderName] = val
                         action_log.push({ "time": Date.now() / 1000, "action": sliderName, "index": item_i, "model": model, "value": val })
                         has_unsaved_work = true
                         check_unlock()
@@ -654,12 +733,13 @@ async function display_next_payload(response: DataPayload) {
 
                     // Pre-fill score from payload_existing if available
                     let existingScore: number | null = null
-                    existingScore = response.payload_existing?.annotation[item_i]?.[model]?.sliders?.[sliderName] ?? null
+                    const existingAnnotation2 = response.payload_existing?.annotation[item_i]
+                    existingScore = existingAnnotation2 && typeof existingAnnotation2 === 'object' && model in existingAnnotation2 ? (existingAnnotation2 as any)[model]?.sliders?.[sliderName] ?? null : null
 
                     if (existingScore != null) {
                         slider.val(existingScore)
                         label.text(`${existingScore}/${sliderMax}`)
-                        response_log[item_i][model].sliders![sliderName] = existingScore
+                        currentResponse[model].sliders![sliderName] = existingScore
                     }
                 }
             } else if (!hasNoSliders) {
@@ -673,8 +753,8 @@ async function display_next_payload(response: DataPayload) {
                     let val = parseInt((<HTMLInputElement>this).value)
                     label.text(`${val}/100`)
 
-                    if (response_log[item_i][model].score == null) {
-                        response_log[item_i][model].score = val
+                    if (currentResponse[model].score == null) {
+                        currentResponse[model].score = val
                         has_unsaved_work = true
                         check_unlock()
                         action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
@@ -686,7 +766,7 @@ async function display_next_payload(response: DataPayload) {
 
                     let val = parseInt((<HTMLInputElement>this).value)
                     label.text(`${val}/100`)
-                    response_log[item_i][model].score = val
+                    currentResponse[model].score = val
                     has_unsaved_work = true
                     check_unlock()
                     // push only for change which happens just once
@@ -699,11 +779,12 @@ async function display_next_payload(response: DataPayload) {
                 }
 
                 // Pre-fill score from payload_existing if available
-                const existingScore = response.payload_existing?.annotation[item_i]?.[model]?.score
+                const existingAnnotation3 = response.payload_existing?.annotation[item_i]
+                const existingScore = existingAnnotation3 && typeof existingAnnotation3 === 'object' && model in existingAnnotation3 ? (existingAnnotation3 as any)[model]?.score : undefined
                 if (existingScore != null) {
                     slider.val(existingScore)
                     label.text(`${existingScore}/100`)
-                    response_log[item_i][model].score = existingScore
+                    currentResponse[model].score = existingScore
                 }
             }
 
@@ -716,7 +797,7 @@ async function display_next_payload(response: DataPayload) {
                 // Note: tgt is from trusted campaign data, jQuery .val() safely escapes any content
                 if (response.info.textfield === "prefilled") {
                     textfield.val(tgt)
-                    response_log[item_i][model].textfield = tgt
+                    currentResponse[model].textfield = tgt
                 }
 
                 // Handle toggle button for "hidden" mode
@@ -741,7 +822,7 @@ async function display_next_payload(response: DataPayload) {
                     if (frozenMode) return
 
                     let val = (<HTMLTextAreaElement>this).value
-                    response_log[item_i][model].textfield = val
+                    currentResponse[model].textfield = val
                     has_unsaved_work = true
                     // Log with debounce to avoid excessive logging during typing
                     logTextfieldInput()
@@ -753,16 +834,17 @@ async function display_next_payload(response: DataPayload) {
                 }
 
                 // Pre-fill textfield from payload_existing if available (overrides prefilled mode)
-                const existingTextfield = response.payload_existing?.annotation[item_i]?.[model]?.textfield
+                const existingAnnotation4 = response.payload_existing?.annotation[item_i]
+                const existingTextfield = existingAnnotation4 && typeof existingAnnotation4 === 'object' && model in existingAnnotation4 ? (existingAnnotation4 as any)[model]?.textfield : undefined
                 if (existingTextfield != null) {
                     textfield.val(existingTextfield)
-                    response_log[item_i][model].textfield = existingTextfield
+                    currentResponse[model].textfield = existingTextfield
                 }
             }
         }
 
         // Source character hover effects
-        if (!no_src_char && item.src) {
+        if (!no_src_char && regularItem.src) {
             src_chars_els.forEach((obj, i) => {
                 $(obj).on("mouseleave", function () {
                     $(".src_char").removeClass("highlighted")
@@ -795,7 +877,7 @@ async function display_next_payload(response: DataPayload) {
         }
 
         // Reference character hover effects
-        if (!no_ref_char && item.ref) {
+        if (!no_ref_char && regularItem.ref) {
             ref_chars_els.forEach((obj, i) => {
                 $(obj).on("mouseleave", function () {
                     $(".src_char").removeClass("highlighted")
@@ -921,14 +1003,25 @@ async function performValidation(): Promise<Array<boolean> | null> {
     // Validate each item and each model
     for (let item_ij = 0; item_ij < response_log.length; item_ij++) {
         let results_local = []
-        const modelNames = Object.keys(response_log[item_ij])
+        const itemResponse = response_log[item_ij]
+        
+        // Skip form items - they don't need validation
+        if (typeof itemResponse === 'object' && Object.keys(itemResponse).length > 0) {
+            const firstValue = Object.values(itemResponse)[0]
+            if (typeof firstValue !== 'object' || !('error_spans' in firstValue)) {
+                // This is a form item, skip validation
+                continue
+            }
+        }
+        
+        const modelNames = Object.keys(itemResponse)
 
         for (let model of modelNames) {
             if (validations[item_ij] == undefined) {
                 continue
             }
             // Use validateResponse to support score_greaterthan conditions
-            const result = validateResponse(response_log[item_ij], validations[item_ij]!, model)
+            const result = validateResponse(itemResponse as Record<string, any>, validations[item_ij]!, model)
 
 
             // if we fail and there's a message, prevent loading next item and show warning
@@ -957,6 +1050,24 @@ async function performValidation(): Promise<Array<boolean> | null> {
 }
 
 $("#button_next").on("click", async function () {
+    // Collect form data if there are form items
+    const formData = collectFormData()
+    if (formData.length > 0) {
+        // Update response_log with form data
+        let formIndex = 0
+        for (let i = 0; i < response_log.length; i++) {
+            // Check if this is a form item response (empty object initially)
+            if (Object.keys(response_log[i]).length === 0 || 
+                (typeof response_log[i] === 'object' && !Array.isArray(response_log[i]) && 
+                 Object.values(response_log[i]).every(v => typeof v !== 'object' || !('error_spans' in v)))) {
+                if (formIndex < formData.length) {
+                    response_log[i] = formData[formIndex]
+                    formIndex++
+                }
+            }
+        }
+    }
+    
     // Perform validation unless in skip tutorial mode
     let validationResult;
     if (!skip_tutorial_mode) {
