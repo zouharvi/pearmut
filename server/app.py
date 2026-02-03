@@ -17,8 +17,10 @@ from .results_export import (
 )
 from .utils import (
     ROOT,
+    RESET_MARKER,
     TOKEN_MAIN,
     check_validation_threshold,
+    get_db_log,
     load_progress_data,
     save_db_payload,
     save_progress_data,
@@ -171,6 +173,57 @@ async def _dashboard_data(request: DashboardDataRequest):
     # Get threshold info for the campaign
     validation_threshold = tasks_data[campaign_id]["info"].get("validation_threshold")
 
+    # For single-stream and dynamic, calculate user-specific and global progress
+    user_finished_counts = {}
+    global_progress_count = 0
+    
+    if assignment in ["single-stream", "dynamic"]:
+        # Get all annotations from the database
+        annotations = get_db_log(campaign_id)
+        
+        # Build user_items and global_items, respecting reset markers
+        # For each (user_id, item_i) pair, track if there's a reset marker
+        user_item_reset = {}  # (user_id, item_i) -> last_reset_index
+        for idx, entry in enumerate(annotations):
+            if entry.get("annotation") == RESET_MARKER:
+                user_id_entry = entry.get("user_id")
+                item_i_entry = entry.get("item_i")
+                if user_id_entry and item_i_entry is not None:
+                    user_item_reset[(user_id_entry, item_i_entry)] = idx
+        
+        # Count unique items each user has annotated (excluding welcome items and respecting resets)
+        for user_id in progress_data[campaign_id].keys():
+            user_items = set()
+            for idx, entry in enumerate(annotations):
+                if (
+                    entry.get("user_id") == user_id
+                    and entry.get("annotation") != RESET_MARKER
+                    and entry.get("item_i") is not None
+                    and not isinstance(entry.get("item_i"), str)  # Exclude welcome items
+                ):
+                    # Only count if this entry is after the last reset for this (user, item) pair
+                    reset_idx = user_item_reset.get((user_id, entry.get("item_i")), -1)
+                    if idx > reset_idx:
+                        user_items.add(entry.get("item_i"))
+            user_finished_counts[user_id] = len(user_items)
+        
+        # Count global progress: unique items that have at least one annotation (respecting resets)
+        # For global, an item is counted if ANY user has annotated it after their last reset
+        global_items = set()
+        for idx, entry in enumerate(annotations):
+            if (
+                entry.get("annotation") != RESET_MARKER
+                and entry.get("item_i") is not None
+                and not isinstance(entry.get("item_i"), str)  # Exclude welcome items
+            ):
+                user_id_entry = entry.get("user_id")
+                item_i_entry = entry.get("item_i")
+                # Only count if this entry is after the last reset for this (user, item) pair
+                reset_idx = user_item_reset.get((user_id_entry, item_i_entry), -1)
+                if idx > reset_idx:
+                    global_items.add(item_i_entry)
+        global_progress_count = len(global_items)
+
     for user_id, user_val in progress_data[campaign_id].items():
         # shallow copy
         entry = dict(user_val)
@@ -189,6 +242,11 @@ async def _dashboard_data(request: DashboardDataRequest):
         if not is_privileged:
             entry["token_correct"] = None
             entry["token_incorrect"] = None
+
+        # Add user-specific progress counts for single-stream and dynamic
+        if assignment in ["single-stream", "dynamic"]:
+            entry["finished_by_user"] = user_finished_counts.get(user_id, 0)
+            entry["global_progress"] = global_progress_count
 
         progress_new[user_id] = entry
 
