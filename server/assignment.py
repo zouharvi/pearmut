@@ -237,7 +237,7 @@ def get_next_item_taskbased(
     progress_welcome = user_progress.get("progress_welcome", [])
 
     # Check if there are incomplete welcome items first
-    if progress_welcome and not all(progress_welcome):
+    if not all(progress_welcome):
         # Find first incomplete welcome item
         item_i = next(i for i, v in enumerate(progress_welcome) if not v)
         item_id = f"welcome_{item_i}"
@@ -331,7 +331,7 @@ def get_next_item_singlestream(
     progress_welcome = user_progress.get("progress_welcome", [])
 
     # Check if there are incomplete welcome items first - must complete all before proceeding
-    if progress_welcome and not all(progress_welcome):
+    if not all(progress_welcome):
         # Find first incomplete welcome item (sequential, not random)
         item_i = next(i for i, v in enumerate(progress_welcome) if not v)
         item_id = f"welcome_{item_i}"
@@ -434,7 +434,7 @@ def get_next_item_dynamic(
     progress_welcome = user_progress.get("progress_welcome", [])
 
     # Check if there are incomplete welcome items first - must complete all before proceeding
-    if progress_welcome and not all(progress_welcome):
+    if not all(progress_welcome):
         # Find first incomplete welcome item (sequential)
         item_i = next(i for i, v in enumerate(progress_welcome) if not v)
         item_id = f"welcome_{item_i}"
@@ -662,6 +662,10 @@ def reset_task(
                 {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
             )
         progress_data[campaign_id][user_id]["progress"] = [False] * num_items
+        # Reset welcome items progress if it exists
+        if "progress_welcome" in progress_data[campaign_id][user_id]:
+            num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
+            progress_data[campaign_id][user_id]["progress_welcome"] = [False] * num_welcome
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "single-stream":
@@ -679,6 +683,11 @@ def reset_task(
         for uid in progress_data[campaign_id]:
             for item_i in user_items:
                 progress_data[campaign_id][uid]["progress"][item_i] = False
+
+        # Reset welcome items progress for this user if it exists (per-user, not shared)
+        if "progress_welcome" in progress_data[campaign_id][user_id]:
+            num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
+            progress_data[campaign_id][user_id]["progress_welcome"] = [False] * num_welcome
 
         # Reset only the specified user's time
         _reset_user_time(progress_data, campaign_id, user_id)
