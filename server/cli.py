@@ -236,6 +236,27 @@ def _shuffle_campaign_data(campaign_data, rng):
             shuffle_document(doc)
 
 
+def _validate_items_per_user(campaign_data, num_items):
+    """
+    Validate items_per_user parameter if present.
+
+    Args:
+        campaign_data: The campaign data dictionary
+        num_items: Total number of items in the campaign
+
+    Raises:
+        ValueError: If items_per_user is invalid
+    """
+    if "items_per_user" in campaign_data["info"]:
+        items_per_user = campaign_data["info"]["items_per_user"]
+        if not isinstance(items_per_user, int) or items_per_user < 1:
+            raise ValueError("'items_per_user' must be a positive integer")
+        if items_per_user > num_items:
+            raise ValueError(
+                f"'items_per_user' ({items_per_user}) cannot exceed total items ({num_items})"
+            )
+
+
 def _add_single_campaign(campaign_data, overwrite, server):
     """
     Add a single campaign from campaign data dictionary.
@@ -330,14 +351,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
         else:
             raise ValueError("'users' must be an integer or a list.")
         # Validate items_per_user if specified
-        if "items_per_user" in campaign_data["info"]:
-            items_per_user = campaign_data["info"]["items_per_user"]
-            if not isinstance(items_per_user, int) or items_per_user < 1:
-                raise ValueError("'items_per_user' must be a positive integer")
-            if items_per_user > len(tasks):
-                raise ValueError(
-                    f"'items_per_user' ({items_per_user}) cannot exceed total items ({len(tasks)})"
-                )
+        _validate_items_per_user(campaign_data, len(tasks))
     elif assignment == "dynamic":
         tasks = campaign_data["data"]
         if users_spec is None:
@@ -384,14 +398,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
                     item_models == all_models
                 ), "All items must have the same model outputs"
         # Validate items_per_user if specified
-        if "items_per_user" in campaign_data["info"]:
-            items_per_user = campaign_data["info"]["items_per_user"]
-            if not isinstance(items_per_user, int) or items_per_user < 1:
-                raise ValueError("'items_per_user' must be a positive integer")
-            if items_per_user > len(tasks):
-                raise ValueError(
-                    f"'items_per_user' ({items_per_user}) cannot exceed total items ({len(tasks)})"
-                )
+        _validate_items_per_user(campaign_data, len(tasks))
     else:
         raise ValueError(f"Unknown campaign assignment type: {assignment}")
 
