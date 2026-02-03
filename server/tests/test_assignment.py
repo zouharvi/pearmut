@@ -476,7 +476,7 @@ class TestSingleStream:
         })
         save_db_payload("campaign1", {
             "user_id": "user1",
-            "item_i": 2,
+            "item_i": 3,
             "annotation": {"score": 90}
         })
         # Add annotation for user2 on item 0 and 2
@@ -487,7 +487,7 @@ class TestSingleStream:
         })
         save_db_payload("campaign1", {
             "user_id": "user2",
-            "item_i": 1,
+            "item_i": 2,
             "annotation": {"score": 85}
         })
         
