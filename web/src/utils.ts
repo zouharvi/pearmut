@@ -313,8 +313,8 @@ export function createSpanToolbox(
         let cat1 = parts[0]
         let cat2 = parts.length > 1 ? parts[1] : null
 
-        // Handle case where category might not match explicitly if we only have cat1
-        if (!mqm_categories[cat1] && cat1 !== "" && error_span.category !== "") {
+        // Handle case where category might not exist in the taxonomy
+        if (mqm_categories[cat1] === undefined && cat1 !== "" && error_span.category !== "") {
             // fallback if string is exact match?
             cat1 = error_span.category
         }

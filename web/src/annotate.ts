@@ -56,7 +56,7 @@ const state = {
     // Protocol settings for check_unlock
     protocol_error_spans: false,
     protocol_error_categories: false,
-    mqm_categories: {} as { [key: string]: string[] },
+    mqm_categories: MQM_ERROR_CATEGORIES,
 }
 
 // Prevent accidental refresh/navigation when there is ongoing work

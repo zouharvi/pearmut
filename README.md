@@ -187,7 +187,7 @@ For MQM protocol campaigns, you can define a custom error taxonomy instead of us
     "assignment": "task-based",
     "protocol": "MQM",
     "mqm_categories": {
-      "": [],                          # Empty category (always include)
+      "": [],                          # Empty selection option
       "Fluency": ["", "Grammar", "Spelling", "Word order"],
       "Adequacy": ["", "Mistranslation", "Addition", "Omission"],
       "Terminology": ["", "Inconsistent terminology", "Wrong term"],
@@ -199,7 +199,7 @@ For MQM protocol campaigns, you can define a custom error taxonomy instead of us
 }
 ```
 
-If `mqm_categories` is not provided, the default MQM taxonomy will be used. Categories with empty subcategory lists (e.g., `"Style": []`) do not require a subcategory selection.
+If `mqm_categories` is not provided, the default MQM taxonomy will be used. The empty string key `""` provides an unselected state in the dropdown. Categories with empty subcategory lists (e.g., `"Style": []`) do not require a subcategory selection.
 
 See [examples/custom_mqm.json](examples/custom_mqm.json) for a complete example.
 
