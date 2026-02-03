@@ -56,14 +56,35 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         </tr></thead>
         <tbody>`
     for (let user_id in data) {
-        // sum
+        // Calculate regular progress
         let progress_count = (data[user_id]["progress"] as Array<boolean>).reduce((a, b) => a + (b ? 1 : 0), 0)
         let progress_total = (data[user_id]["progress"] as Array<boolean>).length
+
+        // Calculate welcome progress separately
+        let welcome_count = 0
+        let welcome_total = 0
+        let progress_display = ''
+        
+        if (data[user_id]["progress_welcome"]) {
+            const welcome_progress = data[user_id]["progress_welcome"] as Array<boolean>
+            welcome_count = welcome_progress.reduce((a, b) => a + (b ? 1 : 0), 0)
+            welcome_total = welcome_progress.length
+            // Show as "welcome_done/welcome_total+regular_done/regular_total"
+            progress_display = `${welcome_count}/${welcome_total}+${progress_count}/${progress_total}`
+        } else {
+            // No welcome items, just show regular progress
+            progress_display = `${progress_count}/${progress_total}`
+        }
+
+        // Calculate total for status determination
+        let total_count = welcome_count + progress_count
+        let total_total = welcome_total + progress_total
+
         let threshold_passed = data[user_id]["threshold_passed"]
         let status = ''
         if (data[user_id]["time"] == 0)
             status = '💤'
-        else if (data[user_id]["time"] != 0 && progress_count == progress_total) {
+        else if (data[user_id]["time"] != 0 && total_count == total_total) {
             // Use threshold_passed to determine if user passed/failed
             // threshold_passed is null if not complete, true if passed, false if failed
             if (threshold_passed === false)
@@ -79,8 +100,8 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         // user id and emoji
         html += `<td>${status} ${user_id}</td>`
 
-        // time section
-        html += `<td>${progress_count}/${progress_total}</td>`
+        // time section - show separate progress
+        html += `<td>${progress_display}</td>`
         if (data[user_id]["time_start"] == null) {
             html += `<td title="N/A"></td>`
         } else {

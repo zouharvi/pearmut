@@ -36,8 +36,8 @@ export async function get_next_item<T>(): Promise<T | null> {
     // wait for 5 seconds
     await new Promise(resolve => setTimeout(resolve, delay * 1000));
     delay *= 2
-    // if more than 2 minutes, give up
-    if (delay > 120) return null
+    // if more than 1 minute, give up
+    if (delay > 60) return null
   }
 }
 
@@ -81,7 +81,7 @@ export async function log_response(payload: any, item_i: number | null): Promise
   }
 }
 
-export async function get_i_item<T>(item_i: number): Promise<T | null> {
+export async function get_i_item<T>(item_i: number | string): Promise<T | null> {
   /* Fetch a specific item by index for the user from the server. */
   let user_id = searchParams.get("user_id");
   let campaign_id = searchParams.get("campaign_id");

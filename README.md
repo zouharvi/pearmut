@@ -294,6 +294,10 @@ The `score_greaterthan` field specifies the index of the candidate that must hav
 See [examples/tutorial/esa_deen.json](examples/tutorial/esa_deen.json) for a mock campaign with a fully prepared ESA tutorial.
 To use it, simply extract the `data` attribute and prefix it to each task in your campaign.
 
+#### Universal Tutorial Items with `data_welcome`
+
+Use `data_welcome` to add tutorial items that users must complete before starting regular tasks. The structure is a list of documents (same as `data`). Welcome items have IDs `welcome_0`, `welcome_1`, etc. and are tracked separately via `progress_welcome`.
+
 ### Single-stream Assignment
 
 All annotators draw from a shared pool with random assignment:

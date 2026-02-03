@@ -66,6 +66,7 @@ export type DataPayloadItem = {
 export type DataPayload = {
     status: string,
     progress: Array<boolean>,
+    progress_welcome?: Array<boolean>,  // Optional welcome progress
     time: number,
     payload: Array<DataPayloadItem>,
     payload_existing?: {
@@ -173,25 +174,50 @@ export const MQM_ERROR_CATEGORIES: { [key: string]: string[] } = {
 /**
  * Renders the progress bar for annotation tasks
  */
-export function redrawProgress(current_i: number | null, progress: Array<boolean>, onItemClick?: (i: number) => void): void {
-    let html = progress.map((v, i) => {
-        if (i === current_i) {
+export function redrawProgress(
+    current_i: number | string | null,
+    progress_welcome: Array<boolean> | undefined,
+    progress: Array<boolean>,
+    onItemClick?: (i: number | string) => void
+): void {
+    // Combine progress_welcome and progress for display
+    const combinedProgress: Array<{ complete: boolean, id: number | string }> = [];
+
+    // Add welcome items first
+    if (progress_welcome && progress_welcome.length > 0) {
+        progress_welcome.forEach((v, i) => {
+            combinedProgress.push({ complete: v, id: `welcome_${i}` });
+        });
+    }
+
+    // Add regular items
+    progress.forEach((v, i) => {
+        combinedProgress.push({ complete: v, id: i });
+    });
+
+    let html = combinedProgress.map((item, displayIndex) => {
+        const isCurrent = item.id === current_i;
+        const displayNumber = displayIndex + 1;
+
+        if (isCurrent) {
             // Current item always gets the "current" highlight (larger indicator)
-            return `<span class="progress_current" data-index="${i}">${i + 1}</span>`
-        } else if (v) {
-            return `<span class="progress_complete" data-index="${i}">${i + 1}</span>`
+            return `<span class="progress_current" data-id="${item.id}">${displayNumber}</span>`;
+        } else if (item.complete) {
+            return `<span class="progress_complete" data-id="${item.id}">${displayNumber}</span>`;
         } else {
-            return `<span class="progress_incomplete" data-index="${i}">${i + 1}</span>`
+            return `<span class="progress_incomplete" data-id="${item.id}">${displayNumber}</span>`;
         }
-    }).join("")
-    $("#progress").html(html)
+    }).join("");
+    $("#progress").html(html);
 
     // Attach click handlers if callback is provided
     if (onItemClick) {
         $("#progress span").on("click", function () {
-            const index = parseInt($(this).data("index"))
-            onItemClick(index)
-        })
+            const id = $(this).data("id");
+            // Convert back to number if it's not a welcome item
+            const itemId = typeof id === "string" && id.startsWith("welcome_") ? id : parseInt(id);
+            onItemClick(itemId);
+        });
     }
 }
 
@@ -481,6 +507,7 @@ export function hasAllowSkip(validations: (Validation | Record<string, Validatio
 export type DataGoodbye = {
     status: string,
     progress: Array<boolean>,
+    progress_welcome?: Array<boolean>,  // Optional welcome progress
     time: number,
     token: string,
     instructions_goodbye?: string,
@@ -508,7 +535,7 @@ export type ProtocolInfo = {
 /**
  * Display goodbye screen when all annotations are done
  */
-export function displayGoodbyeScreen(response: DataGoodbye, navigate_to_item: (i: number) => void): void {
+export function displayGoodbyeScreen(response: DataGoodbye, navigate_to_item: (i: number | string) => void): void {
     // Use instructions_goodbye if provided, otherwise use default message
     // Note: instructions_goodbye may contain arbitrary HTML including variables that are replaced server-side
 
@@ -521,7 +548,7 @@ export function displayGoodbyeScreen(response: DataGoodbye, navigate_to_item: (i
     <br>
     </div>
     `)
-    redrawProgress(null, response.progress, navigate_to_item)
+    redrawProgress(null, response.progress_welcome, response.progress, navigate_to_item)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
     $("#button_next").prop("disabled", true)
     $("#button_next").val("Next 💯")

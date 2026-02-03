@@ -683,7 +683,7 @@ async function display_next_payload(response: DataPayload) {
     // Cleanup toolboxes and handlers from previous item
     cleanupPreviousItem()
 
-    redrawProgress(response.info.item_i, response.progress, navigate_to_item)
+    redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
 
     let data = response.payload
@@ -875,7 +875,7 @@ async function display_next_payload(response: DataPayload) {
 
 let payload: DataPayload | null = null
 
-async function navigate_to_item(item_i: number) {
+async function navigate_to_item(item_i: number | string) {
     // Warn if there's unsaved work
     if (state.has_unsaved_work) {
         if (!confirm("You have unsaved work. Are you sure you want to navigate away?")) {

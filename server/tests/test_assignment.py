@@ -54,6 +54,7 @@ class TestTaskBased:
             "campaign1": {
                 "user1": {
                     "progress": [True, False, False],
+                    "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
                     "token_incorrect": "xyz",
@@ -85,6 +86,7 @@ class TestTaskBased:
             "campaign1": {
                 "user1": {
                     "progress": [True],
+                    "progress_welcome": [],
                     "time": 100,
                     "token_correct": "correct_token",
                     "token_incorrect": "wrong_token",
@@ -112,6 +114,7 @@ class TestTaskBased:
             "campaign1": {
                 "user1": {
                     "progress": [False, False, False],
+                    "progress_welcome": [],
                 }
             }
         }
@@ -138,6 +141,7 @@ class TestTaskBased:
             "campaign1": {
                 "user1": {
                     "progress": [True, True],
+                    "progress_welcome": [],
                     "time": 100.0,
                     "time_start": 1000,
                     "time_end": 2000,
@@ -171,6 +175,7 @@ class TestTaskBased:
             "campaign1": {
                 "user1": {
                     "progress": [True, False, False],
+                    "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
                     "token_incorrect": "xyz",
@@ -203,6 +208,7 @@ class TestTaskBased:
             "campaign1": {
                 "user1": {
                     "progress": [False],
+                    "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
                     "token_incorrect": "xyz",
@@ -233,6 +239,7 @@ class TestTaskBased:
             "campaign1": {
                 "user1": {
                     "progress": [True],
+                    "progress_welcome": [],
                     "time": 100,
                     "token_correct": "CORRECT_TOKEN",
                     "token_incorrect": "WRONG_TOKEN",
@@ -267,6 +274,7 @@ class TestTaskBased:
             "campaign1": {
                 "user1": {
                     "progress": [True],
+                    "progress_welcome": [],
                     "time": 100,
                     "token_correct": "MY_TOKEN",
                     "token_incorrect": "BAD_TOKEN",
@@ -303,6 +311,7 @@ class TestTaskBased:
             "campaign1": {
                 "user1": {
                     "progress": [True],
+                    "progress_welcome": [],
                     "time": 100,
                     "token_correct": "PASS_TOKEN",
                     "token_incorrect": "FAIL_TOKEN",
@@ -340,6 +349,7 @@ class TestTaskBased:
             "campaign1": {
                 "user1": {
                     "progress": [True],
+                    "progress_welcome": [],
                     "time": 100,
                     "token_correct": "<b>MY_TOKEN</b>",
                     "token_incorrect": "BAD_TOKEN",
@@ -378,6 +388,7 @@ class TestSingleStream:
             "campaign1": {
                 "user1": {
                     "progress": [True, False, False],
+                    "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
                     "token_incorrect": "xyz",
@@ -407,6 +418,7 @@ class TestSingleStream:
             "campaign1": {
                 "user1": {
                     "progress": [True],
+                    "progress_welcome": [],
                     "time": 100,
                     "token_correct": "correct_token",
                     "token_incorrect": "wrong_token",
@@ -440,6 +452,7 @@ class TestSingleStream:
             "campaign1": {
                 "user1": {
                     "progress": [True, True, False, True],
+                    "progress_welcome": [],
                     "time": 50.0,
                     "time_start": 1000,
                     "time_end": 2000,
@@ -447,6 +460,7 @@ class TestSingleStream:
                 },
                 "user2": {
                     "progress": [True, True, True, False],
+                    "progress_welcome": [],
                     "time": 75.0,
                     "time_start": 1100,
                     "time_end": 2100,
@@ -519,9 +533,11 @@ class TestSingleStream:
             "campaign1": {
                 "user1": {
                     "progress": [False, False, False],
+                    "progress_welcome": [],
                 },
                 "user2": {
                     "progress": [False, False, False],
+                    "progress_welcome": [],
                 }
             }
         }
@@ -550,6 +566,7 @@ class TestSingleStream:
             "campaign1": {
                 "user1": {
                     "progress": [True, False, False],
+                    "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
                     "token_incorrect": "xyz",
@@ -925,6 +942,7 @@ class TestDynamic:
             "campaign1": {
                 "user1": {
                     "progress": [list(), list(), list()],
+                    "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
                     "token_incorrect": "xyz",
@@ -957,6 +975,7 @@ class TestDynamic:
             "campaign1": {
                 "user1": {
                     "progress": [{"model1"}],
+                    "progress_welcome": [],
                     "time": 100,
                     "token_correct": "correct_token",
                     "token_incorrect": "wrong_token",
@@ -983,9 +1002,11 @@ class TestDynamic:
             "campaign1": {
                 "user1": {
                     "progress": [list(), list(), list()],
+                    "progress_welcome": [],
                 },
                 "user2": {
                     "progress": [list(), list(), list()],
+                    "progress_welcome": [],
                 }
             }
         }
@@ -1018,6 +1039,7 @@ class TestDynamic:
             "campaign1": {
                 "user1": {
                     "progress": [{"model1"}, {"model1"}, list(), {"model1"}],
+                    "progress_welcome": [],
                     "time": 50.0,
                     "time_start": 1000,
                     "time_end": 2000,
@@ -1025,6 +1047,7 @@ class TestDynamic:
                 },
                 "user2": {
                     "progress": [{"model1"}, {"model1"}, {"model1"}, list()],
+                    "progress_welcome": [],
                     "time": 75.0,
                     "time_start": 1100,
                     "time_end": 2100,
