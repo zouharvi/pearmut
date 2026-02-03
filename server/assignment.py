@@ -625,7 +625,7 @@ def _reset_user_time(progress_data: dict, campaign_id: str, user_id: str) -> Non
     progress_data[campaign_id][user_id]["validations"] = {}
 
 
-def _get_user_annotated_items(campaign_id: str, user_id: str) -> set[int]:
+def _get_user_annotated_items(campaign_id: str, user_id: str) -> set[int | str]:
     """
     Get the set of item indices that a specific user has annotated.
 
@@ -634,7 +634,8 @@ def _get_user_annotated_items(campaign_id: str, user_id: str) -> set[int]:
         user_id: The user identifier
 
     Returns:
-        Set of item indices (item_i) that the user has annotated
+        Set of item indices (item_i) that the user has annotated.
+        Can include both int indices for regular items and string IDs like "welcome_0" for welcome items.
     """
     log = get_db_log(campaign_id)
     user_items = set()
@@ -681,19 +682,24 @@ def reset_task(
         # Find all items that this user has annotated
         user_items = _get_user_annotated_items(campaign_id, user_id)
 
-        # Save reset markers only for items this user has touched
+        # Separate welcome items from regular items
+        welcome_items = {item for item in user_items if isinstance(item, str) and item.startswith("welcome_")}
+        regular_items = {item for item in user_items if isinstance(item, int)}
+
+        # Save reset markers for all items this user has touched
         for item_i in user_items:
             save_db_payload(
                 campaign_id,
                 {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
             )
 
-        # Reset only the touched items in all users' progress (shared pool)
+        # Reset only the touched regular items in all users' progress (shared pool)
         for uid in progress_data[campaign_id]:
-            for item_i in user_items:
+            for item_i in regular_items:
                 progress_data[campaign_id][uid]["progress"][item_i] = False
 
-        # Reset welcome items progress for this user if it exists (per-user, not shared)
+        # Reset ALL welcome items progress for this user (per-user, not shared)
+        # We reset all welcome items, not just the ones touched, because they're per-user
         if "progress_welcome" in progress_data[campaign_id][user_id]:
             num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
             progress_data[campaign_id][user_id]["progress_welcome"] = [False] * num_welcome
