@@ -944,7 +944,7 @@ class TestDynamic:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [None, None, None],
+                    "progress": [{"model1": None, "model2": None}, {"model1": None, "model2": None}, {"model1": None, "model2": None}],
                     "progress_welcome": [],
                     "time": 0,
                     "token_correct": "abc",
@@ -952,8 +952,7 @@ class TestDynamic:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         # Should return one of the incomplete items
@@ -977,7 +976,7 @@ class TestDynamic:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": ["completed"],
+                    "progress": [{"model1": "completed", "model2": "completed"}],
                     "progress_welcome": [],
                     "time": 100,
                     "token_correct": "correct_token",
@@ -985,8 +984,7 @@ class TestDynamic:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1",
-                                 tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -1004,11 +1002,11 @@ class TestDynamic:
         progress_data = {
             "campaign1": {
                 "user1": {
-                    "progress": [None, None, None],
+                    "progress": [{"model1": None, "model2": None}, {"model1": None, "model2": None}, {"model1": None, "model2": None}],
                     "progress_welcome": [],
                 },
                 "user2": {
-                    "progress": [None, None, None],
+                    "progress": [{"model1": None, "model2": None}, {"model1": None, "model2": None}, {"model1": None, "model2": None}],
                     "progress_welcome": [],
                 }
             }
@@ -1017,10 +1015,10 @@ class TestDynamic:
         payload = {"annotation": [{"model1": {"score": 5}}]}
         update_progress("campaign1", "user1", tasks_data, progress_data, 1, payload)
         # User1 completed item 1, user2 gets completed_foreign
-        assert progress_data["campaign1"]["user1"]["progress"][1] == "completed"
-        assert progress_data["campaign1"]["user2"]["progress"][1] == "completed_foreign"
-        assert progress_data["campaign1"]["user1"]["progress"][0] is None
-        assert progress_data["campaign1"]["user2"]["progress"][0] is None
+        assert progress_data["campaign1"]["user1"]["progress"][1]["model1"] == "completed"
+        assert progress_data["campaign1"]["user2"]["progress"][1]["model1"] == "completed_foreign"
+        assert progress_data["campaign1"]["user1"]["progress"][0]["model1"] is None
+        assert progress_data["campaign1"]["user2"]["progress"][0]["model1"] is None
 
     def test_reset_task_resets_all_users(self):
         """Test that dynamic reset_task returns error (not supported)."""

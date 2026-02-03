@@ -769,7 +769,6 @@ def update_progress(
     if assignment == "dynamic":
         # Mark as completed for the current user, completed_foreign for others
         for model in payload["annotation"][0].keys():
-            print(model)
             for uid in progress_data[campaign_id]:
                 current_status = progress_data[campaign_id][uid]["progress"][item_i][model]
                 if uid == user_id:
