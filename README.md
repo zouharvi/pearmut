@@ -20,6 +20,7 @@
   - [Hosting Assets](#hosting-assets)
 - [Campaign Management](#campaign-management)
   - [Custom Completion Messages](#custom-completion-messages)
+  - [Prolific Integration](#prolific-integration)
 - [CLI Commands](#cli-commands)
 - [Terminology](#terminology)
 - [Development](#development)
@@ -390,6 +391,13 @@ When tokens are supplied, the dashboard will try to show model rankings based on
 ### Custom Completion Messages
 
 Customize the goodbye message shown to users when they complete all annotations using the `instructions_goodbye` field in campaign info. Supports arbitrary HTML for styling and formatting with variable replacement: `${TOKEN}` (completion token) and `${USER_ID}` (user ID). Default: `"If someone asks you for a token of completion, show them: ${TOKEN}"`.
+
+### Prolific Integration
+
+Use task-based assignment with Prolific. For each task, generate a unique URL and upload links to Prolific's interface. Add redirect to `instructions_goodbye`:
+```json
+"instructions_goodbye": "<a href='https://app.prolific.com/submissions/complete?cc=YOUR_CODE'>Click here to return to Prolific</a>"
+```
 
 ## Terminology
 
