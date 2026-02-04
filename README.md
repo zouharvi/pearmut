@@ -123,6 +123,7 @@ The `shuffle` parameter in campaign `info` controls this behavior:
   "data": [...]
 }
 ```
+Documents in `data_welcome` are not shuffled and so don't require to have the same models in all documents.
 
 ### Showing Model Names
 
