@@ -10,11 +10,16 @@ import json
 import os
 import urllib.parse
 
-from .utils import ROOT, TOKEN_MAIN, load_progress_data, save_progress_data
+from .utils import (
+    ROOT,
+    TOKEN_MAIN,
+    is_form_document,
+    load_progress_data,
+    save_progress_data,
+)
 
 os.makedirs(f"{ROOT}/data/tasks", exist_ok=True)
 load_progress_data(warn=None)
-
 
 
 def _run(args_unknown):
@@ -63,7 +68,7 @@ def _run(args_unknown):
         + f"token_main={TOKEN_MAIN}"
         + "".join(
             [
-                f"&campaign_id={urllib.parse.quote_plus(campaign_id)}&token={campaign_data["token"]}"
+                f"&campaign_id={urllib.parse.quote_plus(campaign_id)}&token={campaign_data['token']}"
                 for campaign_id, campaign_data in tasks_data.items()
             ]
         )
@@ -73,14 +78,13 @@ def _run(args_unknown):
     )
     print("🍐", dashboard_url + "\n", flush=True)
 
-
     # disable startup message
     uvicorn.config.LOGGING_CONFIG["loggers"]["uvicorn.error"]["level"] = "WARNING"
     # set time logging
     uvicorn.config.LOGGING_CONFIG["formatters"]["access"]["datefmt"] = "%Y-%m-%d %H:%M"
-    uvicorn.config.LOGGING_CONFIG["formatters"]["access"][
-        "fmt"
-    ] = "%(asctime)s %(levelprefix)s %(client_addr)s - %(request_line)s %(status_code)s"
+    uvicorn.config.LOGGING_CONFIG["formatters"]["access"]["fmt"] = (
+        "%(asctime)s %(levelprefix)s %(client_addr)s - %(request_line)s %(status_code)s"
+    )
     uvicorn.run(
         app,
         host="0.0.0.0",
@@ -92,8 +96,11 @@ def _run(args_unknown):
 def _validate_item_structure(items):
     """
     Validate that items have the correct structure.
-    Items should be lists of dictionaries with 'tgt' and optionally 'src' and/or 'ref' keys.
-    The 'tgt' field should be a dictionary mapping model names to translations.
+    Items can be either:
+    1. Evaluation items: dictionaries with 'tgt' and optionally 'src' and/or 'ref' keys
+    2. Form items: dictionaries with 'text' and 'form' keys
+
+    A document must contain either all evaluation items or all form items (not mixed).
 
     Args:
         items: List of item dictionaries to validate
@@ -101,68 +108,100 @@ def _validate_item_structure(items):
     if not isinstance(items, list):
         raise ValueError("Items must be a list")
 
+    if not items:
+        raise ValueError("Items list cannot be empty")
+
+    # Check if first item is a form item or evaluation item
+    first_item = items[0]
+    if not isinstance(first_item, dict):
+        raise ValueError("Each item must be a dictionary")
+
+    first_item_is_form = "text" in first_item and "form" in first_item
+
     for item in items:
         if not isinstance(item, dict):
-            raise ValueError("Each item must be a dictionary with 'tgt' key")
-        if "tgt" not in item:
-            raise ValueError("Each item must contain 'tgt' key")
+            raise ValueError("Each item must be a dictionary")
 
-        # Validate src is a string if present
-        if "src" in item and not isinstance(item["src"], str):
-            raise ValueError("Item 'src' must be a string")
+        # Check consistency: all items must be same type (form or evaluation)
+        current_is_form = "text" in item and "form" in item
+        if current_is_form != first_item_is_form:
+            raise ValueError("Document cannot mix form items and evaluation items")
 
-        # Validate ref is a string if present
-        if "ref" in item and not isinstance(item["ref"], str):
-            raise ValueError("Item 'ref' must be a string")
-
-        # Validate tgt is a dictionary (annotate template with model names)
-        if isinstance(item["tgt"], str):
-            # String not allowed - suggest using dictionary (don't include user input to prevent injection)
-            raise ValueError(
-                'Item \'tgt\' must be a dictionary mapping model names to translations. For single translation, use {"default": "your_translation"}'
-            )
-        elif isinstance(item["tgt"], dict):
-            # Dictionary mapping model names to translations
-            # Validate that model names don't contain only numbers (JavaScript ordering issue)
-            for model_name, translation in item["tgt"].items():
-                if not isinstance(model_name, str):
-                    raise ValueError("Model names in 'tgt' dictionary must be strings")
-                if model_name.isdigit():
-                    raise ValueError(
-                        f"Model name '{model_name}' cannot be only numeric digits (would cause issues in JS/TS)"
-                    )
-                if not isinstance(translation, str):
-                    raise ValueError(
-                        f"Translation for model '{model_name}' must be a string"
-                    )
+        if first_item_is_form:
+            # Validate form item structure
+            if "text" not in item:
+                raise ValueError("Form item must contain 'text' key")
+            if "form" not in item:
+                raise ValueError("Form item must contain 'form' key")
+            if not isinstance(item["text"], str):
+                raise ValueError("Form item 'text' must be a string")
+            if item["form"] not in {None, "number", "string", "choices", "script"}:
+                raise ValueError(
+                    "Form item 'form' must be null, 'number', 'string', 'choices', or 'script'"
+                )
         else:
-            raise ValueError(
-                "Item 'tgt' must be a dictionary mapping model names to translations"
-            )
+            # Validate evaluation item structure
+            if "tgt" not in item:
+                raise ValueError("Each item must contain 'tgt' key")
 
-        # Validate error_spans structure if present
-        if "error_spans" in item:
-            if not isinstance(item["error_spans"], dict):
-                raise ValueError(
-                    "'error_spans' must be a dictionary mapping model names to error span lists"
-                )
-            for model_name, spans in item["error_spans"].items():
-                if not isinstance(spans, list):
-                    raise ValueError(
-                        f"Error spans for model '{model_name}' must be a list"
-                    )
+            # Validate src is a string if present
+            if "src" in item and not isinstance(item["src"], str):
+                raise ValueError("Item 'src' must be a string")
 
-        # Validate validation structure if present
-        if "validation" in item:
-            if not isinstance(item["validation"], dict):
+            # Validate ref is a string if present
+            if "ref" in item and not isinstance(item["ref"], str):
+                raise ValueError("Item 'ref' must be a string")
+
+            # Validate tgt is a dictionary (annotate template with model names)
+            if isinstance(item["tgt"], str):
+                # String not allowed - suggest using dictionary (don't include user input to prevent injection)
                 raise ValueError(
-                    "'validation' must be a dictionary mapping model names to validation rules"
+                    'Item \'tgt\' must be a dictionary mapping model names to translations. For single translation, use {"default": "your_translation"}'
                 )
-            for model_name, val_rule in item["validation"].items():
-                if not isinstance(val_rule, dict):
+            elif isinstance(item["tgt"], dict):
+                # Dictionary mapping model names to translations
+                # Validate that model names don't contain only numbers (JavaScript ordering issue)
+                for model_name, translation in item["tgt"].items():
+                    if not isinstance(model_name, str):
+                        raise ValueError(
+                            "Model names in 'tgt' dictionary must be strings"
+                        )
+                    if model_name.isdigit():
+                        raise ValueError(
+                            f"Model name '{model_name}' cannot be only numeric digits (would cause issues in JS/TS)"
+                        )
+                    if not isinstance(translation, str):
+                        raise ValueError(
+                            f"Translation for model '{model_name}' must be a string"
+                        )
+            else:
+                raise ValueError(
+                    "Item 'tgt' must be a dictionary mapping model names to translations"
+                )
+
+            # Validate error_spans structure if present
+            if "error_spans" in item:
+                if not isinstance(item["error_spans"], dict):
                     raise ValueError(
-                        f"Validation rule for model '{model_name}' must be a dictionary"
+                        "'error_spans' must be a dictionary mapping model names to error span lists"
                     )
+                for model_name, spans in item["error_spans"].items():
+                    if not isinstance(spans, list):
+                        raise ValueError(
+                            f"Error spans for model '{model_name}' must be a list"
+                        )
+
+            # Validate validation structure if present
+            if "validation" in item:
+                if not isinstance(item["validation"], dict):
+                    raise ValueError(
+                        "'validation' must be a dictionary mapping model names to validation rules"
+                    )
+                for model_name, val_rule in item["validation"].items():
+                    if not isinstance(val_rule, dict):
+                        raise ValueError(
+                            f"Validation rule for model '{model_name}' must be a dictionary"
+                        )
 
 
 def _validate_document_models(doc):
@@ -210,6 +249,10 @@ def _shuffle_campaign_data(campaign_data, rng):
 
     def shuffle_document(doc):
         """Shuffle a single document (list of items) by reordering models in tgt dict."""
+        # Skip shuffling for form documents (they don't have tgt)
+        if is_form_document(doc):
+            return  # Form documents don't need shuffling
+
         # Validate that all items have the same models
         _validate_document_models(doc)
 
@@ -275,7 +318,6 @@ def _add_single_campaign(campaign_data, overwrite, server):
 
     # Validate and process data_welcome if present
     data_welcome = campaign_data.get("data_welcome", [])
-    welcome_item_count = 0
     if data_welcome:
         if not isinstance(data_welcome, list):
             raise ValueError("'data_welcome' must be a list of documents.")
@@ -287,13 +329,6 @@ def _add_single_campaign(campaign_data, overwrite, server):
                 _validate_item_structure(doc)
             except ValueError as e:
                 raise ValueError(f"Welcome document {doc_i}: {e}")
-        # Set item_id to welcome_0, welcome_1, etc. for each item in each document
-        item_counter = 0
-        for doc in data_welcome:
-            for item in doc:
-                item["item_id"] = f"welcome_{item_counter}"
-                item_counter += 1
-        welcome_item_count = item_counter
 
     if assignment == "task-based":
         tasks = campaign_data["data"]
@@ -355,9 +390,9 @@ def _add_single_campaign(campaign_data, overwrite, server):
         if "dynamic_contrastive_models" not in campaign_data["info"]:
             campaign_data["info"]["dynamic_contrastive_models"] = 1
         # Validate that dynamic_warmup is at least 1
-        assert (
-            campaign_data["info"]["dynamic_warmup"] >= 1
-        ), "dynamic_warmup must be at least 1"
+        assert campaign_data["info"]["dynamic_warmup"] >= 1, (
+            "dynamic_warmup must be at least 1"
+        )
         # Validate that dynamic_contrastive_models is at most dynamic_top
         assert (
             campaign_data["info"]["dynamic_contrastive_models"]
@@ -371,9 +406,9 @@ def _add_single_campaign(campaign_data, overwrite, server):
         for item in campaign_data["data"]:
             if item and len(item) > 0:
                 item_models = set(item[0]["tgt"].keys())
-                assert (
-                    item_models == all_models
-                ), "All items must have the same model outputs"
+                assert item_models == all_models, (
+                    "All items must have the same model outputs"
+                )
     else:
         raise ValueError(f"Unknown campaign assignment type: {assignment}")
 
@@ -441,7 +476,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
     # Prepend data_welcome to tasks if present
     if data_welcome:
         if assignment == "task-based":
-            tasks = [data_welcome + task for task in tasks]
+            tasks = [task for task in tasks]
         elif assignment in ["single-stream", "dynamic"]:
             tasks = data_welcome + tasks
 
@@ -474,11 +509,12 @@ def _add_single_campaign(campaign_data, overwrite, server):
                 if assignment == "task-based"
                 else [None] * len(campaign_data["data"])
                 if assignment == "single-stream"
-                else [{model: None for model in all_models}] * len(campaign_data["data"])
+                else [{model: None for model in all_models}]
+                * len(campaign_data["data"])
                 if assignment == "dynamic"
                 else int(f"Invalid assignment: {assignment}")
             ),
-            "progress_welcome": [False] * welcome_item_count,
+            "progress_welcome": [None] * len(data_welcome),
             "time_start": None,
             "time_end": None,
             "time": 0,
@@ -579,7 +615,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
     )
     for user_id, user_val in user_progress.items():
         # point to the protocol URL
-        print(f'🧑 {server}/{user_val["url"]}')
+        print(f"🧑 {server}/{user_val['url']}")
     print()
 
 

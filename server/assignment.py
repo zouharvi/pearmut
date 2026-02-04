@@ -11,6 +11,7 @@ from .utils import (
     check_validation_threshold,
     get_db_log,
     get_db_log_item,
+    is_form_document,
     save_db_payload,
 )
 
@@ -63,6 +64,7 @@ def _completed_response(
         content={
             "status": "goodbye",
             "progress": progress,
+            "progress_welcome": user_progress["progress_welcome"],
             "time": user_progress["time"],
             "token": token,
             "instructions_goodbye": instructions_goodbye,
@@ -131,16 +133,16 @@ def get_i_item_taskbased(
     user_progress = progress_data[campaign_id][user_id]
     progress_welcome = user_progress["progress_welcome"]
 
-    # Convert welcome_X string to integer index
-    actual_index = item_i
-    is_welcome_item = isinstance(item_i, str) and item_i.startswith("welcome_")
-    if is_welcome_item:
+    # if welcome_X, payload is from data_welcome[X], otherwise data[user][X]
+    if isinstance(item_i, str) and item_i.startswith("welcome_"):
         actual_index = int(item_i.split("_")[1])
-        # Validate against total number of welcome items
-        if actual_index < 0 or actual_index >= len(progress_welcome):
+        if actual_index < 0 or actual_index >= len(
+            data_all[campaign_id]["data_welcome"]
+        ):
             return JSONResponse(
                 content="Welcome item index out of range", status_code=400
             )
+        payload = data_all[campaign_id]["data_welcome"][actual_index]
     else:
         # Prevent accessing regular items unless all welcome items are complete
         if not all(progress_welcome):
@@ -148,6 +150,9 @@ def get_i_item_taskbased(
                 content="Complete all welcome items before accessing regular items",
                 status_code=400,
             )
+        if item_i < 0 or item_i >= len(data_all[campaign_id]["data"][user_id]):
+            return JSONResponse(content="Item index out of range", status_code=400)
+        payload = data_all[campaign_id]["data"][user_id][item_i]
 
     # try to get existing annotations if any
     items_existing = get_db_log_item(campaign_id, user_id, item_i)
@@ -159,12 +164,11 @@ def get_i_item_taskbased(
         if "comment" in latest_item:
             payload_existing["comment"] = latest_item["comment"]
 
-    if actual_index < 0 or actual_index >= len(data_all[campaign_id]["data"][user_id]):
-        return JSONResponse(content="Item index out of range", status_code=400)
+    is_form = is_form_document(payload)
 
     return JSONResponse(
         content={
-            "status": "ok",
+            "status": "form" if is_form else "ok",
             "progress": user_progress["progress"],
             "progress_welcome": progress_welcome,
             "time": user_progress["time"],
@@ -177,7 +181,7 @@ def get_i_item_taskbased(
                 for k, v in data_all[campaign_id]["info"].items()
                 if k in CAMPAIGN_INFO_PUBLIC
             },
-            "payload": data_all[campaign_id]["data"][user_id][actual_index],
+            "payload": payload,
         }
         | ({"payload_existing": payload_existing} if payload_existing else {}),
         status_code=200,
@@ -231,9 +235,12 @@ def get_i_item_singlestream(
     if actual_index < 0 or actual_index >= len(data_all[campaign_id]["data"]):
         return JSONResponse(content="Item index out of range", status_code=400)
 
+    payload = data_all[campaign_id]["data"][actual_index]
+    is_form = is_form_document(payload)
+
     return JSONResponse(
         content={
-            "status": "ok",
+            "status": "form" if is_form else "ok",
             "progress": user_progress["progress"],
             "progress_welcome": progress_welcome,
             "time": user_progress["time"],
@@ -246,7 +253,7 @@ def get_i_item_singlestream(
                 for k, v in data_all[campaign_id]["info"].items()
                 if k in CAMPAIGN_INFO_PUBLIC
             },
-            "payload": data_all[campaign_id]["data"][actual_index],
+            "payload": payload,
         }
         | ({"payload_existing": payload_existing} if payload_existing else {}),
         status_code=200,
@@ -281,9 +288,12 @@ def get_next_item_taskbased(
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
 
+        payload = data_all[campaign_id]["data_welcome"][item_i]
+        is_form = is_form_document(payload)
+
         return JSONResponse(
             content={
-                "status": "ok",
+                "status": "form" if is_form else "ok",
                 "progress": user_progress["progress"],
                 "progress_welcome": progress_welcome,
                 "time": user_progress["time"],
@@ -296,7 +306,7 @@ def get_next_item_taskbased(
                     for k, v in data_all[campaign_id]["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": data_all[campaign_id]["data"][user_id][item_i],
+                "payload": payload,
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -307,7 +317,9 @@ def get_next_item_taskbased(
         return _completed_response(data_all, progress_data, campaign_id, user_id)
 
     # find first incomplete item
-    item_i = min([i for i, v in enumerate(user_progress["progress"]) if v != "completed"])
+    item_i = min(
+        [i for i, v in enumerate(user_progress["progress"]) if v != "completed"]
+    )
 
     # try to get existing annotations if any
     items_existing = get_db_log_item(campaign_id, user_id, item_i)
@@ -319,9 +331,12 @@ def get_next_item_taskbased(
         if "comment" in latest_item:
             payload_existing["comment"] = latest_item["comment"]
 
+    payload = data_all[campaign_id]["data"][user_id][item_i]
+    is_form = is_form_document(payload)
+
     return JSONResponse(
         content={
-            "status": "ok",
+            "status": "form" if is_form else "ok",
             "progress": user_progress["progress"],
             "progress_welcome": progress_welcome,
             "time": user_progress["time"],
@@ -376,9 +391,12 @@ def get_next_item_singlestream(
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
 
+        payload = data_all[campaign_id]["data"][item_i]
+        is_form = is_form_document(payload)
+
         return JSONResponse(
             content={
-                "status": "ok",
+                "status": "form" if is_form else "ok",
                 "time": user_progress["time"],
                 "progress": progress,
                 "progress_welcome": progress_welcome,
@@ -391,7 +409,7 @@ def get_next_item_singlestream(
                     for k, v in data_all[campaign_id]["info"].items()
                     if k in {"protocol", "sliders", "textfield", "show_model_names"}
                 },
-                "payload": data_all[campaign_id]["data"][item_i],
+                "payload": payload,
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
@@ -399,7 +417,9 @@ def get_next_item_singlestream(
 
     # All welcome items complete, proceed with regular items
     # Check if user reached docs_per_user limit (if specified)
-    if (docs_per_user := data_all[campaign_id]["info"].get("docs_per_user")) is not None:
+    if (
+        docs_per_user := data_all[campaign_id]["info"].get("docs_per_user")
+    ) is not None:
         completed_docs = sum(v == "completed" for v in progress if v)
         if completed_docs >= docs_per_user:
             return _completed_response(data_all, progress_data, campaign_id, user_id)
@@ -407,7 +427,9 @@ def get_next_item_singlestream(
         return _completed_response(data_all, progress_data, campaign_id, user_id)
 
     # find a random incomplete item
-    incomplete_indices = [i for i, v in enumerate(progress) if v not in {"completed", "completed_foreign"}]
+    incomplete_indices = [
+        i for i, v in enumerate(progress) if v not in {"completed", "completed_foreign"}
+    ]
     item_i = random.choice(incomplete_indices)
 
     # try to get existing annotations if any
@@ -421,9 +443,12 @@ def get_next_item_singlestream(
         if "comment" in latest_item:
             payload_existing["comment"] = latest_item["comment"]
 
+    payload = data_all[campaign_id]["data"][item_i]
+    is_form = is_form_document(payload)
+
     return JSONResponse(
         content={
-            "status": "ok",
+            "status": "form" if is_form else "ok",
             "time": user_progress["time"],
             "progress": progress,
             "progress_welcome": progress_welcome,
@@ -436,7 +461,7 @@ def get_next_item_singlestream(
                 for k, v in data_all[campaign_id]["info"].items()
                 if k in CAMPAIGN_INFO_PUBLIC
             },
-            "payload": data_all[campaign_id]["data"][item_i],
+            "payload": payload,
         }
         | ({"payload_existing": payload_existing} if payload_existing else {}),
         status_code=200,
@@ -512,11 +537,17 @@ def get_next_item_dynamic(
     # First check if docs_per_user limit is reached
     if (docs_per_user := campaign_data["info"].get("docs_per_user")) is not None:
         # Count specifically number of annotations across models
-        completed_docs = sum(v == "completed" for mv in user_progress["progress"] for v in mv.values())
+        completed_docs = sum(
+            v == "completed" for mv in user_progress["progress"] for v in mv.values()
+        )
         if completed_docs >= docs_per_user:
             return _completed_response(tasks_data, progress_data, campaign_id, user_id)
     # Otherwise check if all models completed for all items
-    elif all(v in {"completed", "completed_foreign"} for mv in user_progress["progress"] for v in mv.values()):
+    elif all(
+        v in {"completed", "completed_foreign"}
+        for mv in user_progress["progress"]
+        for v in mv.values()
+    ):
         return _completed_response(tasks_data, progress_data, campaign_id, user_id)
 
     # Get configuration parameters
@@ -588,14 +619,15 @@ def get_next_item_dynamic(
 
     # Find incomplete items (None or completed_foreign status)
     incomplete_indices = [
-        i for i, mv in enumerate(user_progress["progress"])
+        i
+        for i, mv in enumerate(user_progress["progress"])
         if not all(v in {"completed", "completed_foreign"} for v in mv.values())
     ]
-    
+
     # If no incomplete items, user (and everyone) is done
     if not incomplete_indices:
         return _completed_response(tasks_data, progress_data, campaign_id, user_id)
-    
+
     # Select a random incomplete item
     item_i = random.choice(incomplete_indices)
 
@@ -712,7 +744,11 @@ def reset_task(
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "single-stream":
         # Find all items that this user has annotated (has "completed")
-        user_items_to_reset = [i for i, status in enumerate(progress_data[campaign_id][user_id]["progress"]) if status == "completed"]
+        user_items_to_reset = [
+            i
+            for i, status in enumerate(progress_data[campaign_id][user_id]["progress"])
+            if status == "completed"
+        ]
 
         # Save reset markers for all items this user has touched
         for item_i in user_items_to_reset:
@@ -725,7 +761,6 @@ def reset_task(
         for uid in progress_data[campaign_id]:
             for item_i in user_items_to_reset:
                 progress_data[campaign_id][uid]["progress"][item_i] = None
-
 
         # Reset all welcome items progress for this user (per-user, not shared)
         if "progress_welcome" in progress_data[campaign_id][user_id]:
@@ -758,7 +793,9 @@ def update_progress(
     if isinstance(item_i, str) and item_i.startswith("welcome_"):
         welcome_index = int(item_i.split("_")[1])
         # Update only this user's progress_welcome (not shared)
-        progress_data[campaign_id][user_id]["progress_welcome"][welcome_index] = True
+        progress_data[campaign_id][user_id]["progress_welcome"][welcome_index] = (
+            "completed"
+        )
         return JSONResponse(content={"status": "ok"}, status_code=200)
 
     assignment = tasks_data[campaign_id]["info"]["assignment"]
@@ -775,20 +812,28 @@ def update_progress(
                 progress_data[campaign_id][uid]["progress"][item_i] = "completed"
             elif current_status is None:
                 # Other users get "completed_foreign" if not already completed
-                progress_data[campaign_id][uid]["progress"][item_i] = "completed_foreign"
+                progress_data[campaign_id][uid]["progress"][item_i] = (
+                    "completed_foreign"
+                )
             # If already "completed", keep it as "completed"
         return JSONResponse(content="ok", status_code=200)
     if assignment == "dynamic":
         # Mark as completed for the current user, completed_foreign for others
         for model in payload["annotation"][0].keys():
             for uid in progress_data[campaign_id]:
-                current_status = progress_data[campaign_id][uid]["progress"][item_i][model]
+                current_status = progress_data[campaign_id][uid]["progress"][item_i][
+                    model
+                ]
                 if uid == user_id:
                     # User who completed it gets "completed"
-                    progress_data[campaign_id][uid]["progress"][item_i][model] = "completed"
+                    progress_data[campaign_id][uid]["progress"][item_i][model] = (
+                        "completed"
+                    )
                 elif current_status is None:
                     # Other users get "completed_foreign" if not already completed
-                    progress_data[campaign_id][uid]["progress"][item_i][model] = "completed_foreign"
+                    progress_data[campaign_id][uid]["progress"][item_i][model] = (
+                        "completed_foreign"
+                    )
                 # If already "completed", keep it as "completed"
         return JSONResponse(content="ok", status_code=200)
     else:

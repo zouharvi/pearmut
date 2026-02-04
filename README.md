@@ -16,6 +16,7 @@
   - [Pre-filled Error Spans (ESA<sup>AI</sup>)](#pre-filled-error-spans-esaai)
   - [Custom MQM Taxonomy](#custom-mqm-taxonomy)
   - [Tutorial and Attention Checks](#tutorial-and-attention-checks)
+  - [Form Items for User Metadata](#form-items-for-user-metadata)
   - [Pre-defined User IDs and Tokens](#pre-defined-user-ids-and-tokens)
   - [Multimodal Annotations](#multimodal-annotations)
   - [Hosting Assets](#hosting-assets)
@@ -297,6 +298,27 @@ To use it, simply extract the `data` attribute and prefix it to each task in you
 #### Universal Tutorial Items with `data_welcome`
 
 Use `data_welcome` to add tutorial items that users must complete before starting regular tasks. The structure is a list of documents (same as `data`). Welcome items have IDs `welcome_0`, `welcome_1`, etc. and are tracked separately via `progress_welcome`.
+
+### Form Items for User Metadata
+
+Collect user information (demographics, expertise) before annotation tasks using form items in `data_welcome`.
+Form items have `text` (label/question) and `form` (field type: `null`, `"string"`, `"number"`, `"choices"`, and `"script"`).
+Documents must be homogeneous: all form items or all evaluation items.
+
+```python
+{
+  "data_welcome": [
+    [
+      {"text": "What is your native language?", "form": "string"},
+      {"text": "Rate your expertise (1-10)", "form": "number"}
+    ]
+  ]
+}
+```
+
+It is possible to automatically collect additional information from the host system using `"script"` field type.
+Typically such a form document (or their sequence) would be stored in `"data_welcome"` such that it is both mandatory and show to all users.
+See [examples/user_info_form.json](examples/user_info_form.json).
 
 ### Single-stream Assignment
 

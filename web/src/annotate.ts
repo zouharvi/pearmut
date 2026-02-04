@@ -13,15 +13,17 @@ import {
     validateResponse,
     hasAllowSkip,
     DataGoodbye,
+    DataForm,
+    DataFormItem,
     ProtocolInfo,
     SliderConfig,
-    displayGoodbyeScreen,
     isMediaContent,
     contentToCharSpans,
     isSpanComplete,
     computeWordBoundaries,
     detectTextDirection,
     debounce,
+    getErrorSpansForModel,
     DocumentResponse,
     DataPayload,
     DataPayloadItem,
@@ -32,15 +34,6 @@ import {
 const searchParams = new URLSearchParams(window.location.search)
 const frozenMode = searchParams.has("frozen")
 
-
-
-/**
- * Gets error spans for a specific model
- */
-function getErrorSpansForModel(error_spans: Record<string, Array<ErrorSpan>> | undefined, model: string): Array<ErrorSpan> {
-    if (!error_spans) return []
-    return error_spans[model] || []
-}
 
 const state = {
     response_log: [] as Array<DocumentResponse>,
@@ -745,7 +738,7 @@ async function display_next_payload(response: DataPayload) {
 
     state.protocol_error_spans = response.info.protocol == "ESA" || response.info.protocol == "MQM"
     state.protocol_error_categories = response.info.protocol == "MQM"
-    
+
     // Use custom MQM categories if provided, otherwise use default
     state.mqm_categories = response.info.mqm_categories || MQM_ERROR_CATEGORIES
 
@@ -870,10 +863,258 @@ async function display_next_payload(response: DataPayload) {
             state.action_log.push({ "time": Date.now() / 1000, "action": "media_seek", "media_src": element.src, "model": context, "media_time": element.currentTime })
         })
     })
+
+
+    $("#button_next").off("click")
+    $("#button_next").on("click", async function () {
+        // Perform validation unless in skip tutorial mode
+        let validationResult: boolean[] | null = null
+        if (!state.skip_tutorial_mode) {
+            validationResult = await performValidation()
+            if (validationResult == null) {
+                // validation failed, don't proceed
+                return
+            }
+        }
+
+        // disable while communicating with the server
+        $("#button_next").attr("disabled", "disabled")
+        $("#button_next").val("Next 📶")
+        state.action_log.push({ "time": Date.now() / 1000, "action": "submit" + (state.skip_tutorial_mode ? "_skip" : "") })
+
+        // Build payload
+        let payload_local: any = {
+            "annotation": state.response_log,
+            "actions": state.action_log,
+            "item": response.payload,
+        }
+
+        if (!state.skip_tutorial_mode && validationResult && validationResult.length > 0) {
+            payload_local["validations"] = validationResult
+        }
+
+        // Include comment if provided
+        const comment = $("#settings_comment").val() as string
+        if (comment && comment.trim() !== "") {
+            payload_local["comment"] = comment.trim()
+            // Clear comment after submission
+            $("#settings_comment").val("")
+        }
+
+        let outcome = await log_response(payload_local, response.info.item_i)
+        if (outcome == null || outcome == false) {
+            notify("Error submitting the annotations. Please try again.")
+            $("#button_next").removeAttr("disabled")
+            check_unlock()
+            return
+        }
+        await display_next_item()
+    })
+}
+
+/**
+ * Display goodbye screen when all annotations are done
+ */
+function display_goodbye(response: DataGoodbye, navigate_to_item: (i: number | string) => void): void {
+    // Use instructions_goodbye if provided, otherwise use default message
+    // Note: instructions_goodbye may contain arbitrary HTML including variables that are replaced server-side
+
+    $("#output_div").html(`
+    <div class='white-box' style='width: max-content'>
+    <h2>🎉 All done, thank you for your annotations!</h2>
+
+    ${response.instructions_goodbye}
+    <br>
+    <br>
+    </div>
+    `)
+    redrawProgress(null, response.progress_welcome, response.progress, navigate_to_item)
+    $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
+    $("#button_next").prop("disabled", true)
+    $("#button_next").val("Next 💯")
 }
 
 
-let payload: DataPayload | null = null
+// Display form for collecting user information
+function display_form(response: DataForm) {
+    // Clear previous content and state
+    $("#output_div").empty()
+    state.response_log = []
+    state.validations = []
+    state.output_blocks = []
+
+    redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
+    $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
+
+    // Display instructions if present
+    if (response.info.instructions) {
+        $("#instructions").html(response.info.instructions)
+        $("#instructions").show()
+    } else {
+        $("#instructions").hide()
+    }
+
+    // Create form container
+    const formContainer = $('<div class="form-container"></div>')
+
+    // Store form responses (using Array.from for clarity)
+    const formResponses: Array<string | number | null> = Array.from({ length: response.payload.length }, () => null)
+
+    // Pre-fill if there are existing responses
+    if (response.payload_existing?.annotation) {
+        response.payload_existing.annotation.forEach((value, i) => {
+            formResponses[i] = value
+        })
+    }
+
+    // Create form fields
+    response.payload.forEach((item, index) => {
+        const fieldDiv = $('<div class="form-field"></div>')
+
+        // Add the text/label
+        const label = $(`<div class="form-label">${item.text}</div>`)
+        fieldDiv.append(label)
+
+        // Add input field based on form type
+        if (item.form === "string") {
+            const input = $('<input type="text" class="form-input" />')
+            if (formResponses[index] !== null) {
+                input.val(String(formResponses[index]))
+            }
+            input.on('input', function () {
+                formResponses[index] = $(this).val() as string
+                state.has_unsaved_work = true
+                check_form_unlock(formResponses, response.payload)
+            })
+            fieldDiv.append(input)
+        } else if (item.form === "number") {
+            const input = $('<input type="number" class="form-input" />')
+            if (formResponses[index] !== null) {
+                input.val(Number(formResponses[index]))
+            }
+            input.on('input', function () {
+                const val = $(this).val()
+                formResponses[index] = val === "" ? null : Number(val)
+                state.has_unsaved_work = true
+                check_form_unlock(formResponses, response.payload)
+            })
+            fieldDiv.append(input)
+        } else if (item.form === "choices" && item.choices) {
+            const select = $('<select class="form-input"></select>')
+            // Add default empty option if no value is selected
+            if (formResponses[index] === null) {
+                select.append('<option value="" disabled selected>Select an option</option>')
+            }
+
+            item.choices.forEach(choice => {
+                const option = $(`<option value="${choice}">${choice}</option>`)
+                if (formResponses[index] === choice) {
+                    option.prop("selected", true)
+                }
+                select.append(option)
+            })
+
+            select.on('change', function () {
+                const val = $(this).val() as string
+                formResponses[index] = val
+                state.has_unsaved_work = true
+                check_form_unlock(formResponses, response.payload)
+            })
+            fieldDiv.append(select)
+        } else if (item.form === "script" && item.script) {
+            // Script is evaluated immediately and hidden from user view
+            try {
+                // Wrap in anonymous function as requested: "put the content of form.script into an anonymous function"
+                const scriptFunc = new Function(item.script)
+                const result = scriptFunc()
+                formResponses[index] = result
+            } catch (e) {
+                console.error("Error executing form script:", e)
+                formResponses[index] = "Error: " + String(e)
+            }
+        }
+
+        formContainer.append(fieldDiv)
+    })
+
+    $("#output_div").append(formContainer)
+
+    // Set up submit button
+    $("#button_next").off("click")
+    $("#button_next").on("click", async function () {
+        // Disable button during submission
+        $("#button_next").attr("disabled", "disabled")
+        $("#button_next").val("Next 📶")
+
+        state.action_log.push({ "time": Date.now() / 1000, "action": "submit" })
+
+        // Build payload with proper typing
+        const payload_local: {
+            annotation: Array<string | number | null>,
+            actions: Array<any>,
+            item: Array<DataFormItem>,
+            comment?: string
+        } = {
+            "annotation": formResponses,
+            "actions": state.action_log,
+            "item": response.payload,
+        }
+
+        // Include comment if provided
+        const comment = $("#settings_comment").val() as string
+        if (comment && comment.trim() !== "") {
+            payload_local.comment = comment.trim()
+            // Clear comment after submission
+            $("#settings_comment").val("")
+        }
+
+        // Log the form responses
+        let outcome = await log_response(payload_local, response.info.item_i)
+
+        if (outcome == null || outcome == false) {
+            notify("Error submitting the form. Please try again.")
+            $("#button_next").removeAttr("disabled")
+            check_form_unlock(formResponses, response.payload)
+            return
+        }
+
+        state.has_unsaved_work = false
+        state.action_log = []
+
+        // Move to next item
+        display_next_item()
+    })
+
+    check_form_unlock(formResponses, response.payload)
+}
+
+// Check if form can be submitted (all required fields filled)
+function check_form_unlock(responses: Array<string | number | null>, payload: Array<DataFormItem>) {
+    if (frozenMode) {
+        $("#button_next").attr("disabled", "disabled")
+        $("#button_next").val("Next 🔒")
+        return
+    }
+
+    // Check if all form fields (non-null form type) are filled
+    for (let i = 0; i < payload.length; i++) {
+        if (payload[i].form !== null) {
+            const response = responses[i]
+            // Check if response is null or empty string
+            if (response === null || response === "") {
+                $("#button_next").attr("disabled", "disabled")
+                $("#button_next").val("Next 🚧")
+                return
+            }
+        }
+    }
+
+    // All required fields are filled
+    $("#button_next").removeAttr("disabled")
+    $("#button_next").val("Next ✅")
+}
+
+
 
 async function navigate_to_item(item_i: number | string) {
     // Warn if there's unsaved work
@@ -884,7 +1125,7 @@ async function navigate_to_item(item_i: number | string) {
     }
 
     // Fetch and display a specific item by index
-    let response = await get_i_item<DataPayload | DataGoodbye>(item_i)
+    let response = await get_i_item<DataPayload | DataGoodbye | DataForm>(item_i)
     state.has_unsaved_work = false
 
     if (response == null) {
@@ -892,10 +1133,13 @@ async function navigate_to_item(item_i: number | string) {
         return
     }
 
+    // clear previous handler
+    $("#button_next").off("click")
     if (response.status == "goodbye") {
-        displayGoodbyeScreen(response as DataGoodbye, navigate_to_item)
+        display_goodbye(response as DataGoodbye, navigate_to_item)
+    } else if (response.status == "form") {
+        display_form(response as DataForm)
     } else if (response.status == "ok") {
-        payload = response as DataPayload
         display_next_payload(response as DataPayload)
     } else {
         console.error("Non-ok response", response)
@@ -903,7 +1147,7 @@ async function navigate_to_item(item_i: number | string) {
 }
 
 async function display_next_item() {
-    let response = await get_next_item<DataPayload | DataGoodbye>()
+    let response = await get_next_item<DataPayload | DataGoodbye | DataForm>()
     state.has_unsaved_work = false
 
     if (response == null) {
@@ -912,9 +1156,10 @@ async function display_next_item() {
     }
 
     if (response.status == "goodbye") {
-        displayGoodbyeScreen(response as DataGoodbye, navigate_to_item)
+        display_goodbye(response as DataGoodbye, navigate_to_item)
+    } else if (response.status == "form") {
+        display_form(response as DataForm)
     } else if (response.status == "ok") {
-        payload = response as DataPayload
         display_next_payload(response as DataPayload)
     } else {
         console.error("Non-ok response", response)
@@ -967,47 +1212,6 @@ async function performValidation(): Promise<Array<boolean> | null> {
 
     return results
 }
-
-$("#button_next").on("click", async function () {
-    // Perform validation unless in skip tutorial mode
-    let validationResult;
-    if (!state.skip_tutorial_mode) {
-        validationResult = await performValidation()
-        if (validationResult == null) {
-            // validation failed, don't proceed
-            return
-        }
-    }
-
-    // disable while communicating with the server
-    $("#button_next").attr("disabled", "disabled")
-    $("#button_next").val("Next 📶")
-    state.action_log.push({ "time": Date.now() / 1000, "action": "submit" + (state.skip_tutorial_mode ? "_skip" : "") })
-
-    let payload_local = { "annotation": state.response_log, "actions": state.action_log, "item": payload?.payload, }
-    if (!state.skip_tutorial_mode && validationResult!.length > 0) {
-        // @ts-ignore
-        payload_local["validations"] = validationResult
-    }
-
-    // Include comment if provided
-    const comment = $("#settings_comment").val() as string
-    if (comment && comment.trim() !== "") {
-        // @ts-ignore
-        payload_local["comment"] = comment.trim()
-        // Clear comment after submission
-        $("#settings_comment").val("")
-    }
-
-    let outcome = await log_response(payload_local, payload!.info.item_i)
-    if (outcome == null || outcome == false) {
-        notify("Error submitting the annotations. Please try again.")
-        $("#button_next").removeAttr("disabled")
-        $("#button_next").val("Next ❓")
-        return
-    }
-    await display_next_item()
-})
 
 // Skip tutorial button handler
 $("#button_skip_tutorial").on("click", function () {

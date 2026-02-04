@@ -76,6 +76,28 @@ export type DataPayload = {
     info: ProtocolInfo
 }
 
+// Form item type for collecting user information
+export type DataFormItem = {
+    text: string,  // The question or label for the form field
+    form: null | "number" | "string" | "choices" | "script",  // Form field type (null = instructions only)
+    choices?: Array<string>  // Optional choices for "choices" form field
+    script?: string  // Optional script for "script" form field
+}
+
+// Form response type - contains multiple form items
+export type DataForm = {
+    status: string,
+    progress: Array<boolean>,
+    progress_welcome?: Array<boolean>,  // Optional welcome progress
+    time: number,
+    payload: Array<DataFormItem>,
+    payload_existing?: {
+        annotation: Array<string | number | null>,  // Previous form responses
+        comment?: string
+    },
+    info: ProtocolInfo
+}
+
 /**
  * Check if an error span is complete (has required fields set based on protocol).
  * For MQM protocol, category must contain "/" to indicate both main category and subcategory are set.
@@ -532,26 +554,13 @@ export type ProtocolInfo = {
     mqm_categories?: { [key: string]: string[] },  // Optional custom MQM categories
 }
 
+
 /**
- * Display goodbye screen when all annotations are done
+ * Gets error spans for a specific model
  */
-export function displayGoodbyeScreen(response: DataGoodbye, navigate_to_item: (i: number | string) => void): void {
-    // Use instructions_goodbye if provided, otherwise use default message
-    // Note: instructions_goodbye may contain arbitrary HTML including variables that are replaced server-side
-
-    $("#output_div").html(`
-    <div class='white-box' style='width: max-content'>
-    <h2>🎉 All done, thank you for your annotations!</h2>
-
-    ${response.instructions_goodbye}
-    <br>
-    <br>
-    </div>
-    `)
-    redrawProgress(null, response.progress_welcome, response.progress, navigate_to_item)
-    $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
-    $("#button_next").prop("disabled", true)
-    $("#button_next").val("Next 💯")
+export function getErrorSpansForModel(error_spans: Record<string, Array<ErrorSpan>> | undefined, model: string): Array<ErrorSpan> {
+    if (!error_spans) return []
+    return error_spans[model] || []
 }
 
 /**

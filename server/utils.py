@@ -9,6 +9,7 @@ ROOT = "."
 RESET_MARKER = "__RESET__"
 TOKEN_MAIN = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
 
+
 def load_progress_data(warn: str | None = None):
     if not os.path.exists(f"{ROOT}/data/progress.json"):
         if warn is not None:
@@ -17,7 +18,7 @@ def load_progress_data(warn: str | None = None):
             f.write(json.dumps({}))
     with open(f"{ROOT}/data/progress.json", "r") as f:
         data = json.load(f)
-    
+
     return data
 
 
@@ -38,42 +39,43 @@ def get_db_log(campaign_id: str) -> list[dict]:
         log_path = f"{ROOT}/data/outputs/{campaign_id}.jsonl"
         if os.path.exists(log_path):
             with open(log_path, "r") as f:
-                _logs[campaign_id] = [
-                    json.loads(line) for line in f.readlines()
-                ]
+                _logs[campaign_id] = [json.loads(line) for line in f.readlines()]
         else:
             _logs[campaign_id] = []
 
     return _logs[campaign_id]
 
 
-def get_db_log_item(campaign_id: str, user_id: str | None, item_i: int | None) -> list[dict]:
+def get_db_log_item(
+    campaign_id: str, user_id: str | None, item_i: int | str | None
+) -> list[dict]:
     """
     Returns the log item for the given campaign_id, user_id and item_i.
     Can be empty. Respects reset markers - if a reset marker is found,
     only entries after the last reset are returned.
     """
     log = get_db_log(campaign_id)
-    
+
     # Filter matching entries
     matching = [
-        entry for entry in log
+        entry
+        for entry in log
         if (
-            (user_id is None or entry.get("user_id") == user_id) and
-            (item_i is None or entry.get("item_i") == item_i)
+            (user_id is None or entry.get("user_id") == user_id)
+            and (item_i is None or entry.get("item_i") == item_i)
         )
     ]
-    
+
     # Find the last reset marker for this user (if any)
     last_reset_idx = -1
     for i, entry in enumerate(matching):
         if entry.get("annotation") == RESET_MARKER:
             last_reset_idx = i
-    
+
     # Return only entries after the last reset
     if last_reset_idx >= 0:
-        matching = matching[last_reset_idx + 1:]
-    
+        matching = matching[last_reset_idx + 1 :]
+
     return matching
 
 
@@ -89,7 +91,13 @@ def save_db_payload(campaign_id: str, payload: dict):
     log_path = f"{ROOT}/data/outputs/{campaign_id}.jsonl"
     os.makedirs(os.path.dirname(log_path), exist_ok=True)
     with open(log_path, "a") as log_file:
-        log_file.write(json.dumps(payload, ensure_ascii=False,) + "\n")
+        log_file.write(
+            json.dumps(
+                payload,
+                ensure_ascii=False,
+            )
+            + "\n"
+        )
 
     log.append(payload)
 
@@ -102,20 +110,20 @@ def check_validation_threshold(
 ) -> bool:
     """
     Check if user passes the validation threshold.
-    
+
     The threshold is defined in campaign info as 'validation_threshold':
     - If integer: pass if number of failed checks <= threshold
-    - If float in [0, 1): pass if proportion of failed checks <= threshold  
+    - If float in [0, 1): pass if proportion of failed checks <= threshold
     - If float >= 1: always fail
     - If None/not set: defaults to 0 (fail on any failed check)
-    
+
     Returns True if validation passes, False otherwise.
     """
     threshold = tasks_data[campaign_id]["info"].get("validation_threshold", 0)
-    
+
     user_progress = progress_data[campaign_id][user_id]
     validations = user_progress.get("validations", {})
-    
+
     # Count failed checks (validations is dict of item_i -> list of bools)
     total_checks = 0
     failed_checks = 0
@@ -128,11 +136,11 @@ def check_validation_threshold(
     # If no validation checks exist, pass
     if total_checks == 0:
         return True
-    
+
     # Float >= 1: always fail
     if isinstance(threshold, float) and threshold >= 1:
         return False
-    
+
     # Check threshold based on type
     if isinstance(threshold, float):
         # Float in [0, 1): proportion-based, pass if failed proportion <= threshold
@@ -140,3 +148,12 @@ def check_validation_threshold(
     else:
         # Integer: count-based, pass if failed count <= threshold
         return failed_checks <= threshold
+
+
+def is_form_document(items):
+    """Check if a document contains form items instead of evaluation items."""
+    if not items:
+        return False
+    # Check if first item has 'text' and 'form' keys (form item)
+    first_item = items[0]
+    return "text" in first_item and "form" in first_item

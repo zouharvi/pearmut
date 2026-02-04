@@ -1,0 +1,59 @@
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "DA",
+    "instructions": "Please provide some information about yourself before we begin."
+  },
+  "campaign_id": "user_info_example",
+  "data_welcome": [
+    [
+      {
+        "text": "Welcome! Before you start the annotation task, please tell us a bit about yourself.",
+        "form": null
+      },
+      {
+        "text": "What is your native language?",
+        "form": "string"
+      },
+      {
+        "text": "How would you rate your expertise in the target language? (1-5)",
+        "form": "choices",
+        "choices": [
+          "A0 (None)",
+          "A1",
+          "A2",
+          "B1",
+          "B2",
+          "C1 (Professional)",
+          "C2 (Native)"
+        ]
+      },
+      {
+        "text": "How many years have you been working professionaly with the target language (German)?",
+        "form": "number"
+      },
+      {
+        "text": "What is your age?",
+        "form": "number"
+      },
+      {
+        "text": "By clicking Next you agree to collect anonymized information about your setup (e.g. timezone, screen resolution).",
+        "form": "script",
+        "script": "let a = 50 + 14; return {'resolution': `${screen.width}x${screen.height}`, 'timezone': Intl.DateTimeFormat().resolvedOptions().timeZone, 'platform': navigator.platform, 'a': a}"
+      }
+    ]
+  ],
+  "data": [
+    [
+      [
+        {
+          "item_id": "demo_1",
+          "src": "This is a sample source sentence.",
+          "tgt": {
+            "System-A": "This is a translation."
+          }
+        }
+      ]
+    ]
+  ]
+}
