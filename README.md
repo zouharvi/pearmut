@@ -316,6 +316,9 @@ Documents must be homogeneous: all form items or all evaluation items.
 }
 ```
 
+<img width="400" alt="Screenshot of a user form" src="https://github.com/user-attachments/assets/2310e8dc-98e9-4abf-8a27-6781b0094efe" />
+
+
 It is possible to automatically collect additional information from the host system using `"script"` field type.
 Typically such a form document (or their sequence) would be stored in `"data_welcome"` such that it is both mandatory and show to all users.
 See [examples/user_info_form.json](examples/user_info_form.json).
