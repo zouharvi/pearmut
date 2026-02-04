@@ -35,8 +35,6 @@ const searchParams = new URLSearchParams(window.location.search)
 const frozenMode = searchParams.has("frozen")
 
 
-
-
 const state = {
     response_log: [] as Array<DocumentResponse>,
     action_log: [] as Array<any>,
@@ -865,6 +863,53 @@ async function display_next_payload(response: DataPayload) {
             state.action_log.push({ "time": Date.now() / 1000, "action": "media_seek", "media_src": element.src, "model": context, "media_time": element.currentTime })
         })
     })
+
+
+    $("#button_next").off("click")
+    $("#button_next").on("click", async function () {
+        // Perform validation unless in skip tutorial mode
+        let validationResult: boolean[] | null = null
+        if (!state.skip_tutorial_mode) {
+            validationResult = await performValidation()
+            if (validationResult == null) {
+                // validation failed, don't proceed
+                return
+            }
+        }
+
+        // disable while communicating with the server
+        $("#button_next").attr("disabled", "disabled")
+        $("#button_next").val("Next 📶")
+        state.action_log.push({ "time": Date.now() / 1000, "action": "submit" + (state.skip_tutorial_mode ? "_skip" : "") })
+
+        // Build payload
+        let payload_local: any = {
+            "annotation": state.response_log,
+            "actions": state.action_log,
+            "item": response.payload,
+        }
+
+        if (!state.skip_tutorial_mode && validationResult && validationResult.length > 0) {
+            payload_local["validations"] = validationResult
+        }
+
+        // Include comment if provided
+        const comment = $("#settings_comment").val() as string
+        if (comment && comment.trim() !== "") {
+            payload_local["comment"] = comment.trim()
+            // Clear comment after submission
+            $("#settings_comment").val("")
+        }
+
+        let outcome = await log_response(payload_local, response.info.item_i)
+        if (outcome == null || outcome == false) {
+            notify("Error submitting the annotations. Please try again.")
+            $("#button_next").removeAttr("disabled")
+            check_unlock()
+            return
+        }
+        await display_next_item()
+    })
 }
 
 /**
@@ -1070,7 +1115,6 @@ function check_form_unlock(responses: Array<string | number | null>, payload: Ar
 }
 
 
-let payload: DataPayload | DataForm | null = null
 
 async function navigate_to_item(item_i: number | string) {
     // Warn if there's unsaved work
@@ -1089,13 +1133,13 @@ async function navigate_to_item(item_i: number | string) {
         return
     }
 
+    // clear previous handler
+    $("#button_next").off("click")
     if (response.status == "goodbye") {
         display_goodbye(response as DataGoodbye, navigate_to_item)
     } else if (response.status == "form") {
-        payload = response as DataForm
         display_form(response as DataForm)
     } else if (response.status == "ok") {
-        payload = response as DataPayload
         display_next_payload(response as DataPayload)
     } else {
         console.error("Non-ok response", response)
@@ -1114,10 +1158,8 @@ async function display_next_item() {
     if (response.status == "goodbye") {
         display_goodbye(response as DataGoodbye, navigate_to_item)
     } else if (response.status == "form") {
-        payload = response as DataForm
         display_form(response as DataForm)
     } else if (response.status == "ok") {
-        payload = response as DataPayload
         display_next_payload(response as DataPayload)
     } else {
         console.error("Non-ok response", response)
@@ -1170,47 +1212,6 @@ async function performValidation(): Promise<Array<boolean> | null> {
 
     return results
 }
-
-$("#button_next").on("click", async function () {
-    // Perform validation unless in skip tutorial mode
-    let validationResult;
-    if (!state.skip_tutorial_mode) {
-        validationResult = await performValidation()
-        if (validationResult == null) {
-            // validation failed, don't proceed
-            return
-        }
-    }
-
-    // disable while communicating with the server
-    $("#button_next").attr("disabled", "disabled")
-    $("#button_next").val("Next 📶")
-    state.action_log.push({ "time": Date.now() / 1000, "action": "submit" + (state.skip_tutorial_mode ? "_skip" : "") })
-
-    let payload_local = { "annotation": state.response_log, "actions": state.action_log, "item": payload?.payload, }
-    if (!state.skip_tutorial_mode && validationResult!.length > 0) {
-        // @ts-ignore
-        payload_local["validations"] = validationResult
-    }
-
-    // Include comment if provided
-    const comment = $("#settings_comment").val() as string
-    if (comment && comment.trim() !== "") {
-        // @ts-ignore
-        payload_local["comment"] = comment.trim()
-        // Clear comment after submission
-        $("#settings_comment").val("")
-    }
-
-    let outcome = await log_response(payload_local, payload!.info.item_i)
-    if (outcome == null || outcome == false) {
-        notify("Error submitting the annotations. Please try again.")
-        $("#button_next").removeAttr("disabled")
-        $("#button_next").val("Next ❓")
-        return
-    }
-    await display_next_item()
-})
 
 // Skip tutorial button handler
 $("#button_skip_tutorial").on("click", function () {

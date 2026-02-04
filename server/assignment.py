@@ -64,6 +64,7 @@ def _completed_response(
         content={
             "status": "goodbye",
             "progress": progress,
+            "progress_welcome": user_progress["progress_welcome"],
             "time": user_progress["time"],
             "token": token,
             "instructions_goodbye": instructions_goodbye,
@@ -132,16 +133,16 @@ def get_i_item_taskbased(
     user_progress = progress_data[campaign_id][user_id]
     progress_welcome = user_progress["progress_welcome"]
 
-    # Convert welcome_X string to integer index
-    actual_index = item_i
-    is_welcome_item = isinstance(item_i, str) and item_i.startswith("welcome_")
-    if is_welcome_item:
+    # if welcome_X, payload is from data_welcome[X], otherwise data[user][X]
+    if isinstance(item_i, str) and item_i.startswith("welcome_"):
         actual_index = int(item_i.split("_")[1])
-        # Validate against total number of welcome items
-        if actual_index < 0 or actual_index >= len(progress_welcome):
+        if actual_index < 0 or actual_index >= len(
+            data_all[campaign_id]["data_welcome"]
+        ):
             return JSONResponse(
                 content="Welcome item index out of range", status_code=400
             )
+        payload = data_all[campaign_id]["data_welcome"][actual_index]
     else:
         # Prevent accessing regular items unless all welcome items are complete
         if not all(progress_welcome):
@@ -149,6 +150,9 @@ def get_i_item_taskbased(
                 content="Complete all welcome items before accessing regular items",
                 status_code=400,
             )
+        if item_i < 0 or item_i >= len(data_all[campaign_id]["data"][user_id]):
+            return JSONResponse(content="Item index out of range", status_code=400)
+        payload = data_all[campaign_id]["data"][user_id][item_i]
 
     # try to get existing annotations if any
     items_existing = get_db_log_item(campaign_id, user_id, item_i)
@@ -160,10 +164,6 @@ def get_i_item_taskbased(
         if "comment" in latest_item:
             payload_existing["comment"] = latest_item["comment"]
 
-    if actual_index < 0 or actual_index >= len(data_all[campaign_id]["data"][user_id]):
-        return JSONResponse(content="Item index out of range", status_code=400)
-
-    payload = data_all[campaign_id]["data"][user_id][actual_index]
     is_form = is_form_document(payload)
 
     return JSONResponse(
