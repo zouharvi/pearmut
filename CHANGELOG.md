@@ -8,6 +8,7 @@
   - Add `data_welcome` to support tutorials seen by all annotators
   - Improve user progress reporting in dashboard
   - Add `docs_per_user` cap for single-stream and dynamic assignment
+  - Add form for collecting user information
 - v1.0.2
   - Fix `token_main` vulnerability
   - Add textfields for translation and post-editing
