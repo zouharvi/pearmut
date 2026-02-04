@@ -135,8 +135,10 @@ def _validate_item_structure(items):
                 raise ValueError("Form item must contain 'form' key")
             if not isinstance(item["text"], str):
                 raise ValueError("Form item 'text' must be a string")
-            if item["form"] not in [None, "number", "string"]:
-                raise ValueError("Form item 'form' must be null, 'number', or 'string'")
+            if item["form"] not in {None, "number", "string", "choices", "script"}:
+                raise ValueError(
+                    "Form item 'form' must be null, 'number', 'string', 'choices', or 'script'"
+                )
         else:
             # Validate evaluation item structure
             if "tgt" not in item:
@@ -316,7 +318,6 @@ def _add_single_campaign(campaign_data, overwrite, server):
 
     # Validate and process data_welcome if present
     data_welcome = campaign_data.get("data_welcome", [])
-    welcome_item_count = 0
     if data_welcome:
         if not isinstance(data_welcome, list):
             raise ValueError("'data_welcome' must be a list of documents.")
@@ -328,13 +329,6 @@ def _add_single_campaign(campaign_data, overwrite, server):
                 _validate_item_structure(doc)
             except ValueError as e:
                 raise ValueError(f"Welcome document {doc_i}: {e}")
-        # Set item_id to welcome_0, welcome_1, etc. for each item in each document
-        item_counter = 0
-        for doc in data_welcome:
-            for item in doc:
-                item["item_id"] = f"welcome_{item_counter}"
-                item_counter += 1
-        welcome_item_count = item_counter
 
     if assignment == "task-based":
         tasks = campaign_data["data"]
@@ -482,7 +476,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
     # Prepend data_welcome to tasks if present
     if data_welcome:
         if assignment == "task-based":
-            tasks = [data_welcome + task for task in tasks]
+            tasks = [task for task in tasks]
         elif assignment in ["single-stream", "dynamic"]:
             tasks = data_welcome + tasks
 
@@ -520,7 +514,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
                 if assignment == "dynamic"
                 else int(f"Invalid assignment: {assignment}")
             ),
-            "progress_welcome": [False] * welcome_item_count,
+            "progress_welcome": [None] * len(data_welcome),
             "time_start": None,
             "time_end": None,
             "time": 0,

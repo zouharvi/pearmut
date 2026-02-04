@@ -1066,7 +1066,7 @@ function check_form_unlock(responses: Array<string | number | null>, payload: Ar
 
     // All required fields are filled
     $("#button_next").removeAttr("disabled")
-    $("#button_next").val("Next ✓")
+    $("#button_next").val("Next ✅")
 }
 
 
