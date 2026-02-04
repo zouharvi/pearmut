@@ -1,7 +1,7 @@
 
 # Changelog
 
-- v1.0.3 (unreleased)
+- v1.1.0 (unreleased)
   - Log media actions
   - Add basic mobile support
   - Add custom MQM taxonomy support
