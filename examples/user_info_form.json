@@ -17,25 +17,25 @@
       },
       {
         "text": "How would you rate your expertise in the target language? (1-5)",
-        "form": "number"
+        "form": "choices",
+        "choices": [
+          "A0 (None)",
+          "A1",
+          "A2",
+          "B1",
+          "B2",
+          "C1 (Professional)",
+          "C2 (Native)"
+        ]
       },
       {
         "text": "What is your age?",
         "form": "number"
       },
       {
-        "text": "Preferred OS?",
-        "form": "choices",
-        "choices": [
-          "Linux",
-          "Windows",
-          "MacOS"
-        ]
-      },
-      {
-        "text": "Computed Value (Hidden)",
+        "text": "By clicking Next you agree to collect anonymized information about your setup (e.g. timezone, screen resolution).",
         "form": "script",
-        "script": "return 40 + 2"
+        "script": "let a = 50 + 14; return {'resolution': `${screen.width}x${screen.height}`, 'timezone': Intl.DateTimeFormat().resolvedOptions().timeZone, 'platform': navigator.platform, 'a': a}"
       }
     ]
   ],
