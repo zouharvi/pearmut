@@ -17,13 +17,13 @@ import {
     DataFormItem,
     ProtocolInfo,
     SliderConfig,
-    displayGoodbyeScreen,
     isMediaContent,
     contentToCharSpans,
     isSpanComplete,
     computeWordBoundaries,
     detectTextDirection,
     debounce,
+    getErrorSpansForModel,
     DocumentResponse,
     DataPayload,
     DataPayloadItem,
@@ -36,13 +36,6 @@ const frozenMode = searchParams.has("frozen")
 
 
 
-/**
- * Gets error spans for a specific model
- */
-function getErrorSpansForModel(error_spans: Record<string, Array<ErrorSpan>> | undefined, model: string): Array<ErrorSpan> {
-    if (!error_spans) return []
-    return error_spans[model] || []
-}
 
 const state = {
     response_log: [] as Array<DocumentResponse>,
@@ -747,7 +740,7 @@ async function display_next_payload(response: DataPayload) {
 
     state.protocol_error_spans = response.info.protocol == "ESA" || response.info.protocol == "MQM"
     state.protocol_error_categories = response.info.protocol == "MQM"
-    
+
     // Use custom MQM categories if provided, otherwise use default
     state.mqm_categories = response.info.mqm_categories || MQM_ERROR_CATEGORIES
 
@@ -874,6 +867,29 @@ async function display_next_payload(response: DataPayload) {
     })
 }
 
+/**
+ * Display goodbye screen when all annotations are done
+ */
+function display_goodbye(response: DataGoodbye, navigate_to_item: (i: number | string) => void): void {
+    // Use instructions_goodbye if provided, otherwise use default message
+    // Note: instructions_goodbye may contain arbitrary HTML including variables that are replaced server-side
+
+    $("#output_div").html(`
+    <div class='white-box' style='width: max-content'>
+    <h2>🎉 All done, thank you for your annotations!</h2>
+
+    ${response.instructions_goodbye}
+    <br>
+    <br>
+    </div>
+    `)
+    redrawProgress(null, response.progress_welcome, response.progress, navigate_to_item)
+    $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
+    $("#button_next").prop("disabled", true)
+    $("#button_next").val("Next 💯")
+}
+
+
 // Display form for collecting user information
 function display_form(response: DataForm) {
     // Clear previous content and state
@@ -895,7 +911,7 @@ function display_form(response: DataForm) {
 
     // Create form container
     const formContainer = $('<div class="form-container"></div>')
-    
+
     // Store form responses (using Array.from for clarity)
     const formResponses: Array<string | number | null> = Array.from({ length: response.payload.length }, () => null)
 
@@ -909,7 +925,7 @@ function display_form(response: DataForm) {
     // Create form fields
     response.payload.forEach((item, index) => {
         const fieldDiv = $('<div class="form-field"></div>')
-        
+
         // Add the text/label
         const label = $(`<div class="form-label">${item.text}</div>`)
         fieldDiv.append(label)
@@ -920,7 +936,7 @@ function display_form(response: DataForm) {
             if (formResponses[index] !== null) {
                 input.val(String(formResponses[index]))
             }
-            input.on('input', function() {
+            input.on('input', function () {
                 formResponses[index] = $(this).val() as string
                 state.has_unsaved_work = true
                 check_form_unlock(formResponses, response.payload)
@@ -931,7 +947,7 @@ function display_form(response: DataForm) {
             if (formResponses[index] !== null) {
                 input.val(Number(formResponses[index]))
             }
-            input.on('input', function() {
+            input.on('input', function () {
                 const val = $(this).val()
                 formResponses[index] = val === "" ? null : Number(val)
                 state.has_unsaved_work = true
@@ -939,6 +955,8 @@ function display_form(response: DataForm) {
             })
             fieldDiv.append(input)
         }
+        // TODO: item.form === "choices", item.choices to dropdown
+        // TODO: item.form === "script", item.script to script. call the function and store the result
         // If item.form is null, it's just text/instructions - no input field
 
         formContainer.append(fieldDiv)
@@ -952,7 +970,7 @@ function display_form(response: DataForm) {
         // Disable button during submission
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Next 📶")
-        
+
         state.action_log.push({ "time": Date.now() / 1000, "action": "submit" })
 
         // Build payload with proper typing
@@ -977,7 +995,7 @@ function display_form(response: DataForm) {
 
         // Log the form responses
         let outcome = await log_response(payload_local, response.info.item_i)
-        
+
         if (outcome == null || outcome == false) {
             notify("Error submitting the form. Please try again.")
             $("#button_next").removeAttr("disabled")
@@ -1042,7 +1060,7 @@ async function navigate_to_item(item_i: number | string) {
     }
 
     if (response.status == "goodbye") {
-        displayGoodbyeScreen(response as DataGoodbye, navigate_to_item)
+        display_goodbye(response as DataGoodbye, navigate_to_item)
     } else if (response.status == "form") {
         payload = response as DataForm
         display_form(response as DataForm)
@@ -1064,7 +1082,7 @@ async function display_next_item() {
     }
 
     if (response.status == "goodbye") {
-        displayGoodbyeScreen(response as DataGoodbye, navigate_to_item)
+        display_goodbye(response as DataGoodbye, navigate_to_item)
     } else if (response.status == "form") {
         payload = response as DataForm
         display_form(response as DataForm)

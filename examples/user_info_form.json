@@ -16,7 +16,7 @@
         "form": "string"
       },
       {
-        "text": "How would you rate your expertise in the target language? (1-10)",
+        "text": "How would you rate your expertise in the target language? (1-5)",
         "form": "number"
       },
       {
