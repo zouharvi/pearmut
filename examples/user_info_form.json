@@ -22,6 +22,20 @@
       {
         "text": "What is your age?",
         "form": "number"
+      },
+      {
+        "text": "Preferred OS?",
+        "form": "choices",
+        "choices": [
+          "Linux",
+          "Windows",
+          "MacOS"
+        ]
+      },
+      {
+        "text": "Computed Value (Hidden)",
+        "form": "script",
+        "script": "return 40 + 2"
       }
     ]
   ],

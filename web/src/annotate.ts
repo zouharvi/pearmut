@@ -954,10 +954,40 @@ function display_form(response: DataForm) {
                 check_form_unlock(formResponses, response.payload)
             })
             fieldDiv.append(input)
+        } else if (item.form === "choices" && item.choices) {
+            const select = $('<select class="form-input"></select>')
+            // Add default empty option if no value is selected
+            if (formResponses[index] === null) {
+                select.append('<option value="" disabled selected>Select an option</option>')
+            }
+
+            item.choices.forEach(choice => {
+                const option = $(`<option value="${choice}">${choice}</option>`)
+                if (formResponses[index] === choice) {
+                    option.prop("selected", true)
+                }
+                select.append(option)
+            })
+
+            select.on('change', function () {
+                const val = $(this).val() as string
+                formResponses[index] = val
+                state.has_unsaved_work = true
+                check_form_unlock(formResponses, response.payload)
+            })
+            fieldDiv.append(select)
+        } else if (item.form === "script" && item.script) {
+            // Script is evaluated immediately and hidden from user view
+            try {
+                // Wrap in anonymous function as requested: "put the content of form.script into an anonymous function"
+                const scriptFunc = new Function(item.script)
+                const result = scriptFunc()
+                formResponses[index] = result
+            } catch (e) {
+                console.error("Error executing form script:", e)
+                formResponses[index] = "Error: " + String(e)
+            }
         }
-        // TODO: item.form === "choices", item.choices to dropdown
-        // TODO: item.form === "script", item.script to script. call the function and store the result
-        // If item.form is null, it's just text/instructions - no input field
 
         formContainer.append(fieldDiv)
     })

@@ -22,7 +22,6 @@ os.makedirs(f"{ROOT}/data/tasks", exist_ok=True)
 load_progress_data(warn=None)
 
 
-
 def _run(args_unknown):
     # Acquire lock before starting server
     lock_file = f"{ROOT}/data/.lock"
@@ -69,7 +68,7 @@ def _run(args_unknown):
         + f"token_main={TOKEN_MAIN}"
         + "".join(
             [
-                f"&campaign_id={urllib.parse.quote_plus(campaign_id)}&token={campaign_data["token"]}"
+                f"&campaign_id={urllib.parse.quote_plus(campaign_id)}&token={campaign_data['token']}"
                 for campaign_id, campaign_data in tasks_data.items()
             ]
         )
@@ -79,14 +78,13 @@ def _run(args_unknown):
     )
     print("🍐", dashboard_url + "\n", flush=True)
 
-
     # disable startup message
     uvicorn.config.LOGGING_CONFIG["loggers"]["uvicorn.error"]["level"] = "WARNING"
     # set time logging
     uvicorn.config.LOGGING_CONFIG["formatters"]["access"]["datefmt"] = "%Y-%m-%d %H:%M"
-    uvicorn.config.LOGGING_CONFIG["formatters"]["access"][
-        "fmt"
-    ] = "%(asctime)s %(levelprefix)s %(client_addr)s - %(request_line)s %(status_code)s"
+    uvicorn.config.LOGGING_CONFIG["formatters"]["access"]["fmt"] = (
+        "%(asctime)s %(levelprefix)s %(client_addr)s - %(request_line)s %(status_code)s"
+    )
     uvicorn.run(
         app,
         host="0.0.0.0",
@@ -138,9 +136,7 @@ def _validate_item_structure(items):
             if not isinstance(item["text"], str):
                 raise ValueError("Form item 'text' must be a string")
             if item["form"] not in [None, "number", "string"]:
-                raise ValueError(
-                    "Form item 'form' must be null, 'number', or 'string'"
-                )
+                raise ValueError("Form item 'form' must be null, 'number', or 'string'")
         else:
             # Validate evaluation item structure
             if "tgt" not in item:
@@ -165,7 +161,9 @@ def _validate_item_structure(items):
                 # Validate that model names don't contain only numbers (JavaScript ordering issue)
                 for model_name, translation in item["tgt"].items():
                     if not isinstance(model_name, str):
-                        raise ValueError("Model names in 'tgt' dictionary must be strings")
+                        raise ValueError(
+                            "Model names in 'tgt' dictionary must be strings"
+                        )
                     if model_name.isdigit():
                         raise ValueError(
                             f"Model name '{model_name}' cannot be only numeric digits (would cause issues in JS/TS)"
@@ -398,9 +396,9 @@ def _add_single_campaign(campaign_data, overwrite, server):
         if "dynamic_contrastive_models" not in campaign_data["info"]:
             campaign_data["info"]["dynamic_contrastive_models"] = 1
         # Validate that dynamic_first is at least 1
-        assert (
-            campaign_data["info"]["dynamic_first"] >= 1
-        ), "dynamic_first must be at least 1"
+        assert campaign_data["info"]["dynamic_first"] >= 1, (
+            "dynamic_first must be at least 1"
+        )
         # Validate that dynamic_contrastive_models is at most dynamic_top
         assert (
             campaign_data["info"]["dynamic_contrastive_models"]
@@ -414,9 +412,9 @@ def _add_single_campaign(campaign_data, overwrite, server):
         for item in campaign_data["data"]:
             if item and len(item) > 0:
                 item_models = set(item[0]["tgt"].keys())
-                assert (
-                    item_models == all_models
-                ), "All items must have the same model outputs"
+                assert item_models == all_models, (
+                    "All items must have the same model outputs"
+                )
     else:
         raise ValueError(f"Unknown campaign assignment type: {assignment}")
 
@@ -510,7 +508,6 @@ def _add_single_campaign(campaign_data, overwrite, server):
 
     user_progress = {
         user_id: {
-            # TODO: progress tracking could be based on the assignment type
             "progress": (
                 [False] * len(campaign_data["data"][user_id])
                 if assignment == "task-based"
@@ -524,7 +521,9 @@ def _add_single_campaign(campaign_data, overwrite, server):
                     )
                 )
             ),
-            "progress_welcome": [False] * welcome_item_count if welcome_item_count > 0 else [],
+            "progress_welcome": [False] * welcome_item_count
+            if welcome_item_count > 0
+            else [],
             "time_start": None,
             "time_end": None,
             "time": 0,
@@ -625,7 +624,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
     )
     for user_id, user_val in user_progress.items():
         # point to the protocol URL
-        print(f'🧑 {server}/{user_val["url"]}')
+        print(f"🧑 {server}/{user_val['url']}")
     print()
 
 
