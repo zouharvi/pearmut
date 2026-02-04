@@ -29,6 +29,10 @@
         ]
       },
       {
+        "text": "How many years have you been working professionaly with the target language (German)?",
+        "form": "number"
+      },
+      {
         "text": "What is your age?",
         "form": "number"
       },
