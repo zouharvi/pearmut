@@ -391,13 +391,13 @@ def _add_single_campaign(campaign_data, overwrite, server):
         # Validate dynamic-specific parameters
         if "dynamic_top" not in campaign_data["info"]:
             campaign_data["info"]["dynamic_top"] = 2
-        if "dynamic_first" not in campaign_data["info"]:
-            campaign_data["info"]["dynamic_first"] = 5
+        if "dynamic_warmup" not in campaign_data["info"]:
+            campaign_data["info"]["dynamic_warmup"] = 5
         if "dynamic_contrastive_models" not in campaign_data["info"]:
             campaign_data["info"]["dynamic_contrastive_models"] = 1
-        # Validate that dynamic_first is at least 1
-        assert campaign_data["info"]["dynamic_first"] >= 1, (
-            "dynamic_first must be at least 1"
+        # Validate that dynamic_warmup is at least 1
+        assert campaign_data["info"]["dynamic_warmup"] >= 1, (
+            "dynamic_warmup must be at least 1"
         )
         # Validate that dynamic_contrastive_models is at most dynamic_top
         assert (
@@ -492,7 +492,7 @@ def _add_single_campaign(campaign_data, overwrite, server):
         campaign_data["data"] = {
             user_id: task for user_id, task in zip(user_ids, tasks)
         }
-    elif assignment in ["single-stream", "dynamic"]:
+    elif assignment in {"single-stream", "dynamic"}:
         campaign_data["data"] = tasks
 
     # generate a token for dashboard access if not present
@@ -508,22 +508,19 @@ def _add_single_campaign(campaign_data, overwrite, server):
 
     user_progress = {
         user_id: {
+            # Progress tracking: None | "completed" for task-based,
+            # None | "completed" | "completed_foreign" for single-stream/dynamic
             "progress": (
-                [False] * len(campaign_data["data"][user_id])
+                [None] * len(campaign_data["data"][user_id])
                 if assignment == "task-based"
-                else (
-                    [False] * len(campaign_data["data"])
-                    if assignment == "single-stream"
-                    else (
-                        [list() for _ in range(len(campaign_data["data"]))]
-                        if assignment == "dynamic"
-                        else []
-                    )
-                )
+                else [None] * len(campaign_data["data"])
+                if assignment == "single-stream"
+                else [{model: None for model in all_models}]
+                * len(campaign_data["data"])
+                if assignment == "dynamic"
+                else int(f"Invalid assignment: {assignment}")
             ),
-            "progress_welcome": [False] * welcome_item_count
-            if welcome_item_count > 0
-            else [],
+            "progress_welcome": [False] * welcome_item_count,
             "time_start": None,
             "time_end": None,
             "time": 0,
