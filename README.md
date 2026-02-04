@@ -301,7 +301,9 @@ Use `data_welcome` to add tutorial items that users must complete before startin
 
 ### Form Items for User Metadata
 
-Collect user information (demographics, expertise) before annotation tasks using form items in `data_welcome`. Form items have `text` (label/question) and `form` (field type: `null`, `"string"`, or `"number"`). Documents must be homogeneous: all form items or all evaluation items.
+Collect user information (demographics, expertise) before annotation tasks using form items in `data_welcome`.
+Form items have `text` (label/question) and `form` (field type: `null`, `"string"`, `"number"`, `"choices"`, and `"script"`).
+Documents must be homogeneous: all form items or all evaluation items.
 
 ```python
 {
@@ -314,6 +316,8 @@ Collect user information (demographics, expertise) before annotation tasks using
 }
 ```
 
+It is possible to automatically collect additional information from the host system using `"script"` field type.
+Typically such a form document (or their sequence) would be stored in `"data_welcome"` such that it is both mandatory and show to all users.
 See [examples/user_info_form.json](examples/user_info_form.json).
 
 ### Single-stream Assignment
