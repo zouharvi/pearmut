@@ -1,14 +1,17 @@
 
 # Changelog
 
-- v1.0.3 (unreleased)
+Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
+
+- v1.1.1 (unreleased)
+- v1.1.0
   - Log media actions
   - Add basic mobile support
   - Add custom MQM taxonomy support
   - Add `data_welcome` to support tutorials seen by all annotators
   - Improve user progress reporting in dashboard
   - Add `docs_per_user` cap for single-stream and dynamic assignment
-  - Add form for collecting user information
+  - Add form document type for collecting user and other non-evaluation information
 - v1.0.2
   - Fix `token_main` vulnerability
   - Add textfields for translation and post-editing
