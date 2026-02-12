@@ -181,6 +181,10 @@ input[type="button"].error_delete:hover {
     cursor: pointer;
 }
 
+input[type="button"][selected] {
+    border-radius: 2px;
+}
+
 /* Progress bar */
 #progress span {
     font-size: 0pt;

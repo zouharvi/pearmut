@@ -345,10 +345,16 @@ export function createSpanToolbox(
         const setSeverity = (sev: string) => {
             updateErrorClass(tgt_chars_objs, left_i, right_i, sev)
             error_span.severity = sev
+            toolbox.find(".span_toolbox_esa input[type='button']").removeAttr("selected")
+            toolbox.find(`.error_${sev}`).attr("selected", "selected")
         }
         toolbox.find(".error_neutral").on("click", () => setSeverity("neutral"))
         toolbox.find(".error_minor").on("click", () => setSeverity("minor"))
         toolbox.find(".error_major").on("click", () => setSeverity("major"))
+
+        if (error_span.severity) {
+            toolbox.find(`.error_${error_span.severity}`).attr("selected", "selected")
+        }
     } else {
         // Frozen mode disabling
         toolbox.find(".error_delete, .error_neutral, .error_minor, .error_major").prop("disabled", true)
@@ -371,7 +377,9 @@ export function createSpanToolbox(
 
         let cat2s = mqm_categories[cat1]
         if (cat2s && cat2s.length > 0) {
-            cat2_select.empty().prop("disabled", false)
+            if (!frozenMode) {
+                cat2_select.empty().prop("disabled", false)
+            }
             for (let subcat of cat2s) {
                 cat2_select.append(`<option value="${subcat}">${subcat}</option>`)
             }
