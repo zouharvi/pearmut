@@ -310,7 +310,7 @@ export function createSpanToolbox(
             if (cat1 == "") {
                 cat2_select.prop("disabled", true)
                 error_span.category = ""
-            } else if (cat2s.length == 0) {
+            } else if (cat2s.length == 1) {
                 // No subcategories - disable subcategory select and use category alone
                 cat2_select.prop("disabled", true)
                 error_span.category = `${cat1}/${cat1}`

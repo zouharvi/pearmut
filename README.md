@@ -191,10 +191,9 @@ For MQM protocol campaigns, you can define a custom error taxonomy instead of us
     "assignment": "task-based",
     "protocol": "MQM",
     "mqm_categories": {
-      "": [],                          # Empty selection option
-      "General": ["", "Accuracy", "Fluency"],
-      "Audio-specific": ["", "Inaudible", "Background noise", "Speaker overlap", "Misinterpretation"],
-      "Style": ["", "Awkward", "Embarassing"],
+      "General": ["Accuracy", "Fluency"],
+      "Audio-specific": ["Inaudible", "Background noise", "Speaker overlap", "Misinterpretation"],
+      "Style": ["Awkward", "Embarassing"],
       "Unknown": []                    # Category with no subcategories
     }
   },

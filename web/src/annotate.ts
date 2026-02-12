@@ -740,7 +740,16 @@ async function display_next_payload(response: DataPayload) {
     state.protocol_error_categories = response.info.protocol == "MQM"
 
     // Use custom MQM categories if provided, otherwise use default
-    state.mqm_categories = response.info.mqm_categories || MQM_ERROR_CATEGORIES
+    if (response.info.mqm_categories) {
+        // adding blanks
+        state.mqm_categories = {
+            "": [],
+            ...Object.fromEntries(Object.entries(response.info.mqm_categories).map(([key, value]) => [key, ["", ...value]]))
+        }
+
+    } else {
+        state.mqm_categories = MQM_ERROR_CATEGORIES
+    }
 
     // Set global instructions from payload
     if (response.info.instructions) {
