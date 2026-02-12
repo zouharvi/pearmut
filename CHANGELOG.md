@@ -4,6 +4,7 @@
 Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
 
 - v1.1.1 (unreleased)
+  - Prevent modifying a running instance
 - v1.1.0
   - Log media actions
   - Add basic mobile support
