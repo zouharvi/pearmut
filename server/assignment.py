@@ -304,7 +304,7 @@ def get_next_item_taskbased(
                 | {
                     k: v
                     for k, v in data_all[campaign_id]["info"].items()
-                    if k in {"protocol", "sliders", "textfield", "show_model_names"}
+                    if k in CAMPAIGN_INFO_PUBLIC
                 },
                 "payload": payload,
             }
@@ -407,7 +407,7 @@ def get_next_item_singlestream(
                 | {
                     k: v
                     for k, v in data_all[campaign_id]["info"].items()
-                    if k in {"protocol", "sliders", "textfield", "show_model_names"}
+                    if k in CAMPAIGN_INFO_PUBLIC
                 },
                 "payload": payload,
             }
@@ -522,7 +522,7 @@ def get_next_item_dynamic(
                 | {
                     k: v
                     for k, v in campaign_data["info"].items()
-                    if k in {"protocol", "sliders", "textfield", "show_model_names"}
+                    if k in CAMPAIGN_INFO_PUBLIC
                 },
                 "payload": campaign_data["data"][item_i],
             }
