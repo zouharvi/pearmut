@@ -316,3 +316,40 @@ class TestItemValidation:
 
         # Should not raise - the score_greaterthan field is valid
         _add_single_campaign(campaign_data, True, "http://localhost:8001")
+
+    def test_custom_sliders_with_validation(self):
+        """Test that campaigns with custom sliders and validation can be loaded."""
+        from pearmut.cli import _add_single_campaign
+
+        campaign_data = {
+            "campaign_id": "test_custom_sliders_validation",
+            "info": {
+                "assignment": "task-based",
+                "template": "basic",
+                "protocol": "DA",
+                "sliders": [
+                    {"name": "Fluency", "min": 0, "max": 5, "step": 1},
+                    {"name": "Adequacy", "min": 0, "max": 100, "step": 1}
+                ]
+            },
+            "data": [
+                [
+                    [
+                        {
+                            "src": "Test source text.",
+                            "tgt": {"A": "Translation A"},
+                            "validation": {
+                                "A": {
+                                    "warning": "Fluency should be 3-5, Adequacy 70-100",
+                                    "Fluency": [3, 5],
+                                    "Adequacy": [70, 100]
+                                }
+                            }
+                        }
+                    ]
+                ]
+            ]
+        }
+
+        # Should not raise - custom slider validation is valid
+        _add_single_campaign(campaign_data, True, "http://localhost:8001")
