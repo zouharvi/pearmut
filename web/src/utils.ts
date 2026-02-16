@@ -122,7 +122,7 @@ export type Validation = {
     score_greaterthan?: string,  // Model name that this score must be greater than
     error_spans?: Array<ValidationErrorSpan>,  // Expected error spans
     allow_skip?: boolean  // Show skip tutorial button
-    [key: string]: any  // Support custom slider validation fields
+    [key: string]: [number, number] | string | boolean | Array<ValidationErrorSpan> | undefined  // Support custom slider validation fields
 }
 export type ValidationResult = {
     valid: boolean,
@@ -479,8 +479,9 @@ export function validateResponse(
     if (response.sliders) {
         for (const sliderName in response.sliders) {
             // Check if there's a validation rule for this slider
-            if (validation[sliderName] !== undefined && Array.isArray(validation[sliderName])) {
-                const [minValue, maxValue] = validation[sliderName] as [number, number];
+            const validationRule = validation[sliderName];
+            if (validationRule !== undefined && Array.isArray(validationRule) && validationRule.length === 2) {
+                const [minValue, maxValue] = validationRule as [number, number];
                 const sliderValue = response.sliders[sliderName];
                 if (sliderValue === null || sliderValue < minValue || sliderValue > maxValue) {
                     return false;
