@@ -1,0 +1,62 @@
+{
+  "annotation_demo_esa": {
+    "alice": {
+      "progress": ["completed", "completed"],
+      "progress_welcome": [],
+      "time": 110,
+      "time_start": 1705680000,
+      "time_end": 1705680200,
+      "token_correct": "ESA_ALICE_DONE",
+      "token_incorrect": "ESA_ALICE_FAIL"
+    },
+    "bob": {
+      "progress": ["completed"],
+      "progress_welcome": [],
+      "time": 40,
+      "time_start": 1705681000,
+      "time_end": 1705681040,
+      "token_correct": "ESA_BOB_DONE",
+      "token_incorrect": "ESA_BOB_FAIL"
+    }
+  },
+  "annotation_demo_da": {
+    "carol": {
+      "progress": ["completed"],
+      "progress_welcome": [],
+      "time": 73,
+      "time_start": 1705682000,
+      "time_end": 1705682115,
+      "token_correct": "DA_CAROL_DONE",
+      "token_incorrect": "DA_CAROL_FAIL"
+    },
+    "david": {
+      "progress": ["completed"],
+      "progress_welcome": [],
+      "time": 72,
+      "time_start": 1705683000,
+      "time_end": 1705683120,
+      "token_correct": "DA_DAVID_DONE",
+      "token_incorrect": "DA_DAVID_FAIL"
+    }
+  },
+  "annotation_demo_mqm": {
+    "eve": {
+      "progress": ["completed"],
+      "progress_welcome": [],
+      "time": 100,
+      "time_start": 1705684000,
+      "time_end": 1705684145,
+      "token_correct": "MQM_EVE_DONE",
+      "token_incorrect": "MQM_EVE_FAIL"
+    },
+    "frank": {
+      "progress": ["completed"],
+      "progress_welcome": [],
+      "time": 50,
+      "time_start": 1705685000,
+      "time_end": 1705685050,
+      "token_correct": "MQM_FRANK_DONE",
+      "token_incorrect": "MQM_FRANK_FAIL"
+    }
+  }
+}

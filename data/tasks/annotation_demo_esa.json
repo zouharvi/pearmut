@@ -1,0 +1,54 @@
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "ESA"
+  },
+  "campaign_id": "annotation_demo_esa",
+  "token": "esa_demo_token",
+  "data": {
+    "alice": [
+      [
+        {
+          "item_id": "esa_item_1",
+          "src": "The weather is beautiful today.",
+          "tgt": {
+            "GPT-4": "Das Wetter ist heute schön.",
+            "Claude": "Das Wetter ist heute wunderschön."
+          },
+          "instructions": "Evaluate the German translations of the English source."
+        },
+        {
+          "item_id": "esa_item_2",
+          "src": "Machine learning has revolutionized artificial intelligence.",
+          "tgt": {
+            "GPT-4": "Maschinelles Lernen hat die künstliche Intelligenz revolutioniert.",
+            "Claude": "Machine Learning hat künstliche Intelligenz revolutioniert."
+          }
+        }
+      ],
+      [
+        {
+          "item_id": "esa_item_3",
+          "src": "The conference will be held next month.",
+          "tgt": {
+            "GPT-4": "Die Konferenz wird nächsten Monat stattfinden.",
+            "Claude": "Die Konferenz findet nächsten Monat statt."
+          }
+        }
+      ]
+    ],
+    "bob": [
+      [
+        {
+          "item_id": "esa_item_4",
+          "src": "Programming requires logical thinking and creativity.",
+          "tgt": {
+            "GPT-4": "Programmierung erfordert logisches Denken und Kreativität.",
+            "Claude": "Programmieren erfordert logisches Denken und Kreativität."
+          },
+          "instructions": "Evaluate translation quality for this technical sentence."
+        }
+      ]
+    ]
+  }
+}

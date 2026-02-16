@@ -1,0 +1,51 @@
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "DA"
+  },
+  "campaign_id": "annotation_demo_da",
+  "token": "da_demo_token",
+  "data": {
+    "carol": [
+      [
+        {
+          "item_id": "da_item_1",
+          "src": "The quick brown fox jumps over the lazy dog.",
+          "tgt": {
+            "Gemini": "El rápido zorro marrón salta sobre el perro perezoso.",
+            "Llama": "El zorro marrón rápido salta sobre el perro holgazán."
+          },
+          "instructions": "Rate the quality of Spanish translations."
+        },
+        {
+          "item_id": "da_item_2",
+          "src": "Climate change is one of the most pressing issues of our time.",
+          "tgt": {
+            "Gemini": "El cambio climático es uno de los problemas más urgentes de nuestro tiempo.",
+            "Llama": "El cambio climático es una de las cuestiones más apremiantes de nuestra época."
+          }
+        }
+      ]
+    ],
+    "david": [
+      [
+        {
+          "item_id": "da_item_3",
+          "src": "She enjoys reading books in her free time.",
+          "tgt": {
+            "Gemini": "Ella disfruta leyendo libros en su tiempo libre.",
+            "Llama": "A ella le gusta leer libros en su tiempo libre."
+          }
+        },
+        {
+          "item_id": "da_item_4",
+          "src": "The restaurant serves delicious Italian cuisine.",
+          "tgt": {
+            "Gemini": "El restaurante sirve deliciosa cocina italiana.",
+            "Llama": "El restaurante ofrece deliciosa comida italiana."
+          }
+        }
+      ]
+    ]
+  }
+}

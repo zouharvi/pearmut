@@ -1,0 +1,43 @@
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "MQM"
+  },
+  "campaign_id": "annotation_demo_mqm",
+  "token": "mqm_demo_token",
+  "data": {
+    "eve": [
+      [
+        {
+          "item_id": "mqm_item_1",
+          "src": "The company announced record profits this quarter.",
+          "tgt": {
+            "DeepL": "L'entreprise a annoncé des bénéfices records ce trimestre.",
+            "Reverso": "La compagnie a annoncé des profits records ce trimestre."
+          },
+          "instructions": "Identify and categorize translation errors according to MQM."
+        },
+        {
+          "item_id": "mqm_item_2",
+          "src": "Please submit your application by Friday.",
+          "tgt": {
+            "DeepL": "Veuillez soumettre votre candidature avant vendredi.",
+            "Reverso": "Merci de soumettre votre demande d'ici vendredi."
+          }
+        }
+      ]
+    ],
+    "frank": [
+      [
+        {
+          "item_id": "mqm_item_3",
+          "src": "The movie received excellent reviews from critics.",
+          "tgt": {
+            "DeepL": "Le film a reçu d'excellentes critiques de la part des critiques.",
+            "Reverso": "Le film a obtenu d'excellents avis des critiques."
+          }
+        }
+      ]
+    ]
+  }
+}
