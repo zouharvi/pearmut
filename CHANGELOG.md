@@ -7,6 +7,7 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
   - Prevent modifying a running instance
   - Improve UI of selected severity buttons
   - Simpler MQM taxonomy definition
+  - Add validation for custom sliders
 - v1.1.0
   - Log media actions
   - Add basic mobile support

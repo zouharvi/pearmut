@@ -480,10 +480,18 @@ export function validateResponse(
         for (const sliderName in response.sliders) {
             // Check if there's a validation rule for this slider
             const validationRule = validation[sliderName];
-            if (validationRule !== undefined && Array.isArray(validationRule) && validationRule.length === 2) {
+            if (validationRule === undefined) {
+                continue;
+            }
+            if (Array.isArray(validationRule) && validationRule.length === 2) {
                 const [minValue, maxValue] = validationRule as [number, number];
                 const sliderValue = response.sliders[sliderName];
                 if (sliderValue === null || sliderValue < minValue || sliderValue > maxValue) {
+                    return false;
+                }
+            } else if (typeof validationRule === "number") {
+                const sliderValue = response.sliders[sliderName];
+                if (sliderValue === null || sliderValue !== validationRule) {
                     return false;
                 }
             }
