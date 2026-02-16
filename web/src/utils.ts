@@ -122,6 +122,7 @@ export type Validation = {
     score_greaterthan?: string,  // Model name that this score must be greater than
     error_spans?: Array<ValidationErrorSpan>,  // Expected error spans
     allow_skip?: boolean  // Show skip tutorial button
+    [key: string]: [number, number] | string | boolean | Array<ValidationErrorSpan> | undefined  // Support custom slider validation fields
 }
 export type ValidationResult = {
     valid: boolean,
@@ -455,7 +456,7 @@ function spanMatches(userSpan: ErrorSpan, validationSpan: ValidationErrorSpan): 
  * @returns true if validation passes, false otherwise
  */
 export function validateResponse(
-    responses: Record<string, Response>,
+    responses: Record<string, CandidateResponse>,
     validations: Record<string, Validation>,
     model: string
 ): boolean {
@@ -471,6 +472,29 @@ export function validateResponse(
         const [minScore, maxScore] = validation.score;
         if (response.score === null || response.score < minScore || response.score > maxScore) {
             return false
+        }
+    }
+
+    // Validate custom sliders if they exist
+    if (response.sliders) {
+        for (const sliderName in response.sliders) {
+            // Check if there's a validation rule for this slider
+            const validationRule = validation[sliderName];
+            if (validationRule === undefined) {
+                continue;
+            }
+            if (Array.isArray(validationRule) && validationRule.length === 2) {
+                const [minValue, maxValue] = validationRule as [number, number];
+                const sliderValue = response.sliders[sliderName];
+                if (sliderValue === null || sliderValue < minValue || sliderValue > maxValue) {
+                    return false;
+                }
+            } else if (typeof validationRule === "number") {
+                const sliderValue = response.sliders[sliderName];
+                if (sliderValue === null || sliderValue !== validationRule) {
+                    return false;
+                }
+            }
         }
     }
 
