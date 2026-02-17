@@ -540,3 +540,5 @@ If you use this work in your paper, please cite as following.
 
 Contributions are welcome! Please reach out to [Vilém Zouhar](mailto:vilem.zouhar@gmail.com).
 See changes in [CHANGELOG.md](CHANGELOG.md).
+
+<img src="misc/poster_nofont.svg" width="800px">

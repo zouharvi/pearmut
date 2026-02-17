@@ -2,7 +2,8 @@
   "info": {
     "assignment": "single-stream",
     "users": 10,
-    "protocol": "ESA"
+    "protocol": "ESA",
+    "show_model_names": true
   },
   "campaign_id": "example_singlestream",
   "data_welcome": [
