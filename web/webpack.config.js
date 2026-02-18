@@ -1,8 +1,15 @@
 const path = require('path');
+const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+// Read version from pyproject.toml
+const pyprojectPath = path.resolve(__dirname, '../pyproject.toml');
+const pyprojectContent = fs.readFileSync(pyprojectPath, 'utf8');
+const versionMatch = pyprojectContent.match(/^version\s*=\s*"([^"]+)"/m);
+const version = versionMatch ? versionMatch[1] : 'unknown';
 
 // Change module.exports to an arrow function
 module.exports = (env, argv) => {
@@ -56,12 +63,18 @@ module.exports = (env, argv) => {
         filename: 'index.html',
         chunks: ['index'],
         hash: true,
+        templateParameters: {
+          version: version,
+        },
       }),
       new HtmlWebpackPlugin({
         template: './src/annotate.html',
         filename: 'annotate.html',
         chunks: ['annotate'],
         hash: true,
+        templateParameters: {
+          version: version,
+        },
       }),
       new HtmlWebpackPlugin({
         template: './src/dashboard.html',

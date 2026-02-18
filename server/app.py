@@ -455,15 +455,6 @@ async def serve_dashboard():
     return FileResponse(static_dir + "dashboard.html")
 
 
-@app.get("/version")
-async def get_version():
-    import tomllib
-    pyproject_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "pyproject.toml")
-    with open(pyproject_path, "rb") as f:
-        data = tomllib.load(f)
-    return JSONResponse(content={"version": data["project"]["version"]}, status_code=200)
-
-
 # Mount user assets from data/assets/
 assets_dir = f"{ROOT}/data/assets"
 os.makedirs(assets_dir, exist_ok=True)
