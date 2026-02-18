@@ -33,6 +33,7 @@ import {
 // Check if frozen mode is enabled (view-only, no annotations)
 const searchParams = new URLSearchParams(window.location.search)
 const frozenMode = searchParams.has("frozen")
+const debugMode = searchParams.has("debug")
 
 
 const state = {
@@ -729,8 +730,8 @@ async function display_next_payload(response: DataPayload) {
     state.has_unsaved_work = false
     state.skip_tutorial_mode = false
 
-    // Show/hide skip tutorial button based on validation settings
-    if (hasAllowSkip(state.validations)) {
+    // Show skip tutorial button in debug mode or if any validation has allow_skip
+    if (debugMode || hasAllowSkip(state.validations)) {
         $("#button_skip_tutorial").show()
     } else {
         $("#button_skip_tutorial").hide()

@@ -543,14 +543,15 @@ export function hasAllowSkip(validations: (Validation | Record<string, Validatio
     for (const v of validations) {
         if (!v) continue;
         if (typeof v === 'object' && !Array.isArray(v)) {
-            // Check if it's a single Validation object (has allow_skip property directly)
+            // Check if it's a single Validation with allow_skip
             if ('allow_skip' in v && v.allow_skip === true) {
                 return true;
             }
-            // Otherwise treat as Record and check nested validations
-            if (!('allow_skip' in v) && !('warning' in v) && !('score' in v)) {
-                // It's a Record<string, Validation>
-                if (Object.values(v).some(vv => vv?.allow_skip === true)) return true;
+            // Check nested validations in Record
+            for (const nested of Object.values(v)) {
+                if (nested?.allow_skip === true) {
+                    return true;
+                }
             }
         }
     }
