@@ -796,6 +796,73 @@ class TestResetMasking:
         items = get_db_log_item(campaign_id, "user1", "welcome_0")
         assert len(items) == 0
 
+    def test_reset_task_single_stream_only_resets_completed_welcome_items(self):
+        """Test that reset_task in single-stream only saves reset markers for completed welcome items."""
+        _clear_test_logs()
+        campaign_id = "test_singlestream_welcome_reset"
+        
+        tasks_data = {
+            campaign_id: {
+                "info": {
+                    "assignment": "single-stream",
+                    "protocol": "DA",
+                },
+                "data_welcome": [
+                    [
+                        {"text": "Name", "form": "string"},
+                        {"text": "Age", "form": "number"}
+                    ],
+                    [
+                        {"text": "Country", "form": "string"}
+                    ]
+                ],
+                "data": [
+                    [{"src": "a", "tgt": {"A": "b"}}]
+                ],
+                "token": "test_token"
+            }
+        }
+        
+        progress_data = {
+            campaign_id: {
+                "user1": {
+                    "progress": [None],
+                    "progress_welcome": ["completed", False],  # First completed, second not
+                    "time": 0,
+                    "time_start": None,
+                    "time_end": None,
+                    "validations": {}
+                }
+            }
+        }
+        
+        # User fills out both welcome forms
+        save_db_payload(campaign_id, {
+            "user_id": "user1",
+            "item_i": "welcome_0",
+            "annotation": ["Alice", 25]
+        })
+        save_db_payload(campaign_id, {
+            "user_id": "user1",
+            "item_i": "welcome_1",
+            "annotation": ["USA"]
+        })
+        
+        # Verify both have data
+        items0 = get_db_log_item(campaign_id, "user1", "welcome_0")
+        items1 = get_db_log_item(campaign_id, "user1", "welcome_1")
+        assert len(items0) == 1
+        assert len(items1) == 1
+        
+        # Reset task
+        reset_task(campaign_id, "user1", tasks_data, progress_data)
+        
+        # Verify only completed welcome item (welcome_0) is masked
+        items0 = get_db_log_item(campaign_id, "user1", "welcome_0")
+        items1 = get_db_log_item(campaign_id, "user1", "welcome_1")
+        assert len(items0) == 0, "Completed welcome item should be masked after reset"
+        assert len(items1) == 1, "Uncompleted welcome item should NOT be masked after reset"
+
 
 class TestValidationThreshold:
     """Tests for validation threshold functionality."""
