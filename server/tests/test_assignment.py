@@ -738,6 +738,64 @@ class TestResetMasking:
         assert len(items_user2) == 1
         assert items_user2[0]["annotation"] == {"score": 70}
 
+    def test_reset_task_clears_welcome_form_data(self):
+        """Test that reset_task clears welcome form data by saving reset markers."""
+        _clear_test_logs()
+        campaign_id = "test_welcome_form_reset"
+        
+        tasks_data = {
+            campaign_id: {
+                "info": {
+                    "assignment": "task-based",
+                    "protocol": "DA",
+                },
+                "data_welcome": [
+                    [
+                        {"text": "Name", "form": "string"},
+                        {"text": "Age", "form": "number"}
+                    ]
+                ],
+                "data": {
+                    "user1": [
+                        [{"src": "a", "tgt": "b"}]
+                    ]
+                },
+                "token": "test_token"
+            }
+        }
+        
+        progress_data = {
+            campaign_id: {
+                "user1": {
+                    "progress": [None],
+                    "progress_welcome": [False],
+                    "time": 0,
+                    "time_start": None,
+                    "time_end": None,
+                    "validations": {}
+                }
+            }
+        }
+        
+        # User fills out welcome form
+        save_db_payload(campaign_id, {
+            "user_id": "user1",
+            "item_i": "welcome_0",
+            "annotation": ["John", 30]
+        })
+        
+        # Verify form data exists
+        items = get_db_log_item(campaign_id, "user1", "welcome_0")
+        assert len(items) == 1
+        assert items[0]["annotation"] == ["John", 30]
+        
+        # Reset task
+        reset_task(campaign_id, "user1", tasks_data, progress_data)
+        
+        # Verify welcome form data is masked
+        items = get_db_log_item(campaign_id, "user1", "welcome_0")
+        assert len(items) == 0
+
 
 class TestValidationThreshold:
     """Tests for validation threshold functionality."""

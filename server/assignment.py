@@ -740,6 +740,12 @@ def reset_task(
             progress_data[campaign_id][user_id]["progress_welcome"] = [
                 False
             ] * num_welcome
+            # Save reset markers for welcome items
+            for i in range(num_welcome):
+                save_db_payload(
+                    campaign_id,
+                    {"user_id": user_id, "item_i": f"welcome_{i}", "annotation": RESET_MARKER},
+                )
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "single-stream":
@@ -768,6 +774,12 @@ def reset_task(
             progress_data[campaign_id][user_id]["progress_welcome"] = [
                 False
             ] * num_welcome
+            # Save reset markers for welcome items
+            for i in range(num_welcome):
+                save_db_payload(
+                    campaign_id,
+                    {"user_id": user_id, "item_i": f"welcome_{i}", "annotation": RESET_MARKER},
+                )
 
         # Reset only the specified user's time
         _reset_user_time(progress_data, campaign_id, user_id)
