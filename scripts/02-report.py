@@ -186,7 +186,7 @@ ngrok http 8000 --url https://alani-unpleadable-vindicatedly.ngrok-free.dev
 
 pearmut purge
 pearmut add scripts/abc_data/pearmut/en*.json
-pearmut run --port 8001 --server https://pearmut.ngrok.io
+pearmut run --port 8001 --url https://pearmut.ngrok.io
 
 ngrok http --url=pearmut.ngrok.io 8001
 """
@@ -403,7 +403,7 @@ for quantity in results:
         elif "0 to 10" in quantity:
             avg_count = collections.Counter([x // 2 for x in results[quantity][tool]])
             print(
-                f"point11({avg:.1f}) + bar5(({",".join(str(avg_count[i]) for i in range(6))}))",
+                f"point11({avg:.1f}) + bar5(({','.join(str(avg_count[i]) for i in range(6))}))",
                 end=", ",
             )
         else:
@@ -649,15 +649,15 @@ def measure_average_response(
             else:
                 raise ValueError(f"Unsupported method: {method}")
 
-            assert (
-                response.status_code == 200
-            ), f"Request failed with status code {response.status_code}"
+            assert response.status_code == 200, (
+                f"Request failed with status code {response.status_code}"
+            )
             response_times.append(time.perf_counter() - start_time)
 
     # Calculate results
     print(url)
     mean = statistics.mean(response_times)
-    print(f"{mean*1000:.1f}ms")
+    print(f"{mean * 1000:.1f}ms")
     # compute 95% confidence interval
     ci = scipy.stats.t.interval(
         0.99,
@@ -665,7 +665,8 @@ def measure_average_response(
         loc=mean,
         scale=scipy.stats.sem(response_times),
     )
-    print(f"  ±{(ci[1]-ci[0])/2*1000:.1f}ms (99% CI)")
+    print(f"  ±{(ci[1] - ci[0]) / 2 * 1000:.1f}ms (99% CI)")
+
 
 appraise_csrf_cookie = input()
 pearmut_token_ensk = input()
@@ -804,7 +805,7 @@ subprocess.run(
 )
 print(
     "Appraise export",
-    f"{(time.perf_counter() - time_start)/100*1000:.1f}ms",
+    f"{(time.perf_counter() - time_start) / 100 * 1000:.1f}ms",
     "",
     sep="\n",
 )

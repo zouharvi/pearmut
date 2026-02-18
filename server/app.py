@@ -180,9 +180,15 @@ async def _dashboard_data(request: DashboardDataRequest):
 
         # Add threshold pass/fail status (only when user is complete)
         if (
-            tasks_data[campaign_id]["info"]["assignment"] != "dynamic" and all(v in {"completed", "completed_foreign"} for v in entry["progress"])
+            tasks_data[campaign_id]["info"]["assignment"] != "dynamic"
+            and all(v in {"completed", "completed_foreign"} for v in entry["progress"])
         ) or (
-            tasks_data[campaign_id]["info"]["assignment"] == "dynamic" and all(v in {"completed", "completed_foreign"} for mv in entry["progress"] for v in mv.values())
+            tasks_data[campaign_id]["info"]["assignment"] == "dynamic"
+            and all(
+                v in {"completed", "completed_foreign"}
+                for mv in entry["progress"]
+                for v in mv.values()
+            )
         ):
             entry["threshold_passed"] = check_validation_threshold(
                 tasks_data, progress_data, campaign_id, user_id
@@ -353,8 +359,8 @@ async def _add_campaign(request: AddCampaignRequest):
         )
 
     try:
-        server = f"{os.environ.get('PEARMUT_SERVER_URL', 'http://localhost:8001')}"
-        _add_single_campaign(request.campaign_data, overwrite=False, server=server)
+        # url=None to skip printing since this is from the dashboard console
+        _add_single_campaign(request.campaign_data, overwrite=False, url=None)
 
         campaign_id = request.campaign_data["campaign_id"]
         with open(f"{ROOT}/data/tasks/{campaign_id}.json", "r") as f:

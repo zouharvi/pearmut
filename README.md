@@ -427,10 +427,10 @@ Files from `videos/` become accessible at `localhost:8001/assets/my_videos/`. Cr
 
 - **`pearmut add <file(s)>`**: Add campaign JSON files (supports wildcards)
   - `-o/--overwrite`: Replace existing campaigns with same ID
-  - `--server <url>`: Server URL prefix (default: `http://localhost:8001`)
+  - `--url <url>`: Server URL prefix (default: `http://localhost:8001`)
 - **`pearmut run`**: Start server
   - `--port <port>`: Server port (default: 8001)
-  - `--server <url>`: Server URL prefix
+  - `--url <url>`: Server URL prefix
 - **`pearmut purge [campaign]`**: Remove campaign data
   - Without args: Purge all campaigns
   - With campaign name: Purge specific campaign only

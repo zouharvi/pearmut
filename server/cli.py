@@ -32,16 +32,16 @@ def _run(args_unknown):
         "--port", type=int, default=8001, help="Port to run the server on"
     )
     args.add_argument(
-        "--server",
-        default="http://localhost:8001",
+        "--url",
+        default="http://localhost",
         help="Prefix server URL for protocol links",
     )
     args = args.parse_args(args_unknown)
 
     # print access dashboard URL for all campaigns
     dashboard_url = (
-        args.server
-        + "/dashboard?"
+        args.url
+        + f":{args.port}/dashboard?"
         + f"token_main={TOKEN_MAIN}"
         + "".join(
             [
@@ -256,7 +256,7 @@ def _shuffle_campaign_data(campaign_data, rng):
             shuffle_document(doc)
 
 
-def _add_single_campaign(campaign_data, overwrite, server):
+def _add_single_campaign(campaign_data, overwrite, url):
     """
     Add a single campaign from campaign data dictionary.
     """
@@ -584,16 +584,17 @@ def _add_single_campaign(campaign_data, overwrite, server):
     progress_data[campaign_data["campaign_id"]] = user_progress
     save_progress_data(progress_data)
 
-    print(
-        "🎛️ ",
-        f"{server}/dashboard.html"
-        f"?campaign_id={urllib.parse.quote_plus(campaign_data['campaign_id'])}"
-        f"&token={campaign_data['token']}",
-    )
-    for user_id, user_val in user_progress.items():
-        # point to the protocol URL
-        print(f"🧑 {server}/{user_val['url']}")
-    print()
+    if url is not None:
+        print(
+            "🎛️ ",
+            f"{url}/dashboard.html"
+            f"?campaign_id={urllib.parse.quote_plus(campaign_data['campaign_id'])}"
+            f"&token={campaign_data['token']}",
+        )
+        for user_id, user_val in user_progress.items():
+            # point to the protocol URL
+            print(f"🧑 {url}/{user_val['url']}")
+        print()
 
 
 def _add_campaign(args_unknown):
@@ -614,7 +615,7 @@ def _add_campaign(args_unknown):
         help="Overwrite existing campaign if it exists",
     )
     args.add_argument(
-        "--server",
+        "--url",
         default="http://localhost:8001",
         help="Prefix server URL for protocol links",
     )
