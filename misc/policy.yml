@@ -1,0 +1,21 @@
+on_http_request:
+  - expressions:
+      - "('blocklist.firehol_org.abusers_30d' in conn.client_ip.categories) || ('proxy.anonymous.tor' in conn.client_ip.categories)"
+    actions:
+      - type: deny
+        config:
+          status_code: 403
+
+  - actions:
+      - type: owasp-crs-request
+        config:
+          on_error: halt
+
+  - actions:
+      - type: rate-limit
+        config:
+          name: "ip-throttle"
+          algorithm: "sliding_window"
+          capacity: 100
+          rate: "1m"
+          bucket_key: ["conn.client_ip"]
