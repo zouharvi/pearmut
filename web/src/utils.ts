@@ -539,19 +539,12 @@ export function validateResponse(
  * Check if any validation has allow_skip enabled
  * Handles both Record validations and single Validation objects
  */
-export function hasAllowSkip(validations: (Validation | Record<string, Validation> | undefined)[]): boolean {
+export function hasAllowSkip(validations: (Record<string, Validation> | undefined)[]): boolean {
     for (const v of validations) {
         if (!v) continue;
-        if (typeof v === 'object' && !Array.isArray(v)) {
-            // Check if it's a single Validation with allow_skip
-            if ('allow_skip' in v && v.allow_skip === true) {
+        for (const validation of Object.values(v)) {
+            if (validation?.allow_skip === true) {
                 return true;
-            }
-            // Check nested validations in Record
-            for (const nested of Object.values(v)) {
-                if (nested?.allow_skip === true) {
-                    return true;
-                }
             }
         }
     }
