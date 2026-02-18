@@ -81,6 +81,9 @@ module.exports = (env, argv) => {
         filename: 'dashboard.html',
         chunks: ['dashboard'],
         hash: true,
+        templateParameters: {
+          version: version,
+        },
       }),
       new CopyWebpackPlugin({
         patterns: [
