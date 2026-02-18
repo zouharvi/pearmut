@@ -9,7 +9,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const pyprojectPath = path.resolve(__dirname, '../pyproject.toml');
 const pyprojectContent = fs.readFileSync(pyprojectPath, 'utf8');
 const versionMatch = pyprojectContent.match(/^version\s*=\s*"([^"]+)"/m);
-const version = versionMatch ? versionMatch[1] : 'unknown';
+const version = versionMatch ? versionMatch[1] : '';
 
 // Change module.exports to an arrow function
 module.exports = (env, argv) => {
