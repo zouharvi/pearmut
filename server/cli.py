@@ -624,7 +624,7 @@ def _add_campaign(args_unknown):
     for data_file in args.data_files:
         try:
             with open(data_file, "r") as f:
-                _add_single_campaign(json.load(f), args.overwrite, args.server)
+                _add_single_campaign(json.load(f), args.overwrite, args.url)
         except Exception as e:
             print(f"Error processing {data_file}: {e}")
             exit(1)
