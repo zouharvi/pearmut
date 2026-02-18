@@ -951,6 +951,7 @@ function display_form(response: DataForm) {
     state.response_log = []
     state.validations = []
     state.output_blocks = []
+    state.action_log = [{ "time": Date.now() / 1000, "action": "load" }]
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
