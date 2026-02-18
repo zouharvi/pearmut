@@ -1,0 +1,45 @@
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "MQM",
+    "instructions_goodbye": "Dear ${USER_ID} you did so well and deserve this token ${TOKEN}."
+  },
+  "campaign_id": "example_multimodal",
+  "data": {
+    "jolly-bough-901": [
+      [
+        {
+          "item_id": "mock_audiovideo",
+          "src": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/U9zFqRQ11qI?si=hpiGfu305GFcPyWW\" frameborder=\"0\" referrerpolicy=\"strict-origin-when-cross-origin\"></iframe>",
+          "tgt": {
+            "A": "안녕하세요, Root에 오신 것을 환영합니다. 약 3분 후에 게임이 시작됩니다. 1~4명의 플레이어가 참여할 수 있는 솔로 모드는 없지만 확장팩에는 솔로 모드가 있습니다. 플레이 시간은 약 1시간입니다. 꽤 복잡한 게임입니다. 전쟁이 대삼림에 찾아왔습니다. 캣 후작 부인은 숲의 자원을 착취하려고 노력하고 있으며, 이로 인해 얼라이언스라는 난잡한 반란군을 결성하기 위해 뭉친 쥐, 여우, 토끼 사이에 마찰이 일어나고 있습니다. 이때 이리 가문이 대거 돌아와 숲을 재정복하고 방랑자는 관련된 모든 당사자와 경쟁합니다. 오직 한 명의 플레이어만이 승리하고 대삼림의 미래를 결정할 수 있습니다. 이 게임의 승자는 먼저 30점에 도달한 플레이어입니다. 경쟁: 오직 한 명의 플레이어만이 대삼림을 지배할 수 있습니다. 비대칭: 모든 진영과 루트는 매우 다른 규칙과 능력을 가지고 있습니다. 카드 관리: 이 게임의 카드는 다양한 방식으로 사용할 수 있습니다. 각 진영마다 다르기 때문에 표준 제비갈매기의 모습을 설명하는 것은 의미가 없습니다."
+          }
+        },
+        {
+          "item_id": "mock_audiovideo",
+          "src": "<audio controls=\"\" src=\"https://www.signalogic.com/melp/EngSamples/Orig/ENG_M.wav\" type=\"audio/wav\"></audio>",
+          "tgt": {
+            "A": "1992년 태양돛을 이용한 화성과 달 탐사 계획이 순조롭게 진행되고 있습니다. 화성 탐사는 500년 전 콜럼버스의 신대륙 탐험을 기념하는 것이고, 달 탐사는 우주 탐사에 태양돛을 활용하는 것을 장려하는 것입니다."
+          }
+        },
+        {
+          "item_id": "mock_audiovideo",
+          "src": "It was something that surprised me and made me wonder why I hadn't thought of it before.",
+          "tgt": {
+            "A": "<audio controls=\"\" src=\"https://upload.wikimedia.org/wikipedia/commons/0/06/%EA%B7%B8%EA%B2%83%EC%9D%80_%EB%82%B4%EA%B0%80_%EC%96%B4%EC%A7%B8_%EC%9D%B4%EB%95%8C_%EA%B7%B8%EA%B2%83_%EC%83%9D%EA%B0%81%EC%9D%B4_%EC%95%84%EB%8B%88%EB%82%AC%EB%8A%94%EA%B3%A0%2C_%ED%95%98%EA%B3%A0_%EC%8A%A4%EC%8A%A4%EB%A1%9C_%EB%86%80%EB%9E%84_%EB%A7%8C%ED%95%9C_%EB%AC%B4%EC%97%87%EC%9D%B4%EC%97%88%EB%8B%A4.ogg\" type=\"audio/wav\"></audio>"
+          }
+        }
+      ],
+      [
+        {
+          "item_id": "mock_image",
+          "src": "<img src=\"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgOoxBvy2KKNpcOu0K-yCwnsaNI69dwd6OjPUzKVqKJPONdR24OCK3Jq8NRAWmoHMnsT2MRyKSaH7SsS_o3T1f4IvoKpoSMBfsWnJ5qM24ahbknY_icvmigut8RTjK1sv9Hpyn71QnIetbjLWUrXZSYbGzua-X3l3KFBf94_ExLFLfN3PeJJFX1mw/s1456/ROSEMARY%20TONKS%20001%20(2).jpg\" width=\"600\"/>",
+          "tgt": {
+            "A": "로즈마리 통크스(Rosemary Tonks)는 런던 사람으로, 햄스테드(Hampstead)에 살고 있습니다. 그녀는 어린이 책 두 권과 시집 두 권을 출간했으며, 그중 한 권은 시 북 소사이어티(Poetry Book Society) 추천 도서였습니다. 그녀의 최근 소설 세 편은 《더 블로터(The Bloater)》, 그 뒤를 잇는 《사업가, 연인이 되다(Businessmen as Lovers)》, 그리고 《버클리 스퀘어에서 벗어나는 길(The Way Out of Berkeley Square)》입니다."
+          }
+        }
+      ]
+    ]
+  },
+  "token": "96dae10191"
+}
