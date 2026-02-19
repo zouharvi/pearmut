@@ -121,7 +121,7 @@ export type Validation = {
     score?: [number, number],  // [min, max] range for valid score
     score_greaterthan?: string,  // Model name that this score must be greater than
     error_spans?: Array<ValidationErrorSpan>,  // Expected error spans
-    allow_skip?: boolean  // Show skip tutorial button
+    allow_skip?: boolean  // Show skip button
     [key: string]: [number, number] | string | boolean | Array<ValidationErrorSpan> | undefined  // Support custom slider validation fields
 }
 export type ValidationResult = {
@@ -539,7 +539,7 @@ export function validateResponse(
  * Check if any validation has allow_skip enabled
  * Handles both Record validations and single Validation objects
  */
-export function hasAllowSkip(validations: (Record<string, Validation> | undefined)[]): boolean {
+export function anyHasAllowSkip(validations: (Record<string, Validation> | undefined)[]): boolean {
     for (const v of validations) {
         if (!v) continue;
         for (const validation of Object.values(v)) {

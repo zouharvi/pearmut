@@ -11,7 +11,7 @@ import {
     updateToolboxPosition,
     Validation,
     validateResponse,
-    hasAllowSkip,
+    anyHasAllowSkip,
     DataGoodbye,
     DataForm,
     DataFormItem,
@@ -46,7 +46,7 @@ const state = {
         word_level: false,
     },
     has_unsaved_work: false,
-    skip_tutorial_mode: false,
+    skip_mode: false,
     // Protocol settings for check_unlock
     protocol_error_spans: false,
     protocol_error_categories: false,
@@ -728,13 +728,13 @@ async function display_next_payload(response: DataPayload) {
     state.output_blocks = []
     state.action_log = [{ "time": Date.now() / 1000, "action": "load" }]
     state.has_unsaved_work = false
-    state.skip_tutorial_mode = false
+    state.skip_mode = false
 
     // Show skip tutorial button in debug mode or if any validation has allow_skip
-    if (debugMode || hasAllowSkip(state.validations)) {
-        $("#button_skip_tutorial").show()
+    if (debugMode || anyHasAllowSkip(state.validations)) {
+        $("#button_skip").show()
     } else {
-        $("#button_skip_tutorial").hide()
+        $("#button_skip").hide()
     }
 
     state.protocol_error_spans = response.info.protocol == "ESA" || response.info.protocol == "MQM"
@@ -879,7 +879,7 @@ async function display_next_payload(response: DataPayload) {
     $("#button_next").on("click", async function () {
         // Perform validation unless in skip tutorial mode
         let validationResult: boolean[] | null = null
-        if (!state.skip_tutorial_mode) {
+        if (!state.skip_mode) {
             validationResult = await performValidation()
             if (validationResult == null) {
                 // validation failed, don't proceed
@@ -890,7 +890,7 @@ async function display_next_payload(response: DataPayload) {
         // disable while communicating with the server
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Next 📶")
-        state.action_log.push({ "time": Date.now() / 1000, "action": "submit" + (state.skip_tutorial_mode ? "_skip" : "") })
+        state.action_log.push({ "time": Date.now() / 1000, "action": "submit" + (state.skip_mode ? "_skip" : "") })
 
         // Build payload
         let payload_local: any = {
@@ -899,7 +899,7 @@ async function display_next_payload(response: DataPayload) {
             "item": response.payload,
         }
 
-        if (!state.skip_tutorial_mode && validationResult && validationResult.length > 0) {
+        if (!state.skip_mode && validationResult && validationResult.length > 0) {
             payload_local["validations"] = validationResult
         }
 
@@ -1225,8 +1225,8 @@ async function performValidation(): Promise<Array<boolean> | null> {
 }
 
 // Skip tutorial button handler
-$("#button_skip_tutorial").on("click", function () {
-    state.skip_tutorial_mode = true
+$("#button_skip").on("click", function () {
+    state.skip_mode = true
     notify("Tutorial skipped. Your current annotations will be submitted.")
     // Trigger the next button click
     $("#button_next").trigger("click")
