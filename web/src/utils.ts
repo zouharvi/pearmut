@@ -61,6 +61,7 @@ export type DataPayloadItem = {
     instructions?: string,
     error_spans?: Record<string, Array<ErrorSpan>>,  // Pre-filled error spans keyed by model name
     validation?: Record<string, Validation> | undefined,  // Validation rules keyed by model name
+    skippable?: boolean,  // Whether this item can be skipped
 }
 
 export type DataPayload = {
@@ -121,7 +122,6 @@ export type Validation = {
     score?: [number, number],  // [min, max] range for valid score
     score_greaterthan?: string,  // Model name that this score must be greater than
     error_spans?: Array<ValidationErrorSpan>,  // Expected error spans
-    allow_skip?: boolean  // Show skip tutorial button
     [key: string]: [number, number] | string | boolean | Array<ValidationErrorSpan> | undefined  // Support custom slider validation fields
 }
 export type ValidationResult = {
@@ -535,27 +535,6 @@ export function validateResponse(
     return true;
 }
 
-/**
- * Check if any validation has allow_skip enabled
- * Handles both Record validations and single Validation objects
- */
-export function hasAllowSkip(validations: (Validation | Record<string, Validation> | undefined)[]): boolean {
-    for (const v of validations) {
-        if (!v) continue;
-        if (typeof v === 'object' && !Array.isArray(v)) {
-            // Check if it's a single Validation object (has allow_skip property directly)
-            if ('allow_skip' in v && v.allow_skip === true) {
-                return true;
-            }
-            // Otherwise treat as Record and check nested validations
-            if (!('allow_skip' in v) && !('warning' in v) && !('score' in v)) {
-                // It's a Record<string, Validation>
-                if (Object.values(v).some(vv => vv?.allow_skip === true)) return true;
-            }
-        }
-    }
-    return false;
-}
 
 // Shared type for goodbye response
 export type DataGoodbye = {

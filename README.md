@@ -250,28 +250,26 @@ The `error_spans` field is a 2D array (one per candidate). See [examples/esaai_p
 
 ### Tutorial and Attention Checks
 
-Add `validation` rules for tutorials or attention checks:
+Add `validation` rules for tutorials or attention checks. For tutorial items that users should be able to skip if they've seen them before, add `skippable: true` at the item level:
 
 ```python
 {
   "src": "The quick brown fox jumps.",
   "tgt": {"modelA": "Rychlá hnědá liška skáče."},
+  "skippable": true,  # Show skip button for incomplete items
   "validation": {
-    "modelA": [
-      {
-        "warning": "Please set score between 70-80.",  # shown on failure (omit for silent logging)
-        "score": [70, 80],                             # required score range [min, max]
-        "error_spans": [{"start_i": [0, 2], "end_i": [4, 8], "severity": "minor"}],  # expected spans
-        "allow_skip": true                             # show "skip tutorial" button
-      }
-    ]
+    "modelA": {
+      "warning": "Please set score between 70-80.",  # shown on failure (omit for silent logging)
+      "score": [70, 80],                             # required score range [min, max]
+      "error_spans": [{"start_i": [0, 2], "end_i": [4, 8], "severity": "minor"}]  # expected spans
+    }
   }
 }
 ```
 
 **Types:**
-- **Tutorial**: Include `allow_skip: true` and `warning` to let users skip after feedback
-- **Loud attention checks**: Include `warning` without `allow_skip` to force retry
+- **Tutorial**: Include `skippable: true` and `warning` to let users skip after feedback
+- **Loud attention checks**: Include `warning` without `skippable` to force retry
 - **Silent attention checks**: Omit `warning` to log failures without notification (quality control)
 
 The `validation` field is an array (one per candidate). Dashboard shows ✅/❌ based on `validation_threshold` in `info` (integer for max failed count, float \[0,1\) for max proportion, default 0).
@@ -478,7 +476,7 @@ The `${TOKEN}` is automatically replaced based on passing attention checks (see 
   - **Token**: A completion code shown to users when they finish their annotations. Tokens verify the completion and whether the user passed quality control checks:
     - **Pass Token** (`token_pass`): Shown when user meets validation thresholds
     - **Fail Token** (`token_fail`): Shown when user fails to meet validation requirements
-- **Tutorial**: An instructional validation item that teaches users how to annotate. Includes `allow_skip: true` to let users skip if they have seen it before.
+- **Tutorial**: An instructional validation item that teaches users how to annotate. Items with `skippable: true` can be skipped if users have already completed the tutorial.
 - **Validation**: Quality control rules attached to items that check if annotations match expected criteria (score ranges, error span locations, etc.). Used for tutorials and attention checks.
 - **Model**: The system or model that generated the output being evaluated (e.g., `"GPT-4"`, `"Claude"`). Used for tracking and ranking model performance.
 - **Dashboard**: The management interface that shows campaign progress, annotator statistics, access links, and allows downloading annotations. Accessed via a special management URL with token authentication.
