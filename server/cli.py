@@ -33,16 +33,18 @@ def _run(args_unknown):
     )
     args.add_argument(
         "--url",
-        default="http://localhost",
+        default="localhost",
         help="Prefix server URL for protocol links",
     )
     args = args.parse_args(args_unknown)
 
+    if args.url in {"localhost", "127.0.0.1", "0.0.0.0"}:
+        args.url = f"http://{args.url}:{args.port}"
+
     # print access dashboard URL for all campaigns
     dashboard_url = (
         args.url
-        + f":{args.port}/dashboard?"
-        + f"token_main={TOKEN_MAIN}"
+        + f"/dashboard?token_main={TOKEN_MAIN}"
         + "".join(
             [
                 f"&campaign_id={urllib.parse.quote_plus(campaign_id)}&token={campaign_data['token']}"
@@ -64,6 +66,7 @@ def _run(args_unknown):
     )
     uvicorn.run(
         app,
+        # bind to all interfaces
         host="0.0.0.0",
         port=args.port,
         reload=False,
