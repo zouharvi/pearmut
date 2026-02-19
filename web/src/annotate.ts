@@ -11,7 +11,6 @@ import {
     updateToolboxPosition,
     Validation,
     validateResponse,
-    anyHasAllowSkip,
     DataGoodbye,
     DataForm,
     DataFormItem,
@@ -33,13 +32,13 @@ import {
 // Check if frozen mode is enabled (view-only, no annotations)
 const searchParams = new URLSearchParams(window.location.search)
 const frozenMode = searchParams.has("frozen")
-const debugMode = searchParams.has("debug")
 
 
 const state = {
     response_log: [] as Array<DocumentResponse>,
     action_log: [] as Array<any>,
     validations: [] as Array<Record<string, Validation> | undefined>,
+    payload_items: [] as Array<DataPayloadItem>,  // Store current payload items to check skippable
     output_blocks: [] as Array<JQuery<HTMLElement>>,
     settings: {
         show_alignment: true,
@@ -73,6 +72,7 @@ function check_unlock() {
     if (frozenMode) {
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Next 🔒")
+        $("#button_skip").hide()
         return
     }
 
@@ -83,7 +83,14 @@ function check_unlock() {
                 for (const span of r.error_spans) {
                     if (!isSpanComplete(span, state.protocol_error_categories)) {
                         $("#button_next").attr("disabled", "disabled")
-                        $("#button_next").val("Next 🚧")
+                        $("#button_next").val("Incomplete 🚧")
+                        // Check if any incomplete item has skippable
+                        const hasSkippable = state.payload_items.some(item => item.skippable === true)
+                        if (hasSkippable) {
+                            $("#button_skip").show()
+                        } else {
+                            $("#button_skip").hide()
+                        }
                         return
                     }
                 }
@@ -107,12 +114,21 @@ function check_unlock() {
     )
     if (!all_done) {
         $("#button_next").attr("disabled", "disabled")
-        $("#button_next").val("Next 🚧")
+        $("#button_next").val("Incomplete 🚧")
+        // Check if any incomplete item has skippable
+        const hasSkippable = state.payload_items.some(item => item.skippable === true)
+        if (hasSkippable) {
+            $("#button_skip").show()
+        } else {
+            $("#button_skip").hide()
+        }
         return
     }
 
+    // All items complete - enable Next button and hide Skip button
     $("#button_next").removeAttr("disabled")
     $("#button_next").val("Next ✅")
+    $("#button_skip").hide()
 }
 
 /**
@@ -725,17 +741,11 @@ async function display_next_payload(response: DataPayload) {
         $("#settings_comment").val("")
     }
     state.validations = data.map(item => item.validation)
+    state.payload_items = data  // Store payload items to check skippable
     state.output_blocks = []
     state.action_log = [{ "time": Date.now() / 1000, "action": "load" }]
     state.has_unsaved_work = false
     state.skip_mode = false
-
-    // Show skip tutorial button in debug mode or if any validation has allow_skip
-    if (debugMode || anyHasAllowSkip(state.validations)) {
-        $("#button_skip").show()
-    } else {
-        $("#button_skip").hide()
-    }
 
     state.protocol_error_spans = response.info.protocol == "ESA" || response.info.protocol == "MQM"
     state.protocol_error_categories = response.info.protocol == "MQM"
@@ -1227,7 +1237,7 @@ async function performValidation(): Promise<Array<boolean> | null> {
 // Skip tutorial button handler
 $("#button_skip").on("click", function () {
     state.skip_mode = true
-    notify("Tutorial skipped. Your current annotations will be submitted.")
+    notify("Skipping. Your current annotations will be submitted.")
     // Trigger the next button click
     $("#button_next").trigger("click")
 })
