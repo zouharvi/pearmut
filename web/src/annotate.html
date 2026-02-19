@@ -180,53 +180,53 @@
       style="max-width: 1600px; min-width: 800px; margin-left: auto; margin-right: auto; margin-top: 20px; padding-left: 10px;">
       <div class="white-box" style="margin-right: 10px; background-color: #e7e2cf; padding: 5px 15px 5px 5px;">
 
-      <span id="instructions_global" style="display: inline-block; font-size: 11pt; width: calc(100% - 175px);">
-      </span>
+        <span id="instructions_global" style="display: inline-block; font-size: 11pt; width: calc(100% - 175px);">
+        </span>
 
-      <div style="width: 170px; display: inline-block; vertical-align: top; text-align: right; padding-top: 5px;">
+        <div style="width: 170px; display: inline-block; vertical-align: top; text-align: right; padding-top: 5px;">
 
-        <span id="time" style="width: 135px; text-align: left; display: inline-block; font-size: 11pt;"
-          title="Approximation of total annotation time.">Time:
-          0m</span>
-        <input type="button" value="⚙️" id="button_settings" style="height: 1.5em; width: 30px;">
+          <span id="time" style="width: 135px; text-align: left; display: inline-block; font-size: 11pt;"
+            title="Approximation of total annotation time.">Time:
+            0m</span>
+          <input type="button" value="⚙️" id="button_settings" style="height: 1.5em; width: 30px;">
 
-        <br>
-        <br>
+          <br>
+          <br>
 
-        <div id="progress" style="text-align: center;"></div>
+          <div id="progress" style="text-align: center;"></div>
 
-        <br>
-        <br>
+          <br>
+          <br>
 
-        <input type="button" value="Next 🛠️" id="button_next" disabled style="width: 170px; height: 2.5em;"
-          title="Finish annotating all examples first.">
+          <input type="button" value="Next 🛠️" id="button_next" disabled style="width: 170px; height: 2.5em;"
+            title="Finish annotating all examples first.">
 
-        <input type="button" value="skip tutorial" id="button_skip_tutorial"
-          style="width: 170px; font-size: 11pt; height: 30px; margin-top: 10px; display: none;"
-          title="Skip tutorial only if you completed it already.">
+          <input type="button" value="skip tutorial" id="button_skip_tutorial"
+            style="width: 170px; font-size: 11pt; height: 30px; margin-top: 10px; display: none;"
+            title="Skip tutorial only if you completed it already.">
+        </div>
       </div>
-    </div>
 
-    <div id="settings_div" class="white-box"
-      style="margin-right: 20px; margin-top: 10px; display: none; background-color: #e7e2cf; font-size: 11pt;">
-      <input type="checkbox" id="settings_approximate_alignment">
-      <label for="settings_approximate_alignment">Show approximate alignment</label>
-      <br>
-      <input type="checkbox" id="settings_word_level">
-      <label for="settings_word_level">Word-level selection</label>
-      <br>
-      <br>
-      <textarea id="settings_comment"
-        style="width: 95%; height: 80px; resize: vertical; margin-top: 5px; padding: 5px; border-radius: 4px; border: 1px solid #999;"
-        placeholder="Optional: Add any comments or feedback about this item. Will be submitted with Next."></textarea>
-    </div>
+      <div id="settings_div" class="white-box"
+        style="margin-right: 20px; margin-top: 10px; display: none; background-color: #e7e2cf; font-size: 11pt;">
+        <input type="checkbox" id="settings_approximate_alignment">
+        <label for="settings_approximate_alignment">Show approximate alignment</label>
+        <br>
+        <input type="checkbox" id="settings_word_level">
+        <label for="settings_word_level">Word-level selection</label>
+        <br>
+        <br>
+        <textarea id="settings_comment"
+          style="width: 95%; height: 80px; resize: vertical; margin-top: 5px; padding: 5px; border-radius: 4px; border: 1px solid #999;"
+          placeholder="Optional: Add any comments or feedback about this item. Will be submitted with Next."></textarea>
+      </div>
 
-    <div id="output_div" style="margin-top: 100px;"></div>
+      <div id="output_div" style="margin-top: 100px;"></div>
 
-    <br><br><br>
+      <br><br><br>
     </div>
   </div>
-  <footer style="text-align: right; padding: 20px 10px; font-size: 10pt; color: #666;">
+  <footer style="text-align: right; padding: 10px; font-size: 10pt; color: #666;">
     Running with <a href="https://github.com/zouharvi/pearmut" style="color: #666;">Pearmut</a>
     <%= version %>
   </footer>
