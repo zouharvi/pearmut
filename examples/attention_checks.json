@@ -21,10 +21,10 @@
               95,
               100
             ],
-            "error_spans": [],
-            "allow_skip": true
+            "error_spans": []
           }
-        }
+        },
+        "skippable": false
       },
       {
         "item_id": "deen_#_tutorial_#_2",
@@ -52,10 +52,10 @@
                 ],
                 "severity": "minor"
               }
-            ],
-            "allow_skip": true
+            ]
           }
-        }
+        },
+        "skippable": true
       },
       {
         "item_id": "deen_#_tutorial_#_3",
@@ -83,10 +83,10 @@
                 ],
                 "severity": "major"
               }
-            ],
-            "allow_skip": true
+            ]
           }
-        }
+        },
+        "skippable": true
       },
       {
         "item_id": "deen_#_tutorial_#_4",
@@ -102,10 +102,10 @@
               70,
               80
             ],
-            "error_spans": [],
-            "allow_skip": true
+            "error_spans": []
           }
-        }
+        },
+        "skippable": true
       }
     ],
     [
@@ -129,10 +129,10 @@
                 "end_i": 19,
                 "severity": "major"
               }
-            ],
-            "allow_skip": true
+            ]
           }
-        }
+        },
+        "skippable": true
       },
       {
         "item_id": "deen_#_tutorial_#_6",
@@ -157,10 +157,10 @@
               95,
               100
             ],
-            "error_spans": [],
-            "allow_skip": true
+            "error_spans": []
           }
-        }
+        },
+        "skippable": true
       }
     ],
     [
@@ -232,26 +232,24 @@
               "score": [
                 80,
                 90
-              ],
-              "allow_skip": true
+              ]
             },
             "B": {
               "warning": "Translation B has errors. Score 40-60.",
               "score": [
                 40,
                 60
-              ],
-              "allow_skip": true
+              ]
             },
             "C": {
               "warning": "Translation C is good. Score 70-80.",
               "score": [
                 70,
                 80
-              ],
-              "allow_skip": true
+              ]
             }
-          }
+          },
+          "skippable": true
         }
       ],
       [
@@ -269,18 +267,17 @@
               "score": [
                 85,
                 95
-              ],
-              "allow_skip": true
+              ]
             },
             "B": {
               "warning": "Translation B is good. Score 80-90.",
               "score": [
                 80,
                 90
-              ],
-              "allow_skip": true
+              ]
             }
-          }
+          },
+          "skippable": true
         }
       ],
       [
@@ -328,26 +325,24 @@
               "score": [
                 90,
                 100
-              ],
-              "allow_skip": true
+              ]
             },
             "B": {
               "warning": "B is good. Score 75-85.",
               "score": [
                 75,
                 85
-              ],
-              "allow_skip": true
+              ]
             },
             "C": {
               "warning": "C has issues. Score 50-65.",
               "score": [
                 50,
                 65
-              ],
-              "allow_skip": true
+              ]
             }
-          }
+          },
+          "skippable": true
         }
       ],
       [
@@ -365,18 +360,17 @@
               "score": [
                 88,
                 98
-              ],
-              "allow_skip": true
+              ]
             },
             "B": {
               "warning": "B is acceptable. Score 60-75.",
               "score": [
                 60,
                 75
-              ],
-              "allow_skip": true
+              ]
             }
-          }
+          },
+          "skippable": true
         }
       ],
       [
@@ -424,26 +418,24 @@
               "score": [
                 85,
                 95
-              ],
-              "allow_skip": true
+              ]
             },
             "B": {
               "warning": "B is good. Score 70-80.",
               "score": [
                 70,
                 80
-              ],
-              "allow_skip": true
+              ]
             },
             "C": {
               "warning": "C is weak. Score 45-60.",
               "score": [
                 45,
                 60
-              ],
-              "allow_skip": true
+              ]
             }
-          }
+          },
+          "skippable": true
         }
       ],
       [
@@ -461,18 +453,17 @@
               "score": [
                 90,
                 100
-              ],
-              "allow_skip": true
+              ]
             },
             "B": {
               "warning": "B is excellent. Score 88-96.",
               "score": [
                 88,
                 96
-              ],
-              "allow_skip": true
+              ]
             }
-          }
+          },
+          "skippable": true
         }
       ],
       [

@@ -11,7 +11,6 @@ import {
     updateToolboxPosition,
     Validation,
     validateResponse,
-    hasAllowSkip,
     DataGoodbye,
     DataForm,
     DataFormItem,
@@ -39,13 +38,14 @@ const state = {
     response_log: [] as Array<DocumentResponse>,
     action_log: [] as Array<any>,
     validations: [] as Array<Record<string, Validation> | undefined>,
+    payload_items: [] as Array<DataPayloadItem>,  // Store current payload items to check skippable
     output_blocks: [] as Array<JQuery<HTMLElement>>,
     settings: {
         show_alignment: true,
         word_level: false,
     },
     has_unsaved_work: false,
-    skip_tutorial_mode: false,
+    skip_mode: false,
     // Protocol settings for check_unlock
     protocol_error_spans: false,
     protocol_error_categories: false,
@@ -72,6 +72,7 @@ function check_unlock() {
     if (frozenMode) {
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Next 🔒")
+        $("#button_skip").hide()
         return
     }
 
@@ -82,7 +83,7 @@ function check_unlock() {
                 for (const span of r.error_spans) {
                     if (!isSpanComplete(span, state.protocol_error_categories)) {
                         $("#button_next").attr("disabled", "disabled")
-                        $("#button_next").val("Next 🚧")
+                        $("#button_next").val("Incomplete 🚧")
                         return
                     }
                 }
@@ -90,28 +91,43 @@ function check_unlock() {
         }
     }
 
+
+    let incomplete_items_i = Array<number>()
+
     // Check if all scores are set
-    let all_done = state.response_log.every(doc_responses =>
-        Object.values(doc_responses).every(r => {
+    state.response_log.forEach((doc_responses, i) =>
+        Object.values(doc_responses).forEach(r => {
             if (r.sliders) {
                 // Custom sliders mode: all sliders must be non-null (no score required)
                 // Note: when sliders is {} (empty, from sliders: []), Object.values returns []
                 // and every() returns true (vacuous truth), allowing immediate progression
-                return Object.values(r.sliders).every(val => val !== null)
+                if (!Object.values(r.sliders).every(val => val !== null)) {
+                    incomplete_items_i.push(i)
+                }
             } else {
                 // Single score mode: the score must be set
-                return r.score != null
+                if (r.score == null) {
+                    incomplete_items_i.push(i)
+                }
             }
         })
     )
-    if (!all_done) {
+    if (incomplete_items_i.length > 0) {
         $("#button_next").attr("disabled", "disabled")
-        $("#button_next").val("Next 🚧")
+        $("#button_next").val("Incomplete 🚧")
+        // Check if all incomplete items are skippable
+        if (incomplete_items_i.every(item_i => state.payload_items[item_i].skippable)) {
+            $("#button_skip").show()
+        } else {
+            $("#button_skip").hide()
+        }
         return
     }
 
+    // All items complete - enable Next button and hide Skip button
     $("#button_next").removeAttr("disabled")
     $("#button_next").val("Next ✅")
+    $("#button_skip").hide()
 }
 
 /**
@@ -724,17 +740,11 @@ async function display_next_payload(response: DataPayload) {
         $("#settings_comment").val("")
     }
     state.validations = data.map(item => item.validation)
+    state.payload_items = data  // Store payload items to check skippable
     state.output_blocks = []
     state.action_log = [{ "time": Date.now() / 1000, "action": "load" }]
     state.has_unsaved_work = false
-    state.skip_tutorial_mode = false
-
-    // Show/hide skip tutorial button based on validation settings
-    if (hasAllowSkip(state.validations)) {
-        $("#button_skip_tutorial").show()
-    } else {
-        $("#button_skip_tutorial").hide()
-    }
+    state.skip_mode = false
 
     state.protocol_error_spans = response.info.protocol == "ESA" || response.info.protocol == "MQM"
     state.protocol_error_categories = response.info.protocol == "MQM"
@@ -878,7 +888,7 @@ async function display_next_payload(response: DataPayload) {
     $("#button_next").on("click", async function () {
         // Perform validation unless in skip tutorial mode
         let validationResult: boolean[] | null = null
-        if (!state.skip_tutorial_mode) {
+        if (!state.skip_mode) {
             validationResult = await performValidation()
             if (validationResult == null) {
                 // validation failed, don't proceed
@@ -889,7 +899,7 @@ async function display_next_payload(response: DataPayload) {
         // disable while communicating with the server
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Next 📶")
-        state.action_log.push({ "time": Date.now() / 1000, "action": "submit" + (state.skip_tutorial_mode ? "_skip" : "") })
+        state.action_log.push({ "time": Date.now() / 1000, "action": "submit" + (state.skip_mode ? "_skip" : "") })
 
         // Build payload
         let payload_local: any = {
@@ -898,7 +908,7 @@ async function display_next_payload(response: DataPayload) {
             "item": response.payload,
         }
 
-        if (!state.skip_tutorial_mode && validationResult && validationResult.length > 0) {
+        if (!state.skip_mode && validationResult && validationResult.length > 0) {
             payload_local["validations"] = validationResult
         }
 
@@ -1224,9 +1234,9 @@ async function performValidation(): Promise<Array<boolean> | null> {
 }
 
 // Skip tutorial button handler
-$("#button_skip_tutorial").on("click", function () {
-    state.skip_tutorial_mode = true
-    notify("Tutorial skipped. Your current annotations will be submitted.")
+$("#button_skip").on("click", function () {
+    state.skip_mode = true
+    notify("Skipping. Your current annotations will be submitted.")
     // Trigger the next button click
     $("#button_next").trigger("click")
 })
