@@ -85,8 +85,7 @@ function check_unlock() {
                         $("#button_next").attr("disabled", "disabled")
                         $("#button_next").val("Incomplete 🚧")
                         // Check if any incomplete item has skippable
-                        const hasSkippable = state.payload_items.some(item => item.skippable === true)
-                        if (hasSkippable) {
+                        if (state.payload_items.some(item => item.skippable === true)) {
                             $("#button_skip").show()
                         } else {
                             $("#button_skip").hide()
@@ -116,8 +115,7 @@ function check_unlock() {
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Incomplete 🚧")
         // Check if any incomplete item has skippable
-        const hasSkippable = state.payload_items.some(item => item.skippable === true)
-        if (hasSkippable) {
+        if (state.payload_items.some(item => item.skippable === true)) {
             $("#button_skip").show()
         } else {
             $("#button_skip").hide()

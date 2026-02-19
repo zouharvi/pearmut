@@ -90,7 +90,7 @@
       },
       {
         "item_id": "deen_#_tutorial_#_4",
-        "src": "Obwohl die Katzen die Nacht drau\u00dfen verbrachten, war ihnen nicht kalt.",
+        "src": "Obwohl die Katzen die Nacht draußen verbrachten, war ihnen nicht kalt.",
         "tgt": {
           "model-tutorial": "Although the cats were outside over the night, they did not get cold."
         },
@@ -221,9 +221,9 @@
           "item_id": "tutorial_1",
           "src": "The quick brown fox jumps over the lazy dog.",
           "tgt": {
-            "A": "Rychl\u00e1 hn\u011bd\u00e1 li\u0161ka sk\u00e1\u010de p\u0159es l\u00edn\u00e9ho psa.",
-            "B": "Hbit\u00e1 hn\u011bd\u00e1 li\u0161ka p\u0159esko\u010dila leniv\u00e9ho psa.",
-            "C": "Svi\u017en\u00e1 hn\u011bd\u00e1 li\u0161ka sko\u010dila p\u0159es ospal\u00e9ho psa."
+            "A": "Rychlá hnědá liška skáče přes líného psa.",
+            "B": "Hbitá hnědá liška přeskočila lenivého psa.",
+            "C": "Svižná hnědá liška skočila přes ospalého psa."
           },
           "instructions": "<b>Tutorial 1:</b> Compare these translations. First translation (A) is best: 80-90. Second (B) has errors: 40-60. Third (C) is good: 70-80.",
           "validation": {
@@ -257,8 +257,8 @@
           "item_id": "tutorial_2",
           "src": "Machine translation improves daily.",
           "tgt": {
-            "A": "Strojov\u00fd p\u0159eklad se denn\u011b zlep\u0161uje.",
-            "B": "Automatick\u00fd p\u0159eklad je ka\u017ed\u00fd den lep\u0161\u00ed."
+            "A": "Strojový překlad se denně zlepšuje.",
+            "B": "Automatický překlad je každý den lepší."
           },
           "instructions": "<b>Tutorial 2:</b> Both are good. A: 85-95, B: 80-90.",
           "validation": {
@@ -285,8 +285,8 @@
           "item_id": "attention_check_1",
           "src": "AI transforms industries.",
           "tgt": {
-            "A": "UI transformuje pr\u016fmysly.",
-            "B": "Um\u011bl\u00e1 inteligence m\u011bn\u00ed obory."
+            "A": "UI transformuje průmysly.",
+            "B": "Umělá inteligence mění obory."
           },
           "instructions": "<b>Attention Check:</b> A: exactly 30. B: exactly 85.",
           "validation": {
@@ -314,9 +314,9 @@
           "item_id": "tutorial_1",
           "src": "Scientists study ocean currents.",
           "tgt": {
-            "A": "V\u011bdci studuj\u00ed mo\u0159sk\u00e9 proudy.",
-            "B": "V\u011bdci zkoumaj\u00ed oce\u00e1nsk\u00e9 proudy.",
-            "C": "Badatel\u00e9 pozoruj\u00ed vodn\u00ed proudy."
+            "A": "Vědci studují mořské proudy.",
+            "B": "Vědci zkoumají oceánské proudy.",
+            "C": "Badatelé pozorují vodní proudy."
           },
           "instructions": "<b>Tutorial 1:</b> A is perfect: 90-100. B is good: 75-85. C has issues: 50-65.",
           "validation": {
@@ -350,8 +350,8 @@
           "item_id": "tutorial_2",
           "src": "Weather affects agriculture.",
           "tgt": {
-            "A": "Po\u010das\u00ed ovliv\u0148uje zem\u011bd\u011blstv\u00ed.",
-            "B": "Klima m\u00e1 dopad na farma\u0159en\u00ed."
+            "A": "Počasí ovlivňuje zemědělství.",
+            "B": "Klima má dopad na farmaření."
           },
           "instructions": "<b>Tutorial 2:</b> A is great: 88-98. B is acceptable: 60-75.",
           "validation": {
@@ -379,7 +379,7 @@
           "src": "Energy costs rise.",
           "tgt": {
             "A": "Ceny energie rostou.",
-            "B": "N\u00e1klady na energii stoupaj\u00ed."
+            "B": "Náklady na energii stoupají."
           },
           "instructions": "<b>Attention Check:</b> A: exactly 80. B: exactly 75.",
           "validation": {
@@ -407,9 +407,9 @@
           "item_id": "tutorial_1",
           "src": "Technology changes society.",
           "tgt": {
-            "A": "Technologie m\u011bn\u00ed spole\u010dnost.",
-            "B": "Technika transformuje spole\u010dnost.",
-            "C": "Technologie ovliv\u0148uje lidstvo."
+            "A": "Technologie mění společnost.",
+            "B": "Technika transformuje společnost.",
+            "C": "Technologie ovlivňuje lidstvo."
           },
           "instructions": "<b>Tutorial 1:</b> A is best: 85-95. B is good: 70-80. C is weak: 45-60.",
           "validation": {
@@ -443,8 +443,8 @@
           "item_id": "tutorial_2",
           "src": "Education is important.",
           "tgt": {
-            "A": "Vzd\u011bl\u00e1n\u00ed je d\u016fle\u017eit\u00e9.",
-            "B": "Vzd\u011bl\u00e1v\u00e1n\u00ed hraje kl\u00ed\u010dovou roli."
+            "A": "Vzdělání je důležité.",
+            "B": "Vzdělávání hraje klíčovou roli."
           },
           "instructions": "<b>Tutorial 2:</b> Both excellent. A: 90-100, B: 88-96.",
           "validation": {
@@ -471,8 +471,8 @@
           "item_id": "attention_check_1",
           "src": "Markets fluctuate daily.",
           "tgt": {
-            "A": "Trhy denn\u011b kol\u00edsaj\u00ed.",
-            "B": "Trhy se ka\u017ed\u00fd den m\u011bn\u00ed."
+            "A": "Trhy denně kolísají.",
+            "B": "Trhy se každý den mění."
           },
           "instructions": "<b>Attention Check:</b> A: exactly 70. B: exactly 65.",
           "validation": {
@@ -500,8 +500,8 @@
           "item_id": "silent_check_1",
           "src": "The weather forecast predicts rain tomorrow.",
           "tgt": {
-            "A": "Ban\u00e1n l\u00e9t\u00e1 rychle p\u0159es hory ko\u010dka.",
-            "B": "P\u0159edpov\u011b\u010f po\u010das\u00ed hl\u00e1s\u00ed d\u00e9\u0161\u0165 na z\u00edtra."
+            "A": "Banán létá rychle přes hory kočka.",
+            "B": "Předpověď počasí hlásí déšť na zítra."
           },
           "instructions": "Compare these translations.",
           "validation": {
@@ -525,8 +525,8 @@
           "item_id": "silent_check_2",
           "src": "Scientists have discovered a new planet.",
           "tgt": {
-            "A": "V\u011bdci objevili novou planetu.",
-            "B": "St\u016fl plave v mo\u0159i zelen\u00fdch sn\u016f v\u010dera."
+            "A": "Vědci objevili novou planetu.",
+            "B": "Stůl plave v moři zelených snů včera."
           },
           "instructions": "Compare these translations.",
           "validation": {
@@ -550,8 +550,8 @@
           "item_id": "silent_check_3",
           "src": "The restaurant serves excellent Italian cuisine.",
           "tgt": {
-            "A": "Po\u010d\u00edta\u010d zp\u00edv\u00e1 modrou knihu telefon.",
-            "B": "Restaurace nab\u00edz\u00ed vynikaj\u00edc\u00ed italskou kuchyni."
+            "A": "Počítač zpívá modrou knihu telefon.",
+            "B": "Restaurace nabízí vynikající italskou kuchyni."
           },
           "instructions": "Compare these translations.",
           "validation": {
