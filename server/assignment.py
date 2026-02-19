@@ -716,16 +716,10 @@ def reset_task(
     """
     Reset the task progress for the user in the specified campaign.
     Saves a reset marker to mask existing annotations.
-
-    Note: Dynamic assignment does not support user-level deletion.
+    Only resets items originally completed by this user (not completed_foreign).
     """
     assignment = tasks_data[campaign_id]["info"]["assignment"]
-    if assignment == "dynamic":
-        return JSONResponse(
-            content="User-level deletion is not supported for dynamic assignments",
-            status_code=400,
-        )
-    elif assignment == "task-based":
+    if assignment == "task-based":
         # Save reset marker for this user to mask existing annotations
         num_items = len(tasks_data[campaign_id]["data"][user_id])
         for item_i in range(num_items):
@@ -763,10 +757,9 @@ def reset_task(
                 {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
             )
 
-        # Reset the touched regular items in all users' progress (shared pool)
-        for uid in progress_data[campaign_id]:
-            for item_i in user_items_to_reset:
-                progress_data[campaign_id][uid]["progress"][item_i] = None
+        # Reset only this user's progress for their completed items
+        for item_i in user_items_to_reset:
+            progress_data[campaign_id][user_id]["progress"][item_i] = None
 
         # Reset all welcome items progress for this user (per-user, not shared)
         if "progress_welcome" in progress_data[campaign_id][user_id]:
@@ -784,6 +777,39 @@ def reset_task(
             ] * num_welcome
 
         # Reset only the specified user's time
+        _reset_user_time(progress_data, campaign_id, user_id)
+        return JSONResponse(content="ok", status_code=200)
+    elif assignment == "dynamic":
+        # Reset only this user's completed items
+        for item_i, item_progress in enumerate(
+            progress_data[campaign_id][user_id]["progress"]
+        ):
+            if any(v == "completed" for v in item_progress.values()):
+                save_db_payload(
+                    campaign_id,
+                    {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
+                )
+                for model in item_progress:
+                    if item_progress[model] == "completed":
+                        item_progress[model] = None
+        # Reset welcome items progress if it exists
+        if "progress_welcome" in progress_data[campaign_id][user_id]:
+            for i, status in enumerate(
+                progress_data[campaign_id][user_id]["progress_welcome"]
+            ):
+                if status:
+                    save_db_payload(
+                        campaign_id,
+                        {
+                            "user_id": user_id,
+                            "item_i": f"welcome_{i}",
+                            "annotation": RESET_MARKER,
+                        },
+                    )
+            num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
+            progress_data[campaign_id][user_id]["progress_welcome"] = (
+                [False] * num_welcome
+            )
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
     else:
