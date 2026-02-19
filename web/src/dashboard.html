@@ -110,26 +110,30 @@
     </style>
 </head>
 
-<body style="padding-top: 50px; padding-bottom: 50px;">
-    <div id="main_div" style="width: calc(100% - 200px); min-width: 1300px; margin-left: auto; margin-right: auto;">
-        <div style="margin-bottom: 15px; font-size: 0.9em; color: #555;">
-            💤not started &nbsp;&nbsp; ✍️in progress &nbsp;&nbsp; ✅completed & passed &nbsp;&nbsp;❌completed & failed
-            &nbsp;&nbsp;
-            🔗annotator link &nbsp;&nbsp; 👁️anotator link (view-only) &nbsp;&nbsp; 🗑️reset progress/campaign
-            &nbsp;&nbsp; ⚖️show model ranking
+<body style="min-height: 100vh; display: flex; flex-direction: column; margin: 0;">
+    <div style="flex: 1; padding-top: 50px; padding-bottom: 50px;">
+        <div id="main_div" style="width: calc(100% - 200px); min-width: 1300px; margin-left: auto; margin-right: auto;">
+            <div style="margin-bottom: 15px; font-size: 0.9em; color: #555;">
+                💤not started &nbsp;&nbsp; ✍️in progress &nbsp;&nbsp; ✅completed & passed &nbsp;&nbsp;❌completed &
+                failed
+                &nbsp;&nbsp;
+                🔗annotator link &nbsp;&nbsp; 👁️anotator link (view-only) &nbsp;&nbsp; 🗑️reset progress/campaign
+                &nbsp;&nbsp; ⚖️show model ranking
+            </div>
+            <div id="dashboard_div">
+
+            </div>
+
+            <br>
+
+            <a class="abutton" id="download_progress" style="margin-right: 20px;">Download progress metadata 💾</a>
+            <a class="abutton" id="download_annotations" style="margin-right: 20px;">Download all annotations 💾</a>
+            <button class="abutton" id="add_campaign" style="width: 180px; margin-right: 20px;">Add new campaign
+                📤</button>
+            <input type="file" id="campaign_file_input" accept=".json" style="display: none;">
         </div>
-        <div id="dashboard_div">
-
-        </div>
-
-        <br>
-
-        <a class="abutton" id="download_progress" style="margin-right: 20px;">Download progress metadata 💾</a>
-        <a class="abutton" id="download_annotations" style="margin-right: 20px;">Download all annotations 💾</a>
-        <button class="abutton" id="add_campaign" style="width: 180px; margin-right: 20px;">Add new campaign 📤</button>
-        <input type="file" id="campaign_file_input" accept=".json" style="display: none;">
     </div>
-    <footer style="position: fixed; bottom: 10px; right: 10px; font-size: 10pt; color: #666;">
+    <footer style="text-align: right; padding: 10px; font-size: 10pt; color: #666;">
         Running with <a href="https://github.com/zouharvi/pearmut" style="text-decoration: underline;">Pearmut</a>
         <%= version %>
     </footer>

@@ -8,18 +8,20 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 
-<body>
-  <div class="white-box"
-    style="width: max-content; font-size: large; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-    You have reached the Pearmut🍐 evaluation interface.
-    <ul>
-      <li>If you are an annotator, you should have received a specialized link that takes you to the annotations.</li>
-      <li>If you are annotation manager, then you should distribute these links from the dashboard interface.</li>
-    </ul>
+<body style="min-height: 100vh; display: flex; flex-direction: column; margin: 0;">
+  <div style="flex: 1; position: relative;">
+    <div class="white-box"
+      style="width: max-content; font-size: large; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+      You have reached the Pearmut🍐 evaluation interface.
+      <ul>
+        <li>If you are an annotator, you should have received a specialized link that takes you to the annotations.</li>
+        <li>If you are annotation manager, then you should distribute these links from the dashboard interface.</li>
+      </ul>
+    </div>
   </div>
-  <footer style="position: fixed; bottom: 10px; right: 10px; font-size: 10pt; color: #666;">
-    Made with 💚 by Vilém Zouhar and others in 2025-2026.
-    Running with <a href="https://github.com/zouharvi/pearmut" style="color: #666;">Pearmut</a>
+  <footer style="text-align: right; padding: 10px; font-size: 10pt; color: #666;">
+    Made with 🍐 by Vilém Zouhar and others in 2025-2026.
+    Running with <a href="https://github.com/zouharvi/pearmut" style="color: #666 !important;">Pearmut</a>
     <%= version %>
   </footer>
 </body>
