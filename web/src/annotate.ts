@@ -84,6 +84,12 @@ function check_unlock() {
                     if (!isSpanComplete(span, state.protocol_error_categories)) {
                         $("#button_next").attr("disabled", "disabled")
                         $("#button_next").val("Incomplete 🚧")
+                        // Check if all incomplete items are skippable
+                        if (state.payload_items.every(item => item.skippable === true)) {
+                            $("#button_skip").show()
+                        } else {
+                            $("#button_skip").hide()
+                        }
                         return
                     }
                 }
@@ -108,8 +114,8 @@ function check_unlock() {
     if (!all_done) {
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Incomplete 🚧")
-        // Check if any incomplete item has skippable
-        if (state.payload_items.some(item => item.skippable === true)) {
+        // Check if all incomplete items are skippable
+        if (state.payload_items.every(item => item.skippable === true)) {
             $("#button_skip").show()
         } else {
             $("#button_skip").hide()
