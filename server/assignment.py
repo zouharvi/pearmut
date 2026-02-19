@@ -391,7 +391,7 @@ def get_next_item_singlestream(
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
 
-        payload = data_all[campaign_id]["data"][item_i]
+        payload = data_all[campaign_id]["data_welcome"][item_i]
         is_form = is_form_document(payload)
 
         return JSONResponse(
