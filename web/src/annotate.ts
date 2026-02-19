@@ -84,12 +84,6 @@ function check_unlock() {
                     if (!isSpanComplete(span, state.protocol_error_categories)) {
                         $("#button_next").attr("disabled", "disabled")
                         $("#button_next").val("Incomplete 🚧")
-                        // Check if all incomplete items are skippable
-                        if (state.payload_items.every(item => item.skippable === true)) {
-                            $("#button_skip").show()
-                        } else {
-                            $("#button_skip").hide()
-                        }
                         return
                     }
                 }
@@ -97,25 +91,32 @@ function check_unlock() {
         }
     }
 
+
+    let incomplete_items_i = Array<number>()
+
     // Check if all scores are set
-    let all_done = state.response_log.every(doc_responses =>
-        Object.values(doc_responses).every(r => {
+    state.response_log.forEach((doc_responses, i) =>
+        Object.values(doc_responses).forEach(r => {
             if (r.sliders) {
                 // Custom sliders mode: all sliders must be non-null (no score required)
                 // Note: when sliders is {} (empty, from sliders: []), Object.values returns []
                 // and every() returns true (vacuous truth), allowing immediate progression
-                return Object.values(r.sliders).every(val => val !== null)
+                if (!Object.values(r.sliders).every(val => val !== null)) {
+                    incomplete_items_i.push(i)
+                }
             } else {
                 // Single score mode: the score must be set
-                return r.score != null
+                if (r.score == null) {
+                    incomplete_items_i.push(i)
+                }
             }
         })
     )
-    if (!all_done) {
+    if (incomplete_items_i.length > 0) {
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Incomplete 🚧")
         // Check if all incomplete items are skippable
-        if (state.payload_items.every(item => item.skippable === true)) {
+        if (incomplete_items_i.every(item_i => state.payload_items[item_i].skippable)) {
             $("#button_skip").show()
         } else {
             $("#button_skip").hide()
