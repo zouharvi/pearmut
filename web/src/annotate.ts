@@ -134,18 +134,11 @@ function check_unlock() {
  * Cleanup function to remove toolboxes and handlers from previous item
  * Must be called before loading a new item to prevent memory leaks and stale UI
  */
-function updateScrollIndicator(el: HTMLElement) {
-    const hasMoreRight = el.scrollLeft + el.clientWidth < el.scrollWidth - 1
-    $(el).toggleClass('has-more-right', hasMoreRight)
-}
-
 function cleanupPreviousItem(): void {
     // Remove all toolboxes appended to body
     $(".span_toolbox_parent").remove()
     // Remove resize handlers for toolbox positioning (use namespace to avoid removing other handlers)
     $(window).off('resize.toolbox')
-    // Remove scroll indicator listeners
-    $("#output_div .output_item").off('scroll.scrollindicator')
 }
 
 function _textfield_button_html(item_i: number, model: string, mode: string | null | undefined): string {
@@ -865,15 +858,6 @@ async function display_next_payload(response: DataPayload) {
     // trigger once to reposition toolboxes
     $(window).trigger('resize.toolbox')
     check_unlock()
-
-    // Setup horizontal scroll indicators for output_item elements
-    requestAnimationFrame(() => {
-        $("#output_div .output_item").each(function () {
-            const el = this as HTMLElement
-            updateScrollIndicator(el)
-            $(el).on('scroll.scrollindicator', () => updateScrollIndicator(el))
-        })
-    })
 
     // Attach event listeners to multimedia elements for logging (no overhead if no audio/video present)
     // Note: Elements are removed when output_div is cleared, so no explicit cleanup needed

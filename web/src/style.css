@@ -286,3 +286,168 @@ input[type="button"][selected] {
     border-color: #4CAF50;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
 }
+
+.output_item {
+    display: flex;
+    width: calc(100% - 10px);
+    padding-right: 10px;
+}
+
+.output_src,
+.output_ref {
+    display: inline-block;
+    flex: 1;
+    box-sizing: border-box;
+    background-color: #fff7;
+    padding: 10px;
+    border-radius: 8px;
+    vertical-align: top;
+    margin-bottom: 10px;
+    user-select: none;
+    box-shadow: 0 4px 6px #0005;
+    margin-right: 10px;
+}
+
+.output_candidate {
+    display: inline-block;
+    flex: 1;
+    box-sizing: border-box;
+    vertical-align: top;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
+
+.output_tgt,
+.output_textfield {
+    width: calc(100% - 20px);
+    background-color: #fffc;
+    padding: 10px;
+    border-radius: 8px;
+    user-select: none;
+    box-shadow: 0 4px 6px #0005;
+    border: none;
+}
+
+.output_response {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    position: relative;
+}
+
+/* When output_response contains slider_container children, stack vertically */
+.output_response:has(.slider_container) {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.output_response input[type=range] {
+    flex: 1;
+    min-width: 0;
+}
+
+.slider_label {
+    width: 50px;
+    font-size: 10pt;
+    color: #555;
+    text-align: right;
+    margin-left: 5px;
+}
+
+/* Custom sliders styling */
+.slider_container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.slider_container:first-child {
+    margin-top: 0;
+}
+
+.slider_container input[type=range] {
+    flex: 1;
+    min-width: 0;
+}
+
+.slider_name {
+    display: inline-block;
+    width: 120px;
+    margin-right: 8px;
+    color: #333;
+    flex-shrink: 0;
+}
+
+/* on displays with less than 1000px - stack vertically */
+@media (max-width: 1000px) {
+
+    .output_src,
+    .output_ref,
+    .output_candidate {
+        display: block;
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .output_item {
+        flex-direction: column;
+    }
+}
+
+input[type=range] {
+    height: 16px;
+    position: relative;
+}
+
+/* Slider anchors at 33% and 66% */
+.output_response::before,
+.output_response::after {
+    content: '▼';
+    position: absolute;
+    transform: translateY(-30%);
+    width: 1px;
+    height: 10px;
+    pointer-events: none;
+    z-index: -1;
+    color: #777;
+}
+
+/* Hide anchors when custom sliders are present */
+.output_response:has(.slider_container)::before,
+.output_response:has(.slider_container)::after {
+    display: none;
+}
+
+/* Hide anchors when no sliders (empty div) */
+.output_response:empty::before,
+.output_response:empty::after {
+    display: none;
+}
+
+.output_response::before {
+    left: calc(33% - 18px);
+}
+
+.output_response::after {
+    left: calc(66% - 36px);
+}
+
+/* Textfield styling */
+.output_textfield {
+    width: calc(100% - 20px);
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #999;
+    resize: vertical;
+    min-height: 60px;
+    font-family: inherit;
+    font-size: 10pt;
+}
+
+.textfield_toggle {
+    background: none;
+    border: none;
+    font-size: 9pt;
+    cursor: pointer;
+}
