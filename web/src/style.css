@@ -287,16 +287,22 @@ input[type="button"][selected] {
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
 }
 
+.output_block {
+    container-type: inline-size;
+}
+
 .output_item {
     display: flex;
     width: calc(100% - 10px);
     padding-right: 10px;
+    overflow-x: auto;
 }
 
 .output_src,
 .output_ref {
     display: inline-block;
     flex: 1;
+    min-width: 400px;
     box-sizing: border-box;
     background-color: #fff7;
     padding: 10px;
@@ -311,6 +317,7 @@ input[type="button"][selected] {
 .output_candidate {
     display: inline-block;
     flex: 1;
+    min-width: 400px;
     box-sizing: border-box;
     vertical-align: top;
     margin-right: 5px;
@@ -378,14 +385,15 @@ input[type="button"][selected] {
     flex-shrink: 0;
 }
 
-/* on displays with less than 1000px - stack vertically */
-@media (max-width: 1000px) {
+/* stack vertically when each column would be less than 400px */
+@container (max-width: 800px) {
 
     .output_src,
     .output_ref,
     .output_candidate {
         display: block;
         width: 100%;
+        min-width: unset;
         margin-right: 0;
     }
 
