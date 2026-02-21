@@ -9,6 +9,7 @@
   <style>
     .output_item {
       display: flex;
+      flex-wrap: wrap;
       width: calc(100% - 10px);
       padding-right: 10px;
     }
@@ -17,6 +18,7 @@
     .output_ref {
       display: inline-block;
       flex: 1;
+      min-width: 400px;
       box-sizing: border-box;
       background-color: #fff7;
       padding: 10px;
@@ -31,6 +33,7 @@
     .output_candidate {
       display: inline-block;
       flex: 1;
+      min-width: 400px;
       box-sizing: border-box;
       vertical-align: top;
       margin-right: 5px;
@@ -96,22 +99,6 @@
       margin-right: 8px;
       color: #333;
       flex-shrink: 0;
-    }
-
-    /* stack vertically when flex items would be narrower than 400px (3 * 400px = 1200px) */
-    @container (max-width: 1200px) {
-
-      .output_src,
-      .output_ref,
-      .output_candidate {
-        display: block;
-        width: 100%;
-        margin-right: 0;
-      }
-
-      .output_item {
-        flex-direction: column;
-      }
     }
 
     input[type=range] {
