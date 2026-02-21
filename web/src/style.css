@@ -67,6 +67,7 @@ label {
 
 .output_block {
     margin-bottom: 30pt;
+    container-type: inline-size;
 }
 
 .model_name {

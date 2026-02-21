@@ -98,8 +98,8 @@
       flex-shrink: 0;
     }
 
-    /* on displays with less than 1000px - stack vertically */
-    @media (max-width: 1000px) {
+    /* stack vertically when flex items would be narrower than 400px (3 * 400px = 1200px) */
+    @container (max-width: 1200px) {
 
       .output_src,
       .output_ref,
