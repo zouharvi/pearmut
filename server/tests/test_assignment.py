@@ -424,8 +424,8 @@ class TestSingleStream:
         assert '"status":"goodbye"' in content
         assert 'correct_token' in content
 
-    def test_reset_task_resets_all_users(self):
-        """Test that single-stream reset_task resets only touched items for all users."""
+    def test_reset_task_resets_completed_items_for_all_users(self):
+        """Test that single-stream reset_task resets items the user originally completed, for all users in the shared pool."""
         _clear_test_logs()
         tasks_data = {
             "campaign1": {
@@ -460,7 +460,7 @@ class TestSingleStream:
                 }
             }
         }
-        # Add annotations for user1 on items 0 and 1
+        # Add annotations for user1 on items 0 and 3
         save_db_payload("campaign1", {
             "user_id": "user1",
             "item_i": 0,
@@ -471,7 +471,7 @@ class TestSingleStream:
             "item_i": 3,
             "annotation": {"score": 90}
         })
-        # Add annotation for user2 on item 0 and 2
+        # Add annotation for user2 on items 0 and 2
         save_db_payload("campaign1", {
             "user_id": "user2",
             "item_i": 0,
@@ -482,31 +482,28 @@ class TestSingleStream:
             "item_i": 2,
             "annotation": {"score": 85}
         })
-        
+
         reset_task("campaign1", "user1", tasks_data, progress_data)
-        
-        # Only items touched by user1 (0 and 1) should be reset for all users
+
+        # Items user1 originally completed (0 and 3) are reset for both users in the shared pool
+        # Item 2 was completed_foreign for user1 (not originally theirs) so it is NOT reset
         assert progress_data["campaign1"]["user1"]["progress"] == [None, None, "completed_foreign", None]
-        # User2 completed item 0, so it stays "completed"
-        # User2 didn't complete item 1, so it becomes None
+        # User2's items 0 and 3 are also reset (shared pool), item 2 is unaffected
         assert progress_data["campaign1"]["user2"]["progress"] == [None, None, "completed", None]
         # Only user1's time should be reset
         assert progress_data["campaign1"]["user1"]["time"] == 0.0
         assert progress_data["campaign1"]["user1"]["time_start"] is None
         assert progress_data["campaign1"]["user2"]["time"] == 75.0
-        
-        # Verify reset markers were added only for user1's items (0 and 1)
-        items_user1_0 = get_db_log_item("campaign1", "user1", 0)
-        items_user1_1 = get_db_log_item("campaign1", "user1", 1)
-        assert len(items_user1_0) == 0  # Masked by reset marker
-        assert len(items_user1_1) == 0  # Masked by reset marker
-        
-        # User2's annotation on item 0 should still be visible (different user_id)
+
+        # User1's annotations on items 0 and 3 should be masked
+        assert len(get_db_log_item("campaign1", "user1", 0)) == 0
+        assert len(get_db_log_item("campaign1", "user1", 3)) == 0
+
+        # User2's annotations are unaffected (different user_id in the log)
         items_user2_0 = get_db_log_item("campaign1", "user2", 0)
         assert len(items_user2_0) == 1
         assert items_user2_0[0]["annotation"] == {"score": 70}
-        
-        # User2's annotation on item 2 should still be visible (user1 didn't touch it)
+
         items_user2_2 = get_db_log_item("campaign1", "user2", 2)
         assert len(items_user2_2) == 1
         assert items_user2_2[0]["annotation"] == {"score": 85}
@@ -1234,8 +1231,8 @@ class TestDynamic:
         assert progress_data["campaign1"]["user1"]["progress"][0]["model1"] is None
         assert progress_data["campaign1"]["user2"]["progress"][0]["model1"] is None
 
-    def test_reset_task_resets_all_users(self):
-        """Test that dynamic reset_task returns error (not supported)."""
+    def test_reset_task_resets_only_requesting_user(self):
+        """Test that dynamic reset_task resets only the requesting user's completed items."""
         _clear_test_logs()
         tasks_data = {
             "campaign1": {
@@ -1270,20 +1267,29 @@ class TestDynamic:
                 }
             }
         }
-        
-        # Dynamic assignment should not support reset
+        # Add annotations for user1 on items 0, 1, 3
+        save_db_payload("campaign1", {"user_id": "user1", "item_i": 0, "annotation": [{"model1": {"score": 5}}]})
+        save_db_payload("campaign1", {"user_id": "user1", "item_i": 1, "annotation": [{"model1": {"score": 4}}]})
+        save_db_payload("campaign1", {"user_id": "user1", "item_i": 3, "annotation": [{"model1": {"score": 3}}]})
+
         response = reset_task("campaign1", "user1", tasks_data, progress_data)
-        assert response.status_code == 400
-        content = response.body.decode()
-        assert "not supported" in content.lower()
-        
-        # Verify progress was not changed
+        assert response.status_code == 200
+
+        # User1's completed items (0, 1, 3) reset to None; item 2 was already None
         assert progress_data["campaign1"]["user1"]["progress"] == [
-            {"model1": "completed"}, {"model1": "completed"}, {"model1": None}, {"model1": "completed"}]
+            {"model1": None}, {"model1": None}, {"model1": None}, {"model1": None}]
+        # User2's progress is entirely unchanged
         assert progress_data["campaign1"]["user2"]["progress"] == [
             {"model1": "completed"}, {"model1": "completed"}, {"model1": "completed"}, {"model1": None}]
-        assert progress_data["campaign1"]["user1"]["time"] == 50.0
+        # Only user1's time should be reset
+        assert progress_data["campaign1"]["user1"]["time"] == 0.0
+        assert progress_data["campaign1"]["user1"]["time_start"] is None
         assert progress_data["campaign1"]["user2"]["time"] == 75.0
+
+        # User1's annotations should be masked
+        assert len(get_db_log_item("campaign1", "user1", 0)) == 0
+        assert len(get_db_log_item("campaign1", "user1", 1)) == 0
+        assert len(get_db_log_item("campaign1", "user1", 3)) == 0
 
     def test_docs_per_user_triggers_goodbye(self):
         """Test that dynamic with docs_per_user shows goodbye after specified items."""

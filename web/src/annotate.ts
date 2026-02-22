@@ -32,7 +32,7 @@ import {
 // Check if frozen mode is enabled (view-only, no annotations)
 const searchParams = new URLSearchParams(window.location.search)
 const frozenMode = searchParams.has("frozen")
-
+const debugMode = searchParams.has("debug")
 
 const state = {
     response_log: [] as Array<DocumentResponse>,
@@ -116,7 +116,7 @@ function check_unlock() {
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Incomplete 🚧")
         // Check if all incomplete items are skippable
-        if (incomplete_items_i.every(item_i => state.payload_items[item_i].skippable)) {
+        if (debugMode || incomplete_items_i.every(item_i => state.payload_items[item_i].skippable)) {
             $("#button_skip").show()
         } else {
             $("#button_skip").hide()
