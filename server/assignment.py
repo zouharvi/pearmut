@@ -567,8 +567,7 @@ def get_next_item_dynamic(
         if (item_i := annotation_line.get("item_i")) is not None:
             # Count which models were annotated in this annotation
             for annotation_item in annotation_line.get("annotation", []):
-                if annotation_item is None:  # skippable items have no annotation
-                    continue
+                # we don't skip empty annotations from skippable items as they won't be assigned anyway
                 for model in annotation_item:
                     model_item_counts[(model, item_i)] += 1
                     model_total_counts[model] += 1
