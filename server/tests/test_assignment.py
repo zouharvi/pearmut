@@ -1134,6 +1134,100 @@ class TestValidationThreshold:
 class TestDynamic:
     """Tests for dynamic assignment."""
 
+    def test_get_i_item_returns_annotated_models(self):
+        """Test that dynamic get_i_item returns only annotated models."""
+        tasks_data = {
+            "campaign1": {
+                "info": {
+                    "assignment": "dynamic",
+                },
+                "data": [
+                    [{"src": "a", "tgt": {"model1": "b", "model2": "c", "model3": "d"}}],
+                    [{"src": "e", "tgt": {"model1": "f", "model2": "g", "model3": "h"}}],
+                ]
+            }
+        }
+        progress_data = {
+            "campaign1": {
+                "user1": {
+                    "progress": [
+                        {"model1": "completed", "model2": "completed_foreign", "model3": None},
+                        {"model1": None, "model2": None, "model3": None},
+                    ],
+                    "progress_welcome": [],
+                    "time": 0,
+                    "token_correct": "abc",
+                    "token_incorrect": "xyz",
+                }
+            }
+        }
+        # Item 0 has model1 and model2 annotated, model3 not
+        response = get_i_item("campaign1", "user1", tasks_data, progress_data, 0)
+        assert response.status_code == 200
+        import json
+        data = json.loads(response.body.decode())
+        assert data["info"]["item_i"] == 0
+        assert "model1" in data["payload"][0]["tgt"]
+        assert "model2" in data["payload"][0]["tgt"]
+        assert "model3" not in data["payload"][0]["tgt"]
+
+    def test_get_i_item_returns_all_models_when_none_annotated(self):
+        """Test that dynamic get_i_item returns all models when none are annotated."""
+        tasks_data = {
+            "campaign1": {
+                "info": {
+                    "assignment": "dynamic",
+                },
+                "data": [
+                    [{"src": "a", "tgt": {"model1": "b", "model2": "c"}}],
+                ]
+            }
+        }
+        progress_data = {
+            "campaign1": {
+                "user1": {
+                    "progress": [{"model1": None, "model2": None}],
+                    "progress_welcome": [],
+                    "time": 0,
+                    "token_correct": "abc",
+                    "token_incorrect": "xyz",
+                }
+            }
+        }
+        # No models annotated - should return full item
+        response = get_i_item("campaign1", "user1", tasks_data, progress_data, 0)
+        assert response.status_code == 200
+        import json
+        data = json.loads(response.body.decode())
+        assert "model1" in data["payload"][0]["tgt"]
+        assert "model2" in data["payload"][0]["tgt"]
+
+    def test_get_i_item_out_of_range(self):
+        """Test that dynamic get_i_item returns error for invalid index."""
+        tasks_data = {
+            "campaign1": {
+                "info": {
+                    "assignment": "dynamic",
+                },
+                "data": [
+                    [{"src": "a", "tgt": {"model1": "b"}}],
+                ]
+            }
+        }
+        progress_data = {
+            "campaign1": {
+                "user1": {
+                    "progress": [{"model1": None}],
+                    "progress_welcome": [],
+                    "time": 0,
+                    "token_correct": "abc",
+                    "token_incorrect": "xyz",
+                }
+            }
+        }
+        response = get_i_item("campaign1", "user1", tasks_data, progress_data, 5)
+        assert response.status_code == 400
+
     def test_get_next_item_returns_item_from_pool(self):
         """Test that dynamic returns an item from the shared pool."""
         tasks_data = {
