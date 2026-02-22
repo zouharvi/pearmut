@@ -8,7 +8,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <style>
     .output_item {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 5px 10px;
       width: calc(100% - 10px);
       padding-right: 10px;
     }
@@ -16,25 +18,19 @@
     .output_src,
     .output_ref {
       display: inline-block;
-      flex: 1;
       box-sizing: border-box;
       background-color: #fff7;
       padding: 10px;
       border-radius: 8px;
       vertical-align: top;
-      margin-bottom: 10px;
       user-select: none;
       box-shadow: 0 4px 6px #0005;
-      margin-right: 10px;
     }
 
     .output_candidate {
       display: inline-block;
-      flex: 1;
       box-sizing: border-box;
       vertical-align: top;
-      margin-right: 5px;
-      margin-bottom: 10px;
     }
 
     .output_tgt,
@@ -96,22 +92,6 @@
       margin-right: 8px;
       color: #333;
       flex-shrink: 0;
-    }
-
-    /* on displays with less than 1000px - stack vertically */
-    @media (max-width: 1000px) {
-
-      .output_src,
-      .output_ref,
-      .output_candidate {
-        display: block;
-        width: 100%;
-        margin-right: 0;
-      }
-
-      .output_item {
-        flex-direction: column;
-      }
     }
 
     input[type=range] {
