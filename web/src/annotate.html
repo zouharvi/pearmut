@@ -9,7 +9,8 @@
   <style>
     .output_item {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 5px 10px;
       width: calc(100% - 10px);
       padding-right: 10px;
     }
@@ -22,18 +23,14 @@
       padding: 10px;
       border-radius: 8px;
       vertical-align: top;
-      margin-bottom: 10px;
       user-select: none;
       box-shadow: 0 4px 6px #0005;
-      margin-right: 10px;
     }
 
     .output_candidate {
       display: inline-block;
       box-sizing: border-box;
       vertical-align: top;
-      margin-right: 5px;
-      margin-bottom: 10px;
     }
 
     .output_tgt,

@@ -10,6 +10,7 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
   - Add validation for custom sliders
   - Rename `--server` to `--url`
   - Granular `skippable` item attribute
+  - Make multiple outputs at the same time cleaner
 - v1.1.0
   - Log media actions
   - Add basic mobile support
