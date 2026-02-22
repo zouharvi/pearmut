@@ -55,15 +55,10 @@ def _completed_response(
         "${USER_ID}", user_id
     )
 
-    # Convert sets to lists for JSON serialization (for dynamic assignment)
-    progress = user_progress["progress"]
-    if progress and isinstance(progress[0], set):
-        progress = [list(s) for s in progress]
-
     return JSONResponse(
         content={
             "status": "goodbye",
-            "progress": progress,
+            "progress": _progress_to_bool(user_progress["progress"]),
             "progress_welcome": user_progress["progress_welcome"],
             "time": user_progress["time"],
             "token": token,
@@ -71,6 +66,22 @@ def _completed_response(
         },
         status_code=200,
     )
+
+
+def _progress_to_bool(progress: list) -> list[bool]:
+    """
+    Normalize progress to a list of booleans for the client.
+    For dynamic assignments, each entry is a dict mapping model -> status.
+    An item is considered complete if any model has a non-null status.
+    For other assignments, truthy values map to True.
+    """
+    result = []
+    for v in progress:
+        if isinstance(v, dict):
+            result.append(any(status is not None for status in v.values()))
+        else:
+            result.append(bool(v))
+    return result
 
 
 def get_next_item(
@@ -506,7 +517,7 @@ def get_i_item_dynamic(
         return JSONResponse(
             content={
                 "status": "ok",
-                "progress": user_progress["progress"],
+                "progress": _progress_to_bool(user_progress["progress"]),
                 "progress_welcome": progress_welcome,
                 "time": user_progress["time"],
                 "info": {
@@ -564,7 +575,7 @@ def get_i_item_dynamic(
     return JSONResponse(
         content={
             "status": "ok",
-            "progress": user_progress["progress"],
+            "progress": _progress_to_bool(user_progress["progress"]),
             "progress_welcome": progress_welcome,
             "time": user_progress["time"],
             "info": {
@@ -627,7 +638,7 @@ def get_next_item_dynamic(
             content={
                 "status": "ok",
                 "time": user_progress["time"],
-                "progress": user_progress["progress"],
+                "progress": _progress_to_bool(user_progress["progress"]),
                 "progress_welcome": progress_welcome,
                 "info": {
                     "item_i": item_id,
@@ -779,7 +790,7 @@ def get_next_item_dynamic(
         content={
             "status": "ok",
             "time": user_progress["time"],
-            "progress": user_progress["progress"],
+            "progress": _progress_to_bool(user_progress["progress"]),
             "info": {
                 "item_i": item_i,
                 "instructions": _get_instructions(tasks_data, campaign_id),
