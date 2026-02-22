@@ -14,6 +14,7 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
   - Make multiple outputs at the same time cleaner
   - Add `&debug` override to allow skipping items
   - Fix resetting individual users in single-stream/dynamic
+  - Fix error in computations involving skipped items
 - v1.1.0
   - Log media actions
   - Add basic mobile support
