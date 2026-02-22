@@ -184,7 +184,7 @@ def get_i_item_taskbased(
     return JSONResponse(
         content={
             "status": "form" if is_form else "ok",
-            "progress": user_progress["progress"],
+            "progress": _progress_to_bool(user_progress["progress"]),
             "progress_welcome": progress_welcome,
             "time": user_progress["time"],
             "info": {
@@ -256,7 +256,7 @@ def get_i_item_singlestream(
     return JSONResponse(
         content={
             "status": "form" if is_form else "ok",
-            "progress": user_progress["progress"],
+            "progress": _progress_to_bool(user_progress["progress"]),
             "progress_welcome": progress_welcome,
             "time": user_progress["time"],
             "info": {
@@ -310,7 +310,7 @@ def get_next_item_taskbased(
             content={
                 "status": "form" if is_form else "ok",
                 "time": user_progress["time"],
-                "progress": user_progress["progress"],
+                "progress": _progress_to_bool(user_progress["progress"]),
                 "progress_welcome": progress_welcome,
                 "info": {
                     "item_i": item_id,
@@ -352,7 +352,7 @@ def get_next_item_taskbased(
     return JSONResponse(
         content={
             "status": "form" if is_form else "ok",
-            "progress": user_progress["progress"],
+            "progress": _progress_to_bool(user_progress["progress"]),
             "progress_welcome": progress_welcome,
             "time": user_progress["time"],
             "info": {
@@ -413,7 +413,7 @@ def get_next_item_singlestream(
             content={
                 "status": "form" if is_form else "ok",
                 "time": user_progress["time"],
-                "progress": progress,
+                "progress": _progress_to_bool(progress),
                 "progress_welcome": progress_welcome,
                 "info": {
                     "item_i": item_id,
@@ -465,7 +465,7 @@ def get_next_item_singlestream(
         content={
             "status": "form" if is_form else "ok",
             "time": user_progress["time"],
-            "progress": progress,
+            "progress": _progress_to_bool(progress),
             "progress_welcome": progress_welcome,
             "info": {
                 "item_i": item_i,
