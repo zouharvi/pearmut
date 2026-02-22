@@ -453,13 +453,6 @@ def _add_single_campaign(campaign_data, overwrite, url):
         if os.path.exists(output_file):
             os.remove(output_file)
 
-    # Prepend data_welcome to tasks if present
-    if data_welcome:
-        if assignment == "task-based":
-            tasks = [task for task in tasks]
-        elif assignment in ["single-stream", "dynamic"]:
-            tasks = data_welcome + tasks
-
     # For task-based, data is a dict mapping user_id -> tasks
     # For single-stream and dynamic, data is a flat list (shared among all users)
     if assignment == "task-based":
