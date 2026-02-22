@@ -636,6 +636,40 @@ class TestSingleStream:
         # Should return one of the incomplete items (1 or 3)
         assert '"item_i":1' in content or '"item_i":3' in content
 
+    def test_get_next_item_returns_welcome_data_during_tutorial(self):
+        """Test that single-stream returns data_welcome items (not data) during tutorial."""
+        tasks_data = {
+            "campaign1": {
+                "info": {
+                    "assignment": "single-stream",
+                },
+                "data_welcome": [
+                    [{"src": "tutorial_src", "tgt": {"A": "tutorial_tgt"}}],
+                ],
+                "data": [
+                    [{"src": "real_src", "tgt": {"A": "real_tgt"}}],
+                ],
+            }
+        }
+        progress_data = {
+            "campaign1": {
+                "user1": {
+                    "progress": [None],
+                    "progress_welcome": [False],
+                    "time": 0,
+                    "token_correct": "abc",
+                    "token_incorrect": "xyz",
+                }
+            }
+        }
+        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        assert response.status_code == 200
+        content = response.body.decode()
+        # Should return welcome item, not regular data item
+        assert "tutorial_src" in content
+        assert "real_src" not in content
+        assert '"item_i":"welcome_0"' in content
+
 class TestResetMasking:
     """Tests for reset masking functionality."""
 

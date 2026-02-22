@@ -294,9 +294,9 @@ def get_next_item_taskbased(
         return JSONResponse(
             content={
                 "status": "form" if is_form else "ok",
+                "time": user_progress["time"],
                 "progress": user_progress["progress"],
                 "progress_welcome": progress_welcome,
-                "time": user_progress["time"],
                 "info": {
                     "item_i": item_id,
                     "instructions": _get_instructions(data_all, campaign_id),
@@ -391,7 +391,7 @@ def get_next_item_singlestream(
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
 
-        payload = data_all[campaign_id]["data"][item_i]
+        payload = data_all[campaign_id]["data_welcome"][item_i]
         is_form = is_form_document(payload)
 
         return JSONResponse(
@@ -738,7 +738,11 @@ def reset_task(
             for i in range(num_welcome):
                 save_db_payload(
                     campaign_id,
-                    {"user_id": user_id, "item_i": f"welcome_{i}", "annotation": RESET_MARKER},
+                    {
+                        "user_id": user_id,
+                        "item_i": f"welcome_{i}",
+                        "annotation": RESET_MARKER,
+                    },
                 )
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
@@ -765,11 +769,17 @@ def reset_task(
         # Reset all welcome items progress for this user (per-user, not shared)
         if "progress_welcome" in progress_data[campaign_id][user_id]:
             # Save reset markers only for completed welcome items
-            for i, status in enumerate(progress_data[campaign_id][user_id]["progress_welcome"]):
+            for i, status in enumerate(
+                progress_data[campaign_id][user_id]["progress_welcome"]
+            ):
                 if status:  # If completed (True or "completed")
                     save_db_payload(
                         campaign_id,
-                        {"user_id": user_id, "item_i": f"welcome_{i}", "annotation": RESET_MARKER},
+                        {
+                            "user_id": user_id,
+                            "item_i": f"welcome_{i}",
+                            "annotation": RESET_MARKER,
+                        },
                     )
             # Reset progress to False for all welcome items
             num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
