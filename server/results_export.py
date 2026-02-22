@@ -45,7 +45,7 @@ def compute_model_scores(campaign_id):
         if "item" not in entry or "annotation" not in entry:
             continue
         for item, annotation in zip(entry["item"], entry["annotation"]):
-            if annotation is None:
+            if annotation is None:  # skippable items have no annotation
                 continue
             for model, annotation in annotation.items():
                 if "score" in annotation and annotation["score"] is not None:
