@@ -757,9 +757,10 @@ def reset_task(
                 {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
             )
 
-        # Reset only this user's progress for their completed items
-        for item_i in user_items_to_reset:
-            progress_data[campaign_id][user_id]["progress"][item_i] = None
+        # Reset the completed items in all users' progress (shared pool)
+        for uid in progress_data[campaign_id]:
+            for item_i in user_items_to_reset:
+                progress_data[campaign_id][uid]["progress"][item_i] = None
 
         # Reset all welcome items progress for this user (per-user, not shared)
         if "progress_welcome" in progress_data[campaign_id][user_id]:

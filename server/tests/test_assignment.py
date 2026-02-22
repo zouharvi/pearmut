@@ -424,8 +424,8 @@ class TestSingleStream:
         assert '"status":"goodbye"' in content
         assert 'correct_token' in content
 
-    def test_reset_task_only_resets_requesting_user(self):
-        """Test that single-stream reset_task only resets the requesting user's completed items."""
+    def test_reset_task_resets_completed_items_for_all_users(self):
+        """Test that single-stream reset_task resets items the user originally completed, for all users in the shared pool."""
         _clear_test_logs()
         tasks_data = {
             "campaign1": {
@@ -485,10 +485,11 @@ class TestSingleStream:
 
         reset_task("campaign1", "user1", tasks_data, progress_data)
 
-        # Only user1's completed items (0 and 3) should be reset; completed_foreign (2) unchanged
+        # Items user1 originally completed (0 and 3) are reset for both users in the shared pool
+        # Item 2 was completed_foreign for user1 (not originally theirs) so it is NOT reset
         assert progress_data["campaign1"]["user1"]["progress"] == [None, None, "completed_foreign", None]
-        # User2's progress is entirely unchanged
-        assert progress_data["campaign1"]["user2"]["progress"] == ["completed", None, "completed", "completed_foreign"]
+        # User2's items 0 and 3 are also reset (shared pool), item 2 is unaffected
+        assert progress_data["campaign1"]["user2"]["progress"] == [None, None, "completed", None]
         # Only user1's time should be reset
         assert progress_data["campaign1"]["user1"]["time"] == 0.0
         assert progress_data["campaign1"]["user1"]["time_start"] is None
@@ -498,7 +499,7 @@ class TestSingleStream:
         assert len(get_db_log_item("campaign1", "user1", 0)) == 0
         assert len(get_db_log_item("campaign1", "user1", 3)) == 0
 
-        # User2's annotations are unaffected
+        # User2's annotations are unaffected (different user_id in the log)
         items_user2_0 = get_db_log_item("campaign1", "user2", 0)
         assert len(items_user2_0) == 1
         assert items_user2_0[0]["annotation"] == {"score": 70}
