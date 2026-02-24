@@ -541,8 +541,8 @@ function setupCandidateInteractions(
         for (const sliderConfig of allSliders) {
             const sliderName = sliderConfig.name
             const sliderMax = sliderConfig.max
-            let slider = candidate_block.find(`input[data-slider="${sliderName}"]`)
-            let label = candidate_block.find(`.slider_label[data-slider="${sliderName}"]`)
+            let slider = candidate_block.find(`input[data-slider="${CSS.escape(sliderName)}"]`)
+            let label = candidate_block.find(`.slider_label[data-slider="${CSS.escape(sliderName)}"]`)
 
             slider.on("click input", function () {
                 // In frozen mode, do not allow changing scores
@@ -636,8 +636,8 @@ function setupCandidateInteractions(
 
     // Setup textfield if enabled
     if (response.info.textfield) {
-        const textfield = candidate_block.find(`#textfield_${item_i}_${model}`)
-        const toggle = candidate_block.find(`#textfield_toggle_${item_i}_${model}`)
+        const textfield = candidate_block.find(`#textfield_${item_i}_${CSS.escape(model)}`)
+        const toggle = candidate_block.find(`#textfield_toggle_${item_i}_${CSS.escape(model)}`)
 
         // Pre-fill with model output if mode is "prefilled"
         // Note: tgt is from trusted campaign data, jQuery .val() safely escapes any content
@@ -781,7 +781,7 @@ async function display_next_payload(response: DataPayload) {
         let ref_chars_els = no_ref_char || !item.ref ? [] : output_block.find(".ref_char").toArray()
 
         for (const [model, tgt] of Object.entries(item.tgt)) {
-            let candidate_block = output_block.find(`.output_candidate[data-model='${model}']`)
+            let candidate_block = output_block.find(`.output_candidate[data-model='${CSS.escape(model)}']`)
             setupCandidateInteractions(candidate_block, item_i, model, tgt, response, src_chars_els, ref_chars_els, output_block)
         }
 
