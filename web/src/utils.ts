@@ -129,6 +129,9 @@ export type ValidationResult = {
     failed_items: number[],  // indices of failed items
 }
 
+// MQM Error Severities
+export const MQM_SEVERITIES = ["Minor", "Major"]
+
 // MQM Error Categories
 export const MQM_ERROR_CATEGORIES: { [key: string]: string[] } = {
     "": [],
@@ -249,7 +252,7 @@ export function redrawProgress(
  */
 function updateErrorClass(objs: Array<CharData>, left_i: number, right_i: number, severity: string) {
     for (let j = left_i; j <= right_i; j++) {
-        $(objs[j].el).removeClass("error_unknown error_neutral error_minor error_major")
+        $(objs[j].el).removeClass((_, c) => c.split(' ').filter(cls => cls.startsWith('error_')).join(' '))
         $(objs[j].el).addClass(`error_${severity}`)
     }
 }
@@ -265,16 +268,14 @@ export function createSpanToolbox(
     right_i: number,
     onDelete: () => void,
     frozenMode: boolean = false,
-    mqm_categories: { [key: string]: string[] } = MQM_ERROR_CATEGORIES
+    mqm_categories: { [key: string]: string[] } = MQM_ERROR_CATEGORIES,
+    mqm_severities: string[] = MQM_SEVERITIES
 ): JQuery<HTMLElement> {
     let toolbox = $(`
     <div class='span_toolbox_parent'>
     <div class='span_toolbox'>
       <div class="span_toolbox_esa" style="display: inline-block; width: 70px; padding-right: 5px;">
         <input type="button" class="error_delete" style="border-radius: 8px;" value="Remove">
-        <input type="button" class="error_neutral" style="margin-top: 3px;" value="Neutral">
-        <input type="button" class="error_minor" style="margin-top: 3px;" value="Minor">
-        <input type="button" class="error_major" style="margin-top: 3px;" value="Major">
       </div>
       <div class="span_toolbox_mqm" style="display: inline-block; width: 140px; vertical-align: top;">
         <select style="height: 2em; width: 100%;"></select><br>
@@ -284,6 +285,12 @@ export function createSpanToolbox(
     </div>
     `)
 
+    // Add severity buttons dynamically
+    let esa_div = toolbox.find(".span_toolbox_esa")
+    for (let sev of mqm_severities) {
+        esa_div.append(`<input type="button" class="error_${sev.toLowerCase()}" style="margin-top: 3px;" value="${sev}">`)
+    }
+
     let cat1_select = toolbox.find("select").eq(0)
     let cat2_select = toolbox.find("select").eq(1)
 
@@ -292,7 +299,6 @@ export function createSpanToolbox(
     }
 
     if (!protocol_error_categories) {
-        toolbox.find(".error_neutral").remove()
         toolbox.find(".span_toolbox_mqm").remove()
         toolbox.find(".span_toolbox_esa").css({ "border-right": "", "margin-right": "-5px" })
     }
@@ -335,7 +341,7 @@ export function createSpanToolbox(
         toolbox.find(".error_delete").on("click", () => {
             toolbox.remove()
             for (let j = left_i; j <= right_i; j++) {
-                $(tgt_chars_objs[j].el).removeClass("error_unknown error_neutral error_minor error_major")
+                $(tgt_chars_objs[j].el).removeClass((_, c) => c.split(' ').filter(cls => cls.startsWith('error_')).join(' '))
                 tgt_chars_objs[j].toolbox = null
                 tgt_chars_objs[j].error_span = null
             }
@@ -349,16 +355,16 @@ export function createSpanToolbox(
             toolbox.find(".span_toolbox_esa input[type='button']").removeAttr("selected")
             toolbox.find(`.error_${sev}`).attr("selected", "selected")
         }
-        toolbox.find(".error_neutral").on("click", () => setSeverity("neutral"))
-        toolbox.find(".error_minor").on("click", () => setSeverity("minor"))
-        toolbox.find(".error_major").on("click", () => setSeverity("major"))
+        for (let sev of mqm_severities) {
+            toolbox.find(`.error_${sev.toLowerCase()}`).on("click", () => setSeverity(sev.toLowerCase()))
+        }
 
         if (error_span.severity) {
             toolbox.find(`.error_${error_span.severity}`).attr("selected", "selected")
         }
     } else {
         // Frozen mode disabling
-        toolbox.find(".error_delete, .error_neutral, .error_minor, .error_major").prop("disabled", true)
+        toolbox.find(".span_toolbox_esa input[type='button']").prop("disabled", true)
         toolbox.find("select").prop("disabled", true)
     }
 
@@ -563,6 +569,7 @@ export type ProtocolInfo = {
     textfield?: null | "hidden" | "visible" | "prefilled",  // Optional textfield mode
     show_model_names?: boolean,  // Show model names on top of each block (default: false)
     mqm_categories?: { [key: string]: string[] },  // Optional custom MQM categories
+    mqm_severities?: string[],  // Optional custom MQM severities
 }
 
 

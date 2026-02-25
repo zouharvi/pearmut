@@ -22,6 +22,7 @@ CAMPAIGN_INFO_PUBLIC = {
     "textfield",
     "show_model_names",
     "mqm_categories",
+    "mqm_severities",
 }
 
 
