@@ -113,6 +113,10 @@ label {
     background-color: #e88;
 }
 
+.error_critical {
+    background-color: #c44;
+}
+
 /* Span toolbox */
 .span_toolbox {
     background-color: white;
@@ -161,6 +165,17 @@ input[type="button"].error_major {
 
 input[type="button"].error_major:hover {
     background-color: #c66 !important;
+}
+
+input[type="button"].error_critical {
+    background-color: #c44 !important;
+    width: 100%;
+    text-align: center;
+    border-radius: 8px;
+}
+
+input[type="button"].error_critical:hover {
+    background-color: #a22 !important;
 }
 
 input[type="button"].error_delete {

@@ -27,6 +27,7 @@ import {
     DataPayload,
     DataPayloadItem,
     MQM_ERROR_CATEGORIES,
+    MQM_SEVERITIES,
 } from './utils';
 
 // Check if frozen mode is enabled (view-only, no annotations)
@@ -50,6 +51,7 @@ const state = {
     protocol_error_spans: false,
     protocol_error_categories: false,
     mqm_categories: MQM_ERROR_CATEGORIES,
+    mqm_severities: MQM_SEVERITIES as string[],
 }
 
 // Prevent accidental refresh/navigation when there is ongoing work
@@ -439,7 +441,8 @@ function setupCandidateInteractions(
                                 state.has_unsaved_work = true
                             },
                             frozenMode,
-                            state.mqm_categories
+                            state.mqm_categories,
+                            state.mqm_severities
                         )
 
                         $("body").append(toolbox)
@@ -509,7 +512,7 @@ function setupCandidateInteractions(
                 state.response_log[item_i][model].error_spans = state.response_log[item_i][model].error_spans.filter(s => s != error_span)
                 state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
                 state.has_unsaved_work = true
-            }, frozenMode, state.mqm_categories)
+            }, frozenMode, state.mqm_categories, state.mqm_severities)
             $("body").append(toolbox)
             toolbox.on("mouseenter", () => { toolbox.css("display", "block"); check_unlock() })
             toolbox.on("mouseleave", () => {
@@ -760,6 +763,9 @@ async function display_next_payload(response: DataPayload) {
     } else {
         state.mqm_categories = MQM_ERROR_CATEGORIES
     }
+
+    // Use custom MQM severities if provided, otherwise use default
+    state.mqm_severities = response.info.mqm_severities ?? MQM_SEVERITIES
 
     // Set global instructions from payload
     if (response.info.instructions) {

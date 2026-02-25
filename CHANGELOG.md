@@ -3,7 +3,8 @@
 
 Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
 
-- v1.1.1 (unreleased)
+- v1.1.2 (unreleased)
+- v1.1.1
   - Prevent modifying a running instance
   - Improve UI of selected severity buttons
   - Simpler MQM taxonomy definition
@@ -16,6 +17,7 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
   - Fix resetting individual users in single-stream/dynamic
   - Fix error in computations involving skipped items
   - Fix error on unescaped model names
+  - Add custom MQM severity levels
 - v1.1.0
   - Log media actions
   - Add basic mobile support

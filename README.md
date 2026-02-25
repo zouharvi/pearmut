@@ -203,6 +203,11 @@ For MQM protocol campaigns, you can define a custom error taxonomy instead of us
 ```
 
 If `mqm_categories` is not provided, the default MQM taxonomy will be used. The empty string key `""` provides an unselected state in the dropdown. Categories with empty subcategory lists (e.g., `"Style": []`) do not require a subcategory selection.
+The severity levels can also be customized via `mqm_severities` (default: `["Minor", "Major"]`):
+
+```json
+"mqm_severities": ["Neutral", "Minor", "Major", "Critical"]
+```
 
 See [examples/custom_mqm.json](examples/custom_mqm.json) for a complete example.
 

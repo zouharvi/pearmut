@@ -2,6 +2,7 @@
   "info": {
     "assignment": "task-based",
     "protocol": "MQM",
+    "mqm_severities": ["Neutral", "Minor", "Major", "Critical"],
     "mqm_categories": {
       "General": [
         "",
