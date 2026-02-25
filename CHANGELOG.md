@@ -16,6 +16,7 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
   - Add `&debug` override to allow skipping items
   - Fix resetting individual users in single-stream/dynamic
   - Fix error in computations involving skipped items
+  - Fix error on unescaped model names
   - Add custom MQM severity levels
 - v1.1.0
   - Log media actions
