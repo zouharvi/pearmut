@@ -16,7 +16,6 @@ dependencies = [
     "fastapi >= 0.110",
     "uvicorn >= 0.29",
     "wonderwords >= 3.0",
-    "psutil >= 7.1",
     "typst >= 0.14",
     "scipy >= 1.16",
 ]

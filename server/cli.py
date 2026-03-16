@@ -4,7 +4,6 @@ Command-line interface for managing and running the Pearmut server.
 
 import argparse
 import atexit
-import fcntl
 import hashlib
 import json
 import os
@@ -633,23 +632,16 @@ def main():
 
     # Acquire lock before starting server
     lock_file = f"{ROOT}/data/.lock"
-    try:
-        lock_fd = open(lock_file, "a+")
-        fcntl.flock(lock_fd.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-        lock_fd.seek(0)
-        lock_fd.truncate()
-        lock_fd.write(str(os.getpid()))
-        lock_fd.flush()
-    except BlockingIOError:
-        try:
-            with open(lock_file, "r") as f:
-                pid = f.read().strip()
-            print("You can't run multiple instances of Pearmut in the same directory.")
-            if pid:
-                print(f"Another instance (PID {pid}) is holding the lock.")
-        except (FileNotFoundError, PermissionError, OSError):
-            print("You can't run multiple instances of Pearmut in the same directory.")
+    if os.path.exists(lock_file):
+        with open(lock_file, "r") as f:
+            pid = f.read().strip()
+        print(
+            f"Another instance (PID {pid}) is already running in the same directory. We know this because {lock_file} exists."
+        )
         exit(1)
+
+    with open(lock_file, "w") as f:
+        f.write(str(os.getpid()))
 
     # Register cleanup to remove lock file on exit
     atexit.register(lambda: os.path.exists(lock_file) and os.remove(lock_file))
