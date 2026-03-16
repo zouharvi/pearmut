@@ -19,6 +19,7 @@ dependencies = [
     "psutil >= 7.1",
     "typst >= 0.14",
     "scipy >= 1.16",
+    "filelock >= 3.0",
 ]
 
 [project.optional-dependencies]
