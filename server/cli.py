@@ -9,8 +9,6 @@ import json
 import os
 import urllib.parse
 
-import filelock
-
 from .utils import (
     ROOT,
     TOKEN_MAIN,
@@ -634,29 +632,21 @@ def main():
 
     # Acquire lock before starting server
     lock_file = f"{ROOT}/data/.lock"
-    _lock = filelock.FileLock(lock_file, timeout=0)
-    try:
-        _lock.acquire()
-        with open(lock_file, "w") as f:
-            f.write(str(os.getpid()))
-    except filelock.Timeout:
+    if os.path.exists(lock_file):
         try:
             with open(lock_file, "r") as f:
-                pid = f.read().strip()
-            print("You can't run multiple instances of Pearmut in the same directory.")
-            if pid:
-                print(f"Another instance (PID {pid}) is holding the lock.")
-        except (FileNotFoundError, PermissionError, OSError):
-            print("You can't run multiple instances of Pearmut in the same directory.")
-        exit(1)
+                pid = int(f.read().strip())
+            os.kill(pid, 0)
+            print(f"Another instance (PID {pid}) is already running in the same directory.")
+            exit(1)
+        except (ValueError, OSError):
+            pass  # Stale lock file, proceed
 
-    # Register cleanup to release lock and remove lock file on exit
-    def _cleanup():
-        _lock.release()
-        if os.path.exists(lock_file):
-            os.remove(lock_file)
+    with open(lock_file, "w") as f:
+        f.write(str(os.getpid()))
 
-    atexit.register(_cleanup)
+    # Register cleanup to remove lock file on exit
+    atexit.register(lambda: os.path.exists(lock_file) and os.remove(lock_file))
 
     args = argparse.ArgumentParser()
     args.add_argument(
