@@ -635,7 +635,7 @@ def main():
     if os.path.exists(lock_file):
         with open(lock_file, "r") as f:
             pid = f.read().strip()
-        print(f"Another instance (PID {pid}) is already running in the same directory.")
+        print(f"Another instance (PID {pid}) is already running in the same directory (lock: {lock_file}).")
         exit(1)
 
     with open(lock_file, "w") as f:
