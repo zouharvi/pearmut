@@ -624,7 +624,7 @@ function setupCandidateInteractions(
 
             // Warn if ESA protocol, score < 80, and no error spans marked
             if (response.info.protocol === "ESA" && val < 80 && state.response_log[item_i][model].error_spans.length === 0) {
-                notify("Warning: score is below 80 but no error spans have been marked.")
+                notify("⚠️ Warning: score is below 80 but no error spans have been marked.")
             }
         })
 
