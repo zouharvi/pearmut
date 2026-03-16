@@ -4,6 +4,8 @@
 Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
 
 - v1.1.2 (unreleased)
+  - Modify slightly default ESA/MQM/DA instructions
+  - Fix display of long model outputs
 - v1.1.1
   - Prevent modifying a running instance
   - Improve UI of selected severity buttons
