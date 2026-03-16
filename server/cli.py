@@ -633,14 +633,10 @@ def main():
     # Acquire lock before starting server
     lock_file = f"{ROOT}/data/.lock"
     if os.path.exists(lock_file):
-        try:
-            with open(lock_file, "r") as f:
-                pid = int(f.read().strip())
-            os.kill(pid, 0)
-            print(f"Another instance (PID {pid}) is already running in the same directory.")
-            exit(1)
-        except (ValueError, OSError):
-            pass  # Stale lock file, proceed
+        with open(lock_file, "r") as f:
+            pid = f.read().strip()
+        print(f"Another instance (PID {pid}) is already running in the same directory.")
+        exit(1)
 
     with open(lock_file, "w") as f:
         f.write(str(os.getpid()))
