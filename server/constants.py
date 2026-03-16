@@ -9,10 +9,10 @@ PROTOCOL_INSTRUCTIONS = {
             <strong>Important:</strong> The relative order of scores matters; ensure better translations have higher
             scores than worse ones.
             <ul>
-              <li>0: <strong>Nonsense</strong>: most information is lost.</li>
-              <li>33%: <strong>Broken</strong>: major gaps and narrative issues.</li>
-              <li>66%: <strong>Middling</strong>: minor issues with grammar or consistency.</li>
-              <li>100%: <strong>Perfect</strong>: meaning and grammar align completely with the source.</li>
+              <li>0: <strong>Broken</strong>/Nonsense</li>
+              <li>33%: <strong>Flawed</strong>: substantial issues.</li>
+              <li>66%: <strong>Good</strong>: small issues with grammar, fluency, or consistency.</li>
+              <li>100%: <strong>Perfect</strong>: meaning and style align completely with the source.</li>
             </ul>
           </li>
         </ul>
@@ -41,10 +41,10 @@ PROTOCOL_INSTRUCTIONS = {
             <strong>Important:</strong> The relative order of scores matters; ensure better translations have higher
             scores than worse ones.
             <ul>
-              <li>0: <strong>Nonsense</strong>: most information is lost.</li>
-              <li>33%: <strong>Broken</strong>: major gaps and narrative issues.</li>
-              <li>66%: <strong>Middling</strong>: minor issues with grammar or consistency.</li>
-              <li>100%: <strong>Perfect</strong>: meaning and grammar align completely with the source.</li>
+              <li>0: <strong>Broken</strong>/Nonsense</li>
+              <li>33%: <strong>Flawed</strong>: substantial issues.</li>
+              <li>66%: <strong>Good</strong>: small issues with grammar, fluency, or consistency.</li>
+              <li>100%: <strong>Perfect</strong>: meaning and style align completely with the source.</li>
             </ul>
           </li>
         </ul>
@@ -73,10 +73,10 @@ PROTOCOL_INSTRUCTIONS = {
             <strong>Important:</strong> The relative order of scores matters; ensure better translations have higher
             scores than worse ones.
             <ul>
-              <li>0: <strong>Nonsense</strong>: most information is lost.</li>
-              <li>33%: <strong>Broken</strong>: major gaps and narrative issues.</li>
-              <li>66%: <strong>Middling</strong>: minor issues with grammar or consistency.</li>
-              <li>100%: <strong>Perfect</strong>: meaning and grammar align completely with the source.</li>
+              <li>0: <strong>Broken</strong>/Nonsense</li>
+              <li>33%: <strong>Flawed</strong>: substantial issues.</li>
+              <li>66%: <strong>Good</strong>: small issues with grammar, fluency, or consistency.</li>
+              <li>100%: <strong>Perfect</strong>: meaning and style align completely with the source.</li>
             </ul>
           </li>
           <li>
