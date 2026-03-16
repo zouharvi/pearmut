@@ -7,6 +7,7 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
   - Modify slightly default ESA/MQM/DA instructions
   - Fix display of long model outputs
   - Add warning for ESA when score is lower than 80 but no errors are marked
+  - Make lockfile multiplatform
 - v1.1.1
   - Prevent modifying a running instance
   - Improve UI of selected severity buttons
