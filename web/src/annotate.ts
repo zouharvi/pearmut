@@ -621,6 +621,11 @@ function setupCandidateInteractions(
             check_unlock()
             // push only for change which happens just once
             state.action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
+
+            // Warn if ESA protocol, score < 80, and no error spans marked
+            if (response.info.protocol === "ESA" && val < 80 && state.response_log[item_i][model].error_spans.length === 0) {
+                notify("Warning: score is below 80 but no error spans have been marked.")
+            }
         })
 
         // Disable slider in frozen mode
