@@ -15,6 +15,8 @@
 - [Advanced Features](#advanced-features)
   - [Pre-filled Error Spans (ESA<sup>AI</sup>)](#pre-filled-error-spans-esaai)
   - [Custom MQM Taxonomy](#custom-mqm-taxonomy)
+  - [Custom Score Sliders](#custom-score-sliders)
+  - [Textfield comment box](#textfield-comment-box)
   - [Tutorial and Attention Checks](#tutorial-and-attention-checks)
   - [Form Items for User Metadata](#form-items-for-user-metadata)
   - [Pre-defined User IDs and Tokens](#pre-defined-user-ids-and-tokens)
@@ -161,9 +163,9 @@ For multi-dimensional evaluation tasks (e.g., assessing fluency on a Likert scal
 
 When `sliders` is specified, only the custom sliders are shown. Each slider must have `name`, `min`, `max`, and `step` properties. All sliders must be answered before proceeding.
 
-### Textfield for Post-editing/Translation
+### Textfield comment box
 
-Enable a textfield for post-editing or translation tasks using the `textfield` parameter in `info`. The textfield content is stored in annotations alongside scores and error spans.
+To enable a textfield for commenting, post-editing or translation tasks, use the `textfield` parameter in `info`. The textfield content is stored in annotations alongside scores and error spans.
 
 ```python
 {
