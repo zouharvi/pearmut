@@ -8,11 +8,13 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <style>
     .output_item {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
       gap: 5px 10px;
       width: calc(100% - 10px);
       padding-right: 10px;
+      padding-bottom: 6px;
     }
 
     .output_src,
@@ -25,6 +27,8 @@
     .output_ref {
       display: inline-block;
       box-sizing: border-box;
+      min-width: 350px;
+      flex: 0 0 350px;
       background-color: #fff7;
       padding: 10px;
       border-radius: 8px;
@@ -36,6 +40,8 @@
     .output_candidate {
       display: inline-block;
       box-sizing: border-box;
+      min-width: 350px;
+      flex: 0 0 350px;
       vertical-align: top;
     }
 

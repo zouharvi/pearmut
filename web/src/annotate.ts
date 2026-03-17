@@ -866,6 +866,20 @@ async function display_next_payload(response: DataPayload) {
         state.output_blocks.push(output_block)
     }
 
+    // Synchronize horizontal scroll across all output rows
+    let syncScrollRAF: number | null = null
+    $("#output_div").on("scroll", ".output_item", function () {
+        if (syncScrollRAF !== null) return
+        const source = this as HTMLElement
+        const scrollLeft = source.scrollLeft
+        syncScrollRAF = requestAnimationFrame(() => {
+            $(".output_item").not(source).each(function () {
+                (this as HTMLElement).scrollLeft = scrollLeft
+            })
+            syncScrollRAF = null
+        })
+    })
+
     // trigger once to reposition toolboxes
     $(window).trigger('resize.toolbox')
     check_unlock()
