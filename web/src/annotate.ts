@@ -239,9 +239,10 @@ function createOutputBlock(item: DataPayloadItem, item_i: number, info: Protocol
     let output_block = $(`
     <div class="output_block">
       <span class="instructions_message"></span>
-      <div class="output_item">
+      <div class="output_context">
         ${srcRefBoxes}
       </div>
+      <div class="output_item"></div>
     </div>
     `)
 
@@ -867,18 +868,24 @@ async function display_next_payload(response: DataPayload) {
     }
 
     // Synchronize horizontal scroll across all output rows
-    let syncScrollRAF: number | null = null
-    $("#output_div").on("scroll", ".output_item", function () {
-        if (syncScrollRAF !== null) return
-        const source = this as HTMLElement
-        const scrollLeft = source.scrollLeft
-        syncScrollRAF = requestAnimationFrame(() => {
-            $(".output_item").not(source).each(function () {
-                (this as HTMLElement).scrollLeft = scrollLeft
-            })
-            syncScrollRAF = null
+    let isSyncingScroll = false
+    const syncScroll = function (this: HTMLElement) {
+        if (isSyncingScroll) return
+        isSyncingScroll = true
+        const scrollLeft = this.scrollLeft
+        $(".output_item").not(this).each(function () {
+            const element = this as HTMLElement
+            if (element.scrollLeft !== scrollLeft) {
+                element.scrollLeft = scrollLeft
+            }
         })
-    })
+        isSyncingScroll = false
+    }
+    $(".output_item").off("scroll.syncRows").on("scroll.syncRows", syncScroll)
+    const firstOutputItem = $(".output_item").get(0) as HTMLElement | undefined
+    if (firstOutputItem) {
+        syncScroll.call(firstOutputItem)
+    }
 
     // trigger once to reposition toolboxes
     $(window).trigger('resize.toolbox')

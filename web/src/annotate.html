@@ -7,6 +7,15 @@
   <title>Pearmut Evaluation</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <style>
+    .output_context {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 5px 10px;
+      width: calc(100% - 10px);
+      padding-right: 10px;
+      margin-bottom: 5px;
+    }
+
     .output_item {
       display: flex;
       flex-wrap: nowrap;
@@ -28,8 +37,6 @@
     .output_ref {
       display: inline-block;
       box-sizing: border-box;
-      min-width: 350px;
-      flex: 0 0 350px;
       background-color: #fff7;
       padding: 10px;
       border-radius: 8px;
