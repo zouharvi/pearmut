@@ -241,6 +241,7 @@ function createOutputBlock(item: DataPayloadItem, item_i: number, info: Protocol
       <span class="instructions_message"></span>
       <div class="output_item">
         ${srcRefBoxes}
+        <div class="output_scrollable"></div>
       </div>
     </div>
     `)
@@ -272,8 +273,11 @@ function createOutputBlock(item: DataPayloadItem, item_i: number, info: Protocol
         candidate_block.find(".output_response").prepend(_textfield_button_html(item_i, model, info.textfield))
         candidate_block.append(_textfield_html(item_i, model, info.textfield))
 
-        output_block.find(".output_item").append(candidate_block)
+        output_block.find(".output_scrollable").append(candidate_block)
     }
+
+    // make the weight of the scrollable be number of items
+    output_block.find(".output_scrollable").css("flex", `${Object.keys(item.tgt).length}`)
 
     return output_block
 }
@@ -864,6 +868,26 @@ async function display_next_payload(response: DataPayload) {
 
         $("#output_div").append(output_block)
         state.output_blocks.push(output_block)
+    }
+
+    // Synchronize horizontal scroll across all output rows
+    let isSyncingScroll = false
+    const syncScroll = function (this: HTMLElement) {
+        if (isSyncingScroll) return
+        isSyncingScroll = true
+        const scrollLeft = this.scrollLeft
+        $(".output_scrollable").not(this).each(function () {
+            const element = this as HTMLElement
+            if (element.scrollLeft !== scrollLeft) {
+                element.scrollLeft = scrollLeft
+            }
+        })
+        isSyncingScroll = false
+    }
+    $(".output_scrollable").off("scroll.syncRows").on("scroll.syncRows", syncScroll)
+    const firstOutputItem = $(".output_scrollable").get(0) as HTMLElement | undefined
+    if (firstOutputItem) {
+        syncScroll.call(firstOutputItem)
     }
 
     // trigger once to reposition toolboxes

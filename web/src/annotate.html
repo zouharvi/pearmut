@@ -7,18 +7,33 @@
   <title>Pearmut Evaluation</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <style>
+    :root {
+      --box-width: 350px;
+    }
+
     .output_item {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .output_scrollable {
+      overflow-x: auto;
       gap: 5px 10px;
-      width: calc(100% - 10px);
+      min-width: 0;
       padding-right: 10px;
+      padding-bottom: 25px;
+      padding-left: 5px;
+      display: flex;
+      flex: 1;
     }
 
     .output_src,
     .output_tgt,
     .output_ref {
       word-break: break-word;
+      min-width: var(--box-width);
     }
 
     .output_src,
@@ -29,14 +44,16 @@
       padding: 10px;
       border-radius: 8px;
       vertical-align: top;
-      user-select: none;
       box-shadow: 0 4px 6px #0005;
+      box-sizing: border-box;
+      flex: 1;
     }
 
     .output_candidate {
       display: inline-block;
       box-sizing: border-box;
       vertical-align: top;
+      flex: 1;
     }
 
     .output_tgt,
