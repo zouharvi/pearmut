@@ -8,9 +8,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <style>
     .output_context {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 5px 10px;
       width: calc(100% - 10px);
       padding-right: 10px;
       margin-bottom: 5px;
@@ -35,9 +35,8 @@
 
     .output_src,
     .output_ref {
-      display: block;
+      display: inline-block;
       box-sizing: border-box;
-      width: calc(100% - 20px);
       background-color: #fff7;
       padding: 10px;
       border-radius: 8px;
