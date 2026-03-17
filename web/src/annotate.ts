@@ -239,10 +239,12 @@ function createOutputBlock(item: DataPayloadItem, item_i: number, info: Protocol
     let output_block = $(`
     <div class="output_block">
       <span class="instructions_message"></span>
-      <div class="output_context">
-        ${srcRefBoxes}
+      <div class="output_row">
+        <div class="output_context">
+          ${srcRefBoxes}
+        </div>
+        <div class="output_item"></div>
       </div>
-      <div class="output_item"></div>
     </div>
     `)
 
