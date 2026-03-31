@@ -182,7 +182,7 @@ function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): 
     if (!sliders) {
         return `
         <div class="output_response">
-          <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}">
+          <input type="range" min="0" max="100" value="-1" step="5" id="response_${item_i}_${model}">
           <span class="slider_label">❓/100</span>
         </div>
         `
@@ -600,12 +600,19 @@ function setupCandidateInteractions(
         // Single slider mode (default Score slider)
         let slider = candidate_block.find("input[type='range']")
         let label = candidate_block.find(".slider_label")
+        let slider_div = slider.parent(".output_response")
+
+        function updateSliderVisual(val: number) {
+            label.text(`${val}/100`)
+            slider_div.css("background-color", `color-mix(in lab, color-mix(in lab, red ${100 - val}%, green ${val}%), white 40%)`)
+        }
+
         slider.on("click input", function () {
             // In frozen mode, do not allow changing scores
             if (frozenMode) return
 
             let val = parseInt((<HTMLInputElement>this).value)
-            label.text(`${val}/100`)
+            updateSliderVisual(val)
 
             if (state.response_log[item_i][model].score == null) {
                 state.response_log[item_i][model].score = val
@@ -619,7 +626,7 @@ function setupCandidateInteractions(
             if (frozenMode) return
 
             let val = parseInt((<HTMLInputElement>this).value)
-            label.text(`${val}/100`)
+            updateSliderVisual(val)
             state.response_log[item_i][model].score = val
             state.has_unsaved_work = true
             check_unlock()
@@ -641,7 +648,7 @@ function setupCandidateInteractions(
         const existingScore = response.payload_existing?.annotation[item_i]?.[model]?.score
         if (existingScore != null) {
             slider.val(existingScore)
-            label.text(`${existingScore}/100`)
+            updateSliderVisual(existingScore)
             state.response_log[item_i][model].score = existingScore
         }
     }

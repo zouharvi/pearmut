@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background: linear-gradient(135deg, #b9e2a1 0%, #e7e2cf 100%);
+    background: linear-gradient(135deg, #b3cba5 0%, #f6edcd 100%);
     background-attachment: fixed;
 
     /* never rescale for phone */
