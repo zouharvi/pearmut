@@ -442,6 +442,7 @@ Files from `videos/` become accessible at `localhost:8001/assets/my_videos/`. Cr
 - **`pearmut purge [campaign]`**: Remove campaign data
   - Without args: Purge all campaigns
   - With campaign name: Purge specific campaign only
+- **`PEARMUT_ROOT=<path> pearmut `**: User pearmut with custom root directory
 
 ## Campaign Management
 

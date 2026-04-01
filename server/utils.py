@@ -3,7 +3,7 @@ import json
 import os
 import random
 
-ROOT = "."
+ROOT = os.environ.get("PEARMUT_ROOT", ".")
 
 # Sentinel value to indicate a task reset - masks all prior annotations
 RESET_MARKER = "__RESET__"
