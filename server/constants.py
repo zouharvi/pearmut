@@ -51,7 +51,7 @@ PROTOCOL_INSTRUCTIONS = {
     """,
     "cESA": """
     <ul>
-      <li><strong>Task:</strong> Read the source text and competing translations. Highlight all errors. Rate each translation.</li>
+      <li><strong>Task:</strong> Read the source text and competing translations. Highlight all errors. Rate each translation (each column is an output from a single model/translator). At the end, click <b>Next</b> in top-right corner.</li>
       <li><strong>Highlighting errors:</strong>
         <ul>
           <li><strong>Select text</strong> containing an error to mark it as <span class="error_minor">Minor</span>.</li>
@@ -83,15 +83,6 @@ PROTOCOL_INSTRUCTIONS = {
         </ul>
       </li>
     </ul>
-    <style>
-    .output_candidate, .output_src {
-        width: 345px !important;
-        flex: unset;
-    }
-    .output_tgt, .output_src { 
-      height: calc(100% - 50px);
-    }
-    </style>
     """,
     "MQM": """
         <ul>
