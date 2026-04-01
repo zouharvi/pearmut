@@ -48,6 +48,7 @@ const state = {
     has_unsaved_work: false,
     skip_mode: false,
     // Protocol settings for check_unlock
+    protocol: "",
     protocol_error_spans: false,
     protocol_error_categories: false,
     mqm_categories: MQM_ERROR_CATEGORIES,
@@ -180,12 +181,29 @@ function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): 
 
     // If no custom sliders specified (undefined), use default single slider
     if (!sliders) {
-        return `
+        if (state.protocol == "cESA") {
+            return `
         <div class="output_response">
-          <input type="range" min="0" max="100" value="-1" step="5" id="response_${item_i}_${model}">
+          <div style="width: 100%;">
+            <input type="range" min="0" max="100" value="-1" step="5" id="response_${item_i}_${model}">
+          </div>
           <span class="slider_label">❓/100</span>
         </div>
         `
+        } else {
+            return `
+        <div class="output_response">
+          <div style="width: 100%;">
+            <input type="range" min="0" max="100" value="-1" step="1" id="response_${item_i}_${model}">
+            <div class="slider_anchor_parent">
+                <span class="slider_anchor_simple">▼</span>
+                <span class="slider_anchor_simple">▼</span>
+            </div>
+          </div>
+          <span class="slider_label">❓/100</span>
+        </div>
+        `
+        }
     }
 
     // Generate multiple sliders with labels (no Score slider when custom sliders are defined)
@@ -603,6 +621,12 @@ function setupCandidateInteractions(
 
         function updateSliderVisual(val: number) {
             label.text(`${val}/100`)
+            if (response.info.protocol == "cESA") {
+                let text = `${val >= 85 ? "acceptable" : val >= 65 ? "good" : val >= 45 ? "acceptable" : val >= 25 ? "borderline" : "not&nbsp;acceptable"}`
+                label.html(`${val}/100<div class="slider_anchor_cESA">${text}</div>`)
+            }
+
+            if (!response.info.slider_colors) return
             let scores = new Array<[string, number]>()
             for (const model of Object.keys(state.response_log[item_i])) {
                 let val = state.response_log[item_i][model].score
@@ -615,7 +639,7 @@ function setupCandidateInteractions(
             let max = Math.max(...scores.map(score => score[1]))
             for (const [model, score] of scores) {
                 let color_val = (score - min) / (max - min) * 100
-                $(`#response_${item_i}_${model}`).parent(".output_response").css("background-color", `color-mix(in lab, color-mix(in lab, red ${100 - color_val}%, green ${color_val}%), white 30%)`)
+                $(`#response_${item_i}_${model}`).parents(".output_response").css("background-color", `color-mix(in lab, color-mix(in lab, red ${100 - color_val}%, green ${color_val}%), white 30%)`)
             }
         }
 
@@ -782,6 +806,7 @@ async function display_next_payload(response: DataPayload) {
     state.has_unsaved_work = false
     state.skip_mode = false
 
+    state.protocol = response.info.protocol
     state.protocol_error_spans = response.info.protocol == "ESA" || response.info.protocol == "cESA" || response.info.protocol == "MQM"
     state.protocol_error_categories = response.info.protocol == "MQM"
 

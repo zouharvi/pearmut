@@ -4,6 +4,7 @@
 Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
 
 - v1.1.3 (unreleased)
+  - Add cESA label next to score
 - v1.1.2
   - Modify slightly default ESA/MQM/DA instructions
   - Fix display of long model outputs

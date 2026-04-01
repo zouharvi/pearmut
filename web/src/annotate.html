@@ -87,11 +87,25 @@
     }
 
     .slider_label {
-      width: 50px;
+      width: 65px;
       font-size: 10pt;
       color: #555;
       text-align: right;
-      margin-left: 5px;
+      margin-left: 0px;
+      height: 1em;
+    }
+
+    /* if it has .slider_anchor_cESA child */
+    .slider_label:has(.slider_anchor_cESA) {
+      margin-top: -10px;
+    }
+
+    .slider_anchor_cESA {
+      width: 100pt;
+      height: 0pt;
+      font-size: 8pt;
+      margin-top: -5px;
+      float: right;
     }
 
     /* Custom sliders styling */
@@ -105,10 +119,6 @@
       margin-top: 0;
     }
 
-    .slider_container input[type=range] {
-      flex: 1;
-      min-width: 0;
-    }
 
     .slider_name {
       display: inline-block;
@@ -121,31 +131,24 @@
     input[type=range] {
       height: 16px;
       position: relative;
+      width: 100%;
+      min-width: 0;
     }
 
     /* Slider anchors at 33% and 66% */
-    .output_response::before,
-    .output_response::after {
-      content: '▼';
-      position: absolute;
-      transform: translateY(-30%);
+    .slider_anchor_parent {
+      width: 100%;
+      margin-top: -1.3em;
+      height: 1.4em;
+    }
+
+    .slider_anchor_simple {
       width: 1px;
-      height: 10px;
       pointer-events: none;
-      z-index: -1;
+      z-index: 1;
       color: #777;
-    }
-
-    /* Hide anchors when custom sliders are present */
-    .output_response:has(.slider_container)::before,
-    .output_response:has(.slider_container)::after {
-      display: none;
-    }
-
-    /* Hide anchors when no sliders (empty div) */
-    .output_response:empty::before,
-    .output_response:empty::after {
-      display: none;
+      font-size: 9pt;
+      margin-left: 33%;
     }
 
     .output_response::before {
