@@ -6,6 +6,7 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
 - v1.1.3 (unreleased)
   - Add cESA label next to score
   - Add `PEARMUT_ROOT` environment variable to specify the root directory
+  - Hard prevent default for cESA on score <85
 - v1.1.2
   - Modify slightly default ESA/MQM/DA instructions
   - Fix display of long model outputs

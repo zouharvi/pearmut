@@ -645,11 +645,21 @@ function setupCandidateInteractions(
 
 
 
-        slider.on("click input", function () {
+        slider.on("click input", function (event) {
             // In frozen mode, do not allow changing scores
             if (frozenMode) return
 
             let val = parseInt((<HTMLInputElement>this).value)
+            // Warn if cESA protocol, score < 85, and no error spans marked
+            if (response.info.protocol === "cESA" && val < 85 && state.response_log[item_i][model].error_spans.length === 0) {
+                if (event.originalEvent?.type == "click") {
+                    notify("⛔ Error: score is below 85 but no error spans have been marked.")
+                }
+                // prevent default
+                slider.val(state.response_log[item_i][model].score ?? 0)
+                return
+            }
+
             state.response_log[item_i][model].score = val
             updateSliderVisual(val)
 
@@ -662,22 +672,18 @@ function setupCandidateInteractions(
         slider.on("change", function () {
             // In frozen mode, do not allow changing scores
             if (frozenMode) return
-
             let val = parseInt((<HTMLInputElement>this).value)
+            // Warn if ESA protocol, score < 80, and no error spans marked
+            if (response.info.protocol === "ESA" && val < 80 && state.response_log[item_i][model].error_spans.length === 0) {
+                notify("⚠️ Warning: score is below 80 but no error spans have been marked.")
+            }
+
             state.response_log[item_i][model].score = val
             state.has_unsaved_work = true
             updateSliderVisual(val)
             check_unlock()
             // push only for change which happens just once
             state.action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
-
-            // Warn if ESA protocol, score < 80, and no error spans marked
-            // Warn if cESA protocol, score <= 65, and no error spans marked
-            if (response.info.protocol === "ESA" && val < 80 && state.response_log[item_i][model].error_spans.length === 0) {
-                notify("⚠️ Warning: score is below 80 but no error spans have been marked.")
-            } else if (response.info.protocol === "cESA" && val <= 65 && state.response_log[item_i][model].error_spans.length === 0) {
-                notify("⚠️ Warning: score is below 65 but no error spans have been marked.")
-            }
         })
 
         // Disable slider in frozen mode
