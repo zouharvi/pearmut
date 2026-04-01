@@ -664,3 +664,21 @@ export function debounce(fn: Function, delay: number): (...args: any[]) => void 
         timer = window.setTimeout(() => fn(...args), delay)
     }
 }
+
+/**
+ * Debounce a function call - delays execution until after a specified delay has elapsed
+ * since the last time it was invoked. Useful for reducing frequent event handler calls.
+ * @param fn - Function to debounce
+ * @param delay - Delay in milliseconds
+ * @returns Debounced function
+ */
+export function debounce2(fn: Function, delay: number): (...args: any[]) => void {
+    let timer: number | undefined
+    return (...args: any[]) => {
+        if (timer == undefined) {
+            fn(...args)
+        }
+        clearTimeout(timer)
+        timer = window.setTimeout(() => timer = undefined, delay)
+    }
+}

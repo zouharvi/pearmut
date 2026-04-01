@@ -85,8 +85,11 @@ PROTOCOL_INSTRUCTIONS = {
     </ul>
     <style>
     .output_candidate, .output_src {
-        width: 370px !important;
+        width: 345px !important;
         flex: unset;
+    }
+    .output_tgt, .output_src { 
+      height: calc(100% - 70px);
     }
     </style>
     """,

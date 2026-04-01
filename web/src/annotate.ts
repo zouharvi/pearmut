@@ -28,6 +28,7 @@ import {
     DataPayloadItem,
     MQM_ERROR_CATEGORIES,
     MQM_SEVERITIES,
+    debounce2,
 } from './utils';
 
 // Check if frozen mode is enabled (view-only, no annotations)
@@ -643,6 +644,9 @@ function setupCandidateInteractions(
             }
         }
 
+        const errorCESANotification = debounce2(() => {
+            notify("⛔ Error: score is below 85 but no error spans have been marked.")
+        }, 500)
 
 
         slider.on("click input", function (event) {
@@ -652,9 +656,7 @@ function setupCandidateInteractions(
             let val = parseInt((<HTMLInputElement>this).value)
             // Warn if cESA protocol, score < 85, and no error spans marked
             if (response.info.protocol === "cESA" && val < 85 && state.response_log[item_i][model].error_spans.length === 0) {
-                if (event.originalEvent?.type == "click") {
-                    notify("⛔ Error: score is below 85 but no error spans have been marked.")
-                }
+                errorCESANotification()
                 // prevent default
                 slider.val(state.response_log[item_i][model].score ?? 0)
                 return
