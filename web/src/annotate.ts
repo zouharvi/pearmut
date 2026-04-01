@@ -634,7 +634,7 @@ function setupCandidateInteractions(
             state.action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
 
             // Warn if ESA protocol, score < 80, and no error spans marked
-            if (response.info.protocol === "ESA" && val < 80 && state.response_log[item_i][model].error_spans.length === 0) {
+            if ((response.info.protocol === "ESA" || response.info.protocol === "cESA") && val < 80 && state.response_log[item_i][model].error_spans.length === 0) {
                 notify("⚠️ Warning: score is below 80 but no error spans have been marked.")
             }
         })
@@ -765,7 +765,7 @@ async function display_next_payload(response: DataPayload) {
     state.has_unsaved_work = false
     state.skip_mode = false
 
-    state.protocol_error_spans = response.info.protocol == "ESA" || response.info.protocol == "MQM"
+    state.protocol_error_spans = response.info.protocol == "ESA" || response.info.protocol == "cESA" || response.info.protocol == "MQM"
     state.protocol_error_categories = response.info.protocol == "MQM"
 
     // Use custom MQM categories if provided, otherwise use default

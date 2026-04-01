@@ -10,6 +10,7 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
   - Make lockfile multiplatform
   - Synchronized horizontal slider for many model outputs
   - Default score slider changes color based on the score
+  - Add support for contrastive evaluation (cESA)
 - v1.1.1
   - Prevent modifying a running instance
   - Improve UI of selected severity buttons

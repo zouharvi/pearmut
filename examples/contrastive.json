@@ -1,11 +1,11 @@
 {
     "info": {
         "assignment": "task-based",
-        "protocol": "ESA",
+        "protocol": "cESA",
         "textfield": "hidden",
         "show_model_names": true
     },
-    "campaign_id": "example_contrastive",
+    "campaign_id": "example_cESA",
     "data": [
         [
             [
