@@ -648,8 +648,11 @@ function setupCandidateInteractions(
             state.action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
 
             // Warn if ESA protocol, score < 80, and no error spans marked
-            if ((response.info.protocol === "ESA" || response.info.protocol === "cESA") && val < 80 && state.response_log[item_i][model].error_spans.length === 0) {
+            // Warn if cESA protocol, score <= 65, and no error spans marked
+            if (response.info.protocol === "ESA" && val < 80 && state.response_log[item_i][model].error_spans.length === 0) {
                 notify("⚠️ Warning: score is below 80 but no error spans have been marked.")
+            } else if (response.info.protocol === "cESA" && val <= 65 && state.response_log[item_i][model].error_spans.length === 0) {
+                notify("⚠️ Warning: score is below 65 but no error spans have been marked.")
             }
         })
 
