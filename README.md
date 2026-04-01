@@ -164,6 +164,8 @@ For multi-dimensional evaluation tasks (e.g., assessing fluency on a Likert scal
 
 When `sliders` is specified, only the custom sliders are shown. Each slider must have `name`, `min`, `max`, and `step` properties. All sliders must be answered before proceeding.
 
+By default, cESA uses a single score slider which is colored relative to other translations of the same segment. This can be turned on or off using `slider_colors` parameter in `info`.
+
 ### Textfield comment box
 
 To enable a textfield for commenting, post-editing or translation tasks, use the `textfield` parameter in `info`. The textfield content is stored in annotations alongside scores and error spans.

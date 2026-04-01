@@ -3,14 +3,15 @@
 
 Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
 
-- v1.1.2 (unreleased)
+- v1.1.3 (unreleased)
+- v1.1.2
   - Modify slightly default ESA/MQM/DA instructions
   - Fix display of long model outputs
   - Add warning for ESA when score is lower than 80 but no errors are marked
   - Make lockfile multiplatform
   - Synchronized horizontal slider for many model outputs
-  - Default score slider changes color based on the score
   - Add support for contrastive evaluation (cESA)
+  - Score slider changes color based on the score relatively to other translations of the same segment
 - v1.1.1
   - Prevent modifying a running instance
   - Improve UI of selected severity buttons

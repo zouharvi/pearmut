@@ -23,6 +23,7 @@ CAMPAIGN_INFO_PUBLIC = {
     "show_model_names",
     "mqm_categories",
     "mqm_severities",
+    "slider_colors",
 }
 
 
@@ -822,9 +823,9 @@ def reset_task(
                         },
                     )
             num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
-            progress_data[campaign_id][user_id]["progress_welcome"] = (
-                [False] * num_welcome
-            )
+            progress_data[campaign_id][user_id]["progress_welcome"] = [
+                False
+            ] * num_welcome
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
     else:
