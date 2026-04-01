@@ -28,7 +28,7 @@ import {
     DataPayloadItem,
     MQM_ERROR_CATEGORIES,
     MQM_SEVERITIES,
-    debounce2,
+    errorCESANotification,
 } from './utils';
 
 // Check if frozen mode is enabled (view-only, no annotations)
@@ -643,10 +643,6 @@ function setupCandidateInteractions(
                 $(`#response_${item_i}_${model}`).parents(".output_response").css("background-color", `color-mix(in lab, color-mix(in lab, red ${100 - color_val}%, green ${color_val}%), white 30%)`)
             }
         }
-
-        const errorCESANotification = debounce2(() => {
-            notify("⛔ Error: score is below 85 but no error spans have been marked.")
-        }, 500)
 
 
         slider.on("click input", function (event) {

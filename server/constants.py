@@ -89,7 +89,7 @@ PROTOCOL_INSTRUCTIONS = {
         flex: unset;
     }
     .output_tgt, .output_src { 
-      height: calc(100% - 70px);
+      height: calc(100% - 50px);
     }
     </style>
     """,

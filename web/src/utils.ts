@@ -682,3 +682,7 @@ export function debounce2(fn: Function, delay: number): (...args: any[]) => void
         timer = window.setTimeout(() => timer = undefined, delay)
     }
 }
+
+export const errorCESANotification = debounce2(() => {
+    notify("⛔ Error: score is below 85 but no error spans have been marked.")
+}, 1000)
