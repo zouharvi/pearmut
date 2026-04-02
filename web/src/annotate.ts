@@ -28,7 +28,6 @@ import {
     DataPayloadItem,
     MQM_ERROR_CATEGORIES,
     MQM_SEVERITIES,
-    errorCESANotification,
 } from './utils';
 
 // Check if frozen mode is enabled (view-only, no annotations)
@@ -185,11 +184,11 @@ function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): 
         if (state.protocol == "cESA") {
             return `
         <div class="output_response">
-          <div style="width: 100%;">
+          <div style="width: calc(100% - 30px);">
             <input type="range" min="0" max="100" value="-1" step="5" id="response_${item_i}_${model}">
           </div>
-          <span class="slider_label">❓/100</span>
         </div>
+        <div class="slider_label slider_label_cESA">❓/100</div>
         `
         } else {
             return `
@@ -624,7 +623,7 @@ function setupCandidateInteractions(
             label.text(`${val}/100`)
             if (response.info.protocol == "cESA") {
                 let text = `${val >= 85 ? "acceptable" : val >= 65 ? "good" : val >= 45 ? "acceptable" : val >= 25 ? "borderline" : "not&nbsp;acceptable"}`
-                label.html(`${val}/100<div class="slider_anchor_cESA">${text}</div>`)
+                label.html(`(${text})&nbsp;&nbsp;${val}/100`)
             }
 
             if (!response.info.slider_colors) return
@@ -650,14 +649,6 @@ function setupCandidateInteractions(
             if (frozenMode) return
 
             let val = parseInt((<HTMLInputElement>this).value)
-            // Warn if cESA protocol, score < 85, and no error spans marked
-            if (response.info.protocol === "cESA" && val < 85 && state.response_log[item_i][model].error_spans.length === 0) {
-                errorCESANotification()
-                // prevent default
-                slider.val(state.response_log[item_i][model].score ?? 0)
-                return
-            }
-
             state.response_log[item_i][model].score = val
             updateSliderVisual(val)
 
@@ -671,9 +662,12 @@ function setupCandidateInteractions(
             // In frozen mode, do not allow changing scores
             if (frozenMode) return
             let val = parseInt((<HTMLInputElement>this).value)
-            // Warn if ESA protocol, score < 80, and no error spans marked
             if (response.info.protocol === "ESA" && val < 80 && state.response_log[item_i][model].error_spans.length === 0) {
+                // Warn if ESA protocol, score < 80, and no error spans marked
                 notify("⚠️ Warning: score is below 80 but no error spans have been marked.")
+            } else if (response.info.protocol === "cESA" && val < 85 && state.response_log[item_i][model].error_spans.length === 0) {
+                // Warn if cESA protocol, score < 85, and no error spans marked
+                notify("⛔ Error: score is below 85 but no error spans have been marked.<br>⛔ Please highlight errors in the translation.")
             }
 
             state.response_log[item_i][model].score = val
