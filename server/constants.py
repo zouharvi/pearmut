@@ -82,6 +82,7 @@ PROTOCOL_INSTRUCTIONS = {
           <li><strong>0-20% (Not acceptable):</strong> Violation of meaning; large portions mistranslated, missing, or incoherent; unusable without complete retranslation.</li>
         </ul>
       </li>
+      <li>For unexpected problems and remarks, use comment box in ⚙️ (top right).</li>
     </ul>
     """,
     "MQM": """

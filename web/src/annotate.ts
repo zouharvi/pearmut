@@ -627,20 +627,7 @@ function setupCandidateInteractions(
             }
 
             if (!response.info.slider_colors) return
-            let scores = new Array<[string, number]>()
-            for (const model of Object.keys(state.response_log[item_i])) {
-                let val = state.response_log[item_i][model].score
-                if (val != null) {
-                    scores.push([model, val])
-                }
-            }
-            // make the min ever so slightly smaller so that default is max
-            let min = Math.min(...scores.map(score => score[1])) - 1
-            let max = Math.max(...scores.map(score => score[1]))
-            for (const [model, score] of scores) {
-                let color_val = (score - min) / (max - min) * 100
-                $(`#response_${item_i}_${model}`).parents(".output_response").css("background-color", `color-mix(in lab, color-mix(in lab, red ${100 - color_val}%, green ${color_val}%), white 30%)`)
-            }
+            slider.parents(".output_response").css("background-color", `color-mix(in lab, color-mix(in lab, red ${100 - val}%, green ${val}%), white 30%)`)
         }
 
 
