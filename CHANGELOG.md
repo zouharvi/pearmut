@@ -8,6 +8,7 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
   - Add `PEARMUT_ROOT` environment variable to specify the root directory
   - Hard prevent default for cESA on score <85
   - cESA styling
+  - Add `PEARMUT_TOKEN_MAIN` environment variable to specify main admin token
 - v1.1.2
   - Modify slightly default ESA/MQM/DA instructions
   - Fix display of long model outputs
