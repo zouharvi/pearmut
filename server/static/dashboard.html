@@ -1,0 +1,101 @@
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=900px"><title>Pearmut Evaluation</title><link rel="icon" type="image/svg+xml" href="favicon.svg"><style>.white-box {
+            margin-bottom: 10px;
+            width: max-content;
+            display: inline-block;
+        }
+
+        .abutton {
+            background-color: #eee !important;
+            text-decoration: none;
+            color: black;
+            padding: 5px 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px #0003;
+            border: none;
+            font-size: smaller !important;
+        }
+
+        .abutton:hover {
+            background-color: #ffd !important;
+            cursor: pointer;
+        }
+
+        .abutton[disabled] {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .ranking-content input[type="button"]:not(:last-child) {
+            margin-right: 5px;
+        }
+
+        .ranking-content input[type="button"] {
+            margin-bottom: 8px;
+            padding: 3px 5px;
+            box-shadow: 0 2px 2px #0003 !important;
+        }
+
+        .ranking-content {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .show-ranking-btn:hover {
+            cursor: pointer;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding-right: 20px;
+        }
+
+        tr:hover {
+            background-color: #d6e8c4;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        h3 {
+            margin-top: 0px;
+        }
+
+        a[disabled] {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .reset-task:hover {
+            cursor: pointer;
+        }
+
+        .reset-task[disabled] {
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .dashboard-content {
+            display: inline-block;
+        }
+
+        .results-section {
+            min-width: 300px;
+        }
+
+        .results-table th:not(:first-child),
+        .results-table td:not(:first-child) {
+            padding-left: 5px;
+            text-align: right;
+        }
+
+        @media (max-width: 1400px) {
+            .white-box {
+                overflow-x: auto;
+            }
+        }</style><script defer="defer" src="dashboard.bundle.js?1abf6c7f0f200797a650"></script><link href="style.css?1abf6c7f0f200797a650" rel="stylesheet"></head><body style="min-height: 100vh; display: flex; flex-direction: column; margin: 0;"><div style="flex: 1; padding-top: 50px; padding-bottom: 50px;"><div id="main_div" style="width: calc(100% - 200px); min-width: 1300px; margin-left: auto; margin-right: auto;"><div style="margin-bottom: 15px; font-size: 0.9em; color: #555;">💤not started &nbsp;&nbsp; ✍️in progress &nbsp;&nbsp; ✅completed & passed &nbsp;&nbsp;❌completed & failed &nbsp;&nbsp; 🔗annotator link &nbsp;&nbsp; 👁️anotator link (view-only) &nbsp;&nbsp; 🗑️reset progress/campaign &nbsp;&nbsp; ⚖️show model ranking</div><div id="dashboard_div"></div><br><a class="abutton" id="download_progress" style="margin-right: 20px;">Download progress metadata 💾</a> <a class="abutton" id="download_annotations" style="margin-right: 20px;">Download all annotations 💾</a> <button class="abutton" id="add_campaign" style="width: 180px; margin-right: 20px;">Add new campaign 📤</button> <input type="file" id="campaign_file_input" accept=".json" style="display: none;"></div></div><footer style="text-align: right; padding: 10px; font-size: 10pt; color: #666;">Running with <a href="https://github.com/zouharvi/pearmut" style="text-decoration: underline;">Pearmut</a> 1.1.3</footer></body></html>
