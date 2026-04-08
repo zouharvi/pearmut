@@ -622,7 +622,7 @@ function setupCandidateInteractions(
         function updateSliderVisual(val: number) {
             label.text(`${val}/100`)
             if (response.info.protocol == "cESA") {
-                let text = `${val >= 85 ? "acceptable" : val >= 65 ? "good" : val >= 45 ? "acceptable" : val >= 25 ? "borderline" : "not&nbsp;acceptable"}`
+                let text = `${val >= 85 ? "very good" : val >= 65 ? "good" : val >= 45 ? "acceptable" : val >= 25 ? "borderline" : "not&nbsp;acceptable"}`
                 label.html(`(${text})&nbsp;&nbsp;${val}/100`)
             }
 
