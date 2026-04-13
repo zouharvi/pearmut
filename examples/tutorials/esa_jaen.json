@@ -3,17 +3,17 @@
     "protocol": "ESA",
     "assignment": "task-based"
   },
-  "campaign_id": "esa_deen_tutorial",
+  "campaign_id": "esa_jaen_tutorial",
   "data": [
     [
       [
         {
-          "item_id": "deen_#_tutorial_#_1",
-          "src": "Der Hund ist rausgerannt.",
+          "item_id": "jaen_#_tutorial_#_1",
+          "src": "犬は外へ走り出た。",
           "tgt": {
             "model-tutorial": "The dog ran outside."
           },
-          "instructions": "<b>Welcome to the Error Span Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>German to English</b>.<br><br>This translation is completely correct. Please use the slider to set the quality to 100%.",
+          "instructions": "<b>Welcome to the Error Span Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Japanese to English</b>.<br><br>This translation is completely correct. Please use the slider to set the quality to 100%.",
           "validation": {
             "model-tutorial": {
               "warning": "This translation is perfect! Please set the score to 100%.",
@@ -27,12 +27,12 @@
           }
         },
         {
-          "item_id": "deen_#_tutorial_#_2",
-          "src": "Der Hund ist rausgerannt.",
+          "item_id": "jaen_#_tutorial_#_2",
+          "src": "犬は外へ走り出た。",
           "tgt": {
             "model-tutorial": "The dog walked outside."
           },
-          "instructions": "<b>Let's practice marking errors.</b> The word <u>\"walked\"</u> is incorrect in this translation. The German word \"rausgerannt\" means \"ran out\" not \"walked\".<br>1. Select and mark the word \"walked\" as a minor error<br>2. Move the slider to around 75-85% to reflect the reduced quality",
+          "instructions": "<b>Let's practice marking errors.</b> The word <u>\"walked\"</u> is incorrect in this translation. The Japanese phrase \"外へ走り出た\" means \"ran out\" not \"walked\".<br>1. Select and mark the word \"walked\" as a minor error<br>2. Move the slider to around 75-85% to reflect the reduced quality",
           "validation": {
             "model-tutorial": {
               "warning": "Please mark the word \"walked\" as a minor error (light pink) and set the score to 75-85%.",
@@ -52,12 +52,12 @@
           }
         },
         {
-          "item_id": "deen_#_tutorial_#_3",
-          "src": "Der Hund ist rausgerannt.",
+          "item_id": "jaen_#_tutorial_#_3",
+          "src": "犬は外へ走り出た。",
           "tgt": {
             "model-tutorial": "The dog stayed inside."
           },
-          "instructions": "<b>Let's mark a major error.</b>The words <u>\"stayed inside\"</u> are completely wrong; they mean the opposite of the German \"rausgerannt\" (ran outside).<br>1. Select and mark \"stayed inside\" as an error<br>2. Move the slider to 10-20% due to the serious error",
+          "instructions": "<b>Let's mark a major error.</b>The words <u>\"stayed inside\"</u> are completely wrong; they mean the opposite of the Japanese \"外へ走り出た\" (ran outside).<br>1. Select and mark \"stayed inside\" as an error<br>2. Move the slider to 10-20% due to the serious error",
           "validation": {
             "model-tutorial": {
               "warning": "Please mark \"stayed inside\" as a major error (dark pink) and set the score to 10-20%.",
@@ -77,8 +77,8 @@
           }
         },
         {
-          "item_id": "deen_#_tutorial_#_4",
-          "src": "Obwohl die Katzen die Nacht draußen verbrachten, war ihnen nicht kalt.",
+          "item_id": "jaen_#_tutorial_#_4",
+          "src": "猫たちは夜を外で過ごしたが、寒がってはいなかった。",
           "tgt": {
             "model-tutorial": "Although the cats were outside over the night, they did not get cold."
           },
@@ -98,12 +98,12 @@
       ],
       [
         {
-          "item_id": "deen_#_tutorial_#_5",
-          "src": "Der Hund ist rausgerannt.",
+          "item_id": "jaen_#_tutorial_#_5",
+          "src": "犬は外へ走り出た。",
           "tgt": {
             "model-tutorial": "The walked outside."
           },
-          "instructions": "<b>Now let's mark missing content.</b> The word for <u>\"dog\"</u> (Hund) is completely missing from this translation. <br>1. Mark [missing] to mark it as a major error<br>2. Set the score to 5-15% because critical content is missing",
+          "instructions": "<b>Now let's mark missing content.</b> The word for <u>\"dog\"</u> (犬) is completely missing from this translation. <br>1. Mark [missing] to mark it as a major error<br>2. Set the score to 5-15% because critical content is missing",
           "validation": {
             "model-tutorial": {
               "warning": "Please mark the [missing] marker as a major error (dark pink) and set the score to 5-15%.",
@@ -123,8 +123,8 @@
           }
         },
         {
-          "item_id": "deen_#_tutorial_#_6",
-          "src": "Der Hund ist rausgerannt.",
+          "item_id": "jaen_#_tutorial_#_6",
+          "src": "犬は外へ走り出た。",
           "tgt": {
             "model-tutorial": "The dog ran outside."
           },
@@ -153,8 +153,8 @@
       ],
       [
         {
-          "item_id": "deen_#_attention-check_#_1",
-          "src": "Die Sonne scheint hell am Himmel.",
+          "item_id": "jaen_#_attention-check_#_1",
+          "src": "太陽は空で明るく輝いている。",
           "tgt": {
             "model-tutorial": "The sun shines brightly in the sky."
           },
@@ -171,8 +171,8 @@
           }
         },
         {
-          "item_id": "deen_#_attention-check_#_2",
-          "src": "Das Buch liegt auf dem Tisch.",
+          "item_id": "jaen_#_attention-check_#_2",
+          "src": "本はテーブルの上にある。",
           "tgt": {
             "model-tutorial": "The book is under the chair."
           },
