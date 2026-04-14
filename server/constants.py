@@ -51,7 +51,7 @@ PROTOCOL_INSTRUCTIONS = {
     """,
     "cESA": """
     <ul>
-      <li><strong>Task:</strong> Read the source text and competing translations. Highlight all errors. Rate each translation (each column is an output from a single model/translator). At the end, click <b>Next</b> in top-right corner.</li>
+      <li><strong>Task:</strong> Read the source text and competing translations. Highlight all errors. Rate each translation (each column is an output from a single model/translator). At the end, click <b>Next</b> in top-right corner.</li><br>
       <li><strong>Highlighting errors:</strong>
         <ul>
           <li><strong>Select text</strong> containing an error to mark it as <span class="error_minor">Minor</span>.</li>
@@ -59,12 +59,14 @@ PROTOCOL_INSTRUCTIONS = {
           <li><strong>Missing text:</strong> Highlight the <code style="font-family: monospace">[MISSING]</code> tag if the translation omits important source text.</li>
         </ul>
       </li>
+      <br>
       <li><strong>Error severity:</strong>
         <ul>
           <li><span class="error_minor">Minor:</span> Imperfections or stylistic issues that do not impact the core message (e.g., awkward phrasing).</li>
           <li><span class="error_major">Major:</span> Confuses meaning, misrepresents the source, or violates the message (e.g., incorrect information, confusing wording).</li>
         </ul>
       </li>
+      <br>
       <li><strong>Important rules:</strong>
         <ul>
           <li><strong>Multiple errors:</strong> Use separate highlights for each error.</li>
@@ -73,6 +75,7 @@ PROTOCOL_INSTRUCTIONS = {
           <li><strong>Consistency:</strong> Check translation consistency (e.g., technical terms) across the document.</li>
         </ul>
       </li>
+      <br>
       <li><strong>Rating scale (0-100%):</strong>
         <ul>
           <li><strong>85-100% (Very Good):</strong> Complete meaning transfer; perfectly natural; no or minimal proofreading.</li>
@@ -82,6 +85,7 @@ PROTOCOL_INSTRUCTIONS = {
           <li><strong>0-20% (Not acceptable):</strong> Violation of meaning; large portions mistranslated, missing, or incoherent; unusable without complete retranslation.</li>
         </ul>
       </li>
+      <br>
       <li>For unexpected problems and remarks, use comment box in ⚙️ (top right).</li>
     </ul>
     """,
