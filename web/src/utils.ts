@@ -408,7 +408,7 @@ export function updateToolboxPosition(toolbox: JQuery<HTMLElement>, charEl: JQue
     const toolboxWidth = toolbox.innerWidth() || 0;
     const windowWidth = $(window).width() || 900;
 
-    let topPosition = position.top - toolboxHeight;
+    let topPosition = position.top - toolboxHeight + 2;
     let leftPosition = position.left;
     // make sure it's not getting out of screen
     leftPosition = Math.min(leftPosition, Math.max(windowWidth, 900) - toolboxWidth + 10);
