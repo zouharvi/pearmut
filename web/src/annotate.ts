@@ -461,6 +461,7 @@ function setupCandidateInteractions(
                                 state.response_log[item_i][model].error_spans = state.response_log[item_i][model].error_spans.filter(span => span != error_span)
                                 state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
                                 state.has_unsaved_work = true
+                                check_unlock()
                             },
                             frozenMode,
                             state.mqm_categories,
@@ -468,7 +469,6 @@ function setupCandidateInteractions(
                         )
 
                         $("body").append(toolbox)
-                        check_unlock()
 
                         // handle hover on toolbox
                         toolbox.on("mouseenter focusin contextmenu", function (e) {
@@ -498,6 +498,8 @@ function setupCandidateInteractions(
                             tgt_chars_objs[j].toolbox = toolbox
                             tgt_chars_objs[j].error_span = error_span
                         }
+                        
+                        check_unlock()
                     } else {
                         // check if we are in existing span
                         if (state.response_log[item_i][model].error_spans.some(span => i >= span.start_i && i <= span.end_i)) {
