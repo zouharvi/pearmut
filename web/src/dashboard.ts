@@ -33,7 +33,7 @@ function delta_to_human(delta: number): string {
 
 async function fetchAndRenderCampaign(campaign_id: string, token: string | null) {
     let x = await $.ajax({
-        url: `/dashboard-data`,
+        url: `dashboard-data`,
         method: "POST",
         data: JSON.stringify({ "campaign_id": campaign_id, "token": token }),
         contentType: "application/json",
@@ -200,7 +200,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         // Fetch results data
         try {
             const resultsData = await $.ajax({
-                url: `/dashboard-results`,
+                url: `dashboard-results`,
                 method: "POST",
                 data: JSON.stringify({ "campaign_id": campaign_id, "token": token }),
                 contentType: "application/json",
@@ -281,7 +281,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 }
 
                 $.ajax({
-                    url: `/purge-campaign`,
+                    url: `purge-campaign`,
                     method: "POST",
                     data: JSON.stringify({ "campaign_id": campaign_id, "token": token }),
                     contentType: "application/json",
@@ -328,7 +328,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 for (let user_id in data) {
                     resetPromises.push(
                         $.ajax({
-                            url: `/reset-task`,
+                            url: `reset-task`,
                             method: "POST",
                             data: JSON.stringify({ "campaign_id": campaign_id, "user_id": user_id, "token": token }),
                             contentType: "application/json",
@@ -360,7 +360,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 return
             }
             $.ajax({
-                url: `/reset-task`,
+                url: `reset-task`,
                 method: "POST",
                 data: JSON.stringify({ "campaign_id": campaign_id, "user_id": user_id, "token": token }),
                 contentType: "application/json",
@@ -427,7 +427,7 @@ $("#campaign_file_input").on("change", async function (event: JQuery.ChangeEvent
         }
 
         const response = await $.ajax({
-            url: `/add-campaign`,
+            url: `add-campaign`,
             method: "POST",
             data: JSON.stringify({ campaign_data: campaignData, token_main: tokenMain }),
             contentType: "application/json",
