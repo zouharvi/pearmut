@@ -24,7 +24,8 @@
               "error_spans": [],
               "allow_skip": true
             }
-          }
+          },
+          "skippable": true
         },
         {
           "item_id": "jaen_#_tutorial_#_2",
@@ -49,7 +50,8 @@
               ],
               "allow_skip": true
             }
-          }
+          },
+          "skippable": true
         },
         {
           "item_id": "jaen_#_tutorial_#_3",
@@ -74,7 +76,8 @@
               ],
               "allow_skip": true
             }
-          }
+          },
+          "skippable": true
         },
         {
           "item_id": "jaen_#_tutorial_#_4",
@@ -93,7 +96,8 @@
               "error_spans": [],
               "allow_skip": true
             }
-          }
+          },
+          "skippable": true
         }
       ],
       [
@@ -120,7 +124,8 @@
               ],
               "allow_skip": true
             }
-          }
+          },
+          "skippable": true
         },
         {
           "item_id": "jaen_#_tutorial_#_6",
@@ -148,7 +153,8 @@
               "error_spans": [],
               "allow_skip": true
             }
-          }
+          },
+          "skippable": true
         }
       ],
       [
@@ -168,7 +174,8 @@
               ],
               "error_spans": []
             }
-          }
+          },
+          "skippable": true
         },
         {
           "item_id": "jaen_#_attention-check_#_2",
@@ -192,7 +199,8 @@
                 }
               ]
             }
-          }
+          },
+          "skippable": true
         }
       ]
     ]
