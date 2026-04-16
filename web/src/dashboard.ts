@@ -99,8 +99,25 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
             }
         }
 
+        // Shared streams mark others' work as "completed_foreign"; backend treats that as done
+        // for threshold_passed, but counting only "completed" never reaches total_total.
+        let progress_slots_filled = progress_count
+        if (assignment === "single-stream") {
+            progress_slots_filled = progress.filter(
+                (v) => v === "completed" || v === "completed_foreign"
+            ).length
+        } else if (assignment === "dynamic") {
+            progress_slots_filled = progress
+                .map((l) =>
+                    Object.values(l as object).filter(
+                        (v) => v === "completed" || v === "completed_foreign"
+                    ).length
+                )
+                .reduce((a, b) => a + b, 0)
+        }
+
         // Calculate total for status determination
-        let total_count = welcome_count + progress_count
+        let total_count = welcome_count + progress_slots_filled
         let total_total = welcome_total + progress_total
         campaignFinished += total_count
         campaignTotal += total_total
