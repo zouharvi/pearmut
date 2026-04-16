@@ -43,6 +43,8 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
     let assignment = x.assignment;
 
     let html = ""
+    let campaignFinished = 0
+    let campaignTotal = 0
     html += `
     <table class="dashboard-table">
         <thead><tr>
@@ -100,6 +102,8 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         // Calculate total for status determination
         let total_count = welcome_count + progress_count
         let total_total = welcome_total + progress_total
+        campaignFinished += total_count
+        campaignTotal += total_total
 
         let threshold_passed = data[user_id]["threshold_passed"]
         let status = ''
@@ -157,6 +161,12 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
     }
     html += '</tbody></table>'
 
+    let pctTitle = ""
+    if (campaignTotal > 0) {
+        const pct = (campaignFinished / campaignTotal) * 100
+        pctTitle = ` — ${(Math.round(pct * 10) / 10).toFixed(1)}%`
+    }
+
     // link to campaign-specific dashboard
     let dashboard_url = `${window.location.origin}/dashboard.html?campaign_id=${encodeURIComponent(campaign_id)}${token != null ? `&token=${encodeURIComponent(token)}` : ''}`
 
@@ -174,7 +184,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         <div class="white-box">
             <div style="">
                 <h3 style="margin: 0;">
-                ${campaign_id} 
+                ${campaign_id}${pctTitle}
                 <a href="${dashboard_url}">🔗</a>
                 <a class="show-ranking-btn">⚖️</a>
                 ${token !== null ? '<a class="purge-campaign-btn" style="cursor: pointer;">🗑️</a>' : ''}
