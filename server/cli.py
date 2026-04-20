@@ -362,8 +362,6 @@ def _add_single_campaign(campaign_data, overwrite, url):
         else:
             raise ValueError("'users' must be an integer or a list.")
         # Validate dynamic-specific parameters
-        if "dynamic_top" not in campaign_data["info"]:
-            campaign_data["info"]["dynamic_top"] = 2
         if "dynamic_warmup" not in campaign_data["info"]:
             campaign_data["info"]["dynamic_warmup"] = 5
         if "dynamic_models" not in campaign_data["info"]:
@@ -372,11 +370,6 @@ def _add_single_campaign(campaign_data, overwrite, url):
         assert campaign_data["info"]["dynamic_warmup"] >= 1, (
             "dynamic_warmup must be at least 1"
         )
-        # Validate that dynamic_models is at most dynamic_top
-        assert (
-            campaign_data["info"]["dynamic_models"]
-            <= campaign_data["info"]["dynamic_top"]
-        ), "dynamic_models must be at most dynamic_top"
         # Validate that all items have the same models
         all_models = set()
         for item in campaign_data["data"]:

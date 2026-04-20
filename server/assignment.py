@@ -483,10 +483,9 @@ def get_next_item_dynamic(
     NOTE: All items must contain all model outputs for this assignment type to work.
 
     In this mode, items are selected based on the current performance of models:
-    1. Contrastive comparison: `dynamic_models` models are randomly selected and shown per item
-    2. Warmup phase: Each model gets `dynamic_coldstart` annotations with fully random selection
-    3. After warmup phase: Top `dynamic_top` models are identified, K randomly selected from them
-    4. Items with least annotations for the selected models are prioritized
+    1. Warmup phase: Each model gets `dynamic_coldstart` annotations with fully random selection
+    2. Contrastive comparison: `dynamic_models` models are randomly selected and shown per itemem
+    3. Items with least annotations for the selected models are prioritized
     """
     import random
 
@@ -553,7 +552,6 @@ def get_next_item_dynamic(
         return _completed_response(tasks_data, progress_data, campaign_id, user_id)
 
     # Get configuration parameters
-    dynamic_top = campaign_data["info"].get("dynamic_top", 2)
     dynamic_coldstart = campaign_data["info"].get("dynamic_coldstart", 5)
     dynamic_models = campaign_data["info"].get("dynamic_models", 1)
 
