@@ -157,3 +157,10 @@ def is_form_document(items):
     # Check if first item has 'text' and 'form' keys (form item)
     first_item = items[0]
     return "text" in first_item and "form" in first_item
+
+
+def shuffled(lst):
+    """Return a shuffled copy of the input list."""
+    lst_copy = list(lst)
+    random.shuffle(lst_copy)
+    return lst_copy
