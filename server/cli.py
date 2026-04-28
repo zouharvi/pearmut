@@ -650,7 +650,7 @@ def main():
     args.add_argument(
         "command",
         type=str,
-        choices=["run", "add", "purge", "token"],
+        choices=["run", "add", "purge"],
         default="run",
         nargs="?",
     )
@@ -660,8 +660,6 @@ def main():
         _run(args_unknown)
     elif args.command == "add":
         _add_campaign(args_unknown)
-    elif args.command == "token":
-        print(TOKEN_MAIN)
     elif args.command == "purge":
         import shutil
 

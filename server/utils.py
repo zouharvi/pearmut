@@ -4,11 +4,10 @@ import os
 import random
 
 ROOT = os.environ.get("PEARMUT_ROOT", ".")
+TOKEN_MAIN = os.environ.get("PEARMUT_TOKEN_MAIN", hashlib.sha256(random.randbytes(16)).hexdigest()[:10])
 
 # Sentinel value to indicate a task reset - masks all prior annotations
 RESET_MARKER = "__RESET__"
-_key = os.environ.get("PEARMUT_SECRET", random.randbytes(16).hex())
-TOKEN_MAIN = hashlib.sha256(_key.encode()).hexdigest()[:10]
 
 
 def load_progress_data(warn: str | None = None):
