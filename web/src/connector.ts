@@ -13,7 +13,7 @@ export async function get_next_item<T>(): Promise<T | null> {
     try {
       return await new Promise<T>((resolve, reject) => {
         $.ajax({
-          url: `/get-next-item`,
+          url: `get-next-item`,
           method: "POST",
           data: JSON.stringify({ "campaign_id": campaign_id, "user_id": user_id }),
           contentType: "application/json",
@@ -52,7 +52,7 @@ export async function log_response(payload: any, item_i: number | null): Promise
     try {
       await new Promise<void>((resolve, reject) => {
         $.ajax({
-          url: `/log-response`,
+          url: `log-response`,
           method: "POST",
           data: JSON.stringify({ "campaign_id": campaign_id, "user_id": user_id, "payload": payload, "item_i": item_i }),
           contentType: "application/json",
@@ -91,7 +91,7 @@ export async function get_i_item<T>(item_i: number | string): Promise<T | null> 
     try {
       return await new Promise<T>((resolve, reject) => {
         $.ajax({
-          url: `/get-i-item`,
+          url: `get-i-item`,
           method: "POST",
           data: JSON.stringify({ "campaign_id": campaign_id, "user_id": user_id, "item_i": item_i }),
           contentType: "application/json",

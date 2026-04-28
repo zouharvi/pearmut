@@ -13,6 +13,7 @@ from .utils import (
     get_db_log_item,
     is_form_document,
     save_db_payload,
+    shuffled,
 )
 
 # Public campaign info fields that are sent to the client
@@ -482,11 +483,9 @@ def get_next_item_dynamic(
     NOTE: All items must contain all model outputs for this assignment type to work.
 
     In this mode, items are selected based on the current performance of models:
-    1. Contrastive comparison: `dynamic_contrastive_models` models are randomly selected and shown per item
-    2. Warmup phase: Each model gets `dynamic_warmup` annotations with fully random selection
-    3. After warmup phase: Top `dynamic_top` models are identified, K randomly selected from them
-    4. Items with least annotations for the selected models are prioritized
-    5. With probability `dynamic_backoff`, uniformly random selection is used instead
+    1. Warmup phase: Each model gets `dynamic_coldstart` annotations with fully random selection
+    2. Contrastive comparison: `dynamic_models` models are randomly selected and shown per itemem
+    3. Items with least annotations for the selected models are prioritized
     """
     import random
 
@@ -553,12 +552,8 @@ def get_next_item_dynamic(
         return _completed_response(tasks_data, progress_data, campaign_id, user_id)
 
     # Get configuration parameters
-    dynamic_top = campaign_data["info"].get("dynamic_top", 2)
-    dynamic_warmup = campaign_data["info"].get("dynamic_warmup", 5)
-    dynamic_contrastive_models = campaign_data["info"].get(
-        "dynamic_contrastive_models", 1
-    )
-    dynamic_backoff = campaign_data["info"].get("dynamic_backoff", 0)
+    dynamic_coldstart = campaign_data["info"].get("dynamic_coldstart", 5)
+    dynamic_models = campaign_data["info"].get("dynamic_models", 1)
 
     # Count annotations per (model, item) pair to track coverage
     annotations = get_db_log(campaign_id)
@@ -576,26 +571,25 @@ def get_next_item_dynamic(
 
     # Check if we're still in the first phase (collecting initial data)
     in_warmup_phase = any(
-        model_total_counts.get(model, 0) < dynamic_warmup for model in all_models
+        model_total_counts.get(model, 0) < dynamic_coldstart for model in all_models
     )
 
     # Select which models to show
     if in_warmup_phase:
-        # First phase or backoff: select models that don't have enough annotations yet
-        selected_models = random.sample(
-            [
-                model
-                for model in all_models
-                if model_total_counts.get(model, 0) < dynamic_warmup
-            ],
-            k=min(dynamic_contrastive_models, len(all_models)),
-        )
-    elif random.random() < dynamic_backoff:
-        # Backoff: select K models randomly from all models
-        selected_models = random.sample(
-            all_models, k=min(dynamic_contrastive_models, len(all_models))
+        # First phase: select models that don't have enough annotations yet
+        available_models = [
+            model
+            for model in all_models
+            if model_total_counts.get(model, 0) < dynamic_coldstart
+        ]
+        if len(available_models) < dynamic_models:
+            # If not enough models in warmup, include all models to fill the slots
+            available_models += [model for model in shuffled(all_models) if model not in available_models][:dynamic_models-len(available_models)]
+        selected_models = random.sample(available_models,
+            k=min(dynamic_models, len(available_models)),
         )
     else:
+        import numpy as np
         # Calculate model scores from annotations
         model_scores = collections.defaultdict(list)
         for annotation_line in annotations:
@@ -610,17 +604,11 @@ def get_next_item_dynamic(
         model_avg_scores = {
             model: statistics.mean(scores) for model, scores in model_scores.items()
         }
+        model_weights = {model: 1/(rank+1) for rank, model in enumerate(sorted(model_avg_scores, key=model_avg_scores.get, reverse=True))}
+        model_weights_all = sum(model_weights.values())
+        model_weights = [model_weights[model]/model_weights_all for model in all_models]
+        selected_models = np.random.choice(all_models, size=min(dynamic_models, len(all_models)), replace=False, p=model_weights)
 
-        # Get top N models
-        sorted_models = sorted(
-            model_avg_scores.items(), key=lambda x: x[1], reverse=True
-        )
-        top_models = [model for model, score in sorted_models[:dynamic_top]]
-
-        # From top N, randomly select K models
-        selected_models = random.sample(
-            top_models, k=min(dynamic_contrastive_models, len(top_models))
-        )
 
     # Find incomplete items (None or completed_foreign status)
     incomplete_indices = [

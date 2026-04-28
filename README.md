@@ -364,10 +364,8 @@ All items must contain outputs from all models for this assignment type to work 
         "assignment": "dynamic",
         "protocol": "ESA",
         "users": 10,                           # number of annotators
-        "dynamic_top": 3,                      # how many top models to consider (required)
-        "dynamic_contrastive_models": 2,       # how many models to compare per item (optional, default: 1)
-        "dynamic_first": 5,                    # annotations per model before dynamic kicks in (optional, default: 5)
-        "dynamic_backoff": 0.1,                # probability of uniform sampling (optional, default: 0)
+        "dynamic_models": 2,                   # how many models to compare per item (optional, default: 1)
+        "dynamic_coldstart": 5,                # annotations per model before dynamic kicks in (optional, default: 5)
         "docs_per_user": 20,                   # optional: show goodbye after N documents per user
     },
     "data": [...], # list of all items (shared among all annotators)
@@ -377,11 +375,10 @@ All items must contain outputs from all models for this assignment type to work 
 Set `docs_per_user` to limit how many documents each user annotates before seeing the goodbye message (for dynamic, this is roughly the number of documents × models).
 
 **How it works:**
-1. Initial phase: Each model gets `dynamic_first` annotations with fully random contrastive evaluation
-2. Dynamic phase: After the initial phase, top `dynamic_top` models (by average score) are identified
-3. Contrastive evaluation: From the top N models, `dynamic_contrastive_models` models are randomly selected for each item
+1. Initial phase: Each model gets `dynamic_coldstart` annotations with fully random contrastive evaluation
+2. Dynamic phase: After the initial phase, models sampled according to 1/rank (by average score) are identified
+3. Contrastive evaluation: From the top N models, `dynamic_models` models are randomly selected for each item
 4. Item prioritization: Items with the least annotations for the selected models are prioritized
-5. Backoff: With probability `dynamic_backoff`, uniform random selection is used instead to maintain exploration
 
 This approach efficiently focuses annotation resources on distinguishing between the best-performing models while ensuring all models get adequate baseline coverage. The contrastive evaluation allows for direct comparison of multiple models simultaneously.
 For an example, see [examples/dynamic.json](examples/dynamic.json).
@@ -443,6 +440,7 @@ Files from `videos/` become accessible at `localhost:8001/assets/my_videos/`. Cr
   - Without args: Purge all campaigns
   - With campaign name: Purge specific campaign only
 - **`PEARMUT_ROOT=<path> pearmut `**: User pearmut with custom root directory
+- **`PEARMUT_TOKEN_MAIN=<token> pearmut run`**: Main admin token
 
 ## Campaign Management
 

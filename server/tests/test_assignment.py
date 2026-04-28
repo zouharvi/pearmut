@@ -1141,9 +1141,7 @@ class TestDynamic:
                 "info": {
                     "assignment": "dynamic",
                     "shuffle": False,
-                    "dynamic_top": 1,
                     "dynamic_warmup": 2,
-                    "dynamic_backoff": 0,
                 },
                 "data": [
                     [{"src": "a", "tgt": {"model1": "b", "model2": "c"}}],
@@ -1176,7 +1174,6 @@ class TestDynamic:
                 "info": {
                     "assignment": "dynamic",
                     "shuffle": False,
-                    "dynamic_top": 1,
                     "dynamic_warmup": 2,
                 },
                 "data": [
@@ -1298,8 +1295,7 @@ class TestDynamic:
                 "info": {
                     "assignment": "dynamic",
                     "docs_per_user": 2,
-                    "dynamic_top": 1,
-                    "dynamic_first": 2,
+                    "dynamic_coldstart": 2,
                 },
                 "data": [
                     [{"src": "a", "tgt": {"model1": "b", "model2": "c"}}],
@@ -1334,8 +1330,7 @@ class TestDynamic:
                 "info": {
                     "assignment": "dynamic",
                     "docs_per_user": 3,
-                    "dynamic_top": 1,
-                    "dynamic_first": 2,
+                    "dynamic_coldstart": 2,
                 },
                 "data": [
                     [{"src": "a", "tgt": {"model1": "b", "model2": "c"}}],
