@@ -267,6 +267,7 @@ export function createSpanToolbox(
     left_i: number,
     right_i: number,
     onDelete: () => void,
+    onUpdate: () => void,
     frozenMode: boolean = false,
     mqm_categories: { [key: string]: string[] } = MQM_ERROR_CATEGORIES,
     mqm_severities: string[] = MQM_SEVERITIES
@@ -324,6 +325,7 @@ export function createSpanToolbox(
             } else {
                 error_span.category = `${cat1}`
             }
+            onUpdate()
         })
 
         // MQM Subcategory Change
@@ -335,6 +337,7 @@ export function createSpanToolbox(
             } else {
                 error_span.category = `${cat1}/${cat2}`
             }
+            onUpdate()
         })
 
         // Delete
@@ -354,6 +357,7 @@ export function createSpanToolbox(
             error_span.severity = sev
             toolbox.find(".span_toolbox_esa input[type='button']").removeAttr("selected")
             toolbox.find(`.error_${sev}`).attr("selected", "selected")
+            onUpdate()
         }
         for (let sev of mqm_severities) {
             toolbox.find(`.error_${sev.toLowerCase()}`).on("click", () => setSeverity(sev.toLowerCase()))

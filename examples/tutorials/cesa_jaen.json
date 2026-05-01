@@ -17,7 +17,10 @@
           "validation": {
             "model-tutorial": {
               "warning": "This translation is perfect! Please set the score to 100% and do not mark any error spans.",
-              "score": [95, 100],
+              "score": [
+                95,
+                100
+              ],
               "error_spans": [],
               "allow_skip": true
             }
@@ -36,11 +39,20 @@
           "validation": {
             "model-tutorial": {
               "warning": "Please mark the word \"longest\" as a minor error (light pink) and set the score to 75-85%.",
-              "score": [75, 85],
+              "score": [
+                75,
+                85
+              ],
               "error_spans": [
                 {
-                  "start_i": [103, 104],
-                  "end_i": [110, 111],
+                  "start_i": [
+                    103,
+                    104
+                  ],
+                  "end_i": [
+                    110,
+                    111
+                  ],
                   "severity": "minor"
                 }
               ],
@@ -61,11 +73,20 @@
           "validation": {
             "model-tutorial": {
               "warning": "Please mark \"unsuccessful\" as a major error (dark pink) and set the score to 15-30%.",
-              "score": [15, 30],
+              "score": [
+                15,
+                30
+              ],
               "error_spans": [
                 {
-                  "start_i": [117, 118],
-                  "end_i": [129, 130],
+                  "start_i": [
+                    117,
+                    118
+                  ],
+                  "end_i": [
+                    129,
+                    130
+                  ],
                   "severity": "major"
                 }
               ],
@@ -86,7 +107,10 @@
           "validation": {
             "model-tutorial": {
               "warning": "Please mark the [missing] tag as a Minor error and set the score to 75–85%.",
-              "score": [75, 85],
+              "score": [
+                75,
+                85
+              ],
               "error_spans": [
                 {
                   "start_i": 262,
@@ -111,13 +135,24 @@
           "validation": {
             "model-tutorial": {
               "warning": "Mark the word \"water\" as a major error and set the score to 35-45%.",
-              "score": [35, 45],
+              "score": [
+                35,
+                45
+              ],
               "error_spans": [
-                {"start_i": [122,124],
-                  "end_i": [128,130],
-                  "severity": "major"}
-                ],
-                "allow_skip": true
+                {
+                  "start_i": [
+                    122,
+                    124
+                  ],
+                  "end_i": [
+                    128,
+                    130
+                  ],
+                  "severity": "major"
+                }
+              ],
+              "allow_skip": true
             }
           },
           "skippable": true
@@ -132,7 +167,10 @@
           "validation": {
             "model-tutorial": {
               "warning": "This translation is excellent. Please don't mark any errors and set the score to 95-100%.",
-              "score": [95, 100],
+              "score": [
+                95,
+                100
+              ],
               "error_spans": []
             }
           },
@@ -147,7 +185,7 @@
             "model-tutorial-A": "Dr. Katie Joy of the University of Manchester in the UK said that the new samples brought back by Chang'e 5 will also lead to a better understanding of the history of lunar volcanoes.",
             "model-tutorial-B": "Dr. Katie Joy of the University of Manchester in the UK said that the old samples brought back by Chang'e 5 will also lead to a better understanding of the future of lunar volcanoes."
           },
-          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>The first translation is accurate. Set the score to 90-100%.<br><br>The second translation has two major errors. The words \"新た\" (new) and \"歴史\" (history) are translated incorrectly to \"old\" and \"future\", respectively. Having two major errors, set the score to 10-25%.</div>",
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br><br>The other translation has two major errors. The words \"新た\" (new) and \"歴史\" (history) are translated incorrectly to \"old\" and \"future\", respectively. Having two major errors, set the score to 10-25%.</div>",
           "skippable": true
         },
         {
@@ -157,11 +195,10 @@
             "model-tutorial-A": "\"This mission is heading to an area where we know there have been volcanic eruptions and water sources in the past. We want to find out exactly when those eruptions occurred,\" Dr. Joy told BBC News.",
             "model-tutorial-B": "\"This mission is heading to an area where we know there have been volcanic eruptions in the past. We want to find out exactly where those eruptions occurred,\" Dr. Joy told BBC News."
           },
-          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In the first translation, \"and water sources\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"いつ\" is mistakenly translated as \"where\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 50–60%.<br></div>",
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"and water sources\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"いつ\" is mistakenly translated as \"where\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 50–60%.<br></div>",
           "skippable": true
         }
       ]
-
     ]
   ]
 }

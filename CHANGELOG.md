@@ -3,7 +3,9 @@
 
 Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
 
-- v1.1.4 (unreleased)
+- v1.1.5 (unreleased)
+- v1.1.4
+  - Make span toolboxes stick for 0.5 second after selection
 - v1.1.3
   - Add cESA label next to score
   - Add `PEARMUT_ROOT` environment variable to specify the root directory
