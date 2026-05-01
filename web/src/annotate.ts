@@ -338,9 +338,15 @@ function setupCandidateInteractions(
                 $(".tgt_char").removeClass("highlighted")
                 $(".tgt_char").removeClass("highlighted_active")
 
-                // highlight corresponding toolbox if error severity is set
+                // hide corresponding toolbox after delay if error severity is set
                 if (obj.error_span != null && obj.error_span.severity != null && (!state.protocol_error_categories || (obj.error_span.category != null && obj.error_span.category?.includes("/")))) {
-                    tgt_chars_objs[i].toolbox?.css("display", "none")
+                    const toolbox = obj.toolbox;
+                    if (toolbox) {
+                        const timeoutId = window.setTimeout(() => {
+                            toolbox.css("display", "none")
+                        }, 500);
+                        toolbox.data("hide-timeout", timeoutId);
+                    }
                 }
             })
 
@@ -404,7 +410,15 @@ function setupCandidateInteractions(
                         $(tgt_chars_objs[j].el).addClass("highlighted_active")
                     }
 
-                    tgt_chars_objs[span.start_i].toolbox?.css("display", "block")
+                    const toolbox = tgt_chars_objs[span.start_i].toolbox;
+                    if (toolbox) {
+                        const timeoutId = toolbox.data("hide-timeout");
+                        if (timeoutId) {
+                            window.clearTimeout(timeoutId);
+                            toolbox.removeData("hide-timeout");
+                        }
+                        toolbox.css("display", "block")
+                    }
                 }
             })
 
@@ -463,6 +477,9 @@ function setupCandidateInteractions(
                                 state.has_unsaved_work = true
                                 check_unlock()
                             },
+                            () => {
+                                check_unlock()
+                            },
                             frozenMode,
                             state.mqm_categories,
                             state.mqm_severities
@@ -473,6 +490,11 @@ function setupCandidateInteractions(
                         // handle hover on toolbox
                         toolbox.on("mouseenter focusin contextmenu", function (e) {
                             if (e.type === "contextmenu") e.preventDefault();
+                            const timeoutId = toolbox.data("hide-timeout");
+                            if (timeoutId) {
+                                window.clearTimeout(timeoutId);
+                                toolbox.removeData("hide-timeout");
+                            }
                             toolbox.css("display", "block")
                             check_unlock()
                         })
@@ -480,8 +502,11 @@ function setupCandidateInteractions(
                         toolbox.on("mouseleave focusout", function () {
                             // hide if severity is set for ESA or both severity and category are set for MQM
                             if (error_span.severity != null && (!state.protocol_error_categories || (error_span.category != null && error_span.category?.includes("/")))) {
-                                toolbox.css("display", "none")
-                                check_unlock()
+                                const timeoutId = window.setTimeout(() => {
+                                    toolbox.css("display", "none")
+                                    check_unlock()
+                                }, 500);
+                                toolbox.data("hide-timeout", timeoutId);
                             }
                         })
 
@@ -498,7 +523,7 @@ function setupCandidateInteractions(
                             tgt_chars_objs[j].toolbox = toolbox
                             tgt_chars_objs[j].error_span = error_span
                         }
-                        
+
                         check_unlock()
                     } else {
                         // check if we are in existing span
@@ -532,16 +557,35 @@ function setupCandidateInteractions(
             let error_span: ErrorSpan = { ...prefilled }
             state.response_log[item_i][model].error_spans.push(error_span)
 
-            let toolbox = createSpanToolbox(state.protocol_error_categories, error_span, tgt_chars_objs, left_i, right_i, () => {
-                state.response_log[item_i][model].error_spans = state.response_log[item_i][model].error_spans.filter(s => s != error_span)
-                state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
-                state.has_unsaved_work = true
-            }, frozenMode, state.mqm_categories, state.mqm_severities)
+            let toolbox = createSpanToolbox(
+                state.protocol_error_categories, error_span, tgt_chars_objs, left_i, right_i, () => {
+                    state.response_log[item_i][model].error_spans = state.response_log[item_i][model].error_spans.filter(s => s != error_span)
+                    state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
+                    state.has_unsaved_work = true
+                }, () => {
+                    check_unlock()
+                },
+                frozenMode,
+                state.mqm_categories,
+                state.mqm_severities
+            )
             $("body").append(toolbox)
-            toolbox.on("mouseenter", () => { toolbox.css("display", "block"); check_unlock() })
+            toolbox.on("mouseenter", () => {
+                const timeoutId = toolbox.data("hide-timeout");
+                if (timeoutId) {
+                    window.clearTimeout(timeoutId);
+                    toolbox.removeData("hide-timeout");
+                }
+                toolbox.css("display", "block");
+                check_unlock()
+            })
             toolbox.on("mouseleave", () => {
                 if (error_span.severity != null && (!state.protocol_error_categories || (error_span.category != null && error_span.category?.includes("/")))) {
-                    toolbox.css("display", "none"); check_unlock()
+                    const timeoutId = window.setTimeout(() => {
+                        toolbox.css("display", "none");
+                        check_unlock()
+                    }, 500);
+                    toolbox.data("hide-timeout", timeoutId);
                 }
             })
             $(window).on('resize.toolbox', () => updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el)))
