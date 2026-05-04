@@ -22,6 +22,7 @@ CAMPAIGN_INFO_PUBLIC = {
     "sliders",
     "textfield",
     "show_model_names",
+    "show_progress",
     "mqm_categories",
     "mqm_severities",
     "slider_colors",
