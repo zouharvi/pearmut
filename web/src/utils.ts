@@ -572,6 +572,7 @@ export type ProtocolInfo = {
     instructions?: string,
     textfield?: null | "hidden" | "visible" | "prefilled",  // Optional textfield mode
     show_model_names?: boolean,  // Show model names on top of each block (default: false)
+    show_progress?: boolean,  // Show task tracker/progress (default: true)
     mqm_categories?: { [key: string]: string[] },  // Optional custom MQM categories
     mqm_severities?: string[],  // Optional custom MQM severities
     slider_colors?: boolean,  // Optional slider colors

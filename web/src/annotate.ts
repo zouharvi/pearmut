@@ -784,6 +784,7 @@ async function display_next_payload(response: DataPayload) {
     cleanupPreviousItem()
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
+    $("#progress").toggle(response.info.show_progress !== false)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
 
     let data = response.payload
@@ -1084,6 +1085,7 @@ function display_form(response: DataForm) {
     state.action_log = [{ "time": Date.now() / 1000, "action": "load" }]
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
+    $("#progress").toggle(response.info.show_progress !== false)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
 
     // Display instructions if present

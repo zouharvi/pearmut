@@ -470,6 +470,10 @@ Use task-based assignment with Prolific. For each task, Pearmut generates a uniq
 ```
 The `${TOKEN}` is automatically replaced based on passing attention checks (see [Attention checks](#tutorial-and-attention-checks) and [Pre-defined tokens](#pre-defined-user-ids-and-tokens)).
 
+### Hiding progress bar
+
+Add `"show_progress": false` to the campaign json to hide the progress bar from the annotator dashboard.
+
 ## Terminology
 
 - **Campaign**: An annotation project that contains configuration, data, and user assignments. Each campaign has a unique identifier and is defined in a JSON file.
