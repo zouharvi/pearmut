@@ -292,7 +292,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
     rword = wonderwords.RandomWord(rng=rng)
 
     # Parse users specification from info
-    users_spec = campaign_data["info"].get("users")
+    users_spec = campaign_data["info"].get("users", 1)
     user_tokens = {}  # user_id -> {"pass": ..., "fail": ...}
 
     # Validate and process data_welcome if present
@@ -327,8 +327,6 @@ def _add_single_campaign(campaign_data, overwrite, url):
         num_users = len(tasks)
     elif assignment == "single-stream":
         tasks = campaign_data["data"]
-        if users_spec is None:
-            raise ValueError("Single-stream campaigns must specify 'users' in info.")
         if not isinstance(campaign_data["data"], list):
             raise ValueError("Single-stream campaign 'data' must be a list of items.")
         # Validate item structure for single-stream
@@ -345,8 +343,6 @@ def _add_single_campaign(campaign_data, overwrite, url):
             raise ValueError("'users' must be an integer or a list.")
     elif assignment == "dynamic":
         tasks = campaign_data["data"]
-        if users_spec is None:
-            raise ValueError("Dynamic campaigns must specify 'users' in info.")
         if not isinstance(campaign_data["data"], list):
             raise ValueError("Dynamic campaign 'data' must be a list of items.")
         # Validate item structure for dynamic
