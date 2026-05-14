@@ -406,6 +406,7 @@ The `users` field accepts:
 ### Multimodal Annotations
 
 Support for HTML-compatible elements (YouTube embeds, `<video>` tags, images). Ensure elements are pre-styled. See [examples/multimodal.json](examples/multimodal.json).
+Some basic HTML tags are supported: `b`, `strong`, `em`, `i`, `br`, `h1`, `h2`, `h3`, `p`. Newlines `\n` are converted to `<br>`.
 
 <img width="1000" alt="Preview of multimodal elements in Pearmut" src="https://github.com/user-attachments/assets/77c4fa96-ee62-4e46-8e78-fd16e9007956" />
 

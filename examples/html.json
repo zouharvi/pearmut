@@ -1,0 +1,28 @@
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "ESA"
+  },
+  "campaign_id": "test_html",
+  "data": [
+    [
+      [
+        {
+          "item_id": "html_test_1",
+          "src": "Welcome to <b>HTML</b> test.This is a new line.<h1>Title</h1> <p>This is a <strong>strong</strong> paragraph with <em>emphasis</em>.</p>Also testing <i>italics</i> and <h3>smaller headings</h3>.",
+          "tgt": {
+            "Model-A": "Willkommen zum <b>HTML</b>-Test.Dies ist eine neue Zeile.<h1>Titel</h1> <p>Dies ist ein <strong>starker</strong> Absatz mit <em>Hervorhebung</em>.</p>Ebenfalls werden <i>Kursivschrift</i> und <h3>kleinere Überschriften</h3> getestet."
+          },
+          "instructions": "Verify that HTML tags are preserved as tags and not split into individual character spans. Unsupported tags like &lt;u&gt; should be split into characters."
+        },
+        {
+          "item_id": "html_test_2",
+          "src": "Special case: <b>bold</b> and <br> break.\nAnd a custom <div>div</div> which should be spanned char-by-char. Also standard newlines \\n are turned into <br>",
+          "tgt": {
+            "Model-A": "Spezialfall: <b>fett</b> und <br> Zeilenumbruch.\nUnd ein benutzerdefiniertes <div>Div</div>, das Zeichen für Zeichen unterteilt werden sollte. Auch normalle Zeilen \\n sind in <br> umgewandelt."
+          }
+        }
+      ]
+    ]
+  ]
+}

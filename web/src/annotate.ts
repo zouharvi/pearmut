@@ -272,7 +272,7 @@ function createOutputBlock(item: DataPayloadItem, item_i: number, info: Protocol
     for (const [model, tgt] of Object.entries(item.tgt)) {
         let no_tgt_char = isMediaContent(tgt)
         let tgt_dir = !no_tgt_char ? detectTextDirection(tgt) : 'ltr'
-        let tgt_chars = no_tgt_char ? tgt : (contentToCharSpans(tgt, "tgt_char") + (state.protocol_error_spans ? ' <span class="tgt_char char_missing">[missing]</span>' : ""))
+        let tgt_chars = no_tgt_char ? tgt : (contentToCharSpans(tgt, "tgt_char") + (state.protocol_error_spans ? ` <span class="tgt_char char_missing" data-i="${tgt.length}">[missing]</span>` : ""))
         let tgt_style = tgt_dir === 'rtl' ? ' style="direction: rtl;"' : ''
 
         let candidate_block = $(`
@@ -316,9 +316,10 @@ function setupCandidateInteractions(
     // Setup character-level interactions for this model's output
     // Compute word boundaries for the target text
     let _tgt_chars_els = candidate_block.find(".tgt_char").toArray()
-    let tgt_word_boundaries = no_tgt_char ? [] : computeWordBoundaries(_tgt_chars_els.map(el => $(el).text()))
+    let tgt_word_boundaries = no_tgt_char ? [] : computeWordBoundaries(_tgt_chars_els)
     let tgt_chars_objs: Array<CharData> = no_tgt_char ? [] : _tgt_chars_els.map((el, idx) => ({
         "el": $(el),
+        "el_i": $(el).data("i"),
         "toolbox": null,
         "error_span": null,
         "word_start": idx < tgt_word_boundaries.length ? tgt_word_boundaries[idx][0] : idx,
@@ -406,12 +407,16 @@ function setupCandidateInteractions(
                 if (tgt_chars_objs[i].error_span != null) {
                     let span = tgt_chars_objs[i].error_span!
                     // highlight the whole span if we're in one
-                    for (let j = span.start_i; j <= span.end_i; j++) {
-                        $(tgt_chars_objs[j].el).addClass("highlighted_active")
+                    for (let obj of tgt_chars_objs) {
+                        if (obj.el_i >= span.start_i && obj.el_i <= span.end_i) {
+                            $(obj.el).addClass("highlighted_active")
+                        }
                     }
 
-                    const toolbox = tgt_chars_objs[span.start_i].toolbox;
-                    if (toolbox) {
+                    // Find the first element of the span to anchor the toolbox
+                    const firstEl = tgt_chars_objs.find(obj => obj.el_i === span.start_i)?.el;
+                    const toolbox = tgt_chars_objs.find(obj => obj.el_i === span.start_i)?.toolbox;
+                    if (toolbox && firstEl) {
                         const timeoutId = toolbox.data("hide-timeout");
                         if (timeoutId) {
                             window.clearTimeout(timeoutId);
@@ -442,21 +447,25 @@ function setupCandidateInteractions(
                             right_i = tgt_chars_objs[right_i].word_end
                         }
 
+                        let left_el_i = tgt_chars_objs[left_i].el_i
+                        let right_el_i = tgt_chars_objs[right_i].el_i
+
                         state_i = null
                         $(".src_char").removeClass("highlighted")
                         candidate_block.find(".tgt_char").removeClass("highlighted")
 
                         let error_span: ErrorSpan = {
-                            "start_i": left_i,
-                            "end_i": right_i,
+                            "start_i": left_el_i,
+                            "end_i": right_el_i,
                             "category": null,
                             "severity": null,
                         }
 
                         if (state.response_log[item_i][model].error_spans.some(span => {
                             return (
-                                (left_i <= span.start_i && right_i >= span.start_i) ||
-                                (left_i <= span.end_i && right_i >= span.end_i)
+                                (left_el_i <= span.start_i && right_el_i >= span.start_i) ||
+                                (left_el_i <= span.end_i && right_el_i >= span.end_i) ||
+                                (left_el_i >= span.start_i && right_el_i <= span.end_i)
                             )
                         })) {
                             notify("Cannot create overlapping error spans")
@@ -468,12 +477,12 @@ function setupCandidateInteractions(
                             state.protocol_error_categories,
                             error_span,
                             tgt_chars_objs,
-                            left_i,
-                            right_i,
+                            left_el_i,
+                            right_el_i,
                             () => {
                                 // onDelete callback
                                 state.response_log[item_i][model].error_spans = state.response_log[item_i][model].error_spans.filter(span => span != error_span)
-                                state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
+                                state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_el_i, "end_i": right_el_i })
                                 state.has_unsaved_work = true
                                 check_unlock()
                             },
@@ -516,12 +525,14 @@ function setupCandidateInteractions(
 
                         // store error span
                         state.response_log[item_i][model].error_spans.push(error_span)
-                        state.action_log.push({ "time": Date.now() / 1000, "action": "create_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
+                        state.action_log.push({ "time": Date.now() / 1000, "action": "create_span", "index": item_i, "model": model, "start_i": left_el_i, "end_i": right_el_i })
                         state.has_unsaved_work = true
-                        for (let j = left_i; j <= right_i; j++) {
-                            $(tgt_chars_objs[j].el).addClass("error_unknown")
-                            tgt_chars_objs[j].toolbox = toolbox
-                            tgt_chars_objs[j].error_span = error_span
+                        for (let obj of tgt_chars_objs) {
+                            if (obj.el_i >= left_el_i && obj.el_i <= right_el_i) {
+                                $(obj.el).addClass("error_unknown")
+                                obj.toolbox = toolbox
+                                obj.error_span = error_span
+                            }
                         }
 
                         check_unlock()
@@ -552,15 +563,18 @@ function setupCandidateInteractions(
         }
 
         for (const prefilled of candidateSpans) {
-            const left_i = prefilled.start_i, right_i = prefilled.end_i
-            if (left_i < 0 || right_i >= tgt_chars_objs.length || left_i > right_i) continue
+            const left_el_i = prefilled.start_i, right_el_i = prefilled.end_i
+            // Find elements by offset
+            const span_objs = tgt_chars_objs.filter(obj => obj.el_i >= left_el_i && obj.el_i <= right_el_i)
+            if (span_objs.length === 0) continue
+
             let error_span: ErrorSpan = { ...prefilled }
             state.response_log[item_i][model].error_spans.push(error_span)
 
             let toolbox = createSpanToolbox(
-                state.protocol_error_categories, error_span, tgt_chars_objs, left_i, right_i, () => {
+                state.protocol_error_categories, error_span, tgt_chars_objs, left_el_i, right_el_i, () => {
                     state.response_log[item_i][model].error_spans = state.response_log[item_i][model].error_spans.filter(s => s != error_span)
-                    state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
+                    state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_el_i, "end_i": right_el_i })
                     state.has_unsaved_work = true
                 }, () => {
                     check_unlock()
@@ -588,12 +602,12 @@ function setupCandidateInteractions(
                     toolbox.data("hide-timeout", timeoutId);
                 }
             })
-            $(window).on('resize.toolbox', () => updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el)))
+            $(window).on('resize.toolbox', () => updateToolboxPosition(toolbox, $(span_objs[0].el)))
 
-            for (let j = left_i; j <= right_i; j++) {
-                $(tgt_chars_objs[j].el).addClass(error_span.severity ? `error_${error_span.severity}` : "error_unknown")
-                tgt_chars_objs[j].toolbox = toolbox
-                tgt_chars_objs[j].error_span = error_span
+            for (let obj of span_objs) {
+                $(obj.el).addClass(error_span.severity ? `error_${error_span.severity}` : "error_unknown")
+                obj.toolbox = toolbox
+                obj.error_span = error_span
             }
             if (error_span.severity != null && (!state.protocol_error_categories || (error_span.category != null && error_span.category?.includes("/")))) {
                 toolbox.css("display", "none")

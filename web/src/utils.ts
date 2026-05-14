@@ -41,7 +41,7 @@ export function notify(message: string): void {
 // Shared types for error span annotation
 export type ErrorSpan = { start_i: number, end_i: number, category: string | null, severity: string | null }
 export type Response = { score: number | null, error_spans: Array<ErrorSpan> }
-export type CharData = { el: JQuery<HTMLElement>, toolbox: JQuery<HTMLElement> | null, error_span: ErrorSpan | null, word_start: number, word_end: number }
+export type CharData = { el: JQuery<HTMLElement>, el_i: number, toolbox: JQuery<HTMLElement> | null, error_span: ErrorSpan | null, word_start: number, word_end: number }
 
 // Each model has its own response
 export type CandidateResponse = {
@@ -250,10 +250,12 @@ export function redrawProgress(
 /**
  * Helper function to update error classes on character elements.
  */
-function updateErrorClass(objs: Array<CharData>, left_i: number, right_i: number, severity: string) {
-    for (let j = left_i; j <= right_i; j++) {
-        $(objs[j].el).removeClass((_, c) => c.split(' ').filter(cls => cls.startsWith('error_')).join(' '))
-        $(objs[j].el).addClass(`error_${severity}`)
+function updateErrorClass(objs: Array<CharData>, start_el_i: number, end_el_i: number, severity: string) {
+    for (let obj of objs) {
+        if (obj.el_i >= start_el_i && obj.el_i <= end_el_i) {
+            $(obj.el).removeClass((_, c) => c.split(' ').filter(cls => cls.startsWith('error_')).join(' '))
+            $(obj.el).addClass(`error_${severity}`)
+        }
     }
 }
 
@@ -264,8 +266,8 @@ export function createSpanToolbox(
     protocol_error_categories: boolean,
     error_span: ErrorSpan,
     tgt_chars_objs: Array<CharData>,
-    left_i: number,
-    right_i: number,
+    start_el_i: number,
+    end_el_i: number,
     onDelete: () => void,
     onUpdate: () => void,
     frozenMode: boolean = false,
@@ -343,17 +345,19 @@ export function createSpanToolbox(
         // Delete
         toolbox.find(".error_delete").on("click", () => {
             toolbox.remove()
-            for (let j = left_i; j <= right_i; j++) {
-                $(tgt_chars_objs[j].el).removeClass((_, c) => c.split(' ').filter(cls => cls.startsWith('error_')).join(' '))
-                tgt_chars_objs[j].toolbox = null
-                tgt_chars_objs[j].error_span = null
+            for (let obj of tgt_chars_objs) {
+                if (obj.el_i >= start_el_i && obj.el_i <= end_el_i) {
+                    $(obj.el).removeClass((_, c) => c.split(' ').filter(cls => cls.startsWith('error_')).join(' '))
+                    obj.toolbox = null
+                    obj.error_span = null
+                }
             }
             onDelete()
         })
 
         // Severity
         const setSeverity = (sev: string) => {
-            updateErrorClass(tgt_chars_objs, left_i, right_i, sev)
+            updateErrorClass(tgt_chars_objs, start_el_i, end_el_i, sev)
             error_span.severity = sev
             toolbox.find(".span_toolbox_esa input[type='button']").removeAttr("selected")
             toolbox.find(`.error_${sev}`).attr("selected", "selected")
@@ -624,7 +628,11 @@ export function detectTextDirection(text: string): 'rtl' | 'ltr' {
  * Convert text content to character spans with line break handling
  */
 export function contentToCharSpans(content: string, className: string): string {
-    return content.split("").map(c => c == "\n" ? "<br>" : `<span class="${className}">${c}</span>`).join("")
+    return content.replace(/(<\/?(?:br|strong|b|i|p|em|h1|h2|h3)>)|(\n)|(.)/g, (match, tag, newline, char, offset) => {
+        if (tag) return tag;
+        if (newline) return "<br>";
+        return `<span class="${className}" data-i="${offset}">${char}</span>`;
+    });
 }
 
 /**
@@ -633,17 +641,21 @@ export function contentToCharSpans(content: string, className: string): string {
  * Word boundaries are defined by non-alphanumeric characters.
  */
 const is_alphanum = /^\p{L}|\p{N}$/u
-export function computeWordBoundaries(content: string[]): Array<[number, number]> {
+export function computeWordBoundaries(elements: HTMLElement[]): Array<[number, number]> {
     const boundaries: Array<[number, number]> = []
+    const content = elements.map(el => $(el).text())
+    const el_is = elements.map(el => $(el).data("i"))
 
     for (let i = 0; i < content.length; i++) {
-        // non-alphanumeric characters are their own words
+        // non-alphanumeric characters are their own words/boundaries
         if (!is_alphanum.test(content[i])) {
             boundaries.push([i, i])
         } else {
-            // Find the end of this word that's all alphanumeric
+            // Find the end of this word that's all alphanumeric and has no gaps
             let word_start = i
             while (i < content.length - 1 && is_alphanum.test(content[i + 1])) {
+                // check if next is gap
+                if (el_is && el_is[i + 1] > el_is[i] + 1) break;
                 i++;
             }
             for (let j = word_start; j <= i; j++) {
