@@ -1,5 +1,7 @@
 """Tests for protocol functions."""
 
+import json
+
 from pearmut.assignment import (
     get_i_item,
     get_next_item,
@@ -217,7 +219,6 @@ class TestTaskBased:
         }
         response = get_i_item("campaign1", "user1", tasks_data, progress_data, 0)
         assert response.status_code == 200
-        import json
         data = json.loads(response.body.decode())
         assert data["info"]["show_alignment"] is False
         assert data["info"]["word_level"] is True
