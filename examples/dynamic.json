@@ -3,10 +3,8 @@
         "assignment": "dynamic",
         "protocol": "ESA",
         "users": 10,
-        "dynamic_top": 2,
-        "dynamic_contrastive_models": 2,
-        "dynamic_first": 5,
-        "dynamic_backoff": 0.1,
+        "dynamic_models": 2,
+        "dynamic_coldstart": 2,
         "show_model_names": true
     },
     "campaign_id": "example_dynamic",

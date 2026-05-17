@@ -27,6 +27,7 @@ import {
     DataPayload,
     DataPayloadItem,
     MQM_ERROR_CATEGORIES,
+    MQM_SEVERITIES,
 } from './utils';
 
 // Check if frozen mode is enabled (view-only, no annotations)
@@ -47,9 +48,11 @@ const state = {
     has_unsaved_work: false,
     skip_mode: false,
     // Protocol settings for check_unlock
+    protocol: "",
     protocol_error_spans: false,
     protocol_error_categories: false,
     mqm_categories: MQM_ERROR_CATEGORIES,
+    mqm_severities: MQM_SEVERITIES as string[],
 }
 
 // Prevent accidental refresh/navigation when there is ongoing work
@@ -178,12 +181,29 @@ function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): 
 
     // If no custom sliders specified (undefined), use default single slider
     if (!sliders) {
-        return `
+        if (state.protocol == "cESA") {
+            return `
         <div class="output_response">
-          <input type="range" min="0" max="100" value="-1" id="response_${item_i}_${model}">
+          <div style="width: calc(100% - 30px);">
+            <input type="range" min="0" max="100" value="-1" step="5" id="response_${item_i}_${model}">
+          </div>
+        </div>
+        <div class="slider_label slider_label_cESA">❓/100</div>
+        `
+        } else {
+            return `
+        <div class="output_response">
+          <div style="width: 100%;">
+            <input type="range" min="0" max="100" value="-1" step="1" id="response_${item_i}_${model}">
+            <div class="slider_anchor_parent">
+                <span class="slider_anchor_simple">▼</span>
+                <span class="slider_anchor_simple">▼</span>
+            </div>
+          </div>
           <span class="slider_label">❓/100</span>
         </div>
         `
+        }
     }
 
     // Generate multiple sliders with labels (no Score slider when custom sliders are defined)
@@ -239,6 +259,7 @@ function createOutputBlock(item: DataPayloadItem, item_i: number, info: Protocol
       <span class="instructions_message"></span>
       <div class="output_item">
         ${srcRefBoxes}
+        <div class="output_scrollable"></div>
       </div>
     </div>
     `)
@@ -251,7 +272,7 @@ function createOutputBlock(item: DataPayloadItem, item_i: number, info: Protocol
     for (const [model, tgt] of Object.entries(item.tgt)) {
         let no_tgt_char = isMediaContent(tgt)
         let tgt_dir = !no_tgt_char ? detectTextDirection(tgt) : 'ltr'
-        let tgt_chars = no_tgt_char ? tgt : (contentToCharSpans(tgt, "tgt_char") + (state.protocol_error_spans ? ' <span class="tgt_char char_missing">[missing]</span>' : ""))
+        let tgt_chars = no_tgt_char ? tgt : (contentToCharSpans(tgt, "tgt_char") + (state.protocol_error_spans ? ` <span class="tgt_char char_missing" data-i="${tgt.length}">[missing]</span>` : ""))
         let tgt_style = tgt_dir === 'rtl' ? ' style="direction: rtl;"' : ''
 
         let candidate_block = $(`
@@ -270,8 +291,11 @@ function createOutputBlock(item: DataPayloadItem, item_i: number, info: Protocol
         candidate_block.find(".output_response").prepend(_textfield_button_html(item_i, model, info.textfield))
         candidate_block.append(_textfield_html(item_i, model, info.textfield))
 
-        output_block.find(".output_item").append(candidate_block)
+        output_block.find(".output_scrollable").append(candidate_block)
     }
+
+    // make the weight of the scrollable be number of items
+    output_block.find(".output_scrollable").css("flex", `${Object.keys(item.tgt).length}`)
 
     return output_block
 }
@@ -292,9 +316,10 @@ function setupCandidateInteractions(
     // Setup character-level interactions for this model's output
     // Compute word boundaries for the target text
     let _tgt_chars_els = candidate_block.find(".tgt_char").toArray()
-    let tgt_word_boundaries = no_tgt_char ? [] : computeWordBoundaries(_tgt_chars_els.map(el => $(el).text()))
+    let tgt_word_boundaries = no_tgt_char ? [] : computeWordBoundaries(_tgt_chars_els)
     let tgt_chars_objs: Array<CharData> = no_tgt_char ? [] : _tgt_chars_els.map((el, idx) => ({
         "el": $(el),
+        "el_i": $(el).data("i"),
         "toolbox": null,
         "error_span": null,
         "word_start": idx < tgt_word_boundaries.length ? tgt_word_boundaries[idx][0] : idx,
@@ -314,9 +339,15 @@ function setupCandidateInteractions(
                 $(".tgt_char").removeClass("highlighted")
                 $(".tgt_char").removeClass("highlighted_active")
 
-                // highlight corresponding toolbox if error severity is set
+                // hide corresponding toolbox after delay if error severity is set
                 if (obj.error_span != null && obj.error_span.severity != null && (!state.protocol_error_categories || (obj.error_span.category != null && obj.error_span.category?.includes("/")))) {
-                    tgt_chars_objs[i].toolbox?.css("display", "none")
+                    const toolbox = obj.toolbox;
+                    if (toolbox) {
+                        const timeoutId = window.setTimeout(() => {
+                            toolbox.css("display", "none")
+                        }, 500);
+                        toolbox.data("hide-timeout", timeoutId);
+                    }
                 }
             })
 
@@ -376,11 +407,23 @@ function setupCandidateInteractions(
                 if (tgt_chars_objs[i].error_span != null) {
                     let span = tgt_chars_objs[i].error_span!
                     // highlight the whole span if we're in one
-                    for (let j = span.start_i; j <= span.end_i; j++) {
-                        $(tgt_chars_objs[j].el).addClass("highlighted_active")
+                    for (let obj of tgt_chars_objs) {
+                        if (obj.el_i >= span.start_i && obj.el_i <= span.end_i) {
+                            $(obj.el).addClass("highlighted_active")
+                        }
                     }
 
-                    tgt_chars_objs[span.start_i].toolbox?.css("display", "block")
+                    // Find the first element of the span to anchor the toolbox
+                    const firstEl = tgt_chars_objs.find(obj => obj.el_i === span.start_i)?.el;
+                    const toolbox = tgt_chars_objs.find(obj => obj.el_i === span.start_i)?.toolbox;
+                    if (toolbox && firstEl) {
+                        const timeoutId = toolbox.data("hide-timeout");
+                        if (timeoutId) {
+                            window.clearTimeout(timeoutId);
+                            toolbox.removeData("hide-timeout");
+                        }
+                        toolbox.css("display", "block")
+                    }
                 }
             })
 
@@ -404,21 +447,25 @@ function setupCandidateInteractions(
                             right_i = tgt_chars_objs[right_i].word_end
                         }
 
+                        let left_el_i = tgt_chars_objs[left_i].el_i
+                        let right_el_i = tgt_chars_objs[right_i].el_i
+
                         state_i = null
                         $(".src_char").removeClass("highlighted")
                         candidate_block.find(".tgt_char").removeClass("highlighted")
 
                         let error_span: ErrorSpan = {
-                            "start_i": left_i,
-                            "end_i": right_i,
+                            "start_i": left_el_i,
+                            "end_i": right_el_i,
                             "category": null,
                             "severity": null,
                         }
 
                         if (state.response_log[item_i][model].error_spans.some(span => {
                             return (
-                                (left_i <= span.start_i && right_i >= span.start_i) ||
-                                (left_i <= span.end_i && right_i >= span.end_i)
+                                (left_el_i <= span.start_i && right_el_i >= span.start_i) ||
+                                (left_el_i <= span.end_i && right_el_i >= span.end_i) ||
+                                (left_el_i >= span.start_i && right_el_i <= span.end_i)
                             )
                         })) {
                             notify("Cannot create overlapping error spans")
@@ -430,24 +477,33 @@ function setupCandidateInteractions(
                             state.protocol_error_categories,
                             error_span,
                             tgt_chars_objs,
-                            left_i,
-                            right_i,
+                            left_el_i,
+                            right_el_i,
                             () => {
                                 // onDelete callback
                                 state.response_log[item_i][model].error_spans = state.response_log[item_i][model].error_spans.filter(span => span != error_span)
-                                state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
+                                state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_el_i, "end_i": right_el_i })
                                 state.has_unsaved_work = true
+                                check_unlock()
+                            },
+                            () => {
+                                check_unlock()
                             },
                             frozenMode,
-                            state.mqm_categories
+                            state.mqm_categories,
+                            state.mqm_severities
                         )
 
                         $("body").append(toolbox)
-                        check_unlock()
 
                         // handle hover on toolbox
                         toolbox.on("mouseenter focusin contextmenu", function (e) {
                             if (e.type === "contextmenu") e.preventDefault();
+                            const timeoutId = toolbox.data("hide-timeout");
+                            if (timeoutId) {
+                                window.clearTimeout(timeoutId);
+                                toolbox.removeData("hide-timeout");
+                            }
                             toolbox.css("display", "block")
                             check_unlock()
                         })
@@ -455,8 +511,11 @@ function setupCandidateInteractions(
                         toolbox.on("mouseleave focusout", function () {
                             // hide if severity is set for ESA or both severity and category are set for MQM
                             if (error_span.severity != null && (!state.protocol_error_categories || (error_span.category != null && error_span.category?.includes("/")))) {
-                                toolbox.css("display", "none")
-                                check_unlock()
+                                const timeoutId = window.setTimeout(() => {
+                                    toolbox.css("display", "none")
+                                    check_unlock()
+                                }, 500);
+                                toolbox.data("hide-timeout", timeoutId);
                             }
                         })
 
@@ -466,13 +525,17 @@ function setupCandidateInteractions(
 
                         // store error span
                         state.response_log[item_i][model].error_spans.push(error_span)
-                        state.action_log.push({ "time": Date.now() / 1000, "action": "create_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
+                        state.action_log.push({ "time": Date.now() / 1000, "action": "create_span", "index": item_i, "model": model, "start_i": left_el_i, "end_i": right_el_i })
                         state.has_unsaved_work = true
-                        for (let j = left_i; j <= right_i; j++) {
-                            $(tgt_chars_objs[j].el).addClass("error_unknown")
-                            tgt_chars_objs[j].toolbox = toolbox
-                            tgt_chars_objs[j].error_span = error_span
+                        for (let obj of tgt_chars_objs) {
+                            if (obj.el_i >= left_el_i && obj.el_i <= right_el_i) {
+                                $(obj.el).addClass("error_unknown")
+                                obj.toolbox = toolbox
+                                obj.error_span = error_span
+                            }
                         }
+
+                        check_unlock()
                     } else {
                         // check if we are in existing span
                         if (state.response_log[item_i][model].error_spans.some(span => i >= span.start_i && i <= span.end_i)) {
@@ -500,29 +563,51 @@ function setupCandidateInteractions(
         }
 
         for (const prefilled of candidateSpans) {
-            const left_i = prefilled.start_i, right_i = prefilled.end_i
-            if (left_i < 0 || right_i >= tgt_chars_objs.length || left_i > right_i) continue
+            const left_el_i = prefilled.start_i, right_el_i = prefilled.end_i
+            // Find elements by offset
+            const span_objs = tgt_chars_objs.filter(obj => obj.el_i >= left_el_i && obj.el_i <= right_el_i)
+            if (span_objs.length === 0) continue
+
             let error_span: ErrorSpan = { ...prefilled }
             state.response_log[item_i][model].error_spans.push(error_span)
 
-            let toolbox = createSpanToolbox(state.protocol_error_categories, error_span, tgt_chars_objs, left_i, right_i, () => {
-                state.response_log[item_i][model].error_spans = state.response_log[item_i][model].error_spans.filter(s => s != error_span)
-                state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_i, "end_i": right_i })
-                state.has_unsaved_work = true
-            }, frozenMode, state.mqm_categories)
+            let toolbox = createSpanToolbox(
+                state.protocol_error_categories, error_span, tgt_chars_objs, left_el_i, right_el_i, () => {
+                    state.response_log[item_i][model].error_spans = state.response_log[item_i][model].error_spans.filter(s => s != error_span)
+                    state.action_log.push({ "time": Date.now() / 1000, "action": "delete_span", "index": item_i, "model": model, "start_i": left_el_i, "end_i": right_el_i })
+                    state.has_unsaved_work = true
+                }, () => {
+                    check_unlock()
+                },
+                frozenMode,
+                state.mqm_categories,
+                state.mqm_severities
+            )
             $("body").append(toolbox)
-            toolbox.on("mouseenter", () => { toolbox.css("display", "block"); check_unlock() })
+            toolbox.on("mouseenter", () => {
+                const timeoutId = toolbox.data("hide-timeout");
+                if (timeoutId) {
+                    window.clearTimeout(timeoutId);
+                    toolbox.removeData("hide-timeout");
+                }
+                toolbox.css("display", "block");
+                check_unlock()
+            })
             toolbox.on("mouseleave", () => {
                 if (error_span.severity != null && (!state.protocol_error_categories || (error_span.category != null && error_span.category?.includes("/")))) {
-                    toolbox.css("display", "none"); check_unlock()
+                    const timeoutId = window.setTimeout(() => {
+                        toolbox.css("display", "none");
+                        check_unlock()
+                    }, 500);
+                    toolbox.data("hide-timeout", timeoutId);
                 }
             })
-            $(window).on('resize.toolbox', () => updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el)))
+            $(window).on('resize.toolbox', () => updateToolboxPosition(toolbox, $(span_objs[0].el)))
 
-            for (let j = left_i; j <= right_i; j++) {
-                $(tgt_chars_objs[j].el).addClass(error_span.severity ? `error_${error_span.severity}` : "error_unknown")
-                tgt_chars_objs[j].toolbox = toolbox
-                tgt_chars_objs[j].error_span = error_span
+            for (let obj of span_objs) {
+                $(obj.el).addClass(error_span.severity ? `error_${error_span.severity}` : "error_unknown")
+                obj.toolbox = toolbox
+                obj.error_span = error_span
             }
             if (error_span.severity != null && (!state.protocol_error_categories || (error_span.category != null && error_span.category?.includes("/")))) {
                 toolbox.css("display", "none")
@@ -541,8 +626,8 @@ function setupCandidateInteractions(
         for (const sliderConfig of allSliders) {
             const sliderName = sliderConfig.name
             const sliderMax = sliderConfig.max
-            let slider = candidate_block.find(`input[data-slider="${sliderName}"]`)
-            let label = candidate_block.find(`.slider_label[data-slider="${sliderName}"]`)
+            let slider = candidate_block.find(`input[data-slider="${CSS.escape(sliderName)}"]`)
+            let label = candidate_block.find(`.slider_label[data-slider="${CSS.escape(sliderName)}"]`)
 
             slider.on("click input", function () {
                 // In frozen mode, do not allow changing scores
@@ -593,15 +678,28 @@ function setupCandidateInteractions(
         // Single slider mode (default Score slider)
         let slider = candidate_block.find("input[type='range']")
         let label = candidate_block.find(".slider_label")
-        slider.on("click input", function () {
+
+        function updateSliderVisual(val: number) {
+            label.text(`${val}/100`)
+            if (response.info.protocol == "cESA") {
+                let text = `${val >= 85 ? "very good" : val >= 65 ? "good" : val >= 45 ? "acceptable" : val >= 25 ? "borderline" : "not&nbsp;acceptable"}`
+                label.html(`(${text})&nbsp;&nbsp;${val}/100`)
+            }
+
+            if (!response.info.slider_colors) return
+            slider.parents(".output_response").css("background-color", `color-mix(in lab, color-mix(in lab, red ${100 - val}%, green ${val}%), white 30%)`)
+        }
+
+
+        slider.on("click input", function (event) {
             // In frozen mode, do not allow changing scores
             if (frozenMode) return
 
             let val = parseInt((<HTMLInputElement>this).value)
-            label.text(`${val}/100`)
+            state.response_log[item_i][model].score = val
+            updateSliderVisual(val)
 
             if (state.response_log[item_i][model].score == null) {
-                state.response_log[item_i][model].score = val
                 state.has_unsaved_work = true
                 check_unlock()
                 state.action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
@@ -610,11 +708,18 @@ function setupCandidateInteractions(
         slider.on("change", function () {
             // In frozen mode, do not allow changing scores
             if (frozenMode) return
-
             let val = parseInt((<HTMLInputElement>this).value)
-            label.text(`${val}/100`)
+            if (response.info.protocol === "ESA" && val < 80 && state.response_log[item_i][model].error_spans.length === 0) {
+                // Warn if ESA protocol, score < 80, and no error spans marked
+                notify("⚠️ Warning: score is below 80 but no error spans have been marked.")
+            } else if (response.info.protocol === "cESA" && val < 85 && state.response_log[item_i][model].error_spans.length === 0) {
+                // Warn if cESA protocol, score < 85, and no error spans marked
+                notify("⛔ Error: score is below 85 but no error spans have been marked.<br>⛔ Please highlight errors in the translation.")
+            }
+
             state.response_log[item_i][model].score = val
             state.has_unsaved_work = true
+            updateSliderVisual(val)
             check_unlock()
             // push only for change which happens just once
             state.action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
@@ -629,15 +734,15 @@ function setupCandidateInteractions(
         const existingScore = response.payload_existing?.annotation[item_i]?.[model]?.score
         if (existingScore != null) {
             slider.val(existingScore)
-            label.text(`${existingScore}/100`)
+            updateSliderVisual(existingScore)
             state.response_log[item_i][model].score = existingScore
         }
     }
 
     // Setup textfield if enabled
     if (response.info.textfield) {
-        const textfield = candidate_block.find(`#textfield_${item_i}_${model}`)
-        const toggle = candidate_block.find(`#textfield_toggle_${item_i}_${model}`)
+        const textfield = candidate_block.find(`#textfield_${item_i}_${CSS.escape(model)}`)
+        const toggle = candidate_block.find(`#textfield_toggle_${item_i}_${CSS.escape(model)}`)
 
         // Pre-fill with model output if mode is "prefilled"
         // Note: tgt is from trusted campaign data, jQuery .val() safely escapes any content
@@ -693,6 +798,7 @@ async function display_next_payload(response: DataPayload) {
     cleanupPreviousItem()
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
+    $("#progress").toggle(response.info.show_progress !== false)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
 
     let data = response.payload
@@ -746,7 +852,8 @@ async function display_next_payload(response: DataPayload) {
     state.has_unsaved_work = false
     state.skip_mode = false
 
-    state.protocol_error_spans = response.info.protocol == "ESA" || response.info.protocol == "MQM"
+    state.protocol = response.info.protocol
+    state.protocol_error_spans = response.info.protocol == "ESA" || response.info.protocol == "cESA" || response.info.protocol == "MQM"
     state.protocol_error_categories = response.info.protocol == "MQM"
 
     // Use custom MQM categories if provided, otherwise use default
@@ -760,6 +867,14 @@ async function display_next_payload(response: DataPayload) {
     } else {
         state.mqm_categories = MQM_ERROR_CATEGORIES
     }
+
+    // check if slider_colors is not defined
+    if (response.info.slider_colors === undefined && response.info.protocol == "cESA") {
+        response.info.slider_colors = true
+    }
+
+    // Use custom MQM severities if provided, otherwise use default
+    state.mqm_severities = response.info.mqm_severities ?? MQM_SEVERITIES
 
     // Set global instructions from payload
     if (response.info.instructions) {
@@ -781,7 +896,7 @@ async function display_next_payload(response: DataPayload) {
         let ref_chars_els = no_ref_char || !item.ref ? [] : output_block.find(".ref_char").toArray()
 
         for (const [model, tgt] of Object.entries(item.tgt)) {
-            let candidate_block = output_block.find(`.output_candidate[data-model='${model}']`)
+            let candidate_block = output_block.find(`.output_candidate[data-model='${CSS.escape(model)}']`)
             setupCandidateInteractions(candidate_block, item_i, model, tgt, response, src_chars_els, ref_chars_els, output_block)
         }
 
@@ -853,6 +968,26 @@ async function display_next_payload(response: DataPayload) {
 
         $("#output_div").append(output_block)
         state.output_blocks.push(output_block)
+    }
+
+    // Synchronize horizontal scroll across all output rows
+    let isSyncingScroll = false
+    const syncScroll = function (this: HTMLElement) {
+        if (isSyncingScroll) return
+        isSyncingScroll = true
+        const scrollLeft = this.scrollLeft
+        $(".output_scrollable").not(this).each(function () {
+            const element = this as HTMLElement
+            if (element.scrollLeft !== scrollLeft) {
+                element.scrollLeft = scrollLeft
+            }
+        })
+        isSyncingScroll = false
+    }
+    $(".output_scrollable").off("scroll.syncRows").on("scroll.syncRows", syncScroll)
+    const firstOutputItem = $(".output_scrollable").get(0) as HTMLElement | undefined
+    if (firstOutputItem) {
+        syncScroll.call(firstOutputItem)
     }
 
     // trigger once to reposition toolboxes
@@ -964,6 +1099,7 @@ function display_form(response: DataForm) {
     state.action_log = [{ "time": Date.now() / 1000, "action": "load" }]
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
+    $("#progress").toggle(response.info.show_progress !== false)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
 
     // Display instructions if present

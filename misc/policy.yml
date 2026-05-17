@@ -21,12 +21,21 @@ on_http_request:
         config:
           on_error: halt
 
-  # 4. State Tracking
+  # 4. Path-Based Regex Drops
+  # Deterministically drops requests for hidden files, CGI paths, and common scanner payloads.
+  - expressions:
+      - "req.url.path.matches('(?i)^/([.]+|cgi-bin|admin|.*[.]nasl|.*[.]php.*|.*[.]jsp.*|.*[.]cgi|.*[.]cfm|.*[.]pl)')"
+    actions:
+      - type: deny
+        config:
+          status_code: 403
+
+  # 5. State Tracking
   - actions:
       - type: rate-limit
         config:
           name: "ip-throttle"
           algorithm: "sliding_window"
-          capacity: 100
+          capacity: 50
           rate: "1m"
           bucket_key: ["conn.client_ip"]

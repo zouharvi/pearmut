@@ -3,11 +3,11 @@ import json
 import os
 import random
 
-ROOT = "."
+ROOT = os.environ.get("PEARMUT_ROOT", ".")
+TOKEN_MAIN = os.environ.get("PEARMUT_TOKEN_MAIN", hashlib.sha256(random.randbytes(16)).hexdigest()[:10])
 
 # Sentinel value to indicate a task reset - masks all prior annotations
 RESET_MARKER = "__RESET__"
-TOKEN_MAIN = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
 
 
 def load_progress_data(warn: str | None = None):
@@ -157,3 +157,10 @@ def is_form_document(items):
     # Check if first item has 'text' and 'form' keys (form item)
     first_item = items[0]
     return "text" in first_item and "form" in first_item
+
+
+def shuffled(lst):
+    """Return a shuffled copy of the input list."""
+    lst_copy = list(lst)
+    random.shuffle(lst_copy)
+    return lst_copy

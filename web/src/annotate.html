@@ -7,12 +7,32 @@
   <title>Pearmut Evaluation</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <style>
+    :root {
+      --box-width: 325px;
+    }
+
     .output_item {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .output_scrollable {
+      overflow-x: auto;
       gap: 5px 10px;
-      width: calc(100% - 10px);
+      min-width: 0;
       padding-right: 10px;
+      padding-bottom: 25px;
+      padding-left: 5px;
+      display: flex;
+      flex: 1;
+    }
+
+    .output_src,
+    .output_tgt,
+    .output_ref {
+      word-break: break-word;
+      min-width: var(--box-width);
     }
 
     .output_src,
@@ -23,14 +43,17 @@
       padding: 10px;
       border-radius: 8px;
       vertical-align: top;
-      user-select: none;
       box-shadow: 0 4px 6px #0005;
+      box-sizing: border-box;
+      flex: 1;
+      height: 100%;
     }
 
     .output_candidate {
       display: inline-block;
       box-sizing: border-box;
       vertical-align: top;
+      flex: 1;
     }
 
     .output_tgt,
@@ -49,6 +72,7 @@
       align-items: center;
       margin-top: 5px;
       position: relative;
+      border-radius: 5px;
     }
 
     /* When output_response contains slider_container children, stack vertically */
@@ -63,12 +87,18 @@
     }
 
     .slider_label {
-      width: 50px;
+      width: 65px;
       font-size: 10pt;
       color: #555;
       text-align: right;
-      margin-left: 5px;
+      margin-left: 0px;
+      height: 1em;
     }
+
+    .slider_label_cESA {
+      width: 100%;
+    }
+
 
     /* Custom sliders styling */
     .slider_container {
@@ -81,10 +111,6 @@
       margin-top: 0;
     }
 
-    .slider_container input[type=range] {
-      flex: 1;
-      min-width: 0;
-    }
 
     .slider_name {
       display: inline-block;
@@ -97,31 +123,24 @@
     input[type=range] {
       height: 16px;
       position: relative;
+      width: 100%;
+      min-width: 0;
     }
 
     /* Slider anchors at 33% and 66% */
-    .output_response::before,
-    .output_response::after {
-      content: '▼';
-      position: absolute;
-      transform: translateY(-30%);
+    .slider_anchor_parent {
+      width: 100%;
+      margin-top: -1.3em;
+      height: 1.4em;
+    }
+
+    .slider_anchor_simple {
       width: 1px;
-      height: 10px;
       pointer-events: none;
-      z-index: -1;
+      z-index: 1;
       color: #777;
-    }
-
-    /* Hide anchors when custom sliders are present */
-    .output_response:has(.slider_container)::before,
-    .output_response:has(.slider_container)::after {
-      display: none;
-    }
-
-    /* Hide anchors when no sliders (empty div) */
-    .output_response:empty::before,
-    .output_response:empty::after {
-      display: none;
+      font-size: 9pt;
+      margin-left: 33%;
     }
 
     .output_response::before {
@@ -151,13 +170,18 @@
       font-size: 9pt;
       cursor: pointer;
     }
+
+    /* styling of HTML tags in outputs */
+    :is(.output_tgt, .output_src)> :is(h1, h2, h3) {
+      margin: 0;
+    }
   </style>
 </head>
 
 <body style="min-height: 100vh; display: flex; flex-direction: column; margin: 0;">
   <div style="flex: 1;">
     <div
-      style="max-width: 1600px; min-width: 800px; margin-left: auto; margin-right: auto; margin-top: 20px; padding-left: 10px;">
+      style="max-width: 1800px; min-width: 800px; margin-left: auto; margin-right: auto; margin-top: 20px; padding-left: 10px;">
       <div class="white-box" style="margin-right: 10px; background-color: #e7e2cf; padding: 5px 15px 5px 5px;">
 
         <span id="instructions_global" style="display: inline-block; font-size: 11pt; width: calc(100% - 175px);">
@@ -168,7 +192,7 @@
           <span id="time" style="width: 135px; text-align: left; display: inline-block; font-size: 11pt;"
             title="Approximation of total annotation time.">Time:
             0m</span>
-          <input type="button" value="⚙️" id="button_settings" style="height: 1.5em; width: 30px;">
+          <input type="button" value="⚙️" id="button_settings" style="height: 1.5em; width: 30px; padding: 0;">
 
           <br>
           <br>

@@ -1,6 +1,6 @@
 # 🍐Pearmut <br> [![PyPi version](https://badgen.net/pypi/v/pearmut/)](https://pypi.org/project/pearmut) [![PyPI download/month](https://img.shields.io/pypi/dm/pearmut.svg)](https://pypi.python.org/pypi/pearmut/) [![PyPi license](https://badgen.net/pypi/license/pearmut/)](https://pypi.org/project/pearmut/) [![build status](https://github.com/zouharvi/pearmut/actions/workflows/test.yml/badge.svg)](https://github.com/zouharvi/pearmut/actions/workflows/test.yml) [![arXiv](https://img.shields.io/badge/arXiv-2601.02933-b31b1b.svg?style=flat)](https://arxiv.org/abs/2601.02933)
 
-**Platform for Evaluation and Reviewing of Multilingual Tasks**: Evaluate model outputs for translation and NLP tasks with support for multimodal data (text, video, audio, images) and multiple annotation protocols ([DA](https://aclanthology.org/N15-1124/), [ESA](https://aclanthology.org/2024.wmt-1.131/), [ESA<sup>AI</sup>](https://aclanthology.org/2025.naacl-long.255/), [MQM](https://doi.org/10.1162/tacl_a_00437), and more!).
+**Platform for Evaluation and Reviewing of Multilingual Tasks**: Evaluate model outputs for translation and NLP tasks with support for multimodal data (text, video, audio, images) and multiple annotation protocols ([DA](https://aclanthology.org/N15-1124/), [ESA](https://aclanthology.org/2024.wmt-1.131/), [ESA<sup>AI</sup>](https://aclanthology.org/2025.naacl-long.255/), [MQM](https://doi.org/10.1162/tacl_a_00437), cESA, and more!).
 
 
 <img width="1000" alt="Screenshot of ESA/MQM interface" src="https://github.com/user-attachments/assets/71334238-300b-4ffc-b777-7f3c242b1630" />
@@ -15,6 +15,8 @@
 - [Advanced Features](#advanced-features)
   - [Pre-filled Error Spans (ESA<sup>AI</sup>)](#pre-filled-error-spans-esaai)
   - [Custom MQM Taxonomy](#custom-mqm-taxonomy)
+  - [Custom Score Sliders](#custom-score-sliders)
+  - [Textfield comment box](#textfield-comment-box)
   - [Tutorial and Attention Checks](#tutorial-and-attention-checks)
   - [Form Items for User Metadata](#form-items-for-user-metadata)
   - [Pre-defined User IDs and Tokens](#pre-defined-user-ids-and-tokens)
@@ -54,6 +56,7 @@ Campaigns are defined in JSON files (see [examples/](examples/)). The simplest c
     "assignment": "task-based",
     # DA: scores
     # ESA: error spans and scores
+    # cESA: error spans and scores, comparison of multiple translations
     # MQM: error spans, categories, and scores
     "protocol": "ESA", 
   },
@@ -161,9 +164,11 @@ For multi-dimensional evaluation tasks (e.g., assessing fluency on a Likert scal
 
 When `sliders` is specified, only the custom sliders are shown. Each slider must have `name`, `min`, `max`, and `step` properties. All sliders must be answered before proceeding.
 
-### Textfield for Post-editing/Translation
+By default, cESA uses a single score slider which is colored relative to other translations of the same segment. This can be turned on or off using `slider_colors` parameter in `info`.
 
-Enable a textfield for post-editing or translation tasks using the `textfield` parameter in `info`. The textfield content is stored in annotations alongside scores and error spans.
+### Textfield comment box
+
+To enable a textfield for commenting, post-editing or translation tasks, use the `textfield` parameter in `info`. The textfield content is stored in annotations alongside scores and error spans.
 
 ```python
 {
@@ -203,6 +208,11 @@ For MQM protocol campaigns, you can define a custom error taxonomy instead of us
 ```
 
 If `mqm_categories` is not provided, the default MQM taxonomy will be used. The empty string key `""` provides an unselected state in the dropdown. Categories with empty subcategory lists (e.g., `"Style": []`) do not require a subcategory selection.
+The severity levels can also be customized via `mqm_severities` (default: `["Minor", "Major"]`):
+
+```json
+"mqm_severities": ["Neutral", "Minor", "Major", "Critical"]
+```
 
 See [examples/custom_mqm.json](examples/custom_mqm.json) for a complete example.
 
@@ -354,10 +364,8 @@ All items must contain outputs from all models for this assignment type to work 
         "assignment": "dynamic",
         "protocol": "ESA",
         "users": 10,                           # number of annotators
-        "dynamic_top": 3,                      # how many top models to consider (required)
-        "dynamic_contrastive_models": 2,       # how many models to compare per item (optional, default: 1)
-        "dynamic_first": 5,                    # annotations per model before dynamic kicks in (optional, default: 5)
-        "dynamic_backoff": 0.1,                # probability of uniform sampling (optional, default: 0)
+        "dynamic_models": 2,                   # how many models to compare per item (optional, default: 1)
+        "dynamic_coldstart": 5,                # annotations per model before dynamic kicks in (optional, default: 5)
         "docs_per_user": 20,                   # optional: show goodbye after N documents per user
     },
     "data": [...], # list of all items (shared among all annotators)
@@ -367,11 +375,10 @@ All items must contain outputs from all models for this assignment type to work 
 Set `docs_per_user` to limit how many documents each user annotates before seeing the goodbye message (for dynamic, this is roughly the number of documents × models).
 
 **How it works:**
-1. Initial phase: Each model gets `dynamic_first` annotations with fully random contrastive evaluation
-2. Dynamic phase: After the initial phase, top `dynamic_top` models (by average score) are identified
-3. Contrastive evaluation: From the top N models, `dynamic_contrastive_models` models are randomly selected for each item
+1. Initial phase: Each model gets `dynamic_coldstart` annotations with fully random contrastive evaluation
+2. Dynamic phase: After the initial phase, models sampled according to 1/rank (by average score) are identified
+3. Contrastive evaluation: From the top N models, `dynamic_models` models are randomly selected for each item
 4. Item prioritization: Items with the least annotations for the selected models are prioritized
-5. Backoff: With probability `dynamic_backoff`, uniform random selection is used instead to maintain exploration
 
 This approach efficiently focuses annotation resources on distinguishing between the best-performing models while ensuring all models get adequate baseline coverage. The contrastive evaluation allows for direct comparison of multiple models simultaneously.
 For an example, see [examples/dynamic.json](examples/dynamic.json).
@@ -399,6 +406,7 @@ The `users` field accepts:
 ### Multimodal Annotations
 
 Support for HTML-compatible elements (YouTube embeds, `<video>` tags, images). Ensure elements are pre-styled. See [examples/multimodal.json](examples/multimodal.json).
+Some basic HTML tags are supported: `b`, `strong`, `em`, `i`, `br`, `h1`, `h2`, `h3`, `p`. Newlines `\n` are converted to `<br>`.
 
 <img width="1000" alt="Preview of multimodal elements in Pearmut" src="https://github.com/user-attachments/assets/77c4fa96-ee62-4e46-8e78-fd16e9007956" />
 
@@ -432,6 +440,8 @@ Files from `videos/` become accessible at `localhost:8001/assets/my_videos/`. Cr
 - **`pearmut purge [campaign]`**: Remove campaign data
   - Without args: Purge all campaigns
   - With campaign name: Purge specific campaign only
+- **`PEARMUT_ROOT=<path> pearmut `**: User pearmut with custom root directory
+- **`PEARMUT_TOKEN_MAIN=<token> pearmut run`**: Main admin token
 
 ## Campaign Management
 
@@ -460,6 +470,10 @@ Use task-based assignment with Prolific. For each task, Pearmut generates a uniq
 "instructions_goodbye": "<a href='https://app.prolific.com/submissions/complete?cc=${TOKEN}'>Click here to return to Prolific</a>"
 ```
 The `${TOKEN}` is automatically replaced based on passing attention checks (see [Attention checks](#tutorial-and-attention-checks) and [Pre-defined tokens](#pre-defined-user-ids-and-tokens)).
+
+### Hiding progress bar
+
+Add `"show_progress": false` to the campaign json to hide the progress bar from the annotator dashboard.
 
 ## Terminology
 

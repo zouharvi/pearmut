@@ -1,6 +1,6 @@
 [project]
 name = "pearmut"
-version = "1.1.1"
+version = "1.1.4"
 description = "A tool for evaluation of model outputs, primarily MT."
 readme = "README.md"
 license = { text = "MIT" }
@@ -13,11 +13,11 @@ keywords = [
     "annotation",
 ]
 dependencies = [
-    "fastapi >= 0.110.0",
-    "uvicorn >= 0.29.0",
-    "wonderwords >= 3.0.0",
-    "psutil >= 7.1.0",
-    "typst >= 0.14.4",
+    "fastapi >= 0.110",
+    "uvicorn >= 0.29",
+    "wonderwords >= 3.0",
+    "typst >= 0.14",
+    "scipy >= 1.16",
 ]
 
 [project.optional-dependencies]

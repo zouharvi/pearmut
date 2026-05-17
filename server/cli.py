@@ -4,7 +4,6 @@ Command-line interface for managing and running the Pearmut server.
 
 import argparse
 import atexit
-import fcntl
 import hashlib
 import json
 import os
@@ -293,7 +292,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
     rword = wonderwords.RandomWord(rng=rng)
 
     # Parse users specification from info
-    users_spec = campaign_data["info"].get("users")
+    users_spec = campaign_data["info"].get("users", 1)
     user_tokens = {}  # user_id -> {"pass": ..., "fail": ...}
 
     # Validate and process data_welcome if present
@@ -328,8 +327,6 @@ def _add_single_campaign(campaign_data, overwrite, url):
         num_users = len(tasks)
     elif assignment == "single-stream":
         tasks = campaign_data["data"]
-        if users_spec is None:
-            raise ValueError("Single-stream campaigns must specify 'users' in info.")
         if not isinstance(campaign_data["data"], list):
             raise ValueError("Single-stream campaign 'data' must be a list of items.")
         # Validate item structure for single-stream
@@ -346,8 +343,6 @@ def _add_single_campaign(campaign_data, overwrite, url):
             raise ValueError("'users' must be an integer or a list.")
     elif assignment == "dynamic":
         tasks = campaign_data["data"]
-        if users_spec is None:
-            raise ValueError("Dynamic campaigns must specify 'users' in info.")
         if not isinstance(campaign_data["data"], list):
             raise ValueError("Dynamic campaign 'data' must be a list of items.")
         # Validate item structure for dynamic
@@ -363,21 +358,14 @@ def _add_single_campaign(campaign_data, overwrite, url):
         else:
             raise ValueError("'users' must be an integer or a list.")
         # Validate dynamic-specific parameters
-        if "dynamic_top" not in campaign_data["info"]:
-            campaign_data["info"]["dynamic_top"] = 2
         if "dynamic_warmup" not in campaign_data["info"]:
             campaign_data["info"]["dynamic_warmup"] = 5
-        if "dynamic_contrastive_models" not in campaign_data["info"]:
-            campaign_data["info"]["dynamic_contrastive_models"] = 1
+        if "dynamic_models" not in campaign_data["info"]:
+            campaign_data["info"]["dynamic_models"] = 1
         # Validate that dynamic_warmup is at least 1
         assert campaign_data["info"]["dynamic_warmup"] >= 1, (
             "dynamic_warmup must be at least 1"
         )
-        # Validate that dynamic_contrastive_models is at most dynamic_top
-        assert (
-            campaign_data["info"]["dynamic_contrastive_models"]
-            <= campaign_data["info"]["dynamic_top"]
-        ), "dynamic_contrastive_models must be at most dynamic_top"
         # Validate that all items have the same models
         all_models = set()
         for item in campaign_data["data"]:
@@ -633,23 +621,16 @@ def main():
 
     # Acquire lock before starting server
     lock_file = f"{ROOT}/data/.lock"
-    try:
-        lock_fd = open(lock_file, "a+")
-        fcntl.flock(lock_fd.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-        lock_fd.seek(0)
-        lock_fd.truncate()
-        lock_fd.write(str(os.getpid()))
-        lock_fd.flush()
-    except BlockingIOError:
-        try:
-            with open(lock_file, "r") as f:
-                pid = f.read().strip()
-            print("You can't run multiple instances of Pearmut in the same directory.")
-            if pid:
-                print(f"Another instance (PID {pid}) is holding the lock.")
-        except (FileNotFoundError, PermissionError, OSError):
-            print("You can't run multiple instances of Pearmut in the same directory.")
+    if os.path.exists(lock_file):
+        with open(lock_file, "r") as f:
+            pid = f.read().strip()
+        print(
+            f"Another instance (PID {pid}) is already running in the same directory. We know this because {lock_file} exists."
+        )
         exit(1)
+
+    with open(lock_file, "w") as f:
+        f.write(str(os.getpid()))
 
     # Register cleanup to remove lock file on exit
     atexit.register(lambda: os.path.exists(lock_file) and os.remove(lock_file))

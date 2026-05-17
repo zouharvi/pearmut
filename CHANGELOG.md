@@ -3,7 +3,29 @@
 
 Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
 
-- v1.1.1 (unreleased)
+- v1.1.5 (unreleased)
+  - Add `show_progress` flag to dashboard
+  - Default to a single user for single-stream and dynamic campaigns if not specified
+- v1.1.4
+  - Make span toolboxes stick for 0.5 second after selection
+- v1.1.3
+  - Add cESA label next to score
+  - Add `PEARMUT_ROOT` environment variable to specify the root directory
+  - Hard prevent default for cESA on score <85
+  - cESA styling
+  - Add `PEARMUT_TOKEN_MAIN` environment variable to specify main admin token
+  - Make toolboxes easier to reach
+  - Misc. styling of guideliens and top panel
+  - Fix bug where removing uncategorized toolbox would block continuing
+- v1.1.2
+  - Modify slightly default ESA/MQM/DA instructions
+  - Fix display of long model outputs
+  - Add warning for ESA when score is lower than 80 but no errors are marked
+  - Make lockfile multiplatform
+  - Synchronized horizontal slider for many model outputs
+  - Add support for contrastive evaluation (cESA)
+  - Score slider changes color based on the score relatively to other translations of the same segment
+- v1.1.1
   - Prevent modifying a running instance
   - Improve UI of selected severity buttons
   - Simpler MQM taxonomy definition
@@ -15,6 +37,8 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
   - Add `&debug` override to allow skipping items
   - Fix resetting individual users in single-stream/dynamic
   - Fix error in computations involving skipped items
+  - Fix error on unescaped model names
+  - Add custom MQM severity levels
 - v1.1.0
   - Log media actions
   - Add basic mobile support

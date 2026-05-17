@@ -41,7 +41,7 @@ export function notify(message: string): void {
 // Shared types for error span annotation
 export type ErrorSpan = { start_i: number, end_i: number, category: string | null, severity: string | null }
 export type Response = { score: number | null, error_spans: Array<ErrorSpan> }
-export type CharData = { el: JQuery<HTMLElement>, toolbox: JQuery<HTMLElement> | null, error_span: ErrorSpan | null, word_start: number, word_end: number }
+export type CharData = { el: JQuery<HTMLElement>, el_i: number, toolbox: JQuery<HTMLElement> | null, error_span: ErrorSpan | null, word_start: number, word_end: number }
 
 // Each model has its own response
 export type CandidateResponse = {
@@ -128,6 +128,9 @@ export type ValidationResult = {
     valid: boolean,
     failed_items: number[],  // indices of failed items
 }
+
+// MQM Error Severities
+export const MQM_SEVERITIES = ["Minor", "Major"]
 
 // MQM Error Categories
 export const MQM_ERROR_CATEGORIES: { [key: string]: string[] } = {
@@ -253,10 +256,12 @@ export function redrawProgress(
 /**
  * Helper function to update error classes on character elements.
  */
-function updateErrorClass(objs: Array<CharData>, left_i: number, right_i: number, severity: string) {
-    for (let j = left_i; j <= right_i; j++) {
-        $(objs[j].el).removeClass("error_unknown error_neutral error_minor error_major")
-        $(objs[j].el).addClass(`error_${severity}`)
+function updateErrorClass(objs: Array<CharData>, start_el_i: number, end_el_i: number, severity: string) {
+    for (let obj of objs) {
+        if (obj.el_i >= start_el_i && obj.el_i <= end_el_i) {
+            $(obj.el).removeClass((_, c) => c.split(' ').filter(cls => cls.startsWith('error_')).join(' '))
+            $(obj.el).addClass(`error_${severity}`)
+        }
     }
 }
 
@@ -267,20 +272,19 @@ export function createSpanToolbox(
     protocol_error_categories: boolean,
     error_span: ErrorSpan,
     tgt_chars_objs: Array<CharData>,
-    left_i: number,
-    right_i: number,
+    start_el_i: number,
+    end_el_i: number,
     onDelete: () => void,
+    onUpdate: () => void,
     frozenMode: boolean = false,
-    mqm_categories: { [key: string]: string[] } = MQM_ERROR_CATEGORIES
+    mqm_categories: { [key: string]: string[] } = MQM_ERROR_CATEGORIES,
+    mqm_severities: string[] = MQM_SEVERITIES
 ): JQuery<HTMLElement> {
     let toolbox = $(`
     <div class='span_toolbox_parent'>
     <div class='span_toolbox'>
       <div class="span_toolbox_esa" style="display: inline-block; width: 70px; padding-right: 5px;">
         <input type="button" class="error_delete" style="border-radius: 8px;" value="Remove">
-        <input type="button" class="error_neutral" style="margin-top: 3px;" value="Neutral">
-        <input type="button" class="error_minor" style="margin-top: 3px;" value="Minor">
-        <input type="button" class="error_major" style="margin-top: 3px;" value="Major">
       </div>
       <div class="span_toolbox_mqm" style="display: inline-block; width: 140px; vertical-align: top;">
         <select style="height: 2em; width: 100%;"></select><br>
@@ -290,6 +294,12 @@ export function createSpanToolbox(
     </div>
     `)
 
+    // Add severity buttons dynamically
+    let esa_div = toolbox.find(".span_toolbox_esa")
+    for (let sev of mqm_severities) {
+        esa_div.append(`<input type="button" class="error_${sev.toLowerCase()}" style="margin-top: 3px;" value="${sev}">`)
+    }
+
     let cat1_select = toolbox.find("select").eq(0)
     let cat2_select = toolbox.find("select").eq(1)
 
@@ -298,7 +308,6 @@ export function createSpanToolbox(
     }
 
     if (!protocol_error_categories) {
-        toolbox.find(".error_neutral").remove()
         toolbox.find(".span_toolbox_mqm").remove()
         toolbox.find(".span_toolbox_esa").css({ "border-right": "", "margin-right": "-5px" })
     }
@@ -324,6 +333,7 @@ export function createSpanToolbox(
             } else {
                 error_span.category = `${cat1}`
             }
+            onUpdate()
         })
 
         // MQM Subcategory Change
@@ -335,36 +345,40 @@ export function createSpanToolbox(
             } else {
                 error_span.category = `${cat1}/${cat2}`
             }
+            onUpdate()
         })
 
         // Delete
         toolbox.find(".error_delete").on("click", () => {
             toolbox.remove()
-            for (let j = left_i; j <= right_i; j++) {
-                $(tgt_chars_objs[j].el).removeClass("error_unknown error_neutral error_minor error_major")
-                tgt_chars_objs[j].toolbox = null
-                tgt_chars_objs[j].error_span = null
+            for (let obj of tgt_chars_objs) {
+                if (obj.el_i >= start_el_i && obj.el_i <= end_el_i) {
+                    $(obj.el).removeClass((_, c) => c.split(' ').filter(cls => cls.startsWith('error_')).join(' '))
+                    obj.toolbox = null
+                    obj.error_span = null
+                }
             }
             onDelete()
         })
 
         // Severity
         const setSeverity = (sev: string) => {
-            updateErrorClass(tgt_chars_objs, left_i, right_i, sev)
+            updateErrorClass(tgt_chars_objs, start_el_i, end_el_i, sev)
             error_span.severity = sev
             toolbox.find(".span_toolbox_esa input[type='button']").removeAttr("selected")
             toolbox.find(`.error_${sev}`).attr("selected", "selected")
+            onUpdate()
         }
-        toolbox.find(".error_neutral").on("click", () => setSeverity("neutral"))
-        toolbox.find(".error_minor").on("click", () => setSeverity("minor"))
-        toolbox.find(".error_major").on("click", () => setSeverity("major"))
+        for (let sev of mqm_severities) {
+            toolbox.find(`.error_${sev.toLowerCase()}`).on("click", () => setSeverity(sev.toLowerCase()))
+        }
 
         if (error_span.severity) {
             toolbox.find(`.error_${error_span.severity}`).attr("selected", "selected")
         }
     } else {
         // Frozen mode disabling
-        toolbox.find(".error_delete, .error_neutral, .error_minor, .error_major").prop("disabled", true)
+        toolbox.find(".span_toolbox_esa input[type='button']").prop("disabled", true)
         toolbox.find("select").prop("disabled", true)
     }
 
@@ -408,7 +422,7 @@ export function updateToolboxPosition(toolbox: JQuery<HTMLElement>, charEl: JQue
     const toolboxWidth = toolbox.innerWidth() || 0;
     const windowWidth = $(window).width() || 900;
 
-    let topPosition = position.top - toolboxHeight;
+    let topPosition = position.top - toolboxHeight + 2;
     let leftPosition = position.left;
     // make sure it's not getting out of screen
     leftPosition = Math.min(leftPosition, Math.max(windowWidth, 900) - toolboxWidth + 10);
@@ -562,13 +576,16 @@ export type SliderConfig = {
 
 // Shared protocol info type
 export type ProtocolInfo = {
-    protocol: "DA" | "ESA" | "MQM",
+    protocol: "DA" | "cESA" | "ESA" | "MQM",
     item_i: number,
     sliders?: SliderConfig[],  // Optional custom slider configurations
     instructions?: string,
     textfield?: null | "hidden" | "visible" | "prefilled",  // Optional textfield mode
     show_model_names?: boolean,  // Show model names on top of each block (default: false)
+    show_progress?: boolean,  // Show task tracker/progress (default: true)
     mqm_categories?: { [key: string]: string[] },  // Optional custom MQM categories
+    mqm_severities?: string[],  // Optional custom MQM severities
+    slider_colors?: boolean,  // Optional slider colors
 }
 
 
@@ -617,7 +634,11 @@ export function detectTextDirection(text: string): 'rtl' | 'ltr' {
  * Convert text content to character spans with line break handling
  */
 export function contentToCharSpans(content: string, className: string): string {
-    return content.split("").map(c => c == "\n" ? "<br>" : `<span class="${className}">${c}</span>`).join("")
+    return content.replace(/(<\/?(?:br|strong|b|i|p|em|h1|h2|h3)>)|(\n)|(.)/g, (match, tag, newline, char, offset) => {
+        if (tag) return tag;
+        if (newline) return "<br>";
+        return `<span class="${className}" data-i="${offset}">${char}</span>`;
+    });
 }
 
 /**
@@ -626,17 +647,21 @@ export function contentToCharSpans(content: string, className: string): string {
  * Word boundaries are defined by non-alphanumeric characters.
  */
 const is_alphanum = /^\p{L}|\p{N}$/u
-export function computeWordBoundaries(content: string[]): Array<[number, number]> {
+export function computeWordBoundaries(elements: HTMLElement[]): Array<[number, number]> {
     const boundaries: Array<[number, number]> = []
+    const content = elements.map(el => $(el).text())
+    const el_is = elements.map(el => $(el).data("i"))
 
     for (let i = 0; i < content.length; i++) {
-        // non-alphanumeric characters are their own words
+        // non-alphanumeric characters are their own words/boundaries
         if (!is_alphanum.test(content[i])) {
             boundaries.push([i, i])
         } else {
-            // Find the end of this word that's all alphanumeric
+            // Find the end of this word that's all alphanumeric and has no gaps
             let word_start = i
             while (i < content.length - 1 && is_alphanum.test(content[i + 1])) {
+                // check if next is gap
+                if (el_is && el_is[i + 1] > el_is[i] + 1) break;
                 i++;
             }
             for (let j = word_start; j <= i; j++) {
@@ -660,5 +685,23 @@ export function debounce(fn: Function, delay: number): (...args: any[]) => void 
     return (...args: any[]) => {
         clearTimeout(timer)
         timer = window.setTimeout(() => fn(...args), delay)
+    }
+}
+
+/**
+ * Debounce a function call - delays execution until after a specified delay has elapsed
+ * since the last time it was invoked. Useful for reducing frequent event handler calls.
+ * @param fn - Function to debounce
+ * @param delay - Delay in milliseconds
+ * @returns Debounced function
+ */
+export function debounce2(fn: Function, delay: number): (...args: any[]) => void {
+    let timer: number | undefined
+    return (...args: any[]) => {
+        if (timer == undefined) {
+            fn(...args)
+        }
+        clearTimeout(timer)
+        timer = window.setTimeout(() => timer = undefined, delay)
     }
 }
