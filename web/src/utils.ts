@@ -66,7 +66,7 @@ export type DataPayloadItem = {
 
 export type DataPayload = {
     status: string,
-    progress: Array<boolean>,
+    progress: Array<string | null | Record<string, string | null>>,
     progress_welcome?: Array<boolean>,  // Optional welcome progress
     time: number,
     payload: Array<DataPayloadItem>,
@@ -88,7 +88,7 @@ export type DataFormItem = {
 // Form response type - contains multiple form items
 export type DataForm = {
     status: string,
-    progress: Array<boolean>,
+    progress: Array<string | null | Record<string, string | null>>,
     progress_welcome?: Array<boolean>,  // Optional welcome progress
     time: number,
     payload: Array<DataFormItem>,
@@ -203,7 +203,7 @@ export const MQM_ERROR_CATEGORIES: { [key: string]: string[] } = {
 export function redrawProgress(
     current_i: number | string | null,
     progress_welcome: Array<boolean> | undefined,
-    progress: Array<boolean>,
+    progress: Array<string | null | Record<string, string | null>>,
     onItemClick?: (i: number | string) => void
 ): void {
     // Combine progress_welcome and progress for display
@@ -217,8 +217,14 @@ export function redrawProgress(
     }
 
     // Add regular items
+    // For dynamic: v is a dict like {model1: "completed", model2: null}
+    // An item is complete if any model has a non-null status.
+    // For non-dynamic: v is "completed", "completed_foreign", or null.
     progress.forEach((v, i) => {
-        combinedProgress.push({ complete: v, id: i });
+        const isComplete = (v !== null && typeof v === 'object')
+            ? Object.values(v).some(status => status !== null)
+            : v !== null;
+        combinedProgress.push({ complete: isComplete, id: i });
     });
 
     let html = combinedProgress.map((item, displayIndex) => {
@@ -553,7 +559,7 @@ export function validateResponse(
 // Shared type for goodbye response
 export type DataGoodbye = {
     status: string,
-    progress: Array<boolean>,
+    progress: Array<string | null | Record<string, string | null>>,
     progress_welcome?: Array<boolean>,  // Optional welcome progress
     time: number,
     token: string,

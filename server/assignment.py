@@ -59,15 +59,10 @@ def _completed_response(
         "${USER_ID}", user_id
     )
 
-    # Convert sets to lists for JSON serialization (for dynamic assignment)
-    progress = user_progress["progress"]
-    if progress and isinstance(progress[0], set):
-        progress = [list(s) for s in progress]
-
     return JSONResponse(
         content={
             "status": "goodbye",
-            "progress": progress,
+            "progress": user_progress["progress"],
             "progress_welcome": user_progress["progress_welcome"],
             "time": user_progress["time"],
             "token": token,
@@ -118,10 +113,11 @@ def get_i_item(
         return get_i_item_singlestream(
             campaign_id, user_id, tasks_data, progress_data, item_i
         )
-    else:
-        return JSONResponse(
-            content="Get item not supported for this assignment type", status_code=400
+    elif assignment == "dynamic":
+        return get_i_item_dynamic(
+            campaign_id, user_id, tasks_data, progress_data, item_i
         )
+    return JSONResponse(content="Unknown assignment type", status_code=400)
 
 
 def get_i_item_taskbased(
@@ -472,6 +468,120 @@ def get_next_item_singlestream(
     )
 
 
+def get_i_item_dynamic(
+    campaign_id: str,
+    user_id: str,
+    tasks_data: dict,
+    progress_data: dict,
+    item_i: int | str,
+) -> JSONResponse:
+    """
+    Get specific item for dynamic assignment.
+    When navigating to a specific item, show all annotated models (from any user)
+    rather than applying dynamic selection.
+    """
+    user_progress = progress_data[campaign_id][user_id]
+    campaign_data = tasks_data[campaign_id]
+    progress_welcome = user_progress["progress_welcome"]
+
+    if isinstance(item_i, str) and item_i.startswith("welcome_"):
+        actual_index = int(item_i.split("_")[1])
+        if actual_index < 0 or actual_index >= len(progress_welcome):
+            return JSONResponse(
+                content="Welcome item index out of range", status_code=400
+            )
+
+        items_existing = get_db_log_item(campaign_id, user_id, item_i)
+        payload_existing = None
+        if items_existing:
+            latest_item = items_existing[-1]
+            payload_existing = {"annotation": latest_item["annotation"]}
+            if "comment" in latest_item:
+                payload_existing["comment"] = latest_item["comment"]
+
+        return JSONResponse(
+            content={
+                "status": "ok",
+                "progress": user_progress["progress"],
+                "progress_welcome": progress_welcome,
+                "time": user_progress["time"],
+                "info": {
+                    "item_i": item_i,
+                    "instructions": _get_instructions(tasks_data, campaign_id),
+                }
+                | {
+                    k: v
+                    for k, v in campaign_data["info"].items()
+                    if k in CAMPAIGN_INFO_PUBLIC
+                },
+                "payload": campaign_data["data"][actual_index],
+            }
+            | ({"payload_existing": payload_existing} if payload_existing else {}),
+            status_code=200,
+        )
+
+    if (
+        not isinstance(item_i, int)
+        or item_i < 0
+        or item_i >= len(campaign_data["data"])
+    ):
+        return JSONResponse(content="Item index out of range", status_code=400)
+
+    # Show all models that have been annotated for this item.
+    # A non-null status means the model was annotated by this user ("completed")
+    # or by another user ("completed_foreign"), so this covers annotations from all users.
+    item_progress = user_progress["progress"][item_i]
+    annotated_models = [
+        model for model, status in item_progress.items() if status is not None
+    ]
+
+    original_item = campaign_data["data"][item_i]
+    if annotated_models:
+        pruned_item = []
+        for doc_segment in original_item:
+            pruned_segment = doc_segment.copy()
+            pruned_segment["tgt"] = {
+                model: doc_segment["tgt"][model]
+                for model in annotated_models
+                if model in doc_segment["tgt"]
+            }
+            if "error_spans" in doc_segment:
+                pruned_segment["error_spans"] = {
+                    model: doc_segment["error_spans"][model]
+                    for model in annotated_models
+                    if model in doc_segment.get("error_spans", {})
+                }
+            if "validation" in doc_segment:
+                pruned_segment["validation"] = {
+                    model: doc_segment["validation"][model]
+                    for model in annotated_models
+                    if model in doc_segment.get("validation", {})
+                }
+            pruned_item.append(pruned_segment)
+    else:
+        pruned_item = original_item
+
+    return JSONResponse(
+        content={
+            "status": "ok",
+            "progress": user_progress["progress"],
+            "progress_welcome": progress_welcome,
+            "time": user_progress["time"],
+            "info": {
+                "item_i": item_i,
+                "instructions": _get_instructions(tasks_data, campaign_id),
+            }
+            | {
+                k: v
+                for k, v in campaign_data["info"].items()
+                if k in CAMPAIGN_INFO_PUBLIC
+            },
+            "payload": pruned_item,
+        },
+        status_code=200,
+    )
+
+
 def get_next_item_dynamic(
     campaign_id: str,
     user_id: str,
@@ -585,12 +695,16 @@ def get_next_item_dynamic(
         ]
         if len(available_models) < dynamic_models:
             # If not enough models in warmup, include all models to fill the slots
-            available_models += [model for model in shuffled(all_models) if model not in available_models][:dynamic_models-len(available_models)]
-        selected_models = random.sample(available_models,
+            available_models += [
+                model for model in shuffled(all_models) if model not in available_models
+            ][: dynamic_models - len(available_models)]
+        selected_models = random.sample(
+            available_models,
             k=min(dynamic_models, len(available_models)),
         )
     else:
         import numpy as np
+
         # Calculate model scores from annotations
         model_scores = collections.defaultdict(list)
         for annotation_line in annotations:
@@ -605,11 +719,22 @@ def get_next_item_dynamic(
         model_avg_scores = {
             model: statistics.mean(scores) for model, scores in model_scores.items()
         }
-        model_weights = {model: 1/(rank+1) for rank, model in enumerate(sorted(model_avg_scores, key=model_avg_scores.get, reverse=True))}
+        model_weights = {
+            model: 1 / (rank + 1)
+            for rank, model in enumerate(
+                sorted(model_avg_scores, key=model_avg_scores.get, reverse=True)
+            )
+        }
         model_weights_all = sum(model_weights.values())
-        model_weights = [model_weights[model]/model_weights_all for model in all_models]
-        selected_models = np.random.choice(all_models, size=min(dynamic_models, len(all_models)), replace=False, p=model_weights)
-
+        model_weights = [
+            model_weights[model] / model_weights_all for model in all_models
+        ]
+        selected_models = np.random.choice(
+            all_models,
+            size=min(dynamic_models, len(all_models)),
+            replace=False,
+            p=model_weights,
+        )
 
     # Find incomplete items (None or completed_foreign status)
     incomplete_indices = [
@@ -817,10 +942,8 @@ def reset_task(
             ] * num_welcome
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
-    else:
-        return JSONResponse(
-            content="Reset not supported for this assignment type", status_code=400
-        )
+
+    return JSONResponse(content="Unknown assignment type", status_code=400)
 
 
 def update_progress(
