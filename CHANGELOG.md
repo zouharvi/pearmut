@@ -6,6 +6,8 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
 - v1.1.5 (unreleased)
   - Add `show_progress` flag to dashboard
   - Default to a single user for single-stream and dynamic campaigns if not specified
+  - Increase idle time
+  - Various progress bar fixes
 - v1.1.4
   - Make span toolboxes stick for 0.5 second after selection
 - v1.1.3

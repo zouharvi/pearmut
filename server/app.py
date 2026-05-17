@@ -78,7 +78,7 @@ async def _log_response(request: LogResponseRequest):
             progress_data[campaign_id][user_id]["time_start"] = min(times)
         progress_data[campaign_id][user_id]["time_end"] = max(times)
         progress_data[campaign_id][user_id]["time"] += sum(
-            [min(b - a, 60) for a, b in zip(times, times[1:])]
+            [min(b - a, 3 * 60) for a, b in zip(times, times[1:])]
         )
 
     # Initialize validation_checks if it doesn't exist
