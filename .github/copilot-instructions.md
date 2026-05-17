@@ -53,7 +53,7 @@ pearmut run
 
 ## Style Guide
 
-- Write minimal, elegant code—no unnecessary fluff
+- Write minimal, elegant code. No unnecessary fluff.
 - Prioritize maintainability and readability
 - Keep functions focused and concise
 - Avoid over-engineering solutions

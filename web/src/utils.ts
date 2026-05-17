@@ -219,7 +219,7 @@ export function redrawProgress(
     // Add regular items
     // For dynamic: v is a dict like {model1: "completed", model2: null}
     // An item is complete if any model has a non-null status.
-    // For non-dynamic: v is "completed", "completed_foreign", or null — truthy/falsy.
+    // For non-dynamic: v is "completed", "completed_foreign", or null.
     progress.forEach((v, i) => {
         const isComplete = (v !== null && typeof v === 'object')
             ? Object.values(v).some(status => status !== null)

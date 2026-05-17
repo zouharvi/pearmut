@@ -117,10 +117,7 @@ def get_i_item(
         return get_i_item_dynamic(
             campaign_id, user_id, tasks_data, progress_data, item_i
         )
-    else:
-        return JSONResponse(
-            content="Get item not supported for this assignment type", status_code=400
-        )
+    return JSONResponse(content="Unknown assignment type", status_code=400)
 
 
 def get_i_item_taskbased(
@@ -523,7 +520,11 @@ def get_i_item_dynamic(
             status_code=200,
         )
 
-    if not isinstance(item_i, int) or item_i < 0 or item_i >= len(campaign_data["data"]):
+    if (
+        not isinstance(item_i, int)
+        or item_i < 0
+        or item_i >= len(campaign_data["data"])
+    ):
         return JSONResponse(content="Item index out of range", status_code=400)
 
     # Show all models that have been annotated for this item.
@@ -694,12 +695,16 @@ def get_next_item_dynamic(
         ]
         if len(available_models) < dynamic_models:
             # If not enough models in warmup, include all models to fill the slots
-            available_models += [model for model in shuffled(all_models) if model not in available_models][:dynamic_models-len(available_models)]
-        selected_models = random.sample(available_models,
+            available_models += [
+                model for model in shuffled(all_models) if model not in available_models
+            ][: dynamic_models - len(available_models)]
+        selected_models = random.sample(
+            available_models,
             k=min(dynamic_models, len(available_models)),
         )
     else:
         import numpy as np
+
         # Calculate model scores from annotations
         model_scores = collections.defaultdict(list)
         for annotation_line in annotations:
@@ -714,11 +719,22 @@ def get_next_item_dynamic(
         model_avg_scores = {
             model: statistics.mean(scores) for model, scores in model_scores.items()
         }
-        model_weights = {model: 1/(rank+1) for rank, model in enumerate(sorted(model_avg_scores, key=model_avg_scores.get, reverse=True))}
+        model_weights = {
+            model: 1 / (rank + 1)
+            for rank, model in enumerate(
+                sorted(model_avg_scores, key=model_avg_scores.get, reverse=True)
+            )
+        }
         model_weights_all = sum(model_weights.values())
-        model_weights = [model_weights[model]/model_weights_all for model in all_models]
-        selected_models = np.random.choice(all_models, size=min(dynamic_models, len(all_models)), replace=False, p=model_weights)
-
+        model_weights = [
+            model_weights[model] / model_weights_all for model in all_models
+        ]
+        selected_models = np.random.choice(
+            all_models,
+            size=min(dynamic_models, len(all_models)),
+            replace=False,
+            p=model_weights,
+        )
 
     # Find incomplete items (None or completed_foreign status)
     incomplete_indices = [
@@ -926,10 +942,8 @@ def reset_task(
             ] * num_welcome
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
-    else:
-        return JSONResponse(
-            content="Reset not supported for this assignment type", status_code=400
-        )
+
+    return JSONResponse(content="Unknown assignment type", status_code=400)
 
 
 def update_progress(
