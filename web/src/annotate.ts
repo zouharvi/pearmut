@@ -34,8 +34,6 @@ import {
 const searchParams = new URLSearchParams(window.location.search)
 const frozenMode = searchParams.has("frozen")
 const debugMode = searchParams.has("debug")
-const SETTING_APPROXIMATE_ALIGNMENT_KEY = "setting_approximate_alignment"
-const SETTING_WORD_LEVEL_KEY = "setting_word_level"
 
 const state = {
     response_log: [] as Array<DocumentResponse>,
@@ -58,8 +56,8 @@ const state = {
 }
 
 const has_stored_settings = {
-    show_alignment: localStorage.getItem(SETTING_APPROXIMATE_ALIGNMENT_KEY) != null,
-    word_level: localStorage.getItem(SETTING_WORD_LEVEL_KEY) != null,
+    show_alignment: localStorage.getItem("setting_approximate_alignment") != null,
+    word_level: localStorage.getItem("setting_word_level") != null,
 }
 
 // Prevent accidental refresh/navigation when there is ongoing work
@@ -1407,10 +1405,10 @@ $("#button_settings").on("click", function () {
 // load settings from localStorage
 $("#settings_approximate_alignment").on("change", function () {
     state.settings.show_alignment = $("#settings_approximate_alignment").is(":checked")
-    localStorage.setItem(SETTING_APPROXIMATE_ALIGNMENT_KEY, state.settings.show_alignment.toString())
+    localStorage.setItem("setting_approximate_alignment", state.settings.show_alignment.toString())
 })
-if (localStorage.getItem(SETTING_APPROXIMATE_ALIGNMENT_KEY) != null) {
-    state.settings.show_alignment = localStorage.getItem(SETTING_APPROXIMATE_ALIGNMENT_KEY) == "true"
+if (localStorage.getItem("setting_approximate_alignment") != null) {
+    state.settings.show_alignment = localStorage.getItem("setting_approximate_alignment") == "true"
 }
 $("#settings_approximate_alignment").prop("checked", state.settings.show_alignment)
 $("#settings_approximate_alignment").trigger("change")
@@ -1418,10 +1416,10 @@ $("#settings_approximate_alignment").trigger("change")
 // word-level annotation setting
 $("#settings_word_level").on("change", function () {
     state.settings.word_level = $("#settings_word_level").is(":checked")
-    localStorage.setItem(SETTING_WORD_LEVEL_KEY, state.settings.word_level.toString())
+    localStorage.setItem("setting_word_level", state.settings.word_level.toString())
 })
-if (localStorage.getItem(SETTING_WORD_LEVEL_KEY) != null) {
-    state.settings.word_level = localStorage.getItem(SETTING_WORD_LEVEL_KEY) == "true"
+if (localStorage.getItem("setting_word_level") != null) {
+    state.settings.word_level = localStorage.getItem("setting_word_level") == "true"
 }
 $("#settings_word_level").prop("checked", state.settings.word_level)
 $("#settings_word_level").trigger("change")
