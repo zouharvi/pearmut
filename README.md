@@ -115,7 +115,7 @@ pearmut run
 
 By default, Pearmut randomly shuffles the order in which models are shown per each item in order to avoid positional bias.
 The `shuffle` parameter in campaign `info` controls this behavior:
-```json
+```python
 {
   "info": {
     "assignment": "task-based",
