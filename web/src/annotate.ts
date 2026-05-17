@@ -34,6 +34,8 @@ import {
 const searchParams = new URLSearchParams(window.location.search)
 const frozenMode = searchParams.has("frozen")
 const debugMode = searchParams.has("debug")
+const SETTING_APPROXIMATE_ALIGNMENT_KEY = "setting_approximate_alignment"
+const SETTING_WORD_LEVEL_KEY = "setting_word_level"
 
 const state = {
     response_log: [] as Array<DocumentResponse>,
@@ -53,6 +55,11 @@ const state = {
     protocol_error_categories: false,
     mqm_categories: MQM_ERROR_CATEGORIES,
     mqm_severities: MQM_SEVERITIES as string[],
+}
+
+const has_stored_settings = {
+    show_alignment: localStorage.getItem(SETTING_APPROXIMATE_ALIGNMENT_KEY) != null,
+    word_level: localStorage.getItem(SETTING_WORD_LEVEL_KEY) != null,
 }
 
 // Prevent accidental refresh/navigation when there is ongoing work
@@ -797,6 +804,19 @@ async function display_next_payload(response: DataPayload) {
     // Cleanup toolboxes and handlers from previous item
     cleanupPreviousItem()
 
+    // Campaign-level defaults apply only when no user preference is stored yet.
+    if (!has_stored_settings.show_alignment && response.info.show_alignment !== undefined) {
+        state.settings.show_alignment = response.info.show_alignment
+        $("#settings_approximate_alignment").prop("checked", state.settings.show_alignment)
+        $("#settings_approximate_alignment").trigger("change")
+    }
+
+    if (!has_stored_settings.word_level && response.info.word_level !== undefined) {
+        state.settings.word_level = response.info.word_level
+        $("#settings_word_level").prop("checked", state.settings.word_level)
+        $("#settings_word_level").trigger("change")
+    }
+
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
     $("#progress").toggle(response.info.show_progress !== false)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
@@ -1387,10 +1407,10 @@ $("#button_settings").on("click", function () {
 // load settings from localStorage
 $("#settings_approximate_alignment").on("change", function () {
     state.settings.show_alignment = $("#settings_approximate_alignment").is(":checked")
-    localStorage.setItem("setting_approximate_alignment", state.settings.show_alignment.toString())
+    localStorage.setItem(SETTING_APPROXIMATE_ALIGNMENT_KEY, state.settings.show_alignment.toString())
 })
-if (localStorage.getItem("setting_approximate_alignment") != null) {
-    state.settings.show_alignment = localStorage.getItem("setting_approximate_alignment") == "true"
+if (localStorage.getItem(SETTING_APPROXIMATE_ALIGNMENT_KEY) != null) {
+    state.settings.show_alignment = localStorage.getItem(SETTING_APPROXIMATE_ALIGNMENT_KEY) == "true"
 }
 $("#settings_approximate_alignment").prop("checked", state.settings.show_alignment)
 $("#settings_approximate_alignment").trigger("change")
@@ -1398,10 +1418,10 @@ $("#settings_approximate_alignment").trigger("change")
 // word-level annotation setting
 $("#settings_word_level").on("change", function () {
     state.settings.word_level = $("#settings_word_level").is(":checked")
-    localStorage.setItem("setting_word_level", state.settings.word_level.toString())
+    localStorage.setItem(SETTING_WORD_LEVEL_KEY, state.settings.word_level.toString())
 })
-if (localStorage.getItem("setting_word_level") != null) {
-    state.settings.word_level = localStorage.getItem("setting_word_level") == "true"
+if (localStorage.getItem(SETTING_WORD_LEVEL_KEY) != null) {
+    state.settings.word_level = localStorage.getItem(SETTING_WORD_LEVEL_KEY) == "true"
 }
 $("#settings_word_level").prop("checked", state.settings.word_level)
 $("#settings_word_level").trigger("change")
