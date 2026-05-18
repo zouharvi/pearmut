@@ -1,5 +1,7 @@
 """Tests for protocol functions."""
 
+import json
+
 from pearmut.assignment import (
     get_i_item,
     get_next_item,
@@ -187,6 +189,39 @@ class TestTaskBased:
         content = response.body.decode()
         assert '"item_i":2' in content
         assert '"src":"e"' in content
+
+    def test_get_i_item_exposes_alignment_defaults(self):
+        """Test that campaign defaults for alignment UI settings are exposed."""
+        tasks_data = {
+            "campaign1": {
+                "info": {
+                    "assignment": "task-based",
+                    "show_alignment": False,
+                    "word_level": True,
+                },
+                "data": {
+                    "user1": [
+                        [{"src": "a", "tgt": "b"}],
+                    ]
+                }
+            }
+        }
+        progress_data = {
+            "campaign1": {
+                "user1": {
+                    "progress": [None],
+                    "progress_welcome": [],
+                    "time": 0,
+                    "token_correct": "abc",
+                    "token_incorrect": "xyz",
+                }
+            }
+        }
+        response = get_i_item("campaign1", "user1", tasks_data, progress_data, 0)
+        assert response.status_code == 200
+        data = json.loads(response.body.decode())
+        assert data["info"]["show_alignment"] is False
+        assert data["info"]["word_level"] is True
 
     def test_get_i_item_out_of_range(self):
         """Test that task-based get_i_item returns error for invalid index."""
@@ -1452,4 +1487,3 @@ class TestDynamic:
         assert '"status":"ok"' in content
         # Should return an item
         assert '"item_i"' in content
-

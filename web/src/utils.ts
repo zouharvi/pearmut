@@ -581,8 +581,10 @@ export type ProtocolInfo = {
     sliders?: SliderConfig[],  // Optional custom slider configurations
     instructions?: string,
     textfield?: null | "hidden" | "visible" | "prefilled",  // Optional textfield mode
+    show_alignment?: boolean,  // Show approximate alignment in ESA/cESA view (default: true)
     show_model_names?: boolean,  // Show model names on top of each block (default: false)
     show_progress?: boolean,  // Show task tracker/progress (default: true)
+    word_level?: boolean,  // Enable word-level span selection (default: false)
     mqm_categories?: { [key: string]: string[] },  // Optional custom MQM categories
     mqm_severities?: string[],  // Optional custom MQM severities
     slider_colors?: boolean,  // Optional slider colors

@@ -143,6 +143,25 @@ By default, model names are hidden to avoid biasing annotators. To display model
 }
 ```
 
+### Default Alignment Settings
+
+For ESA/cESA campaigns, you can set default values for the annotator settings panel directly in campaign `info`:
+
+```python
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "ESA",
+    "show_alignment": true,  # Default: true
+    "word_level": false      # Default: false
+  },
+  "campaign_id": "my_campaign",
+  "data": [...]
+}
+```
+
+These act as defaults. If an annotator already has a saved preference in their browser, that saved preference is used.
+
 ### Custom Score Sliders
 
 For multi-dimensional evaluation tasks (e.g., assessing fluency on a Likert scale), you can define custom sliders with specific ranges and steps:

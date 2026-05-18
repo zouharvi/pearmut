@@ -55,6 +55,11 @@ const state = {
     mqm_severities: MQM_SEVERITIES as string[],
 }
 
+const has_stored_settings = {
+    show_alignment: localStorage.getItem("setting_approximate_alignment") != null,
+    word_level: localStorage.getItem("setting_word_level") != null,
+}
+
 // Prevent accidental refresh/navigation when there is ongoing work
 window.addEventListener('beforeunload', (event) => {
     if (state.has_unsaved_work) {
@@ -796,6 +801,19 @@ function setupCandidateInteractions(
 async function display_next_payload(response: DataPayload) {
     // Cleanup toolboxes and handlers from previous item
     cleanupPreviousItem()
+
+    // Campaign-level defaults apply only when no user preference is stored yet.
+    if (!has_stored_settings.show_alignment && response.info.show_alignment !== undefined) {
+        state.settings.show_alignment = response.info.show_alignment
+        $("#settings_approximate_alignment").prop("checked", state.settings.show_alignment)
+        $("#settings_approximate_alignment").trigger("change")
+    }
+
+    if (!has_stored_settings.word_level && response.info.word_level !== undefined) {
+        state.settings.word_level = response.info.word_level
+        $("#settings_word_level").prop("checked", state.settings.word_level)
+        $("#settings_word_level").trigger("change")
+    }
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
     $("#progress").toggle(response.info.show_progress !== false)
