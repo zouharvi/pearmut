@@ -1,3 +1,7 @@
+"""
+Each assignment (task-based, single-stream, dynamic) has to support two main actions: getting the next item, and getting a specific item by ID.
+"""
+
 import collections
 import random
 import statistics
@@ -214,6 +218,7 @@ def get_i_item_singlestream(
             return JSONResponse(
                 content="Welcome item index out of range", status_code=400
             )
+        payload = tasks_data[campaign_id]["data_welcome"][actual_index]
     else:
         # Prevent accessing regular items unless all welcome items are complete
         if not all(progress_welcome):
@@ -221,6 +226,7 @@ def get_i_item_singlestream(
                 content="Complete all welcome items before accessing regular items",
                 status_code=400,
             )
+        payload = tasks_data[campaign_id]["data"][actual_index]
 
     # try to get existing annotations if any
     # use user_id for welcome items (per-user), None for shared items
@@ -238,7 +244,6 @@ def get_i_item_singlestream(
     if actual_index < 0 or actual_index >= len(tasks_data[campaign_id]["data"]):
         return JSONResponse(content="Item index out of range", status_code=400)
 
-    payload = tasks_data[campaign_id]["data"][actual_index]
     is_form = is_form_document(payload)
 
     return JSONResponse(
@@ -517,10 +522,16 @@ def get_i_item_dynamic(
                     for k, v in campaign_data["info"].items()
                     if k in CAMPAIGN_INFO_PUBLIC
                 },
-                "payload": campaign_data["data"][actual_index],
+                "payload": campaign_data["data_welcome"][actual_index],
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
+        )
+
+    if not all(progress_welcome):
+        return JSONResponse(
+            content="Complete all welcome items before accessing regular items",
+            status_code=400,
         )
 
     if (
@@ -639,11 +650,12 @@ def get_next_item_dynamic(
                     for k, v in campaign_data["info"].items()
                     if k in CAMPAIGN_INFO_PUBLIC
                 },
-                "payload": campaign_data["data"][item_i],
+                "payload": campaign_data["data_welcome"][item_i],
             }
             | ({"payload_existing": payload_existing} if payload_existing else {}),
             status_code=200,
         )
+
 
     # Get all unique models in the campaign (all items must have all models)
     all_models = list(set(campaign_data["data"][0][0]["tgt"].keys()))
@@ -785,6 +797,7 @@ def get_next_item_dynamic(
             "status": "ok",
             "time": user_progress["time"],
             "progress": user_progress["progress"],
+            "progress_welcome": user_progress["progress_welcome"],
             "info": {
                 "item_i": item_i,
                 "instructions": _get_instructions(tasks_data, campaign_id),

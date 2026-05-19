@@ -9,6 +9,7 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
   - Increase idle time
   - Various progress bar fixes
   - Support for custom special tokens, like `[missing]` or `[instruction fault]`
+  - Various fixes for single-stream and dynamic assignment
 - v1.1.4
   - Make span toolboxes stick for 0.5 second after selection
 - v1.1.3
