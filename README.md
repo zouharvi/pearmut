@@ -329,8 +329,12 @@ See [examples/tutorial/esa_deen.json](examples/tutorial/esa_deen.json) for a moc
 To use it, simply extract the `data` attribute and prefix it to each task in your campaign.
 
 #### Universal Tutorial Items with `data_welcome`
-
 Use `data_welcome` to add tutorial items that users must complete before starting regular tasks. The structure is a list of documents (same as `data`). Welcome items have IDs `welcome_0`, `welcome_1`, etc. and are tracked separately via `progress_welcome`.
+
+#### Attention Checks with `data_random`
+Use `data_random` to add items that will be shown to users randomly during their annotation process (with a probability `data_random_prob` set in `info`). 
+This is useful for attention checks or quality control. Random items are drawn from this list such that a user will not see the same random item twice.
+They are internally indexed as `random_0`, `random_1`, etc., but do not appear in the progress bar.
 
 ### Form Items for User Metadata
 

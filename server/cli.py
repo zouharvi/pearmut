@@ -309,6 +309,25 @@ def _add_single_campaign(campaign_data, overwrite, url):
             except ValueError as e:
                 raise ValueError(f"Welcome document {doc_i}: {e}")
 
+    # Validate and process data_random if present
+    data_random = campaign_data.get("data_random", [])
+    if data_random:
+        if not isinstance(data_random, list):
+            raise ValueError("'data_random' must be a list of documents.")
+        # Validate random documents structure - each should be a list of items
+        for doc_i, doc in enumerate(data_random):
+            if not isinstance(doc, list):
+                raise ValueError(f"Random document {doc_i} must be a list of items.")
+            try:
+                _validate_item_structure(doc)
+            except ValueError as e:
+                raise ValueError(f"Random document {doc_i}: {e}")
+        if "data_random_prob" not in campaign_data["info"]:
+            raise ValueError("'data_random_prob' must be in 'info' when 'data_random' is present.")
+        data_random_prob = campaign_data["info"]["data_random_prob"]
+        if not isinstance(data_random_prob, float) or not (0 <= data_random_prob <= 1):
+            raise ValueError("'data_random_prob' must be a float between 0 and 1 (probability)")
+
     if assignment == "task-based":
         tasks = campaign_data["data"]
         if not isinstance(tasks, list):

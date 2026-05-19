@@ -1,7 +1,7 @@
 
 # Changelog
 
-Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
+Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
 
 - v1.1.5 (unreleased)
   - Add `show_progress` flag to dashboard
@@ -10,6 +10,7 @@ Whenever `y` is bumped in the `x.y.z` version (e.g. `1.0.2 -> 1.1.0`), the in-pr
   - Various progress bar fixes
   - Support for custom special tokens, like `[missing]` or `[instruction fault]`
   - Various fixes for single-stream and dynamic assignment
+  - Add `data_random` and `data_random_prob` for random item sampling that can be used for spot attention checks
 - v1.1.4
   - Make span toolboxes stick for 0.5 second after selection
 - v1.1.3

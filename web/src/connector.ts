@@ -37,11 +37,11 @@ export async function get_next_item<T>(): Promise<T | null> {
         return null
       }
     }
-    // wait for more seconds
-    await new Promise(resolve => setTimeout(resolve, delay * 1000));
     delay *= 2
     // if more than 1 minute, give up
     if (delay > 60) return null
+    // wait for more seconds
+    await new Promise(resolve => setTimeout(resolve, delay * 1000));
   }
 }
 
