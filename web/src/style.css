@@ -266,7 +266,7 @@ input[type="button"][selected] {
     top: -5px;
 }
 
-.char_missing {
+.special_token {
     font-family: monospace;
 }
 

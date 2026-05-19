@@ -277,7 +277,12 @@ function createOutputBlock(item: DataPayloadItem, item_i: number, info: Protocol
     for (const [model, tgt] of Object.entries(item.tgt)) {
         let no_tgt_char = isMediaContent(tgt)
         let tgt_dir = !no_tgt_char ? detectTextDirection(tgt) : 'ltr'
-        let tgt_chars = no_tgt_char ? tgt : (contentToCharSpans(tgt, "tgt_char") + (state.protocol_error_spans ? ` <span class="tgt_char char_missing" data-i="${tgt.length}">[missing]</span>` : ""))
+        let tgt_chars = no_tgt_char ? tgt : contentToCharSpans(tgt, "tgt_char")
+        if (!no_tgt_char && (state.protocol_error_spans || state.protocol_error_categories)) {
+            (info.special_tokens || []).forEach((token, token_idx) => {
+                tgt_chars += ` <span class="tgt_char special_token" data-i="${tgt.length + token_idx}">${token}</span>`
+            })
+        }
         let tgt_style = tgt_dir === 'rtl' ? ' style="direction: rtl;"' : ''
 
         let candidate_block = $(`
@@ -331,11 +336,10 @@ function setupCandidateInteractions(
         "word_end": idx < tgt_word_boundaries.length ? tgt_word_boundaries[idx][1] : idx,
     }))
     let state_i: null | number = null
-    let missing_i = state.protocol_error_spans ? tgt_chars_objs.findIndex(obj => obj.el.hasClass("char_missing")) : -1
 
     if (!no_tgt_char) {
         tgt_chars_objs.forEach((obj, i) => {
-            let is_missing = (i == missing_i)
+            let is_missing = obj.el.hasClass("special_token")
 
             // leaving target character
             $(obj.el).on("mouseleave", function () {
@@ -394,7 +398,8 @@ function setupCandidateInteractions(
                     // In word-level mode, expand selection preview to word boundaries
                     let preview_left = Math.min(state_i, i)
                     let preview_right = Math.max(state_i, i)
-                    if (state.settings.word_level && state_i != missing_i) {
+                    let state_is_missing = state_i != null && tgt_chars_objs[state_i].el.hasClass("special_token")
+                    if (state.settings.word_level && !state_is_missing) {
                         preview_left = tgt_chars_objs[preview_left].word_start
                         preview_right = tgt_chars_objs[preview_right].word_end
                     }
@@ -439,7 +444,7 @@ function setupCandidateInteractions(
                     if (frozenMode) return
 
                     if (is_missing) {
-                        state_i = missing_i
+                        state_i = i
                     }
                     if (state_i != null) {
                         // check if we're not overlapping
@@ -447,7 +452,8 @@ function setupCandidateInteractions(
                         let right_i = Math.max(state_i, i)
 
                         // Expand to word boundaries if word-level mode is enabled
-                        if (state.settings.word_level && !is_missing && state_i != missing_i) {
+                        let state_is_missing = state_i != null && tgt_chars_objs[state_i].el.hasClass("special_token")
+                        if (state.settings.word_level && !is_missing && !state_is_missing) {
                             left_i = tgt_chars_objs[left_i].word_start
                             right_i = tgt_chars_objs[right_i].word_end
                         }

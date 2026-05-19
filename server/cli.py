@@ -419,6 +419,13 @@ def _add_single_campaign(campaign_data, overwrite, url):
             "Warning: 'protocol' not specified in campaign info. Defaulting to 'ESA'."
         )
 
+    protocol = campaign_data["info"].get("protocol", "ESA")
+    if "special_tokens" not in campaign_data["info"]:
+        if protocol in {"ESA", "cESA", "MQM"}:
+            campaign_data["info"]["special_tokens"] = ["[missing]"]
+        else:
+            campaign_data["info"]["special_tokens"] = []
+
     # Validate sliders structure if present
     if "sliders" in campaign_data["info"]:
         if not all(

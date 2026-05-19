@@ -28,6 +28,7 @@ CAMPAIGN_INFO_PUBLIC = {
     "mqm_categories",
     "mqm_severities",
     "slider_colors",
+    "special_tokens",
 }
 
 

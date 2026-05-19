@@ -235,6 +235,12 @@ The severity levels can also be customized via `mqm_severities` (default: `["Min
 
 See [examples/custom_mqm.json](examples/custom_mqm.json) for a complete example.
 
+### Special Tokens
+
+By default, ESA, cESA, and MQM protocols allow annotating missing content with a `[missing]` token.
+You can customize this by providing a list of strings in the `special_tokens` array inside campaign `info`.
+For example: `["[missing]", "[untranslated]"]`.
+
 ### Custom Instructions
 
 Set campaign-level instructions using the `instructions` field in `info` (supports HTML).

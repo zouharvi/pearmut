@@ -588,6 +588,7 @@ export type ProtocolInfo = {
     mqm_categories?: { [key: string]: string[] },  // Optional custom MQM categories
     mqm_severities?: string[],  // Optional custom MQM severities
     slider_colors?: boolean,  // Optional slider colors
+    special_tokens?: string[],  // Optional custom special tokens
 }
 
 

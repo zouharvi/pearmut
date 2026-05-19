@@ -1,7 +1,11 @@
 {
   "info": {
     "assignment": "task-based",
-    "protocol": "ESA"
+    "protocol": "ESA",
+    "special_tokens": [
+      "[missing]",
+      "[instruction fault]"
+    ]
   },
   "campaign_id": "example_esa",
   "data": [
