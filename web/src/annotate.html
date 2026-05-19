@@ -187,7 +187,8 @@
         <span id="instructions_global" style="display: inline-block; font-size: 11pt; width: calc(100% - 175px);">
         </span>
 
-        <div style="width: 170px; display: inline-block; vertical-align: top; text-align: right; padding-top: 5px;">
+        <div id="progress_div"
+          style="width: 170px; display: inline-block; vertical-align: top; text-align: right; padding-top: 5px;">
 
           <span id="time" style="width: 135px; text-align: left; display: inline-block; font-size: 11pt;"
             title="Approximation of total annotation time.">Time:
@@ -207,21 +208,19 @@
           <input type="button" value="Skip ⏭️" id="button_skip"
             style="width: 170px; font-size: 11pt; height: 30px; margin-top: 10px; display: none;">
         </div>
-
-        <div id="settings_div" class="white-box"
-          style="margin-right: 20px; margin-top: 10px; display: none; background-color: #e7e2cf; font-size: 11pt;">
-          <input type="checkbox" id="settings_approximate_alignment">
-          <label for="settings_approximate_alignment">Show approximate alignment</label>
-          <br>
-          <input type="checkbox" id="settings_word_level">
-          <label for="settings_word_level">Word-level selection</label>
-          <br>
-          <br>
-          <textarea id="settings_comment"
-            style="width: 95%; height: 80px; resize: vertical; margin-top: 5px; padding: 5px; border-radius: 4px; border: 1px solid #999;"
-            placeholder="Optional: Add any comments or feedback about this item. Will be submitted with Next."></textarea>
-        </div>
-
+      </div>
+      <div id="settings_div" class="white-box"
+        style="margin-right: 20px; margin-top: 10px; display: none; background-color: #e7e2cf; font-size: 11pt;">
+        <input type="checkbox" id="settings_approximate_alignment">
+        <label for="settings_approximate_alignment">Show approximate alignment</label>
+        <br>
+        <input type="checkbox" id="settings_word_level">
+        <label for="settings_word_level">Word-level selection</label>
+        <br>
+        <br>
+        <textarea id="settings_comment"
+          style="width: 95%; height: 80px; resize: vertical; margin-top: 5px; padding: 5px; border-radius: 4px; border: 1px solid #999;"
+          placeholder="Optional: Add any comments or feedback about this item. Will be submitted with Next."></textarea>
       </div>
       <div id="output_div" style="margin-top: 100px;"></div>
 

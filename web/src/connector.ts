@@ -29,11 +29,15 @@ export async function get_next_item<T>(): Promise<T | null> {
           },
         });
       });
-    } catch (e) {
+    } catch (e: any) {
       console.log("Error in try-catch:", e);
       notify(`Error fetching item. <br><br> ${e} <br><br> Retrying in ${delay} seconds...`);
+      // don't repeat on 400 errors
+      if (e.toString().startsWith("400: ")) {
+        return null
+      }
     }
-    // wait for 5 seconds
+    // wait for more seconds
     await new Promise(resolve => setTimeout(resolve, delay * 1000));
     delay *= 2
     // if more than 1 minute, give up
@@ -107,9 +111,13 @@ export async function get_i_item<T>(item_i: number | string): Promise<T | null> 
           },
         });
       });
-    } catch (e) {
+    } catch (e: any) {
       console.log("Error in try-catch:", e);
       notify(`Error fetching item. <br><br> ${e} <br><br> Retrying in ${delay} seconds...`);
+      // don't repeat on 400 errors
+      if (e.toString().startsWith("400: ")) {
+        return null
+      }
     }
     // wait for 5 seconds
     await new Promise(resolve => setTimeout(resolve, delay * 1000));
