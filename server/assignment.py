@@ -125,7 +125,7 @@ def get_i_item(
 def get_i_item_taskbased(
     campaign_id: str,
     user_id: str,
-    data_all: dict,
+    tasks_data: dict,
     progress_data: dict,
     item_i: int | str,  # Can be int or str like "welcome_0"
 ) -> JSONResponse:
@@ -139,12 +139,12 @@ def get_i_item_taskbased(
     if isinstance(item_i, str) and item_i.startswith("welcome_"):
         actual_index = int(item_i.split("_")[1])
         if actual_index < 0 or actual_index >= len(
-            data_all[campaign_id]["data_welcome"]
+            tasks_data[campaign_id]["data_welcome"]
         ):
             return JSONResponse(
                 content="Welcome item index out of range", status_code=400
             )
-        payload = data_all[campaign_id]["data_welcome"][actual_index]
+        payload = tasks_data[campaign_id]["data_welcome"][actual_index]
     else:
         # Prevent accessing regular items unless all welcome items are complete
         if not all(progress_welcome):
@@ -152,9 +152,9 @@ def get_i_item_taskbased(
                 content="Complete all welcome items before accessing regular items",
                 status_code=400,
             )
-        if item_i < 0 or item_i >= len(data_all[campaign_id]["data"][user_id]):
+        if item_i < 0 or item_i >= len(tasks_data[campaign_id]["data"][user_id]):
             return JSONResponse(content="Item index out of range", status_code=400)
-        payload = data_all[campaign_id]["data"][user_id][item_i]
+        payload = tasks_data[campaign_id]["data"][user_id][item_i]
 
     # try to get existing annotations if any
     items_existing = get_db_log_item(campaign_id, user_id, item_i)
@@ -176,11 +176,11 @@ def get_i_item_taskbased(
             "time": user_progress["time"],
             "info": {
                 "item_i": item_i,
-                "instructions": _get_instructions(data_all, campaign_id),
+                "instructions": _get_instructions(tasks_data, campaign_id),
             }
             | {
                 k: v
-                for k, v in data_all[campaign_id]["info"].items()
+                for k, v in tasks_data[campaign_id]["info"].items()
                 if k in CAMPAIGN_INFO_PUBLIC
             },
             "payload": payload,
@@ -193,7 +193,7 @@ def get_i_item_taskbased(
 def get_i_item_singlestream(
     campaign_id: str,
     user_id: str,
-    data_all: dict,
+    tasks_data: dict,
     progress_data: dict,
     item_i: int | str,  # Can be int or str like "welcome_0"
 ) -> JSONResponse:
@@ -234,10 +234,10 @@ def get_i_item_singlestream(
         if "comment" in latest_item:
             payload_existing["comment"] = latest_item["comment"]
 
-    if actual_index < 0 or actual_index >= len(data_all[campaign_id]["data"]):
+    if actual_index < 0 or actual_index >= len(tasks_data[campaign_id]["data"]):
         return JSONResponse(content="Item index out of range", status_code=400)
 
-    payload = data_all[campaign_id]["data"][actual_index]
+    payload = tasks_data[campaign_id]["data"][actual_index]
     is_form = is_form_document(payload)
 
     return JSONResponse(
@@ -248,11 +248,11 @@ def get_i_item_singlestream(
             "time": user_progress["time"],
             "info": {
                 "item_i": item_i,
-                "instructions": _get_instructions(data_all, campaign_id),
+                "instructions": _get_instructions(tasks_data, campaign_id),
             }
             | {
                 k: v
-                for k, v in data_all[campaign_id]["info"].items()
+                for k, v in tasks_data[campaign_id]["info"].items()
                 if k in CAMPAIGN_INFO_PUBLIC
             },
             "payload": payload,
@@ -265,7 +265,7 @@ def get_i_item_singlestream(
 def get_next_item_taskbased(
     campaign_id: str,
     user_id: str,
-    data_all: dict,
+    tasks_data: dict,
     progress_data: dict,
 ) -> JSONResponse:
     """
@@ -290,7 +290,7 @@ def get_next_item_taskbased(
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
 
-        payload = data_all[campaign_id]["data_welcome"][item_i]
+        payload = tasks_data[campaign_id]["data_welcome"][item_i]
         is_form = is_form_document(payload)
 
         return JSONResponse(
@@ -301,11 +301,11 @@ def get_next_item_taskbased(
                 "progress_welcome": progress_welcome,
                 "info": {
                     "item_i": item_id,
-                    "instructions": _get_instructions(data_all, campaign_id),
+                    "instructions": _get_instructions(tasks_data, campaign_id),
                 }
                 | {
                     k: v
-                    for k, v in data_all[campaign_id]["info"].items()
+                    for k, v in tasks_data[campaign_id]["info"].items()
                     if k in CAMPAIGN_INFO_PUBLIC
                 },
                 "payload": payload,
@@ -316,7 +316,7 @@ def get_next_item_taskbased(
 
     # All welcome items complete, proceed with regular items
     if all(v == "completed" for v in user_progress["progress"]):
-        return _completed_response(data_all, progress_data, campaign_id, user_id)
+        return _completed_response(tasks_data, progress_data, campaign_id, user_id)
 
     # find first incomplete item
     item_i = min(
@@ -333,7 +333,7 @@ def get_next_item_taskbased(
         if "comment" in latest_item:
             payload_existing["comment"] = latest_item["comment"]
 
-    payload = data_all[campaign_id]["data"][user_id][item_i]
+    payload = tasks_data[campaign_id]["data"][user_id][item_i]
     is_form = is_form_document(payload)
 
     return JSONResponse(
@@ -344,14 +344,14 @@ def get_next_item_taskbased(
             "time": user_progress["time"],
             "info": {
                 "item_i": item_i,
-                "instructions": _get_instructions(data_all, campaign_id),
+                "instructions": _get_instructions(tasks_data, campaign_id),
             }
             | {
                 k: v
-                for k, v in data_all[campaign_id]["info"].items()
+                for k, v in tasks_data[campaign_id]["info"].items()
                 if k in CAMPAIGN_INFO_PUBLIC
             },
-            "payload": data_all[campaign_id]["data"][user_id][item_i],
+            "payload": tasks_data[campaign_id]["data"][user_id][item_i],
         }
         | ({"payload_existing": payload_existing} if payload_existing else {}),
         status_code=200,
@@ -361,7 +361,7 @@ def get_next_item_taskbased(
 def get_next_item_singlestream(
     campaign_id: str,
     user_id: str,
-    data_all: dict,
+    tasks_data: dict,
     progress_data: dict,
 ) -> JSONResponse:
     """
@@ -393,7 +393,7 @@ def get_next_item_singlestream(
             if "comment" in latest_item:
                 payload_existing["comment"] = latest_item["comment"]
 
-        payload = data_all[campaign_id]["data_welcome"][item_i]
+        payload = tasks_data[campaign_id]["data_welcome"][item_i]
         is_form = is_form_document(payload)
 
         return JSONResponse(
@@ -404,11 +404,11 @@ def get_next_item_singlestream(
                 "progress_welcome": progress_welcome,
                 "info": {
                     "item_i": item_id,
-                    "instructions": _get_instructions(data_all, campaign_id),
+                    "instructions": _get_instructions(tasks_data, campaign_id),
                 }
                 | {
                     k: v
-                    for k, v in data_all[campaign_id]["info"].items()
+                    for k, v in tasks_data[campaign_id]["info"].items()
                     if k in CAMPAIGN_INFO_PUBLIC
                 },
                 "payload": payload,
@@ -420,13 +420,13 @@ def get_next_item_singlestream(
     # All welcome items complete, proceed with regular items
     # Check if user reached docs_per_user limit (if specified)
     if (
-        docs_per_user := data_all[campaign_id]["info"].get("docs_per_user")
+        docs_per_user := tasks_data[campaign_id]["info"].get("docs_per_user")
     ) is not None:
         completed_docs = sum(v == "completed" for v in progress if v)
         if completed_docs >= docs_per_user:
-            return _completed_response(data_all, progress_data, campaign_id, user_id)
+            return _completed_response(tasks_data, progress_data, campaign_id, user_id)
     elif all(v in {"completed", "completed_foreign"} for v in progress):
-        return _completed_response(data_all, progress_data, campaign_id, user_id)
+        return _completed_response(tasks_data, progress_data, campaign_id, user_id)
 
     # find a random incomplete item
     incomplete_indices = [
@@ -445,7 +445,7 @@ def get_next_item_singlestream(
         if "comment" in latest_item:
             payload_existing["comment"] = latest_item["comment"]
 
-    payload = data_all[campaign_id]["data"][item_i]
+    payload = tasks_data[campaign_id]["data"][item_i]
     is_form = is_form_document(payload)
 
     return JSONResponse(
@@ -456,11 +456,11 @@ def get_next_item_singlestream(
             "progress_welcome": progress_welcome,
             "info": {
                 "item_i": item_i,
-                "instructions": _get_instructions(data_all, campaign_id),
+                "instructions": _get_instructions(tasks_data, campaign_id),
             }
             | {
                 k: v
-                for k, v in data_all[campaign_id]["info"].items()
+                for k, v in tasks_data[campaign_id]["info"].items()
                 if k in CAMPAIGN_INFO_PUBLIC
             },
             "payload": payload,
@@ -631,7 +631,7 @@ def get_next_item_dynamic(
                 "progress_welcome": progress_welcome,
                 "info": {
                     "item_i": item_id,
-                    "instructions": _get_instructions(campaign_data, campaign_id),
+                    "instructions": _get_instructions(tasks_data, campaign_id),
                 }
                 | {
                     k: v
