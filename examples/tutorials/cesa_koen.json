@@ -1,0 +1,204 @@
+{
+    "info": {
+      "protocol": "cESA",
+      "assignment": "task-based"
+    },
+    "campaign_id": "esa_koen_tutorial",
+    "data": [
+      [
+        [
+          {
+            "item_id": "koen_#_tutorial_#_1",
+            "src": "2024년 초, 혼자 살아가는 생활의 즐거움을 담은 작가 신아로미의 에세이는 출간과 동시에 베스트셀러에 올랐다.",
+            "tgt": {
+              "model-tutorial": "In early 2024, writer Shin A-romi's essay capturing the joys of living alone became a bestseller upon publication."
+            },
+            "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Korean to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "This translation is perfect! Please set the score to 100% and do not mark any error spans.",
+                "score": [
+                  95,
+                  100
+                ],
+                "error_spans": [],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "koen_#_tutorial_#_2",
+            "src": "책 '혼자서도 잘 사는 걸 어떡합니까'는 출간 이후 많은 여성들의 환호를 받았다. 신 씨는 나이와 기혼 여부, 자녀 유무와 상관 없이 다양한 배경의 여성들이 책을 읽고 긍정적 후기를 전했다고 한다.",
+            "tgt": {
+              "model-tutorial": "The book \"What Am I Supposed to Do If I Live Just Fine on My Own?\" received cheers from many women after its publication. Shin says that women of different backgrounds — regardless of age, marital status, or whether they have children — read the book and shared positive reviews."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"different\" is incorrect in the following translation. The Korean word \"다양한\" means \"diverse\" not \"different\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"different\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>75–85%</b> to reflect the reduced quality.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark the word \"different\" as a minor error (light pink) and set the score to 75-85%.",
+                "score": [
+                  75,
+                  85
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      145,
+                      146
+                    ],
+                    "end_i": [
+                      154,
+                      155
+                    ],
+                    "severity": "minor"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "koen_#_tutorial_#_3",
+            "src": "원치 않는 주변의 조언에 당당히 응수하는 신 씨의 모습에서 독자들은 '대리 만족'을 느끼고, '눈치 보지 않고 싱글로 살아갈' 자유를 발견했다는 것이다.",
+            "tgt": {
+              "model-tutorial": "Readers feel a sense of \"vicarious satisfaction\" in the way Shin shyly responds to unwanted advice from those around her, and they discover the freedom to \"live as a single person without worrying about others' opinions.\""
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much thoes errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"shyly\" is completely wrong in the given translation; it means the opposite of the Korean \"당당히\" (confidently).<br>1. Select and mark \"shyly\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark \"shyly\" as a major error (dark pink) and set the score to 15-30%.",
+                "score": [
+                  15,
+                  30
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      64,
+                      65
+                    ],
+                    "end_i": [
+                      69,
+                      70
+                    ],
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "koen_#_tutorial_#_4",
+            "src": "하지만 곧 온라인에서는 신 씨를 향한 공격이 시작됐다. 이들은 주로 가정을 꾸리지 않는 신 씨를 \"국가에 이바지하지 않는다\"며 비난하며, 심지어는 \"혼자 여행하다 강간당하고 죽는다\", \"결국 고독사할\" 것이라는 말도 서슴지 않았다.",
+            "tgt": {
+              "model-tutorial": "Attacks against Shin began online. These people mainly criticized Shin for not starting a family, saying she \"does not contribute to the country,\" and did not even hesitate to say things like \"she'll get raped and killed while traveling alone\" or that she would \"end up dying alone.\""
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may noticed, the translation of \"하지만 곧\" (meaning \"However\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>75–85%</b>.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark the [missing] tag as a Minor error and set the score to 75–85%.",
+                "score": [
+                  75,
+                  85
+                ],
+                "error_spans": [
+                  {
+                    "start_i": 283,
+                    "end_i": 283,
+                    "severity": "minor"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "koen_#_tutorial_#_5",
+            "src": "반-페미니즘 백래시의 시대, 한국에서는 여성의 독립성을 지지하고 가부장제에 도전하는 일이 점점 더 위험을 감수해야 하는 선택이 되고 있다.",
+            "tgt": {
+              "model-tutorial": "In an era of anti-feminist backlash, in South Korea, opposing women's independence and challenging the patriarchy is increasingly becoming a choice that requires taking on risk."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Mark the word \"opposing\" as a major error and set the score to 35-45%.",
+                "score": [
+                  35,
+                  45
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      52,
+                      53
+                    ],
+                    "end_i": [
+                      60,
+                      61
+                    ],
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          },
+          {
+            "item_id": "koen_#_tutorial_#_6",
+            "src":  "그런 사회적 맥락에서 한국의 문학계는 여성들이 자신들의 이야기를 자유롭게 나눌 수 있는 몇 안 되는 공간 중 하나로 기능하고 있으며, 문학장 내 자신들만의 방을 꾸려나가고 있는 여성들은 조용한 혁명의 흐름을 형성하고 있다.",
+            "tgt": {
+              "model-tutorial": "In that social context, South Korea's literary world functions as one of the few spaces where women can freely share their own stories, and the women who are building their own rooms within the literary sphere are forming the current of a quiet revolution."
+            },
+            "instructions": "",
+            "validation": {
+              "model-tutorial": {
+                "warning": "This translation is excellent. Please don't mark any errors and set the score to 95-100%.",
+                "score": [
+                  95,
+                  100
+                ],
+                "error_spans": []
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "koen_#_tutorial_#_7",
+            "src": "올해 여성 작가들은 한국에서 가장 권위 있는 문학상 중 하나인 이상문학상에서 사상 처음으로 6개 전 부문을 석권했다.",
+            "tgt": {
+              "model-tutorial-A": "Next year, women writers swept all sixteen categories for the first time ever at the Yi Sang Literary Award, one of the most prestigious literary prizes in South Korea.", 
+              "model-tutorial-B": "This year, women writers swept all six categories for the first time ever at the Yi Sang Literary Award, one of the most prestigious literary prizes in South Korea."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The words \"올\" (This) and \"여섯\" (six) are translated incorrectly to \"next\" and \"sixteen\", respectively. Having two major errors, set the score to 10-25%.</div>",
+            "skippable": true
+          },
+          {
+            "item_id": "koen_#_tutorial_#_8",
+            "src": "2024년 작가 한강은 역사적인 노벨문학상을 수상했지만, 한국 문학을 여성이 주도하게 된 것은 그리 오래되지 않았다.",
+            "tgt": {
+              "model-tutorial-A": "In 2024, writer Han Kang won the historic Nobel Prize in Literature, but it has not been very long since women came to lead Korean literature and entertainment industry.",
+              "model-tutorial-B": "In 2024, writer Han Kang won the historic Nobel Prize in Literature, but it has not been long since women came to lead Korean literature."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"entertainment industry\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"그리 오래\" is mistakenly translated as \"long\". Since this changes the meaning of the sentence, mark it as a minor error and set the score to 75-85%.<br></div>",
+            "skippable": true
+          }
+        ]
+      ]
+    ]
+  }
