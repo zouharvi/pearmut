@@ -113,9 +113,9 @@
                 ],
                 "error_spans": [
                   {
-                    "start_i": 211,
-                    "end_i": 211,
-                    "severity": "minor"
+                    "start_i": 206,
+                    "end_i": 206,
+                    "severity": "major"
                   }
                 ],
                 "allow_skip": true
