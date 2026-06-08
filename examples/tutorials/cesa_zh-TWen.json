@@ -1,0 +1,204 @@
+{
+  "info": {
+    "protocol": "cESA",
+    "assignment": "task-based"
+  },
+  "campaign_id": "esa_zh-TWen_tutorial",
+  "data": [
+    [
+      [
+        {
+          "item_id": "zh-TWen_#_tutorial_#_1",
+          "src": "自2009年世界運動會後，高雄累積大型場館建置與活動營運經驗，其中台灣唯一可容納約五萬多人的世運主場館，成為吸引國際級藝人來台的因素。",
+          "tgt": {
+            "model-tutorial": "Since the 2009 World Games, Kaohsiung has accumulated experience in building large venues and operating events, among them the World Games Main Stadium, the only one in Taiwan able to hold around fifty thousand people, which has become a factor in attracting international-level artists to Taiwan."
+          },
+          "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Chinese (Traditional Taiwan) to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
+          "validation": {
+            "model-tutorial": {
+              "warning": "This translation is perfect! Please set the score to 100% and do not mark any error spans.",
+              "score": [
+                95,
+                100
+              ],
+              "error_spans": [],
+              "allow_skip": true
+            }
+          },
+          "skippable": true
+        }
+      ],
+      [
+        {
+          "item_id": "zh-TWen_#_tutorial_#_2",
+          "src": "這座曾以港口和重工業聞名的南部城市，正逐漸轉型為亞洲歌迷心中的新興「演唱會之都」。",
+          "tgt": {
+            "model-tutorial": "This southern city, once renowned for its harbor and heavy industry, is gradually transforming into an emerging \"concert capital\" in the hearts of Asian music lovers."
+          },
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"music lovers\" is incorrect in the following translation. The Chinese (Traditional Taiwan) word \"歌迷\" means \"fans\" not \"music lovers\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"music lovers\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>75–85%</b> to reflect the reduced quality.<br></div>",
+          "validation": {
+            "model-tutorial": {
+              "warning": "Please mark the word \"music lovers\" as a minor error (light pink) and set the score to 75-85%.",
+              "score": [
+                75,
+                85
+              ],
+              "error_spans": [
+                {
+                  "start_i": [
+                    152,
+                    153
+                  ],
+                  "end_i": [
+                    164,
+                    165
+                  ],
+                  "severity": "minor"
+                }
+              ],
+              "allow_skip": true
+            }
+          },
+          "skippable": true
+        }
+      ],
+      [
+        {
+          "item_id": "zh-TWen_#_tutorial_#_3",
+          "src": "目前，台北最大的演唱會場館為大巨蛋，但僅能容納四萬名觀眾。",
+          "tgt": {
+            "model-tutorial": "Currently, Taipei's largest concert venue is the Taipei Dome, but it is the smallest, holding only forty thousand spectators."
+          },
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much thoes errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"the smallest\" is completely wrong in the given translation; it means the opposite of the Chinese (Traditional Taiwan)\"台北最大的演唱會場館\" (Taipei's largest concert venue).<br>1. Select and mark \"the smallest\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
+          "validation": {
+            "model-tutorial": {
+              "warning": "Please mark \"the smallest\" as a major error (dark pink) and set the score to 15-30%.",
+              "score": [
+                15,
+                30
+              ],
+              "error_spans": [
+                {
+                  "start_i": [
+                    71,
+                    72
+                  ],
+                  "end_i": [
+                    83,
+                    84
+                  ],
+                  "severity": "major"
+                }
+              ],
+              "allow_skip": true
+            }
+          },
+          "skippable": true
+        }
+      ],
+      [
+        {
+          "item_id": "zh-TWen_#_tutorial_#_4",
+          "src": "從香港飛到高雄，航程約一個半小時，她說這趟跨境追星之旅不僅時間成本低，花費也與在香港看演唱會相差不遠。",
+          "tgt": {
+            "model-tutorial": "Flying from Hong Kong to Kaohsiung takes about an hour and a half, and she said this star-chasing trip not only has a low time cost, but the expense is also not far from watching a concert in Hong Kong."
+          },
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may noticed, the translation of \"跨境\" (meaning \"cross-border\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>75–85%</b>.<br></div>",
+          "validation": {
+            "model-tutorial": {
+              "warning": "Please mark the [missing] tag as a Minor error and set the score to 75–85%.",
+              "score": [
+                75,
+                85
+              ],
+              "error_spans": [
+                {
+                  "start_i": 202,
+                  "end_i": 202,
+                  "severity": "minor"
+                }
+              ],
+              "allow_skip": true
+            }
+          },
+          "skippable": true
+        }
+      ],
+      [
+        {
+          "item_id": "zh-TWen_#_tutorial_#_5",
+          "src": "到了2025年，場次較前一年少，但韓國兩大女團BLACKPINK和TWICE的世界巡迴都選擇在高雄演出。其中部分場次是台灣唯一場，吸引大量歌迷專程到高雄朝聖。",
+          "tgt": {
+            "model-tutorial": "By 2025, the number of shows was higher than the previous year, but both of South Korea's major girl groups, BLACKPINK and TWICE, chose to perform in Kaohsiung on their world tours. Some of these shows were the only ones in Taiwan, drawing large numbers of fans to make a special pilgrimage to Kaohsiung."
+          },
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
+          "validation": {
+            "model-tutorial": {
+              "warning": "Mark the word \"higher\" as a major error and set the score to 35-45%.",
+              "score": [
+                35,
+                45
+              ],
+              "error_spans": [
+                {
+                  "start_i": [
+                    32,
+                    33
+                  ],
+                  "end_i": [
+                    38,
+                    39
+                  ],
+                  "severity": "major"
+                }
+              ],
+              "allow_skip": true
+            }
+          },
+          "skippable": true
+        },
+        {
+          "item_id": "zh-TWen_#_tutorial_#_6",
+          "src": "2023年高雄舉行了117場演唱會，2024年進一步增至157場，主要場館如漢神巨蛋、高雄流行音樂中心到世運主場館都滿檔，被產業界稱為「演唱會元年」。",
+          "tgt": {
+            "model-tutorial": "In 2023, Kaohsiung held 117 concerts, and in 2024 the number rose further to 157, with major venues such as the Hanshin Arena, the Kaohsiung Music Center, and the World Games Main Stadium all fully booked, leading the industry to call it the \"first year of the concert era.\""
+          },
+          "instructions": "",
+          "validation": {
+            "model-tutorial": {
+              "warning": "This translation is excellent. Please don't mark any errors and set the score to 95-100%.",
+              "score": [
+                95,
+                100
+              ],
+              "error_spans": []
+            }
+          },
+          "skippable": true
+        }
+      ],
+      [
+        {
+          "item_id": "zh-TWen_#_tutorial_#_7",
+          "src": "而與其他城市的一般演唱會不同的是，高雄不把演唱會當成單一活動，而是串聯官方與民間單位，把粉絲應援提升為「城市應援」活動。",
+          "tgt": {
+            "model-tutorial-A": "What differs from ordinary concerts in other cities is that Kaohsiung does not treat concerts as a single event, but instead links up official and private-sector bodies, elevating fan support into a \"city-wide support\" activity.",
+            "model-tutorial-B": "What differs from ordinary concerts in other cities is that Kaohsiung treats concerts as a single event, but instead links up only official bodies, elevating fan support into a \"city-wide support\" activity."
+          },
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The phrases \"不把演唱會當成單一活動\" (does not treat concerts as a single event) and \"官方與民間單位\" (official and private-sector bodies) are translated incorrectly, dropping the negation and dropping the private-sector bodies to become \"treats concerts as a single event\" and \"only official bodies\", respectively.  Having two major errors, set the score to 20-35%.</div>",
+          "skippable": true
+        },
+        {
+          "item_id": "zh-TWen_#_tutorial_#_8",
+          "src": "2023年起，現任高雄市長陳其邁於施政報告中首度提出演唱會經濟的概念，結合場地優惠、商家補助與跨局處合作機制，系統性引進國際演出。",
+          "tgt": {
+            "model-tutorial-A": "Starting in 2023, the current mayor of Kaohsiung, Chen Chi-mai, first put forward the concept of a concert economy in his policy report, combining venue discounts, business subsidies, and cross-department cooperation mechanisms to systematically bring in international performances, a plan that has already generated over one billion in tax revenue.",
+            "model-tutorial-B": "Starting in 2023, the former mayor of Kaohsiung, Chen Chi-mai, first put forward the concept of a concert economy in his policy report, combining venue discounts, business subsidies, and cross-department cooperation mechanisms to systematically bring in international performances."
+          },
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"a plan that has already generated over one billion in tax revenue\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"現任\" (current) is mistakenly translated as \"former\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 30-40%.<br></div>",
+          "skippable": true
+        }
+      ]
+    ]
+  ]
+}
