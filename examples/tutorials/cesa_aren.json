@@ -11,7 +11,7 @@
             "item_id": "aren_#_tutorial_#_1",
             "src": "في وقتٍ بات العمل والتواصل والترفيه يعتمد بشكل متزايد على الشاشات، يظن كثيرون أن تخصيص نحو ساعة يومياً لممارسة الرياضة يكفي لدرء مخاطر نمط الحياة الخامل على الصحة.",
             "tgt": {
-              "model-tutorial": "At a time when work, communication, and entertainment increasingly rely on screens, many believe that dedicating around an hour a day to exercise is enough to …At a time when work, communication, and entertainment increasingly rely on screens, many believe that dedicating around an hour a day to exercise is enough to ward off the health risks of a sedentary lifestyle."
+              "model-tutorial": "At a time when work, communication, and entertainment increasingly rely on screens, many believe that dedicating around an hour a day to exercise is enough to ward off the health risks of a sedentary lifestyle."
             },
             "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Arabic (Egyptian) to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
             "validation": {
@@ -50,8 +50,8 @@
                       176
                     ],
                     "end_i": [
-                      179,
-                      180
+                      178,
+                      179
                     ],
                     "severity": "minor"
                   }
