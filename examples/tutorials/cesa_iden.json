@@ -198,6 +198,14 @@
             "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"sometimes for days without sleep\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"tolak\" (decline) is mistakenly translated as \"accept\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 25-40%.<br></div>",
             "skippable": true
           }
+        ],
+        [
+          {
+          "src": "",
+          "tgt": {},
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right:10px;'><b>Congrats🎉</b><br><br>You have finished the tutorial. You are now ready to annotate data on Pearmut🚀</div>",
+          "skippable": true
+        }
         ]
       ]
     ]
