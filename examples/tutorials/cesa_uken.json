@@ -1,0 +1,204 @@
+{
+    "info": {
+      "protocol": "cESA",
+      "assignment": "task-based"
+    },
+    "campaign_id": "esa_uken_tutorial",
+    "data": [
+      [
+        [
+          {
+            "item_id": "uken_#_tutorial_#_1",
+            "src": "Міністр освіти та науки Оксен Лісовий вже заявив, що МОН категорично проти таких ініціатив.",
+            "tgt": {
+                "model-tutorial": "The Minister of Education and Science, Oksen Lisovyi, has already stated that the Ministry of Education and Science is categorically against such initiatives."
+            },
+            "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Ukrainian to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "This translation is perfect! Please set the score to 100% and do not mark any error spans.",
+                "score": [
+                  95,
+                  100
+                ],
+                "error_spans": [],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "uken_#_tutorial_#_2",
+            "src": "Також прихильники вилучення математики з обов'язкових на НМТ кажуть, що пройти тести за чотирма предметами в один день вкрай важко.",
+            "tgt": {
+                "model-tutorial": "Supporters of removing mathematics from the mandatory subjects of the NMT also say that passing tests in four subjects in a single day is fairly difficult."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"fairly\" is incorrect in the following translation. The Ukrainian word \"вкрай\" means \"extremely\" not \"fairly\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"fairly\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>70-80%</b> to reflect the reduced quality.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark the word \"fairly\" as a minor error (light pink) and set the score to 75-85%.",
+                "score": [
+                  70,
+                  80
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      138,
+                      139
+                    ],
+                    "end_i": [
+                      144,
+                      145
+                    ],
+                    "severity": "minor"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "uken_#_tutorial_#_3",
+            "src": "Коли у 2021 році вирішили включити математику до переліку обов'язкових предметів зовнішнього незалежного оцінювання (ЗНО), випускники проходили тест за кожним предметом у різні дні.",
+            "tgt": {
+                "model-tutorial": "When it was decided in 2021 to exclude mathematics from the list of mandatory subjects of the External Independent Evaluation (ZNO), graduates took the test for each subject on different days."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much thoes errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"exclude\" is completely wrong in the given translation; it means the opposite of the Ukrainian \"включити\" (include).<br>1. Select and mark \"exclude\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark \"exclude\" as a major error (dark pink) and set the score to 15-30%.",
+                "score": [
+                  15,
+                  30
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      30,
+                      31
+                    ],
+                    "end_i": [
+                      37,
+                      38
+                    ],
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "uken_#_tutorial_#_4",
+            "src": "Петиції з такою вимогою періодично з'являються на урядовому порталі. Головний аргумент - для вступу на творчі, гуманітарні спеціальності математика не потрібна.",
+            "tgt": {
+                "model-tutorial": "Petitions with such a demand appear on the government portal. The main argument is that for admission to creative and humanities specialties, mathematics is not needed."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may noticed, the translation of \"періодично\" (meaning \"periodically\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>75–85%</b>.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark the [missing] tag as a Minor error and set the score to 75–85%.",
+                "score": [
+                  75,
+                  85
+                ],
+                "error_spans": [
+                  {
+                    "start_i": 168,
+                    "end_i": 168,
+                    "severity": "minor"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "uken_#_tutorial_#_5",
+            "src": "Вони пропонують вже з 2027 року під час НМТ оцінювати майбутніх вступників за трьома предметами замість чотирьох, залишивши обов'язковими лише українську мову та історію України.",
+            "tgt": {
+                "model-tutorial": "They propose that, starting from 2027, during the NMT, future applicants be assessed on four subjects instead of three, leaving only the Ukrainian language and the history of Ukraine as mandatory."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "In the first example, mark the word \"four\" as a major error and set the score to 35-45%.",
+                "score": [
+                  35,
+                  45
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      87,
+                      88
+                    ],
+                    "end_i": [
+                      91,
+                      92
+                    ],
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          },
+          {
+            "item_id": "uken_#_tutorial_#_6",
+            "src": "Після широкомасштабного вторгнення ЗНО перетворили на НМТ і проводять його одночасно з усіх чотирьох предметів.",
+            "tgt": {
+                "model-tutorial": "After the full-scale invasion, the ZNO was transformed into the NMT, and it is conducted simultaneously across all four subjects."
+            },
+            "instructions": "",
+            "validation": {
+              "model-tutorial": {
+                "warning": "This translation is excellent. Please don't mark any errors and set the score to 95-100%.",
+                "score": [
+                  95,
+                  100
+                ],
+                "error_spans": []
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "uken_#_tutorial_#_7",
+            "src": "У розпал проведення Національного мультимедійного тесту для випускників знову активізувалася дискусія про те, навіщо для вступу на усі спеціальності у вишах проходити тест з математики.",
+            "tgt": {
+                "model-tutorial-A": "At the height of the National Multimedia Test for graduates, the discussion has reignited about why, for admission to all specialties at universities, one must take a test in mathematics.",
+                "model-tutorial-B": "At the height of the National Multimedia Test for teachers, the discussion has reignited about why, for admission to some specialties at universities, one must take a test in mathematics."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The words \"випускників\" (graduates) and \"усі\" (all) are translated incorrectly to \"teachers\" and \"some\", respectively. Having two major errors, set the score to 10-25%.</div>",
+            "skippable": true
+          },
+          {
+            "item_id": "uken_#_tutorial_#_8",
+            "src": "Авторка законопроєкту, доктор юридичних наук і заступниця голови фракції \"Слуга народу\" Юлія Гришина наголошує, що тестування, хоч і з перервами, - це величезне навантаження для підлітків.",
+            "tgt": {
+                "model-tutorial-A": "The author of the bill, Doctor of Legal Sciences and deputy head of the \"Servant of the People\" faction Yuliia Hryshyna, emphasizes that the testing, even though it has breaks, is an enormous burden for teenagers, many of whom require psychological support afterward.",
+                "model-tutorial-B": "The author of the bill, Doctor of Legal Sciences and deputy head of the \"Servant of the People\" faction Yuliia Hryshyna, emphasizes that the testing, even though it has no breaks, is an enormous burden for teenagers."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"many of whom require psychological support afterward\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"з перервами\" (with breaks) is mistakenly translated as \"no breaks\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 30-40%.<br></div>",
+            "skippable": true
+          }
+        ]
+      ]
+    ]
+  }

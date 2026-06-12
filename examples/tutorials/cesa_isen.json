@@ -1,0 +1,204 @@
+{
+    "info": {
+          "protocol": "cESA",
+          "assignment": "task-based"
+        },
+        "campaign_id": "esa_isen_tutorial",
+        "data": [
+          [
+            [
+              {
+                "item_id": "isen_#_tutorial_#_1",
+                "src": "Zara hannar fötin, framleiðir og selur í eigin verslunum án milliliðs.",
+                "tgt": {
+                    "model-tutorial": "Zara designs the clothes, manufactures them, and sells them in its own stores without any intermediary."
+                },
+                "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Icelandic to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
+                "validation": {
+                  "model-tutorial": {
+                    "warning": "This translation is perfect! Please set the score to 100% and do not mark any error spans.",
+                    "score": [
+                      95,
+                      100
+                    ],
+                    "error_spans": [],
+                    "allow_skip": true
+                  }
+                },
+                "skippable": true
+              }
+            ],
+            [
+              {
+                "item_id": "isen_#_tutorial_#_2",
+                "src": "Zara nýtur vinsælda um allan heim, meðal annars á Íslandi, og gengur viðskiptamódel þeirra út á að koma nýjum tískuvörum mjög hratt í hönnunarferli og út í verslanir.",
+                "tgt": {
+                    "model-tutorial": "Zara enjoys popularity all over the planet, including in Iceland, and their business model revolves around bringing new fashion items very quickly into the design process and out into stores."
+                },
+                "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"planet\" is incorrect in the following translation. The Icelandic phrase \"um allan heim\" means \"all over the world\" not \"planet\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"planet\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>75–85%</b> to reflect the reduced quality.<br></div>",
+                "validation": {
+                  "model-tutorial": {
+                    "warning": "Please mark the word \"planet\" as a minor error (light pink) and set the score to 75-85%.",
+                    "score": [
+                      75,
+                      85
+                    ],
+                    "error_spans": [
+                      {
+                        "start_i": [
+                          35,
+                          36
+                        ],
+                        "end_i": [
+                          41,
+                          42
+                        ],
+                        "severity": "minor"
+                      }
+                    ],
+                    "allow_skip": true
+                  }
+                },
+                "skippable": true
+              }
+            ],
+            [
+              {
+                "item_id": "isen_#_tutorial_#_3",
+                "src": "Með þessu nýja viðskiptamódeli gat Zara boðið upp á nýjustu tísku á mun lægra verði en áður þekktist.",
+                "tgt": {
+                    "model-tutorial": "With this new business model, Zara was able to offer the latest fashion at a much higher price than was previously known."
+                },
+                "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much thoes errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"higher\" is completely wrong in the given translation; it means the opposite of the Icelandic \"lægra\" (lower).<br>1. Select and mark \"higher\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
+                "validation": {
+                  "model-tutorial": {
+                    "warning": "Please mark \"higher\" as a major error (dark pink) and set the score to 15-30%.",
+                    "score": [
+                      15,
+                      30
+                    ],
+                    "error_spans": [
+                      {
+                        "start_i": [
+                          81,
+                          82
+                        ],
+                        "end_i": [
+                          87,
+                          88
+                        ],
+                        "severity": "major"
+                      }
+                    ],
+                    "allow_skip": true
+                  }
+                },
+                "skippable": true
+              }
+            ],
+            [
+              {
+                "item_id": "isen_#_tutorial_#_4",
+                "src": "Fjöldaframleiðsla fatnaðar jókst í kringum 1970 þegar hún færðist frá vestrænum löndum yfir til Asíu. „Vinnuaflið var ódýrara og ekki hægt að fylgjast jafn vel með gæðaeftirlitinu.",
+                "tgt": {
+                    "model-tutorial": "Mass production of clothing increased around 1970 when it shifted from Western countries over to Asia. \"The labor was cheaper, and it was not possible to monitor the quality control.\""
+                },
+                "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may noticed, the translation of \"jafn vel\" (meaning \"as well\" / \"as closely\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>75–85%</b>.<br></div>",
+                "validation": {
+                  "model-tutorial": {
+                    "warning": "Please mark the [missing] tag as a Minor error and set the score to 75–85%.",
+                    "score": [
+                      75,
+                      85
+                    ],
+                    "error_spans": [
+                      {
+                        "start_i": 183,
+                        "end_i": 183,
+                        "severity": "minor"
+                      }
+                    ],
+                    "allow_skip": true
+                  }
+                },
+                "skippable": true
+              }
+            ],
+            [
+              {
+                "item_id": "isen_#_tutorial_#_5",
+                "src": "Hönnunarteymi Zöru getur fengið hugmynd og verið tilbúið með fullkláraða vöru á nokkrum vikum, stundum innan tveggja til þriggja vikna. Þetta er mun hraðara en hjá öðrum hefðbundnum tískufyrirtækjum sem vinna með sex til tólf mánaða fyrirvara.",
+                "tgt": {
+                    "model-tutorial": "Zara's design team can get an idea and have a finished product ready within a few weeks, sometimes within two to three weeks. This is much faster than at other traditional fashion companies, which work with a six to twelve week lead time."
+                },
+                "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
+                "validation": {
+                  "model-tutorial": {
+                    "warning": "Mark the third word \"week\" as a major error and set the score to 35-45%.",
+                    "score": [
+                      35,
+                      45
+                    ],
+                    "error_spans": [
+                      {
+                        "start_i": [
+                          222,
+                          223
+                        ],
+                        "end_i": [
+                          226,
+                          227
+                        ],
+                        "severity": "major"
+                      }
+                    ],
+                    "allow_skip": true
+                  }
+                },
+                "skippable": true
+              },
+              {
+                "item_id": "isen_#_tutorial_#_6",
+                "src": "Tískuhúsin ná verðinu meðal annars niður með því að nota gerviefni í flestallar flíkurnar. Ragna segir gerviefni geta verið frábær þegar þau þjóni réttum tilgangi, eins og þegar komi að íþrótta,- útivistar- og vinnufatnaði.",
+                "tgt": {
+                    "model-tutorial": "The fashion houses bring the price down, among other things, by using synthetic materials in almost all of the garments. Ragna says synthetic materials can be excellent when they serve the right purpose, such as when it comes to sportswear, outdoor wear, and workwear."
+                },
+                "instructions": "",
+                "validation": {
+                  "model-tutorial": {
+                    "warning": "This translation is excellent. Please don't mark any errors and set the score to 95-100%.",
+                    "score": [
+                      95,
+                      100
+                    ],
+                    "error_spans": []
+                  }
+                },
+                "skippable": true
+              }
+            ],
+            [
+              {
+                "item_id": "isen_#_tutorial_#_7",
+                "src": "Sjálf segist Ragna forðast blöndur vegna þess að þegar hún hætti að nota flíkina þá sé nær ómögulegt að aðskilja efnin.",
+                "tgt": {
+                    "model-tutorial-A": "Ragna herself says she avoids blends because, when she stops using a garment, it is nearly impossible to separate the materials.",
+                    "model-tutorial-B": "Ragna herself says she prefers blends because, when she stops using a garment, it is nearly effortless to separate the materials."
+                },
+                "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The words \"forðast\" (avoids) and \"ómögulegt\" (impossible) are translated incorrectly to \"prefers\" and \"effortless\", respectively. Having two major errors, set the score to 10-25%.</div>",
+                "skippable": true
+              },
+              {
+                "item_id": "isen_#_tutorial_#_8",
+                "src": "„Á meðan ef þú ert með einhvern ullarjakka þá gætirðu þess vegna bara grafið hann og hann er í rauninni bara næring fyrir lífið þar. Pólýester er alls ekki þannig.“",
+                "tgt": {
+                    "model-tutorial-A": "\"Whereas if you have some wool jacket, you could for that reason just bury it, and it is in reality just nourishment for the life there, decomposing fully within a single week. Polyester is not like that at all.\"",
+                    "model-tutorial-B": "\"Whereas if you have some cotton jacket, you could for that reason just bury it, and it is in reality just nourishment for the life there. Polyester is not like that at all.\""
+                },
+                "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"decomposing fully within a single week\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"ullarjakka\" (wool jacket) is mistakenly translated as \"cotton jacket\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 40-50%.<br></div>",
+                "skippable": true
+            }
+        ]
+      ]
+    ]
+}

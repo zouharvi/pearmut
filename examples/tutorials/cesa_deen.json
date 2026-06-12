@@ -1,0 +1,204 @@
+{
+    "info": {
+      "protocol": "cESA",
+      "assignment": "task-based"
+    },
+    "campaign_id": "esa_deen_tutorial",
+    "data": [
+      [
+        [
+          {
+            "item_id": "deen_#_tutorial_#_1",
+            "src": "Ihr Ruf bei den alten Griechen war nicht gerade der Beste: Die Amazonen galten als hartgesonnene und unerschrockene Kämpferinnen, die mit Pfeil und Bogen zu Pferde in die Schlacht zogen.",
+            "tgt": {
+              "model-tutorial": "Their reputation among the ancient Greeks was not exactly the best: the Amazons were considered hard-minded and fearless warriors who rode into battle on horseback with bow and arrow."
+            },
+            "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>German to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "This translation is perfect! Please set the score to 100% and do not mark any error spans.",
+                "score": [
+                  95,
+                  100
+                ],
+                "error_spans": [],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "deen_#_tutorial_#_2",
+            "src": "Frauen wurden im Haus gehalten, webten und kümmerten sich um die Kinder.",
+            "tgt": {
+              "model-tutorial": "Women were kept in the house, knitted, and took care of the children."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"knitted\" is incorrect in the following translation. The German word \"webten\" means \"wove\" not \"knitted\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"knitted\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>75–85%</b> to reflect the reduced quality.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark the word \"knitted\" as a minor error (light pink) and set the score to 75-85%.",
+                "score": [
+                  75,
+                  85
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      29,
+                      30
+                    ],
+                    "end_i": [
+                      36,
+                      37
+                    ],
+                    "severity": "minor"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "deen_#_tutorial_#_3",
+            "src": "Gleichzeitig waren die Griechen so fasziniert von ihnen, dass sie sie als Statuen, in Wandmalereien oder auf Vasen verewigten.",
+            "tgt": {
+              "model-tutorial": "At the same time, the Greeks were so disappointed by them that they immortalized them as statues, in wall paintings, or on vases."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much thoes errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"disappointed\" is completely wrong in the given translation; it means the opposite of the German \"fasziniert\" (fascinated).<br>1. Select and mark \"disappointed\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark \"disappointed\" as a major error (dark pink) and set the score to 15-30%.",
+                "score": [
+                  15,
+                  30
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      36,
+                      37
+                    ],
+                    "end_i": [
+                      48,
+                      49
+                    ],
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "deen_#_tutorial_#_4",
+            "src": "Es gab sogar Amazonenpuppen für die Kinder.",
+            "tgt": {
+              "model-tutorial": "There were even Amazon dolls."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may noticed, the translation of \"für die Kinder\" (meaning \"for the children\") is missing from the target text. This is a major error since this omission is a major part of the meaning of text.<br>1. Mark the [missing] tag as a <b>Major</b> error.<br>2. Set the score to <b>45–55%</b>.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark the [missing] tag as a Major error and set the score to 45–55%.",
+                "score": [
+                  45,
+                  55
+                ],
+                "error_spans": [
+                  {
+                    "start_i": 29,
+                    "end_i": 29,
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "deen_#_tutorial_#_5",
+            "src": "So wie Theseus, König von Athen, der die Anführerin Hippolyta entführt und zur Frau genommen haben soll - eine Geschichte, die der englische Dramatiker William Shakespeare  2000 Jahre später in seinem \"Sommernachtstraum\" aufgriff. ",
+            "tgt": {
+              "model-tutorial": "Such as Theseus, King of Athens, who is said to have abducted the soldier Hippolyta and taken her as his wife — a story that the English playwright William Shakespeare took up 2,000 years later in his \"A Midsummer Night's Dream.\""
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Mark the word \"soldier\" as a major error and set the score to 35-45%.",
+                "score": [
+                  35,
+                  45
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      65,
+                      66
+                    ],
+                    "end_i": [
+                      72,
+                      73
+                    ],
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          },
+          {
+            "item_id": "deen_#_tutorial_#_6",
+            "src": "Oder Achilles, der Penthesilea im Kampf erschlagen haben soll.  Allerdings verliebte er sich in sie, als er der Sterbenden den Helm vom Haupt nahm und bedauerte seine Tat.",
+            "tgt": {
+              "model-tutorial": "Or Achilles, who is said to have slain Penthesilea in battle. However, he fell in love with her when he took the helmet from the head of the dying woman and regretted his deed."
+            },
+            "instructions": "",
+            "validation": {
+              "model-tutorial": {
+                "warning": "This translation is excellent. Please don't mark any errors and set the score to 95-100%.",
+                "score": [
+                  95,
+                  100
+                ],
+                "error_spans": []
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "deen_#_tutorial_#_7",
+            "src": "Es gibt viele Varianten dieser Geschichten - doch der Ausgang ist aus Sicht der männlichen Erzähler immer klar: Die Männer behalten am Ende die Oberhand.",
+            "tgt": {
+              "model-tutorial-A": "There are many variants of these stories — but the outcome, from the perspective of the male narrators, is always clear: in the end, the men keep the upper hand.",
+              "model-tutorial-B": "There are many variants of these stories — but the outcome, from the perspective of the female narrators, is always clear: in the end, the men keep the lower hand."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The words \"männlichen\" (male) and \"Ober-\" (upper) are translated incorrectly to \"female\" and \"lower\", respectively. Having two major errors, set the score to 10-25%.</div>",
+            "skippable": true
+          },
+          {
+            "item_id": "deen_#_tutorial_#_8",
+            "src": "Lange war man sich nicht sicher, ob die Fantasie mit den Geschichtenerzählern der Antike durchgegangen war und die kriegerischen Frauen nicht aus dem Reich der Legenden stammten.",
+            "tgt": {
+              "model-tutorial-A": "For a long time, people were not sure whether imagination had run away with the storytellers of antiquity and whether the warlike women did not actually originate from the realm of legends and imagination.",
+              "model-tutorial-B": "For a long time, people were not sure whether imagination had run away with the storytellers of old times and whether the warlike women did not actually originate from the realm of legends."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"and imagination\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"Antike\" is mistakenly translated as \"old times\". Since this does not change the meaning of the sentence, mark it as a minor error and set the score to 75-85%.<br></div>",
+            "skippable": true
+          }
+        ]
+      ]
+    ]
+  }

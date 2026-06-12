@@ -1,0 +1,204 @@
+{
+    "info": {
+      "protocol": "cESA",
+      "assignment": "task-based"
+    },
+    "campaign_id": "esa_ruen_tutorial",
+    "data": [
+      [
+        [
+          {
+            "item_id": "ruen_#_tutorial_#_1",
+            "src": "«Тысячи людей ежедневно выполняют знаменитый ритуал, вращаясь на пятках»",
+            "tgt": {
+              "model-tutorial": "\"Thousands of people perform the famous ritual every day, spinning on their heels.\""
+            },
+            "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Russian to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "This translation is perfect! Please set the score to 100% and do not mark any error spans.",
+                "score": [
+                  95,
+                  100
+                ],
+                "error_spans": [],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "ruen_#_tutorial_#_2",
+            "src": "Ритуал привлечения «удачи» с помощью мозаики стал популярен среди жителей Милана в XIX веке.",
+            "tgt": {
+              "model-tutorial": "The ritual of attracting \"luck\" using the mosaic became fashionable among the residents of Milan in the 19th century."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"fashionable\" is incorrect in the following translation. The Russian word \"популярен\" means \"popular\" not \"fashionable\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"fashionable\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>75–85%</b> to reflect the reduced quality.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark the word \"fashionable\" as a minor error (light pink) and set the score to 75-85%.",
+                "score": [
+                  75,
+                  85
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      55,
+                      56
+                    ],
+                    "end_i": [
+                      66,
+                      67
+                    ],
+                    "severity": "minor"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "ruen_#_tutorial_#_3",
+            "src": "«Это, вероятно, трогательная традиция, но довольно вредная для произведения искусства», — говорит Джанлука Галли.",
+            "tgt": {
+              "model-tutorial": "\"This is probably a touching tradition, but quite beneficial for the work of art,\" says Gianluca Galli."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much thoes errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"beneficial\" is completely wrong in the given translation; it means the opposite of the Russian \"вредная\" (harmful).<br>1. Select and mark \"beneficial\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark \"beneficial\" as a major error (dark pink) and set the score to 15-30%.",
+                "score": [
+                  15,
+                  30
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      49,
+                      50
+                    ],
+                    "end_i": [
+                      59,
+                      60
+                    ],
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "ruen_#_tutorial_#_4",
+            "src": "На полу в центральном восьмиугольном зале галереи, которая была построена во второй половине XIX века, находятся мозаики с изображением гербов четырёх главных городов королевства Италия.",
+            "tgt": {
+              "model-tutorial": "On the floor of the central octagonal hall of the gallery, which was built in the second half of the 19th century, there are mosaics depicting the coats of arms of the four cities of the Kingdom of Italy."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may noticed, the translation of \"главных\" (meaning \"main\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>75–85%</b>.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark the [missing] tag as a Minor error and set the score to 75–85%.",
+                "score": [
+                  75,
+                  85
+                ],
+                "error_spans": [
+                  {
+                    "start_i": 204,
+                    "end_i": 204,
+                    "severity": "minor"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "ruen_#_tutorial_#_5",
+            "src": "уристы, желающие привлечь удачу, уже вытоптали яму на «счастливом месте», полностью стерев мозаичную плитку.",
+            "tgt": {
+              "model-tutorial": "Tourists wishing to attract luck have already trampled a hole in the \"lucky spot,\" completely restoring the mosaic tiles."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Mark the word \"restoring\" as a major error and set the score to 35-45%.",
+                "score": [
+                  35,
+                  45
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      93,
+                      94
+                    ],
+                    "end_i": [
+                      102,
+                      103
+                    ],
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          },
+          {
+            "item_id": "ruen_#_tutorial_#_6",
+            "src": "Реставраторы работают над тем, чтобы вернуть произведению искусства его былое великолепие, говорится в заявлении городского совета Милана.",
+            "tgt": {
+              "model-tutorial": "Restorers are working to return the work of art to its former splendor, according to a statement from the Milan city council."
+            },
+            "instructions": "",
+            "validation": {
+              "model-tutorial": {
+                "warning": "This translation is excellent. Please don't mark any errors and set the score to 95-100%.",
+                "score": [
+                  95,
+                  100
+                ],
+                "error_spans": []
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "ruen_#_tutorial_#_7",
+            "src": "В настоящее время торговая галерея Виктора Эммануила II является одной из туристических достопримечательностей Милана. Здесь находятся магазины многих модных брендов и рестораны, в ней проводятся выставки и концерты.",
+            "tgt": {
+              "model-tutorial-A": "At present, the Victor Emmanuel II shopping gallery is one of the tourist attractions of Milan. Here there are shops of many fashion brands and restaurants, and exhibitions and concerts are held in it.",
+              "model-tutorial-B": "At present, the Victor Emmanuel II shopping gallery is one of the industrial attractions of Milan. Here there are shops of many fashion brands and restaurants, and protests and concerts are held in it."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The words \"туристических\" (tourist) and \"выставки\" (exhibitions) are translated incorrectly to \"industrial\" and \"protests\", respectively. Having two major errors, set the score to 10-25%.</div>",
+            "skippable": true
+          },
+          {
+            "item_id": "ruen_#_tutorial_#_8",
+            "src": "Реставрация мозаики с изображением герба Турина началась на этой неделе: изображение быка было огорожено.",
+            "tgt": {
+              "model-tutorial-A": "The restoration of the mosaic depicting the coat of arms of Turin began this week and will cost two million euros: the image of the bull has been fenced off.",
+              "model-tutorial-B": "The restoration of the mosaic depicting the coat of arms of Turin began last week: the image of the bull has been fenced off."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"and will cost two million euros\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"на этой неделе\" is mistakenly translated as \"last week\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 50–60%.<br></div>",
+            "skippable": true
+          }
+        ]
+      ]
+    ]
+  }

@@ -1,0 +1,204 @@
+{
+    "info": {
+      "protocol": "cESA",
+      "assignment": "task-based"
+    },
+    "campaign_id": "esa_iden_tutorial",
+    "data": [
+      [
+        [
+          {
+            "item_id": "iden_#_tutorial_#_1",
+            "src": "Pemerintah mengklaim bencana di Sumatra dipicu kombinasi curah hujan ekstrem dan dinamika atmosfer yang menghasilkan bibit siklon tropis bernama Senyar.",
+            "tgt": {
+              "model-tutorial": "The government claims the disaster in Sumatra was triggered by a combination of extreme rainfall and atmospheric dynamics that produced a tropical cyclone seed named Senyar."
+            },
+            "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Indonesian to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "This translation is perfect! Please set the score to 100% and do not mark any error spans.",
+                "score": [
+                  95,
+                  100
+                ],
+                "error_spans": [],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "iden_#_tutorial_#_2",
+            "src": "Kolega di tempat kerjanya, Yayasan Hutan, Alam, dan Lingkungan Aceh (HAkA), organisasi nonpemerintah yang berfokus di advokasi perlindungan Kawasan Ekosistem Leuser (KEL), gagal dihubungi sebab jaringan listrik hilang.",
+            "tgt": {
+              "model-tutorial": "Colleagues at her workplace, the Aceh Forest, Nature, and Environment Foundation (HAkA), a non-governmental organization focused on advocacy for the protection of the Leuser Ecosystem Area (KEL), could not be reached because the power grid vanished."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"vanished\" is incorrect in the following translation. The Indonesian word \"hilang\" here means the power \"was lost\" or \"went out\", not \"vanished\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"vanished\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>75–85%</b> to reflect the reduced quality.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark the word \"vanished\" as a minor error (light pink) and set the score to 75-85%.",
+                "score": [
+                  75,
+                  85
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      239,
+                      240
+                    ],
+                    "end_i": [
+                      247,
+                      248
+                    ],
+                    "severity": "minor"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "iden_#_tutorial_#_3",
+            "src": "Belakangan, pemerintah menambahkan faktor alih fungsi lahan maupun deforestasi di hulu ke dalam kotak penyebab bencana.",
+            "tgt": {
+              "model-tutorial": "Later, the government removed the factors of land-use conversion and upstream deforestation from the box of disaster causes."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much thoes errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"removed\" is completely wrong in the given translation; it means the opposite of the Indonesian \"menambahkan\" (added).<br>1. Select and mark \"removed\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark \"removed\" as a major error (dark pink) and set the score to 15-30%.",
+                "score": [
+                  15,
+                  30
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      22,
+                      23
+                    ],
+                    "end_i": [
+                      29,
+                      30
+                    ],
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "iden_#_tutorial_#_4",
+            "src": "Tujuan Farwiza serta HAkA sederhana: mengurangi penderitaan korban di tapak, yang kehilangan anggota keluarga, di samping kebutuhan primer bahkan rumah.",
+            "tgt": {
+              "model-tutorial": "The goal of Farwiza and HAkA was: to reduce the suffering of victims on the ground, who lost family members, alongside their primary needs and even their homes."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may noticed, the translation of \"sederhana\" (meaning \"simple\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>75–85%</b>.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark the [missing] tag as a Minor error and set the score to 75–85%.",
+                "score": [
+                  75,
+                  85
+                ],
+                "error_spans": [
+                  {
+                    "start_i": 160,
+                    "end_i": 160,
+                    "severity": "minor"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "iden_#_tutorial_#_5",
+            "src": "Kepanikan Farwiza \"semakin berlipat ganda\" setelah menyadari yang terdampak bencana banjir bukan sebatas para koleganya di HAkA, melainkan masyarakat lokal.",
+            "tgt": {
+              "model-tutorial": "Farwiza's panic \"multiplied even further\" after she realized that those affected by the flood disaster were limited to her colleagues at HAkA, rather than the local community."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Mark the word \"limited to\" as a major error and set the score to 35-45%.",
+                "score": [
+                  35,
+                  45
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      107,
+                      108
+                    ],
+                    "end_i": [
+                      117,
+                      118
+                    ],
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          },
+          {
+            "item_id": "iden_#_tutorial_#_6",
+            "src": "Kendati demikian, Farwiza dan HAkA bergerak cepat merespons bencana, terkhusus yang berhubungan dengan korban. Mereka mendata apa saja yang sekiranya diperlukan masyarakat, membuka donasi publik, dan kemudian menyalurkannya setelah semuanya terkumpul.",
+            "tgt": {
+              "model-tutorial": "Nevertheless, Farwiza and HAkA moved quickly to respond to the disaster, especially in matters related to the victims. They recorded whatever the community might need, opened public donations, and then distributed them once everything had been collected."
+            },
+            "instructions": "",
+            "validation": {
+              "model-tutorial": {
+                "warning": "This translation is excellent. Please don't mark any errors and set the score to 95-100%.",
+                "score": [
+                  95,
+                  100
+                ],
+                "error_spans": []
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "iden_#_tutorial_#_7",
+            "src": "\"Kenapa kami tidak diberi tahu [tentang] kemunculan siklon? Apakah tidak ada early warning [peringatan dini], atau mungkin sudah disampaikan tapi tidak sampai ke kami?\" tegasnya.",
+            "tgt": {
+              "model-tutorial-A": "\"Why were we not informed [about] the emergence of the cyclone? Was there no early warning, or perhaps it was conveyed but did not reach us?\" she asserted.",
+              "model-tutorial-B": "\"Why were we informed [about] the emergence of the cyclone? Was there an early warning, or perhaps it was conveyed but did not reach us?\" she asserted."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The phrases \"tidak diberi tahu\" (were not informed) and \"tidak ada\" (there was no) are translated incorrectly, dropping the negation to become \"were informed\" and \"there was an\", respectively. Having two major errors, set the score to 10-25%.</div>",
+            "skippable": true
+          },
+          {
+            "item_id": "iden_#_tutorial_#_8",
+            "src": "Selama turun ke lapangan, tak jarang Farwiza merasa lelah secara mental. Tawaran wawancara dengan beberapa media terpaksa dia tolak. \"Setiap kali wawancara, akhirnya saya akan pecah tangis,\" jelasnya.",
+            "tgt": {
+              "model-tutorial-A": "During her time in the field, Farwiza often felt mentally exhausted, sometimes for days without sleep. She was forced to decline interview offers from several media outlets. \"Every time I am interviewed, I end up bursting into tears,\" she explained.",
+              "model-tutorial-B": "During her time in the field, Farwiza often felt mentally exhausted. She was forced to accept interview offers from several media outlets. \"Every time I am interviewed, I end up bursting into tears,\" she explained."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"sometimes for days without sleep\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"tolak\" (decline) is mistakenly translated as \"accept\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 25-40%.<br></div>",
+            "skippable": true
+          }
+        ]
+      ]
+    ]
+  }

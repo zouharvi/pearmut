@@ -1,0 +1,204 @@
+{
+    "info": {
+      "protocol": "cESA",
+      "assignment": "task-based"
+    },
+    "campaign_id": "esa_aren_tutorial",
+    "data": [
+      [
+        [
+          {
+            "item_id": "aren_#_tutorial_#_1",
+            "src": "في وقتٍ بات العمل والتواصل والترفيه يعتمد بشكل متزايد على الشاشات، يظن كثيرون أن تخصيص نحو ساعة يومياً لممارسة الرياضة يكفي لدرء مخاطر نمط الحياة الخامل على الصحة.",
+            "tgt": {
+              "model-tutorial": "At a time when work, communication, and entertainment increasingly rely on screens, many believe that dedicating around an hour a day to exercise is enough to ward off the health risks of a sedentary lifestyle."
+            },
+            "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Arabic (Egyptian) to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "This translation is perfect! Please set the score to 100% and do not mark any error spans.",
+                "score": [
+                  95,
+                  100
+                ],
+                "error_spans": [],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "aren_#_tutorial_#_2",
+            "src": "ويرتبط هذا النمط من الحياة بعدد من التغيرات الفسيولوجية الضارة، من بينها مقاومة الإنسولين، وضعف وظائف الأوعية الدموية، وتراجع كفاءة القلب والعضلات، إضافة إلى زيادة الدهون الحشوية وارتفاع مستويات الالتهاب في الجسم.",
+            "tgt": {
+              "model-tutorial": "This lifestyle is linked to a number of harmful physiological changes, including insulin resistance, impaired vascular function, and declining cardiac and muscular efficiency, and increased visceral fat and elevated levels of inflammation in the body."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The third word \"and\" is incorrect in the following translation. The Arabic word \"إضافة إلى\" means \"in addition\" not \"and\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the third word \"and\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>75–85%</b> to reflect the reduced quality.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark the third word \"and\" as a minor error (light pink) and set the score to 75-85%.",
+                "score": [
+                  75,
+                  85
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      175,
+                      176
+                    ],
+                    "end_i": [
+                      178,
+                      179
+                    ],
+                    "severity": "minor"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "aren_#_tutorial_#_3",
+            "src": "عند الجلوس لساعات متواصلة، يتباطأ تدفق الدم، خصوصاً في الساقين، نتيجة ثني مفاصل الورك والركبة والضغط على الأوعية الدموية، ما يؤدي إلى اضطراب الدورة الدموية وتجمع الدم في الأطراف السفلية، هكذا قال لي كيث دايز، اختصاصي فسيولوجيا التمارين الرياضية والباحث في صحة القلب والأوعية الدموية في جامعة كولومبيا بالولايات المتحدة.",
+            "tgt": {
+              "model-tutorial": "When sitting for hours on end, blood flow increases, especially in the legs, as a result of the bending of the hip and knee joints and pressure on the blood vessels, which leads to disrupted circulation and the pooling of blood in the lower extremities. This is what Keith Diaz, an exercise physiology specialist and cardiovascular health researcher at Columbia University in the United States, told me."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much thoes errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"increases\" is completely wrong in the given translation; it means the opposite of the Arabic \"يتباطأ\" (slow down).<br>1. Select and mark \"increases\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark \"increases\" as a major error (dark pink) and set the score to 15-30%.",
+                "score": [
+                  15,
+                  30
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      41,
+                      42
+                    ],
+                    "end_i": [
+                      50,
+                      51
+                    ],
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "aren_#_tutorial_#_4",
+            "src": "قد يُسبب هذا الاضطراب أضراراً كبيرة للأوعية الدموية، كما تصبح العضلات في حالة خمول، وعندما يقل نشاط العضلات، تتراجع حاجتها إلى الدم الغني بالأكسجين، فتستجيب الأوعية الدموية بالانقباض، ما يؤدي إلى ارتفاع ضغط الدم.",
+            "tgt": {
+              "model-tutorial": "This disruption may cause harm to the blood vessels, and the muscles also become inactive.This disruption may cause significant harm to the blood vessels, and the muscles also become inactive. When muscle activity decreases, their need for oxygen-rich blood declines, so the blood vessels respond by constricting, which leads to elevated blood pressure."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may noticed, the translation of \"كبيرة\" (meaning \"significant\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>75–85%</b>.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Please mark the [missing] tag as a Minor error and set the score to 75–85%.",
+                "score": [
+                  75,
+                  85
+                ],
+                "error_spans": [
+                  {
+                    "start_i": 353,
+                    "end_i": 353,
+                    "severity": "minor"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "aren_#_tutorial_#_5",
+            "src": "عندما يقضي شخص ما ساعة في ممارسة أي نوع من الرياضة، ثم تتبعها فترات طويلة من الخمول البدني، فإن إجمالي نشاطه اليومي يظل منخفضاً بحسب دراسات عدة.",
+            "tgt": {
+              "model-tutorial": "When someone spends an hour doing any kind of exercise, followed by short periods of physical inactivity, their total daily activity still remains low, according to several studies."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
+            "validation": {
+              "model-tutorial": {
+                "warning": "Mark the word \"short\" as a major error and set the score to 35-45%.",
+                "score": [
+                  35,
+                  45
+                ],
+                "error_spans": [
+                  {
+                    "start_i": [
+                      67,
+                      68
+                    ],
+                    "end_i": [
+                      72,
+                      73
+                    ],
+                    "severity": "major"
+                  }
+                ],
+                "allow_skip": true
+              }
+            },
+            "skippable": true
+          },
+          {
+            "item_id": "aren_#_tutorial_#_6",
+            "src": "ولا يخفى أن نمط الحياة الخامل بات أكثر شيوعاً في السنوات الأخيرة، لا سيما مع ازدياد نمط العمل عن بُعد والاعتماد على التكنولوجيا والشاشات بكثرة.",
+            "tgt": {
+              "model-tutorial": "It is no secret that a sedentary lifestyle has become more common in recent years, especially with the rise of remote work and heavy reliance on technology and…It is no secret that a sedentary lifestyle has become more common in recent years, especially with the rise of remote work and heavy reliance on technology and screens."
+            },
+            "instructions": "",
+            "validation": {
+              "model-tutorial": {
+                "warning": "This translation is excellent. Please don't mark any errors and set the score to 95-100%.",
+                "score": [
+                  95,
+                  100
+                ],
+                "error_spans": []
+              }
+            },
+            "skippable": true
+          }
+        ],
+        [
+          {
+            "item_id": "aren_#_tutorial_#_7",
+            "src": "مع تزايد الأدلة العلمية، بدأ الخبراء بإعادة صياغة رسائل الصحة العامة. فبدلاً من التركيز فقط على التمارين الرياضية المنظمة، بات الاهتمام يتجه أيضاً إلى تقليل وقت الجلوس وتوزيع الحركة على مدار اليوم.",
+            "tgt": {
+              "model-tutorial-A": "With mounting scientific evidence, experts have begun to reframe public health messages. Instead of focusing solely on structured exercise, attention is now also turning toward reducing sitting time and distributing movement throughout the day.",
+              "model-tutorial-B": "With mounting scientific evidence, experts have begun to reframe public health messages. Instead of focusing solely on structured exercise, attention is now also turning toward increasing sitting time and distributing movement throughout the night."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The words \"تقليل\" (reducing) and \"اليوم\" (day) are translated incorrectly to \"increasing\" and \"night\", respectively. Having two major errors, set the score to 10-25%.</div>",
+            "skippable": true
+          },
+          {
+            "item_id": "aren_#_tutorial_#_8",
+            "src": "لذلك، قد لا يكون الحل في تخصيص ساعة واحدة للرياضة يومياً بقدر ما يكمن في إعادة التفكير بطريقة تحركنا طوال اليوم. فالأدلة العلمية المتزايدة تشير إلى أن الجسم البشري لم يُصمم للبقاء ساكناً لساعات طويلة، حتى لدى الأشخاص الذين يلتزمون بممارسة التمارين الرياضية بانتظام.",
+            "tgt": {
+              "model-tutorial-A": "Therefore, the solution may lie not so much in dedicating one hour to exercise daily or weekly as in rethinking the way we move throughout the day. Mounting scientific evidence indicates that the human body was not designed to remain still for long hours, even among people who commit to exercising regularly.",
+              "model-tutorial-B": "Therefore, the solution may lie not so much in dedicating one hour to exercise weekly as in rethinking the way we move throughout the day. Mounting scientific evidence indicates that the human body was not designed to remain still for long hours, even among people who commit to exercising regularly."
+            },
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"or weekly\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"يومياً\" is mistakenly translated as \"weekly\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 50–60%.<br></div>",
+            "skippable": true
+          }
+        ]
+      ]
+    ]
+  }
