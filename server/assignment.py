@@ -611,23 +611,23 @@ def get_next_item_dynamic(
                 if annotation_item is None:  # skippable items have no annotation
                     continue
                 for model in annotation_item:
-                    if "score" in annotation_item[model]:
+                    if "score" in annotation_item[model] and annotation_item[model]["score"] is not None:
                         model_scores[model].append(annotation_item[model]["score"])
 
         # Calculate average scores
         model_avg_scores = {
-            model: statistics.mean(scores) for model, scores in model_scores.items()
+            model: statistics.mean(model_scores[model]) if model_scores[model] else 0.0
+            for model in all_models
         }
-        model_weights = {
+        model_weights_dict = {
             model: 1 / (rank + 1)
             for rank, model in enumerate(
                 sorted(model_avg_scores, key=model_avg_scores.get, reverse=True)
             )
         }
-        model_weights_all = sum(model_weights.values())
-        model_weights = [
-            model_weights[model] / model_weights_all for model in all_models
-        ]
+        model_weights_arr = np.array([model_weights_dict[model] for model in all_models], dtype=float)
+        model_weights_arr /= model_weights_arr.sum()
+        model_weights = model_weights_arr.tolist()
         selected_models = np.random.choice(
             all_models,
             size=min(dynamic_models, len(all_models)),
