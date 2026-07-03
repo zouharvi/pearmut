@@ -237,9 +237,9 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 if (token) {
                     const exportLinksHtml = `
                         <div style="margin-top: 10px;">
-                            <a href="/export-results?campaign_id=${encodeURIComponent(campaign_id)}&token=${encodeURIComponent(token)}&format=pdf" class="abutton">Export PDF</a>
-                            <a href="/export-results?campaign_id=${encodeURIComponent(campaign_id)}&token=${encodeURIComponent(token)}&format=typst" class="abutton">Export Typst</a>
-                            <a href="/export-results?campaign_id=${encodeURIComponent(campaign_id)}&token=${encodeURIComponent(token)}&format=latex" class="abutton">Export LaTeX</a>
+                            <a href="export-results?campaign_id=${encodeURIComponent(campaign_id)}&token=${encodeURIComponent(token)}&format=pdf" class="abutton">Export PDF</a>
+                            <a href="export-results?campaign_id=${encodeURIComponent(campaign_id)}&token=${encodeURIComponent(token)}&format=typst" class="abutton">Export Typst</a>
+                            <a href="export-results?campaign_id=${encodeURIComponent(campaign_id)}&token=${encodeURIComponent(token)}&format=latex" class="abutton">Export LaTeX</a>
                         </div>
                     `;
                     $content.append(exportLinksHtml);
@@ -397,9 +397,9 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
 if (tokens.length == 0) {
     $("#download_progress").attr("disabled", "true")
 } else {
-    $("#download_progress").attr("href", `/download-progress?${campaign_ids.map((id, i) => `campaign_id=${encodeURIComponent(id)}&${tokens[i] ? `token=${encodeURIComponent(tokens[i])}` : ''}`).join('&')}`)
+    $("#download_progress").attr("href", `download-progress?${campaign_ids.map((id, i) => `campaign_id=${encodeURIComponent(id)}&${tokens[i] ? `token=${encodeURIComponent(tokens[i])}` : ''}`).join('&')}`)
 }
-$("#download_annotations").attr("href", `/download-annotations?${campaign_ids.map((id, i) => `campaign_id=${encodeURIComponent(id)}&${tokens[i] ? `token=${encodeURIComponent(tokens[i])}` : ''}`).join('&')}`)
+$("#download_annotations").attr("href", `download-annotations?${campaign_ids.map((id, i) => `campaign_id=${encodeURIComponent(id)}&${tokens[i] ? `token=${encodeURIComponent(tokens[i])}` : ''}`).join('&')}`)
 
 // add campaign requires main token
 if (tokenMain === "") {

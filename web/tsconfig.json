@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES2024",
     "module": "nodenext",
-    "lib": ["ES6", "DOM"],
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
