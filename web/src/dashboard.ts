@@ -158,17 +158,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
     html += '</tbody></table>'
 
     // link to campaign-specific dashboard
-    let dashboard_url = `${window.location.origin}/dashboard.html?campaign_id=${encodeURIComponent(campaign_id)}${token != null ? `&token=${encodeURIComponent(token)}` : ''}`
-
-    // Create buttons HTML for the header (only if token is available)
-    let buttonsHtml = '';
-    if (token !== null && token !== undefined) {
-        buttonsHtml = `
-            <div style="display: inline-block; vertical-align: top; gap: 10px; width: 150px;">
-                
-            </div>
-        `;
-    }
+    let dashboard_url = `dashboard.html?campaign_id=${encodeURIComponent(campaign_id)}${token != null ? `&token=${encodeURIComponent(token)}` : ''}`
 
     let el = $(`
         <div class="white-box">
