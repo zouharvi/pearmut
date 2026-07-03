@@ -219,7 +219,7 @@ function _slider_html(item_i: number, model: string, sliders?: SliderConfig[]): 
         html += `
           <div class="slider_container">
             <label class="slider_name">${slider.name}</label>
-            <input type="range" min="${slider.min}" max="${slider.max}" step="${slider.step}" value="${slider.min - 1}" id="response_${item_i}_${model}_${slider.name}" data-slider="${slider.name}">
+            <input type="range" min="${slider.min}" max="${slider.max}" step="${slider.step}" value="${slider.min}" id="response_${item_i}_${model}_${slider.name}" data-slider="${slider.name}">
             <span class="slider_label" data-slider="${slider.name}">❓/${slider.max}</span>
           </div>
         `
@@ -646,16 +646,12 @@ function setupCandidateInteractions(
 
                 let val = parseInt((<HTMLInputElement>this).value)
                 label.text(`${val}/${sliderMax}`)
-
-                // Store in sliders field
-                if (state.response_log[item_i][model].sliders![sliderName] == null) {
-                    state.response_log[item_i][model].sliders![sliderName] = val
-                    state.has_unsaved_work = true
-                    check_unlock()
-                    state.action_log.push({ "time": Date.now() / 1000, "action": sliderName, "index": item_i, "model": model, "value": val })
-                }
+                state.response_log[item_i][model].sliders![sliderName] = val
             })
-
+            // special handler if we ever go back to the original position
+            slider.on("mouseup", function () {
+                if (parseInt((<HTMLInputElement>this).value) == sliderConfig.min) slider.trigger("change")
+            })
             slider.on("change", function () {
                 // In frozen mode, do not allow changing scores
                 if (frozenMode) return
@@ -709,12 +705,10 @@ function setupCandidateInteractions(
             let val = parseInt((<HTMLInputElement>this).value)
             state.response_log[item_i][model].score = val
             updateSliderVisual(val)
-
-            if (state.response_log[item_i][model].score == null) {
-                state.has_unsaved_work = true
-                check_unlock()
-                state.action_log.push({ "time": Date.now() / 1000, "action": "score", "index": item_i, "model": model, "value": val })
-            }
+        })
+        // special handler if we ever go back to the original position
+        slider.on("mouseup", function () {
+            if (parseInt((<HTMLInputElement>this).value) == 0) slider.trigger("change")
         })
         slider.on("change", function () {
             // In frozen mode, do not allow changing scores
@@ -1366,7 +1360,6 @@ async function performValidation(): Promise<Array<boolean> | null> {
             }
             // Use validateResponse to support score_greaterthan conditions
             const result = validateResponse(state.response_log[item_ij], state.validations[item_ij]!, model)
-
 
             // if we fail and there's a message, prevent loading next item and show warning
             if (!result && state.validations[item_ij]![model]?.warning) {
