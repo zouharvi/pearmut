@@ -383,34 +383,40 @@ async def _add_campaign(request: AddCampaignRequest):
 @app.get("/download-annotations")
 async def _download_annotations(
     campaign_id: list[str] = Query(),
+    filename: str = Query("annotations.json"),
     # NOTE: currently not checking tokens for progress download as it is non-destructive
     # token: list[str] = Query()
 ):
     output = {}
-    for campaign_id in campaign_id:
-        output_path = f"{ROOT}/data/outputs/{campaign_id}.jsonl"
-        if campaign_id not in progress_data:
+    for cid in campaign_id:
+        output_path = f"{ROOT}/data/outputs/{cid}.jsonl"
+        if cid not in progress_data:
             return JSONResponse(
-                content=f"Unknown campaign ID {campaign_id}", status_code=400
+                content=f"Unknown campaign ID {cid}", status_code=400
             )
         if not os.path.exists(output_path):
-            output[campaign_id] = []
+            output[cid] = []
         else:
             with open(output_path, "r") as f:
-                output[campaign_id] = [json.loads(x) for x in f.readlines()]
+                output[cid] = [json.loads(x) for x in f.readlines()]
+
+    if not filename.endswith('.json'):
+        filename += '.json'
 
     return JSONResponse(
         content=output,
         status_code=200,
         headers={
-            "Content-Disposition": 'attachment; filename="annotations.json"',
+            "Content-Disposition": f'attachment; filename="{filename}"',
         },
     )
 
 
 @app.get("/download-progress")
 async def _download_progress(
-    campaign_id: list[str] = Query(), token: list[str] = Query()
+    campaign_id: list[str] = Query(), 
+    token: list[str] = Query(),
+    filename: str = Query("progress.json"),
 ):
     if len(campaign_id) != len(token):
         return JSONResponse(
@@ -428,11 +434,14 @@ async def _download_progress(
 
         output[cid] = progress_data[cid]
 
+    if not filename.endswith('.json'):
+        filename += '.json'
+
     return JSONResponse(
         content=output,
         status_code=200,
         headers={
-            "Content-Disposition": 'attachment; filename="progress.json"',
+            "Content-Disposition": f'attachment; filename="{filename}"',
         },
     )
 

@@ -393,13 +393,53 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
 })();
 
 
+async function handleDownload(url: string, defaultFilename: string) {
+    if ('showSaveFilePicker' in window) {
+        try {
+            const handle = await (window as any).showSaveFilePicker({
+                suggestedName: defaultFilename,
+                types: [{
+                    description: 'JSON Files',
+                    accept: { 'application/json': ['.json'] },
+                }],
+            });
+            const response = await fetch(url);
+            if (!response.ok || !response.body) {
+                throw new Error("Failed to fetch file or body is null.");
+            }
+            const writable = await handle.createWritable();
+            await response.body.pipeTo(writable);
+            return;
+        } catch (err: any) {
+            if (err.name === 'AbortError') {
+                return; // User cancelled
+            }
+            console.error('File System Access API failed, falling back:', err);
+        }
+    }
+    // Fallback if API not supported or failed
+    window.location.href = url + `&filename=${encodeURIComponent(defaultFilename)}`;
+}
+
 // progress requries an access token
 if (tokens.length == 0) {
     $("#download_progress").attr("disabled", "true")
 } else {
-    $("#download_progress").attr("href", `download-progress?${campaign_ids.map((id, i) => `campaign_id=${encodeURIComponent(id)}&${tokens[i] ? `token=${encodeURIComponent(tokens[i])}` : ''}`).join('&')}`)
+    const progressUrl = `download-progress?${campaign_ids.map((id, i) => `campaign_id=${encodeURIComponent(id)}&${tokens[i] ? `token=${encodeURIComponent(tokens[i])}` : ''}`).join('&')}`;
+    $("#download_progress").attr("href", progressUrl);
+    $("#download_progress").on("click", (e) => {
+        e.preventDefault();
+        handleDownload(progressUrl, "progress.json");
+    });
 }
-$("#download_annotations").attr("href", `download-annotations?${campaign_ids.map((id, i) => `campaign_id=${encodeURIComponent(id)}&${tokens[i] ? `token=${encodeURIComponent(tokens[i])}` : ''}`).join('&')}`)
+
+const annotationsUrl = `download-annotations?${campaign_ids.map((id, i) => `campaign_id=${encodeURIComponent(id)}&${tokens[i] ? `token=${encodeURIComponent(tokens[i])}` : ''}`).join('&')}`;
+$("#download_annotations").attr("href", annotationsUrl);
+$("#download_annotations").on("click", (e) => {
+    e.preventDefault();
+    handleDownload(annotationsUrl, "annotations.json");
+});
+
 
 // add campaign requires main token
 if (tokenMain === "") {
