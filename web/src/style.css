@@ -81,6 +81,7 @@ label {
 .tgt_char:hover {
     background-color: #ccc;
     cursor: pointer;
+    box-shadow: inset 1.5px 0 0 0 black, inset -1.5px 0 0 0 black;
 }
 
 .src_char:hover {
@@ -90,6 +91,15 @@ label {
 .src_char.highlighted,
 .tgt_char.highlighted {
     background-color: #ccc;
+}
+
+.output_tgt :nth-child(1 of .highlighted) {
+    box-shadow: inset 1.5px 0 0 0 black;
+}
+
+/* last element */
+.output_tgt :nth-last-child(1 of .highlighted) {
+    box-shadow: inset -1.5px 0 0 0 black;
 }
 
 .highlighted_active {
