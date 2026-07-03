@@ -13,6 +13,7 @@ Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.
   - Add `data_random` and `data_random_prob` for random item sampling that can be used for spot attention checks
   - Dashboard now asks where to save `progress.json` and `annotations.json`.
   - Better telegraphing of span boundaries.
+  - Various frontend bugfixes
 - v1.1.4
   - Make span toolboxes stick for 0.5 second after selection
 - v1.1.3

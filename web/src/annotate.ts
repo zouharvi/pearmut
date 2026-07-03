@@ -354,6 +354,10 @@ function setupCandidateInteractions(
                     if (toolbox) {
                         const timeoutId = window.setTimeout(() => {
                             toolbox.css("display", "none")
+                            if (toolbox.data("reposition-interval")) {
+                                window.clearInterval(toolbox.data("reposition-interval"))
+                                toolbox.removeData("reposition-interval")
+                            }
                         }, 500);
                         toolbox.data("hide-timeout", timeoutId);
                     }
@@ -433,6 +437,14 @@ function setupCandidateInteractions(
                             toolbox.removeData("hide-timeout");
                         }
                         toolbox.css("display", "block")
+                        updateToolboxPosition(toolbox, firstEl)
+                        if (!toolbox.data("reposition-interval")) {
+                            // every 1 sec reposition the toolbox if visible
+                            let intervalId = window.setInterval(() => {
+                                updateToolboxPosition(toolbox, firstEl)
+                            }, 1000)
+                            toolbox.data("reposition-interval", intervalId)
+                        }
                     }
                 }
             })
@@ -510,12 +522,19 @@ function setupCandidateInteractions(
                         // handle hover on toolbox
                         toolbox.on("mouseenter focusin contextmenu", function (e) {
                             if (e.type === "contextmenu") e.preventDefault();
-                            const timeoutId = toolbox.data("hide-timeout");
-                            if (timeoutId) {
-                                window.clearTimeout(timeoutId);
+                            if (toolbox.data("hide-timeout")) {
+                                window.clearTimeout(toolbox.data("hide-timeout"));
                                 toolbox.removeData("hide-timeout");
                             }
                             toolbox.css("display", "block")
+                            updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el))
+                            if (!toolbox.data("reposition-interval")) {
+                                // every 1 sec reposition the toolbox
+                                let intervalId = window.setInterval(() => {
+                                    updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el))
+                                }, 1000)
+                                toolbox.data("reposition-interval", intervalId)
+                            }
                             check_unlock()
                         })
                         // handle hover on toolbox
@@ -524,6 +543,10 @@ function setupCandidateInteractions(
                             if (error_span.severity != null && (!state.protocol_error_categories || (error_span.category != null && error_span.category?.includes("/")))) {
                                 const timeoutId = window.setTimeout(() => {
                                     toolbox.css("display", "none")
+                                    if (toolbox.data("reposition-interval")) {
+                                        window.clearInterval(toolbox.data("reposition-interval"))
+                                        toolbox.removeData("reposition-interval")
+                                    }
                                     check_unlock()
                                 }, 500);
                                 toolbox.data("hide-timeout", timeoutId);
@@ -533,6 +556,13 @@ function setupCandidateInteractions(
                         // set up callback to reposition toolbox on resize         
                         $(window).on('resize.toolbox', () => updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el)))
                         updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el))
+                        if (!toolbox.data("reposition-interval")) {
+                            // every 1 sec reposition the toolbox
+                            let intervalId = window.setInterval(() => {
+                                updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el))
+                            }, 1000)
+                            toolbox.data("reposition-interval", intervalId)
+                        }
 
                         // store error span
                         state.response_log[item_i][model].error_spans.push(error_span)
@@ -595,13 +625,21 @@ function setupCandidateInteractions(
                 state.mqm_severities
             )
             $("body").append(toolbox)
-            toolbox.on("mouseenter", () => {
+            toolbox.on("mouseenter focusin contextmenu", () => {
                 const timeoutId = toolbox.data("hide-timeout");
                 if (timeoutId) {
                     window.clearTimeout(timeoutId);
                     toolbox.removeData("hide-timeout");
                 }
-                toolbox.css("display", "block");
+                toolbox.css("display", "block")
+                updateToolboxPosition(toolbox, $(span_objs[0].el))
+                // every 1 sec reposition the toolbox if visible
+                if (!toolbox.data("reposition-interval")) {
+                    let intervalId = window.setInterval(() => {
+                        updateToolboxPosition(toolbox, $(span_objs[0].el))
+                    }, 1000)
+                    toolbox.data("reposition-interval", intervalId)
+                }
                 check_unlock()
             })
             toolbox.on("mouseleave", () => {
@@ -609,11 +647,16 @@ function setupCandidateInteractions(
                     const timeoutId = window.setTimeout(() => {
                         toolbox.css("display", "none");
                         check_unlock()
+                        if (toolbox.data("reposition-interval")) {
+                            window.clearInterval(toolbox.data("reposition-interval"))
+                            toolbox.removeData("reposition-interval")
+                        }
                     }, 500);
                     toolbox.data("hide-timeout", timeoutId);
                 }
             })
             $(window).on('resize.toolbox', () => updateToolboxPosition(toolbox, $(span_objs[0].el)))
+            updateToolboxPosition(toolbox, $(span_objs[0].el))
 
             for (let obj of span_objs) {
                 $(obj.el).addClass(error_span.severity ? `error_${error_span.severity}` : "error_unknown")
@@ -622,6 +665,10 @@ function setupCandidateInteractions(
             }
             if (error_span.severity != null && (!state.protocol_error_categories || (error_span.category != null && error_span.category?.includes("/")))) {
                 toolbox.css("display", "none")
+                if (toolbox.data("reposition-interval")) {
+                    window.clearInterval(toolbox.data("reposition-interval"))
+                    toolbox.removeData("reposition-interval")
+                }
             }
         }
     }
