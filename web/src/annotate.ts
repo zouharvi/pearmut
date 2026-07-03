@@ -415,6 +415,9 @@ function setupCandidateInteractions(
                     for (let j = obj.word_start; j <= obj.word_end; j++) {
                         $(tgt_chars_objs[j].el).addClass("highlighted")
                     }
+                } else if (!state.settings.word_level && !is_missing && state_i == null) {
+                    // Highlight current character on hover when not in word-level mode (no active selection)
+                    $(obj.el).addClass("highlighted")
                 }
 
                 // check if inside a span

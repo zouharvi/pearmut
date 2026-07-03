@@ -77,13 +77,6 @@ label {
     padding: 2px 0;
 }
 
-/* Character hover and highlighting */
-.tgt_char:hover {
-    background-color: #ccc;
-    cursor: pointer;
-    box-shadow: inset 1.5px 0 0 0 black, inset -1.5px 0 0 0 black;
-}
-
 .src_char:hover {
     background-color: #ccc;
 }
@@ -93,13 +86,19 @@ label {
     background-color: #ccc;
 }
 
+/* first suggested char */
 .output_tgt :nth-child(1 of .highlighted) {
     box-shadow: inset 1.5px 0 0 0 black;
 }
 
-/* last element */
+/* last suggested char */
 .output_tgt :nth-last-child(1 of .highlighted) {
     box-shadow: inset -1.5px 0 0 0 black;
+}
+
+/* first and last suggested char at the same time */
+.output_tgt :nth-child(1 of .highlighted):nth-last-child(1 of .highlighted) {
+    box-shadow: inset 1.5px 0 0 0 black, inset -1.5px 0 0 0 black;
 }
 
 .highlighted_active {
