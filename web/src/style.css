@@ -105,6 +105,16 @@ label {
     background-color: #aaf !important;
 }
 
+/* override styling for special tokens */
+.special_token.highlighted {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.special_token:hover {
+    cursor: pointer;
+}
+
 /* Error span colors */
 .error_unknown {
     background-color: #ddf;

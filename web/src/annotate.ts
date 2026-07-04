@@ -338,8 +338,9 @@ function setupCandidateInteractions(
     let state_i: null | number = null
 
     if (!no_tgt_char) {
-        tgt_chars_objs.forEach((obj, i) => {
-            let is_missing = obj.el.hasClass("special_token")
+        tgt_chars_objs.forEach((obj, obj_i) => {
+            let i = obj.el_i
+            let is_special = obj.el.hasClass("special_token")
 
             // leaving target character
             $(obj.el).on("mouseleave", function () {
@@ -369,7 +370,7 @@ function setupCandidateInteractions(
                 $(".src_char").removeClass("highlighted")
                 $(".ref_char").removeClass("highlighted")
                 $(".tgt_char").removeClass("highlighted")
-                if (state.settings.show_alignment && !is_missing) {
+                if (state.settings.show_alignment && !is_special) {
                     // Highlight corresponding characters in source
                     if (src_chars_els.length > 0) {
                         let src_i = Math.round(i / tgt_chars_objs.length * src_chars_els.length)
@@ -398,31 +399,31 @@ function setupCandidateInteractions(
                         }
                     })
                 }
-                if (state_i != null && !is_missing) {
+                if (state_i != null && !is_special) {
                     // In word-level mode, expand selection preview to word boundaries
-                    let preview_left = Math.min(state_i, i)
-                    let preview_right = Math.max(state_i, i)
-                    let state_is_missing = state_i != null && tgt_chars_objs[state_i].el.hasClass("special_token")
-                    if (state.settings.word_level && !state_is_missing) {
+                    let preview_left = Math.min(state_i, obj_i)
+                    let preview_right = Math.max(state_i, obj_i)
+                    let state_is_special = state_i != null && tgt_chars_objs[state_i].el.hasClass("special_token")
+                    if (state.settings.word_level && !state_is_special) {
                         preview_left = tgt_chars_objs[preview_left].word_start
                         preview_right = tgt_chars_objs[preview_right].word_end
                     }
                     for (let j = preview_left; j <= preview_right; j++) {
                         $(tgt_chars_objs[j].el).addClass("highlighted")
                     }
-                } else if (state.settings.word_level && !is_missing && state_i == null) {
+                } else if (state.settings.word_level && !is_special && state_i == null) {
                     // Highlight current word on hover when in word-level mode (no active selection)
                     for (let j = obj.word_start; j <= obj.word_end; j++) {
                         $(tgt_chars_objs[j].el).addClass("highlighted")
                     }
-                } else if (!state.settings.word_level && !is_missing && state_i == null) {
+                } else if (!state.settings.word_level && !is_special && state_i == null) {
                     // Highlight current character on hover when not in word-level mode (no active selection)
                     $(obj.el).addClass("highlighted")
                 }
 
                 // check if inside a span
-                if (tgt_chars_objs[i].error_span != null) {
-                    let span = tgt_chars_objs[i].error_span!
+                if (obj.error_span != null) {
+                    let span = obj.error_span!
                     // highlight the whole span if we're in one
                     for (let obj of tgt_chars_objs) {
                         if (obj.el_i >= span.start_i && obj.el_i <= span.end_i) {
@@ -458,17 +459,17 @@ function setupCandidateInteractions(
                     // In frozen mode, do not allow creating new error spans
                     if (frozenMode) return
 
-                    if (is_missing) {
-                        state_i = i
+                    if (is_special) {
+                        state_i = obj_i
                     }
                     if (state_i != null) {
                         // check if we're not overlapping
-                        let left_i = Math.min(state_i, i)
-                        let right_i = Math.max(state_i, i)
+                        let left_i = Math.min(state_i, obj_i)
+                        let right_i = Math.max(state_i, obj_i)
 
                         // Expand to word boundaries if word-level mode is enabled
-                        let state_is_missing = state_i != null && tgt_chars_objs[state_i].el.hasClass("special_token")
-                        if (state.settings.word_level && !is_missing && !state_is_missing) {
+                        let state_is_special = state_i != null && tgt_chars_objs[state_i].el.hasClass("special_token")
+                        if (state.settings.word_level && !is_special && !state_is_special) {
                             left_i = tgt_chars_objs[left_i].word_start
                             right_i = tgt_chars_objs[right_i].word_end
                         }
@@ -589,7 +590,7 @@ function setupCandidateInteractions(
                             return
                         }
 
-                        state_i = i
+                        state_i = obj_i
                     }
                 })
             }
