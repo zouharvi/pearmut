@@ -54,16 +54,10 @@ PROTOCOL_INSTRUCTIONS = {
       <li><strong>Task:</strong> Read the source text and competing translations. Highlight all errors. Rate each translation (each column is an output from a single model/translator). At the end, click <b>Next</b> in top-right corner.</li><br>
       <li><strong>Highlighting errors:</strong>
         <ul>
-          <li><strong>Select text</strong> containing an error to mark it as <span class="error_minor">Minor</span>.</li>
-          <li><strong>Click selected text</strong> to change the error to <span class="error_major">Major</span> or remove the highlight.</li>
+          <li><strong>Mark errors</strong> by clicking the beginning and end of the erroneous text span.</li>
+          <li>Use <span class="error_minor">minor severity</span> for imperfections or stylistic issues that do not impact the core message (e.g., awkward phrasing).</li>
+          <li>Use <span class="error_major">major severity</span> for errors that confuse meaning, misrepresent the source, or violate the message (e.g., incorrect information, confusing wording).</li>
           <li><strong>Missing text:</strong> Highlight the <code style="font-family: monospace">[MISSING]</code> tag if the translation omits important source text.</li>
-        </ul>
-      </li>
-      <br>
-      <li><strong>Error severity:</strong>
-        <ul>
-          <li><span class="error_minor">Minor:</span> Imperfections or stylistic issues that do not impact the core message (e.g., awkward phrasing).</li>
-          <li><span class="error_major">Major:</span> Confuses meaning, misrepresents the source, or violates the message (e.g., incorrect information, confusing wording).</li>
         </ul>
       </li>
       <br>
