@@ -69,11 +69,7 @@
             "tgt": {
               "model-tutorial": "At the same time, the Greeks were so disappointed by them that they immortalized them as statues, in wall paintings, or on vases."
             },
-<<<<<<< HEAD
             "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much those errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"disappointed\" is completely wrong in the given translation; it means the opposite of the German \"fasziniert\" (fascinated).<br>1. Select and mark \"disappointed\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
-=======
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much thoes errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"disappointed\" is completely wrong in the given translation; it means the opposite of the German \"fasziniert\" (fascinated).<br>1. Select and mark \"disappointed\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
->>>>>>> tutorial
             "validation": {
               "model-tutorial": {
                 "warning": "Please mark \"disappointed\" as a major error (dark pink) and set the score to 15-30%.",
@@ -107,11 +103,7 @@
             "tgt": {
               "model-tutorial": "There were even Amazon dolls."
             },
-<<<<<<< HEAD
             "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may have noticed, the translation of \"für die Kinder\" (meaning \"for the children\") is missing from the target text. This is a major error since this omission is a major part of the meaning of text.<br>1. Mark the [missing] tag as a <b>Major</b> error.<br>2. Set the score to <b>45–55%</b>.<br></div>",
-=======
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may noticed, the translation of \"für die Kinder\" (meaning \"for the children\") is missing from the target text. This is a major error since this omission is a major part of the meaning of text.<br>1. Mark the [missing] tag as a <b>Major</b> error.<br>2. Set the score to <b>45–55%</b>.<br></div>",
->>>>>>> tutorial
             "validation": {
               "model-tutorial": {
                 "warning": "Please mark the [missing] tag as a Major error and set the score to 45–55%.",
@@ -206,8 +198,6 @@
             "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"and imagination\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"Antike\" is mistakenly translated as \"old times\". Since this does not change the meaning of the sentence, mark it as a minor error and set the score to 75-85%.<br></div>",
             "skippable": true
           }
-<<<<<<< HEAD
-=======
         ],
         [
           {
@@ -216,7 +206,6 @@
           "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right:10px;'><b>Congrats🎉</b><br><br>You have finished the tutorial. You are now ready to annotate data on Pearmut🚀</div>",
           "skippable": true
         }
->>>>>>> tutorial
         ]
       ]
     ]
