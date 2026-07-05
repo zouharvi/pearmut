@@ -1,0 +1,156 @@
+{
+    "info": {
+        "assignment": "task-based",
+        "protocol": "XSTSRP",
+        "sliders": [
+            {"min": 1, "max": 5, "step": 1, "name": "Overall"}
+        ]
+    },
+    "campaign_id": "example XSTS+R+P",
+    "data": [
+        [
+            [
+                {
+                    "item_id": "en-es-0-0",
+                    "src": "I am a tweakment holdout.",
+                    "tgt": {
+                        "Baseline-0": "Soy reacia a los retoques."
+                    },
+                    "instructions": "Evaluate translation from English to Spanish."
+                },
+                {
+                    "item_id": "en-es-0-1",
+                    "src": "When will wrinkles, bad teeth and big pores be back in fashion?",
+                    "tgt": {
+                        "Baseline-0": "¿Cuándo volverán a estar de moda las arrugas, los dientes en mal estado y los poros dilatados?"
+                    }
+                },
+                {
+                    "item_id": "en-es-0-2",
+                    "src": "Totally neutral question, no right or wrong answer: how do you feel about salmon sperm?",
+                    "tgt": {
+                        "Baseline-0": "Pregunta totalmente neutral, sin respuesta correcta ni incorrecta: ¿qué opinas del esperma de salmón?"
+                    }
+                },
+                {
+                    "item_id": "en-es-1-0",
+                    "src": "It's not a Nordic culinary microtrend or a sex thing, but a beauty treatment, in which \"Polydeoxyribonucleotides (PDRN) derived from purified fragments of DNA extracted from yes, \"salmon sperm\"\" are injected into your face.",
+                    "tgt": {
+                        "Baseline-0": "No es una microtendencia culinaria nórdica ni algo sexual, sino un tratamiento de belleza, en el que se inyectan \"Polideoxirribonucleótidos (PDRN) derivados de fragmentos purificados de ADN extraídos de sí, \"esperma de salmón\"\" en tu rostro."
+                    }
+                }, 
+                {
+                    "item_id": "en-es-1-1",
+                    "src": "It does seem to work: proper research has found PDRN has wound-repairing properties in hard-to-treat contexts such as diabetic ulcers and deep burns.",
+                    "tgt": {
+                        "Baseline-0": "Parece que funciona: investigaciones adecuadas han encontrado que el PDRN tiene propiedades reparadoras de heridas en contextos difíciles de tratar, como úlceras diabéticas y quemaduras profundas."
+                    }
+                },
+                                {
+                    "item_id": "en-es-1-2",
+                    "src": "Good news (unless you're a male salmon).",
+                    "tgt": {
+                        "Baseline-0": "Buenas noticias (a menos que seas un salmón macho)."
+                    }
+                },
+                {
+                    "item_id": "en-es-1-3",
+                    "src": "But what is it doing in healthy faces?",
+                    "tgt": {
+                        "Baseline-0": "Pero, ¿qué hace en rostros sanos?"
+                    }
+                }
+            ],
+            [
+                {
+                    "item_id": "en-es-2-0",
+                    "src": "I learned about salmon sperm in a Sunday Times article on the \"skincare secrets\" of \"26 tastemakers,\" which I read, increasingly aghast.",
+                    "tgt": {
+                        "Baseline-0": "Me enteré del esperma de salmón en un artículo del Sunday Times sobre los \"secretos del cuidado de la piel\" de \"26 creadores de tendencias\", que leí cada vez más horrorizada."
+                    },
+                    "instructions": "Evaluate translation from English to Spanish."
+                },
+                {
+                    "item_id": "en-es-2-1",
+                    "src": "It was a litany of lasers, microneedling, injectables and proprietary treatments with silly names that left me shouting crossly at my laptop: \"But what does it do?\"",
+                    "tgt": {
+                        "Baseline-0": "Era una letanía de láseres, microneedling, inyectables y tratamientos patentados con nombres tontos que me hicieron gritar con enojo a mi portátil: \"¿Pero qué hace?\""
+                    }
+                },
+                {
+                    "item_id": "en-es-2-2",
+                    "src": "The only treatment I related to at all was Marina Abramović recounting how a friend of her mother's put hot mashed potato on her face to temporarily erase wrinkles; Abramović herself uses \"thermage radiofrequency.\"",
+                    "tgt": {
+                        "Baseline-0": "El único tratamiento con el que me relacioné fue Marina Abramović contando cómo una amiga de su madre le ponía puré de patatas caliente en la cara para borrar temporalmente las arrugas; la propia Abramović usa \"radiofrecuencia thermage.\""
+                    }
+                },
+                {
+                    "item_id": "en-es-2-3",
+                    "src": "No wonder a salmon sperm practitioner says it's \"an exciting time in the aesthetic industry.\"",
+                    "tgt": {
+                        "Baseline-0": "No es de extrañar que un practicante de esperma de salmón diga que es \"un momento emocionante en la industria estética.\""
+                    }
+                },
+                {
+                    "item_id": "en-es-3-0",
+                    "src": "Some contributors were celebs, regularly running the unforgiving gauntlet of high-definition television, and the rest were at least very interested, if not professionally involved, in beauty, so they probably aren't typical.",
+                    "tgt": {
+                        "Baseline-0": "Algunos colaboradores eran celebridades, que regularmente enfrentan el implacable desafío de la televisión de alta definición, y el resto estaban al menos muy interesados, si no profesionalmente involucrados, en la belleza, por lo que probablemente no son típicos."
+                    }
+                },
+                {
+                    "item_id": "en-es-3-1",
+                    "src": "And there's a certain honesty to it, at least.",
+                    "tgt": {
+                        "Baseline-0": "Y hay cierta honestidad en ello, al menos."
+                    }
+                },
+                {
+                    "item_id": "en-es-3-2",
+                    "src": "No one is making out their dewy glow is \"just good genes\" and \"loads of water.\"",
+                    "tgt": {
+                        "Baseline-0": "Nadie pretende que su brillo radiante sea \"solo buenos genes\" y \"mucha agua.\""
+                    }
+                },
+                {
+                    "item_id": "en-es-3-3",
+                    "src": "But I also think this newfound willingness to talk about \"tweakments\" (a jaunty portmanteau that makes me queasy) is a product of them being absolutely everywhere.",
+                    "tgt": {
+                        "Baseline-0": "Pero también creo que esta nueva disposición a hablar sobre los \"retoques\" (un alegre acrónimo que me da náuseas) es un producto de que están absolutamente en todas partes."
+                    }
+                }
+            ],
+            [
+                {
+                    "item_id": "en-es-4-0",
+                    "src": "Because they are everywhere, for everyone.",
+                    "tgt": {
+                        "Baseline-0": "Porque están en todas partes, para todos."
+                    },
+                    "instructions": "Evaluate translation from English to Spanish."
+                },
+                {
+                    "item_id": "en-es-4-1",
+                    "src": "According to researchers at University College London, the UK injectables market will be worth £11.7bn by next year, with Botox and fillers available anywhere from Harley Street to high-street hairdressers.",
+                    "tgt": {
+                        "Baseline-0": "Según investigadores del University College de Londres, el mercado británico de inyectables alcanzará los 11.700 millones de libras el año que viene, con bótox y rellenos disponibles en cualquier lugar, desde Harley Street hasta las peluquerías más tradicionales."
+                    }
+                },
+                {
+                    "item_id": "en-es-4-2",
+                    "src": "Writing in Grazia last week, the Guardian beauty columnist Sali Hughes described how \"women in teaching, policing and the civil service\" ask her advice on where to get \"good injections.\"",
+                    "tgt": {
+                        "Baseline-0": "La semana pasada, en un artículo publicado en Grazia, la columnista de belleza del Guardian, Sali Hughes, describió cómo «las mujeres en la docencia, la policía y la administración pública» le piden consejo sobre dónde conseguir «buenas inyecciones»."
+                    }
+                },
+                {
+                    "item_id": "en-es-4-3",
+                    "src": "In the US, Botox use by 20- to 29-year-olds has increased 28% since 2010, with gen Z buying into \"prejuvenation\" (another awful portmanteau), fuelled by the poreless perfection offered by filters, staring at themselves on pandemic screens and social media skinfluencers (argh).",
+                    "tgt": {
+                        "Baseline-0": "En Estados Unidos, el uso de bótox entre las jóvenes de 20 a 29 años ha aumentado un 28 % desde 2010, con la generación Z adquiriendo el «prejuvenecimiento» (otro acrónimo horrible), impulsada por la perfección sin poros que ofrecen los filtros, mirándose en las pantallas de la pandemia y las influencers de piel de las redes sociales (¡argh!)."
+                    }
+                }
+            ]
+        ]
+    ]
+}
