@@ -8,6 +8,7 @@ import json
 import collections
 import numpy as np
 import statistics
+import scipy.stats
 
 LANG2_TO_LANG3 = {
     "cs": "ces",
@@ -36,7 +37,33 @@ LANG2_TO_LANG3 = {
 
 # get English source data
 
-import subset2evaluate.utils
+ANNOTATOR_GUIDELINES = """
+Your task is to annotate several translations in two interfaces: Pearmut and Appraise using the Error Span Annotation protocol.
+You will be shown a sequence of documents in which you will have to mark errors.
+
+Instructions also shown during the annotation:
+- Error spans:
+  - Click on the start of an error, then click on the end to mark an error span.
+  - Click/hover on an existing highlight to change error severity (minor/major) or remove it.
+- Error severity:
+  - Minor: Style, grammar, or word choice could be better.
+  - Major: Meaning is significantly changed or is hard to understand.
+- Tip: Mark the general area of the error (doesn't need to be exact). Use separate highlights for different errors. Use `[missing]` at the end of a sentence for omitted content.
+- Score each translation using the slider based on meaning preservation and quality. Important: The relative order of scores matters; ensure better translations have higher scores than worse ones.
+  -    0: Nonsense: most information is lost.
+  -  33%: Broken: major gaps and narrative issues.
+  -  66%: Middling: minor issues with grammar or consistency.
+  - 100%: Perfect: meaning and grammar align completely with the source.
+
+After three documents (screens, each document has three texts) in one interface, you will transition to another interface and then back again until you complete nine documents in each interface.
+
+At the end, please evaluate the two tools each on scale of 0 (worst) to 10 (best):
+- How fast was the tool to use?
+- How clear was the tool to use?
+- How much effort, excluding the evaluation task itself, was required to interact with the interface?
+"""
+
+import subset2evaluate.utils # type: ignore
 
 data_raw = subset2evaluate.utils.load_data_wmt(
     "wmt25", "en-cs_CZ", normalize=False, include_human=True, include_ref=True
@@ -66,7 +93,7 @@ data_doc = [
 print(len(data_doc))
 print(json.dumps(data_doc, indent=2, ensure_ascii=False))
 
-"""
+INSTRUCTIONS = """
 Translate the following JSON data into Czech. For each source, output 3 translations: (A) a perfect translation, (B) a poor translation with minor mistakes, and (C) a translation with major mistakes.
 Output the data in the same JSON format, just adding the translations into the "tgt" key as:
 "tgt": {
@@ -75,6 +102,27 @@ Output the data in the same JSON format, just adding the translations into the "
     "C": "translation with noticeable mistakes"
 }
 """
+
+EXAMPLE_OUTPUT = {
+  "english_source": "Bedtime story time! What’s up with T9 keyboards? Why do 7 and 9 have 4 letters, but others 3. Why those two? Why not assign 1 some letters? Is 0 always been space?",
+  "translations": {
+    "A": {
+      "slovak": "Čas na rozprávku na dobrú noc! Čo sa deje s klávesnicami T9? Prečo majú 7 a 9 štyri písmená, ale ostatné len tri? Prečo práve tieto dve? Prečo nepriradiť nejaké písmená jednotke? Bola 0 vždy medzera?",
+      "german": "Zeit für eine Gutenachtgeschichte! Was hat es eigentlich mit T9-Tastaturen auf sich? Warum haben die 7 und die 9 vier Buchstaben, die anderen aber nur drei? Warum gerade diese beiden? Warum weist man der 1 keine Buchstaben zu? War die 0 schon immer das Leerzeichen?",
+      "hindi": "सोने के समय की कहानी! T9 कीबोर्ड्स का क्या चक्कर है? 7 और 9 में 4 अक्षर क्यों होते हैं, जबकि बाकियों में 3? वही दोनों क्यों? 1 को कुछ अक्षर क्यों नहीं दिए गए? क्या 0 हमेशा से स्पेस के लिए था?"
+    },
+    "B": {
+      "slovak": "Čas na posteľný príbeh! Čo je s klávesnicami T9? Prečo 7 a 9 majú 4 písmená, ale iné 3. Prečo tie dve? Prečo nepriradiť 1 nejaké písmená? Je 0 vždy medzerou?",
+      "german": "Bettzeit Geschichtszeit! Was ist los mit T9 Keyboards? Warum haben 7 und 9 vier Buchstaben, aber andere 3. Wieso diese zwei? Warum nicht der 1 manche Buchstaben zuweisen? Ist 0 immer Platz gewesen?",
+      "hindi": "बिस्तर के समय की कहानी! T9 कीबोर्ड के साथ क्या हो रहा है? 7 और 9 में 4 अक्षर क्यों हैं, लेकिन दूसरों में 3. वो दो क्यों? 1 को कुछ पत्र क्यों नहीं सौंपते? क्या 0 हमेशा जगह रहा है?"
+    },
+    "C": {
+      "slovak": "Čas na príbeh spánku! Čo je hore s T9 klávesmi? Prečo robia 7 a 9 mať 4 listy, ale iné 3. Prečo tamtie dva? Prečo nie priradiť 1 nejaké listy? Je 0 vždy bola vesmír?",
+      "german": "Schlafenszeit Geschichte Zeit! Was ist oben mit T9 Tastaturen? Wieso tun 7 und 9 haben 4 Briefe, aber andere 3. Warum jene zwei? Warum nicht zuweisen 1 einige Briefe? Ist 0 immer Weltraum gewesen?",
+      "hindi": "बिस्तर समय कहानी समय! T9 कीबोर्ड के ऊपर क्या है? क्यों 7 और 9 के पास 4 खत हैं, लेकिन अन्य 3. क्यों वो दो? क्यों नहीं 1 को कुछ खत देते? क्या 0 हमेशा अंतरिक्ष रहा है?"
+    }
+  }
+}
 
 # %%
 
@@ -224,7 +272,7 @@ for fname in glob.glob("abc_data/pearmut/*.json"):
                 if found_doc:
                     break
 
-        if not found_doc:
+        if not found_doc: # type: ignore
             data_new.append(doc)
 
     data_pearmut[langs] = data_new
@@ -354,7 +402,7 @@ for user in responses_data["times"].keys():
             / statistics.mean(
                 [
                     len(item["error_spans"].get(model, []))
-                    for item in doc
+                    for item in doc # type: ignore
                     for model in item["error_spans"]
                     for doc in annotations_tool[tool][user]
                 ]
@@ -482,7 +530,7 @@ for tool in ["pearmut", "appraise"]:
         common_items = set(user_items[user1].keys()) & set(user_items[user2].keys())
         for doc_id in common_items:
             user_scores = [user_items[user][doc_id] for user in [user1, user2]]
-            corr = scipy.stats.kendalltau(user_scores[0], user_scores[1]).correlation
+            corr = scipy.stats.kendalltau(user_scores[0], user_scores[1]).correlation # type: ignore
             if np.isnan(corr):
                 corr = 1
             corrs.append(corr)
@@ -588,6 +636,36 @@ plt.show()
 ###################
 """
 
+RESEARCHER_GUIDELINES = """
+Your task is to human-evaluate the quality of the following translations:
+```
+Source:  The quick brown fox jumped over the lazy dog.
+Model-A: Der schnell braun Fuchs springte über das faul Hund.
+Model-B: Der schnelle braune Fuchs sprang über den faulen Hund.
+
+Source:  The European Central Bank announced on Thursday that it would raise interest rates by 0.25 percentage points, marking the tenth consecutive increase since July 2022 as policymakers continue their efforts to combat persistent inflation in the eurozone.
+Model-A: Die Europäisch Zentral Bank ankündigte am Donnerstag, dass es würde heben Interesse Raten bei 0.25 Prozent Punkten, markierend die zehnte konsekutive Erhöhung seit Juli 2022 als Politikmacher weitermachen ihre Anstrengungen zu kämpfen persistente Inflation in die Eurozone.
+Model-B: Die Europäische Zentralbank gab am Donnerstag bekannt, dass sie die Leitzinsen um 0,25 Prozentpunkte anheben werde. Dies markiert die zehnte Erhöhung in Folge seit Juli 2022, da die Entscheidungsträger ihre Bemühungen zur Bekämpfung der hartnäckigen Inflation in der Eurozone fortsetzen
+```
+
+Use the following tools to set up an annotation campaign to find out if Model-A or Model-B is better.
+- Appraise #link("https://github.com/AppraiseDev/Appraise", "github.com/AppraiseDev/Appraise")
+- Potato #link("https://github.com/davidjurgens/potato", "github.com/davidjurgens/potato")
+- Pearmut #link("https://github.com/zouharvi/pearmut", "github.com/zouharvi/pearmut")
+- Label Studio #link("https://github.com/HumanSignal/label-studio", "github.com/HumanSignal/label-studio")
+- Factgenie #link("https://github.com/ufal/Factgenie", "github.com/ufal/Factgenie")
+
+For each, set up the evaluation campaign, send "instructions" to your annotators who will annotate the results, and then interpret the results to conclude your mock "study".
+Time checkpoints will be measured for (1) installing the software, (2) setting up the campaign, (3) annotations complete, and (4) obtaining results.
+
+After finishing please evaluate each on scale of 0 (worst) to 10 (best):
++ How easy was the tool to use?
++ How customizable is the tool?
++ How fitting is the tool for translation evaluation?
++ How likely would you use the tool for your next study of translation evaluation?
+"""
+
+
 """
 Average the columns in this table (that are not commented out).
 For the time, take only the Total time. Still use the same macro.
@@ -604,13 +682,39 @@ XXX
 ```
 """
 
+# %%
+
+"""
+###############
+4. LLM study
+###############
+"""
+
+INSTRUCTIONS = """
+Your task is to prepare a human evaluation campaign to assess the quality of translations from English to German:
+```
+Source:  The quick brown fox jumped over the lazy dog.
+Model-A: Der schnell braun Fuchs springte über das faul Hund.
+Model-B: Der schnelle braune Fuchs sprang über den faulen Hund.
+
+Source:  The European Central Bank announced on Thursday that it would raise interest rates by 0.25 percentage points, marking the tenth consecutive increase since July 2022 as policymakers continue their efforts to combat persistent inflation in the eurozone.
+Model-A: Die Europäisch Zentral Bank ankündigte am Donnerstag, dass es würde heben Interesse Raten bei 0.25 Prozent Punkten, markierend die zehnte konsekutive Erhöhung seit Juli 2022 als Politikmacher weitermachen ihre Anstrengungen zu kämpfen persistente Inflation in die Eurozone.
+Model-B: Die Europäische Zentralbank gab am Donnerstag bekannt, dass sie die Leitzinsen um 0,25 Prozentpunkte anheben werde. Dies markiert die zehnte Erhöhung in Folge seit Juli 2022, da die Entscheidungsträger ihre Bemühungen zur Bekämpfung der hartnäckigen Inflation in der Eurozone fortsetzen
+```
+
+Write a bash script that installs the tool Pearmut/Appraise/Potato/Label Studio/Factgenie and generates a link that we can give to annotators to annotate.
+Read the documentation for the tool first: https://...
+
+Then write another bash script that retrieves the human-annotated data.
+"""
+
 
 # %%
 
 
 """
 #############
-4. Speed test
+5. Speed test
 #############
 
 This tests Pearmut and Appraise speeds, used in the Pearmut report.
@@ -883,7 +987,7 @@ print(
 
 """
 ######################
-5. Bibiliography study
+6. Bibiliography study
 ######################
 
 Download bibliographies from https://aclanthology.org/
