@@ -498,7 +498,7 @@ def get_i_item_dynamic(
         user_progress,
         item_i,
         pruned_item,
-        fetch_existing=False,
+        fetch_existing=True,
     )
 
 
