@@ -1,0 +1,568 @@
+[
+  [
+    "Understanding In-Context Machine Translation for Low-Resource Languages: A Case Study on Manchu",
+    "https://aclanthology.org/2025.acl-long.429.pdf",
+    "yes",
+    "DA"
+  ],
+  [
+    "Locate-and-Focus: Enhancing Terminology Translation in Speech Language Models",
+    "https://aclanthology.org/2025.acl-long.556.pdf",
+    "yes",
+    "terminology verification"
+  ],
+  [
+    "Lost in Literalism: How Supervised Training Shapes Translationese in LLMs",
+    "https://aclanthology.org/2025.acl-long.630.pdf",
+    "yes",
+    "translationese span ratio + ranking"
+  ],
+  [
+    "SwiLTra-Bench: The Swiss Legal Translation Benchmark",
+    "https://aclanthology.org/2025.acl-long.725.pdf",
+    "yes",
+    "DA"
+  ],
+  [
+    "It's Not a Walk in the Park! Challenges of Idiom Translation in Speech-to-text Systems",
+    "https://aclanthology.org/2025.acl-long.1512.pdf",
+    "yes",
+    "error categorization"
+  ],
+  [
+    "Towards Style Alignment in Cross-Cultural Translation",
+    "https://aclanthology.org/2025.acl-long.1550.pdf",
+    "yes",
+    "pairwise"
+  ],
+  [
+    "SHIFT: Selected Helpful Informative Frame for Video-guided Machine Translation",
+    "https://aclanthology.org/2025.emnlp-main.161.pdf",
+    "yes",
+    "pairwise"
+  ],
+  [
+    "A Case Against Implicit Standards: Homophone Normalization in Machine Translation for Languages that use the Ge'ez Script.",
+    "https://aclanthology.org/2025.emnlp-main.523.pdf",
+    "yes*",
+    "qualitative analysis + ranking"
+  ],
+  [
+    "Viability of Machine Translation for Healthcare in Low-Resourced Languages",
+    "https://aclanthology.org/2025.emnlp-main.535.pdf",
+    "yes",
+    "adequacy + clinical risk"
+  ],
+  [
+    "MultiMed-ST: Large-scale Many-to-many Multilingual Medical Speech Translation",
+    "https://aclanthology.org/2025.emnlp-main.599.pdf",
+    "yes",
+    "adequacy, fluency, comprehensibility (1 to 10)"
+  ],
+  [
+    "Should I Share this Translation? Evaluating Quality Feedback for User Reliance on Machine Translation",
+    "https://aclanthology.org/2025.emnlp-main.606.pdf",
+    "yes",
+    "would-share decision"
+  ],
+  [
+    "MAVL: A Multilingual Audio-Video Lyrics Dataset for Animated Song Translation",
+    "https://aclanthology.org/2025.emnlp-main.689.pdf",
+    "yes",
+    "singability, sense, overall (1 to 5)"
+  ],
+  [
+    "Languages Still Left Behind: Toward a Better Multilingual Machine Translation Benchmark",
+    "https://aclanthology.org/2025.emnlp-main.1018.pdf",
+    "yes",
+    "MQM"
+  ],
+  [
+    "Translate Smart, not Hard: Cascaded Translation Systems with Quality-Aware Deferral",
+    "https://aclanthology.org/2025.emnlp-main.1358.pdf",
+    "yes",
+    "DA"
+  ],
+  [
+    "Leveraging Loanword Constraints for Improving Machine Translation in a Low-Resource Multilingual Context",
+    "https://aclanthology.org/2025.emnlp-main.1406.pdf",
+    "yes",
+    "DA"
+  ],
+  [
+    "LiTransProQA: An LLM-based Literary Translation Evaluation Metric with Professional Question Answering",
+    "https://aclanthology.org/2025.emnlp-main.1482.pdf",
+    "yes",
+    "MQM + pairwise"
+  ],
+  [
+    "Toward Machine Translation Literacy: How Lay Users Perceive and Rely on Imperfect Translations",
+    "https://aclanthology.org/2025.emnlp-main.1725.pdf",
+    "yes",
+    "task-based"
+  ],
+  [
+    "Liaozhai through the Looking-Glass: On Paratextual Explicitation of Culture-Bound Terms in Machine Translation",
+    "https://aclanthology.org/2025.emnlp-main.1744.pdf",
+    "yes",
+    "pairwise"
+  ],
+  [
+    "Towards Zero-Shot Multimodal Machine Translation",
+    "https://aclanthology.org/2025.findings-naacl.45.pdf",
+    "yes",
+    "pairwise"
+  ],
+  [
+    "How to Learn in a Noisy World? Self-Correcting the Real-World Data Noise in Machine Translation",
+    "https://aclanthology.org/2025.findings-naacl.416.pdf",
+    "yes",
+    "adequacy (1 to 5)"
+  ],
+  [
+    "Investigating Hallucinations in Simultaneous Machine Translation: Knowledge Distillation Solution and Components Analysis",
+    "https://aclanthology.org/2025.naacl-long.364.pdf",
+    "yes",
+    "hallucination analysis"
+  ],
+  [
+    "Large Language Models for Persian-English Idiom Translation",
+    "https://aclanthology.org/2025.naacl-long.405.pdf",
+    "yes",
+    "fluency (1 to 5) + idiom (0 or 1)"
+  ],
+  [
+    "Automatic Input Rewriting Improves Translation with Large Language Models",
+    "https://aclanthology.org/2025.naacl-long.542.pdf",
+    "yes",
+    "fluency, understandability, meaning (1 to 4)"
+  ],
+  [
+    "How Good Are LLMs for Literary Translation, Really? Literary Translation Evaluation with Humans and LLMs",
+    "https://aclanthology.org/2025.naacl-long.548.pdf",
+    "yes",
+    "MQM + DA"
+  ],
+  [
+    "Scaling Low-Resource MT via Synthetic Data Generation with LLMs",
+    "https://aclanthology.org/2025.emnlp-main.1408.pdf",
+    "yes",
+    "DA"
+  ],
+  [
+    "AFRIDOC-MT: Document-level MT Corpus for African Languages",
+    "https://aclanthology.org/2025.emnlp-main.1413.pdf",
+    "yes",
+    "DA + ESA"
+  ],
+  [
+    "DMDTEval: An Evaluation and Analysis of LLMs on Disambiguation in Multi-domain Translation",
+    "https://aclanthology.org/2025.emnlp-main.309.pdf",
+    "no"
+  ],
+  [
+    "Towards Building Large Scale Datasets and State-of-the-Art Automatic Speech Translation Systems for 14 Indian Languages",
+    "https://aclanthology.org/2025.acl-long.1582.pdf",
+    "no"
+  ],
+  [
+    "Single-to-mix Modality Alignment with Multimodal Large Language Model for Document Image Machine Translation",
+    "https://aclanthology.org/2025.acl-long.606.pdf",
+    "no"
+  ],
+  [
+    "Did Translation Models Get More Robust Without Anyone Even Noticing?",
+    "https://aclanthology.org/2025.acl-long.122.pdf",
+    "no*"
+  ],
+  [
+    "Unveiling the Power of Source: Source-based Minimum Bayes Risk Decoding for Neural Machine Translation",
+    "https://aclanthology.org/2025.acl-long.149.pdf",
+    "no"
+  ],
+  [
+    "Alleviating Distribution Shift in Synthetic Data for Machine Translation Quality Estimation",
+    "https://aclanthology.org/2025.acl-long.373.pdf",
+    "no"
+  ],
+  [
+    "Translation and Fusion Improves Cross-lingual Information Extraction",
+    "https://aclanthology.org/2025.acl-long.382.pdf",
+    "no"
+  ],
+  [
+    "Enhancing Neural Machine Translation Through Target Language Data: A $k$NN-LM Approach for Domain Adaptation",
+    "https://aclanthology.org/2025.acl-long.496.pdf",
+    "no"
+  ],
+  [
+    "Two Intermediate Translations Are Better Than One: Fine-tuning LLMs for Document-level Translation Refinement",
+    "https://aclanthology.org/2025.acl-long.726.pdf",
+    "no"
+  ],
+  [
+    "MLAS-LoRA: Language-Aware Parameters Detection and LoRA-Based Knowledge Transfer for Multilingual Machine Translation",
+    "https://aclanthology.org/2025.acl-long.762.pdf",
+    "no"
+  ],
+  [
+    "SimulS2S-LLM: Unlocking Simultaneous Inference of Speech LLMs for Speech-to-Speech Translation",
+    "https://aclanthology.org/2025.acl-long.817.pdf",
+    "no"
+  ],
+  [
+    "Improving Language and Modality Transfer in Translation by Character-level Modeling",
+    "https://aclanthology.org/2025.acl-long.988.pdf",
+    "no"
+  ],
+  [
+    "THOR-MoE: Hierarchical Task-Guided and Context-Responsive Routing for Neural Machine Translation",
+    "https://aclanthology.org/2025.acl-long.1040.pdf",
+    "no"
+  ],
+  [
+    "Registering Source Tokens to Target Language Spaces in Multilingual Neural Machine Translation",
+    "https://aclanthology.org/2025.acl-long.1052.pdf",
+    "no"
+  ],
+  [
+    "Enhancing Machine Translation with Self-Supervised Preference Data",
+    "https://aclanthology.org/2025.acl-long.1165.pdf",
+    "no"
+  ],
+  [
+    "Make Imagination Clearer! Stable Diffusion-based Visual Imagination for Multimodal Machine Translation",
+    "https://aclanthology.org/2025.acl-long.1289.pdf",
+    "no"
+  ],
+  [
+    "Multi-perspective Alignment for Increasing Naturalness in Neural Machine Translation",
+    "https://aclanthology.org/2025.acl-long.1361.pdf",
+    "no*"
+  ],
+  [
+    "An Empirical Study of Iterative Refinements for Non-autoregressive Translation",
+    "https://aclanthology.org/2025.acl-long.1443.pdf",
+    "no"
+  ],
+  [
+    "GrammaMT: Improving Machine Translation with Grammar-Informed In-Context Learning",
+    "https://aclanthology.org/2025.acl-long.1447.pdf",
+    "no"
+  ],
+  [
+    "SLoW: Select Low-frequency Words! Automatic Dictionary Selection for Translation on Large Language Models",
+    "https://aclanthology.org/2025.emnlp-main.46.pdf",
+    "no"
+  ],
+  [
+    "Whisper-UT: A Unified Translation Framework for Speech and Text",
+    "https://aclanthology.org/2025.emnlp-main.148.pdf",
+    "no"
+  ],
+  [
+    "Few-Shot Learning Translation from New Languages",
+    "https://aclanthology.org/2025.emnlp-main.163.pdf",
+    "no"
+  ],
+  [
+    "PRIM: Towards Practical In-Image Multilingual Machine Translation",
+    "https://aclanthology.org/2025.emnlp-main.691.pdf",
+    "no"
+  ],
+  [
+    "PoseStitch-SLT: Linguistically Inspired Pose-Stitching for End-to-End Sign Language Translation",
+    "https://aclanthology.org/2025.emnlp-main.698.pdf",
+    "no"
+  ],
+  [
+    "Please Translate Again: Two Simple Experiments on Whether Human-Like Reasoning Helps Translation",
+    "https://aclanthology.org/2025.emnlp-main.1031.pdf",
+    "no"
+  ],
+  [
+    "EnAnchored-X2X: English-Anchored Optimization for Many-to-Many Translation",
+    "https://aclanthology.org/2025.emnlp-main.1081.pdf",
+    "no"
+  ],
+  [
+    "Dynamic Jointly Batch Selection for Data Efficient Machine Translation Fine-Tuning",
+    "https://aclanthology.org/2025.emnlp-main.1352.pdf",
+    "no"
+  ],
+  [
+    "You Are What You Train: Effects of Data Composition on Training Context-aware Machine Translation Models",
+    "https://aclanthology.org/2025.emnlp-main.1394.pdf",
+    "no"
+  ],
+  [
+    "BOUQuET : dataset, Benchmark and Open initiative for Universal Quality Evaluation in Translation",
+    "https://aclanthology.org/2025.emnlp-main.1400.pdf",
+    "no"
+  ],
+  [
+    "DrFrattn: Directly Learn Adaptive Policy from Attention for Simultaneous Machine Translation",
+    "https://aclanthology.org/2025.emnlp-main.1767.pdf",
+    "no"
+  ],
+  [
+    "In-Context Example Selection via Similarity Search Improves Low-Resource Machine Translation",
+    "https://aclanthology.org/2025.findings-naacl.68.pdf",
+    "no"
+  ],
+  [
+    "Beyond English: The Impact of Prompt Translation Strategies across Languages and Tasks in Multilingual LLMs",
+    "https://aclanthology.org/2025.findings-naacl.73.pdf",
+    "no"
+  ],
+  [
+    "TEaR: Improving LLM-based Machine Translation with Systematic Self-Refinement",
+    "https://aclanthology.org/2025.findings-naacl.218.pdf",
+    "no"
+  ],
+  [
+    "Effective Self-Mining of In-Context Examples for Unsupervised Machine Translation with LLMs",
+    "https://aclanthology.org/2025.findings-naacl.238.pdf",
+    "no"
+  ],
+  [
+    "DOLFIN - Document-Level Financial Test-Set for Machine Translation",
+    "https://aclanthology.org/2025.findings-naacl.307.pdf",
+    "no"
+  ],
+  [
+    "Dynamic Feature Fusion for Sign Language Translation Using HyperNetworks",
+    "https://aclanthology.org/2025.findings-naacl.348.pdf",
+    "no"
+  ],
+  [
+    "Beyond the Mode: Sequence-Level Distillation of Multilingual Translation Models for Low-Resource Language Pairs",
+    "https://aclanthology.org/2025.findings-naacl.372.pdf",
+    "no"
+  ],
+  [
+    "Media of Langue: Exploring Word Translation Network",
+    "https://aclanthology.org/2025.findings-naacl.387.pdf",
+    "no"
+  ],
+  [
+    "CA*: Addressing Evaluation Pitfalls in Computation-Aware Latency for Simultaneous Speech Translation",
+    "https://aclanthology.org/2025.findings-naacl.393.pdf",
+    "no"
+  ],
+  [
+    "LITERA: An LLM Based Approach to Latin-to-English Translation",
+    "https://aclanthology.org/2025.findings-naacl.434.pdf",
+    "no"
+  ],
+  [
+    "Faster Machine Translation Ensembling with Reinforcement Learning and Competitive Correction",
+    "https://aclanthology.org/2025.findings-naacl.466.pdf",
+    "no"
+  ],
+  [
+    "MoCE: Adaptive Mixture of Contextualization Experts for Byte-based Neural Machine Translation",
+    "https://aclanthology.org/2025.naacl-long.47.pdf",
+    "no"
+  ],
+  [
+    "Detect, Disambiguate, and Translate: On-Demand Visual Reasoning for Multimodal Machine Translation with Large Vision-Language Models",
+    "https://aclanthology.org/2025.naacl-long.74.pdf",
+    "no"
+  ],
+  [
+    "The Impact of Domain-Specific Terminology on Machine Translation for Finance in European Languages",
+    "https://aclanthology.org/2025.naacl-long.140.pdf",
+    "no*"
+  ],
+  [
+    "A Bayesian Optimization Approach to Machine Translation Reranking",
+    "https://aclanthology.org/2025.naacl-long.145.pdf",
+    "no"
+  ],
+  [
+    "Mitigating Hallucinated Translations in Large Language Models with Hallucination-focused Preference Optimization",
+    "https://aclanthology.org/2025.naacl-long.175.pdf",
+    "no"
+  ],
+  [
+    "An Efficient Gloss-Free Sign Language Translation Using Spatial Configurations and Motion Dynamics with LLMs",
+    "https://aclanthology.org/2025.naacl-long.197.pdf",
+    "no"
+  ],
+  [
+    "How to Align Multiple Signed Language Corpora for Better Sign-to-Sign Translations?",
+    "https://aclanthology.org/2025.naacl-long.202.pdf",
+    "no*"
+  ],
+  [
+    "Multilingual Machine Translation with Open Large Language Models at Practical Scale: An Empirical Study",
+    "https://aclanthology.org/2025.naacl-long.280.pdf",
+    "no"
+  ],
+  [
+    "Anticipating Future with Large Language Model for Simultaneous Machine Translation",
+    "https://aclanthology.org/2025.naacl-long.286.pdf",
+    "no"
+  ],
+  [
+    "Towards Inducing Long-Context Abilities in Multilingual Neural Machine Translation Models",
+    "https://aclanthology.org/2025.naacl-long.366.pdf",
+    "no"
+  ],
+  [
+    "Is Translation All You Need? A Study on Solving Multilingual Tasks with Large Language Models",
+    "https://aclanthology.org/2025.naacl-long.485.pdf",
+    "no"
+  ],
+  [
+    "Continual Learning in Multilingual Sign Language Translation",
+    "https://aclanthology.org/2025.naacl-long.546.pdf",
+    "no"
+  ],
+  [
+    "Gender Bias in Nepali-English Machine Translation: A Comparison of LLMs and Existing MT Systems",
+    "https://aclanthology.org/2025.gebnlp-1.6.pdf",
+    "no"
+  ],
+  [
+    "ConECT Dataset: Overcoming Data Scarcity in Context-Aware E-Commerce MT",
+    "https://aclanthology.org/2025.acl-short.7.pdf",
+    "no"
+  ],
+  [
+    "Extending Automatic Machine Translation Evaluation to Book-Length Documents",
+    "https://aclanthology.org/2025.emnlp-main.1645.pdf",
+    "irrelevant"
+  ],
+  [
+    "Assumed Identities: Quantifying Gender Bias in Machine Translation of Gender-Ambiguous Occupational Terms",
+    "https://aclanthology.org/2025.emnlp-main.1640.pdf",
+    "irrelevant"
+  ],
+  [
+    "Mind the Inclusivity Gap: Multilingual Gender-Neutral Translation Evaluation with mGeNTE",
+    "https://aclanthology.org/2025.emnlp-main.692.pdf",
+    "irrelevant"
+  ],
+  [
+    "M-MAD: Multidimensional Multi-Agent Debate for Advanced Machine Translation Evaluation",
+    "https://aclanthology.org/2025.acl-long.351.pdf",
+    "irrelevant"
+  ],
+  [
+    "Adaptive and Robust Translation from Natural Language to Multi-model Query Languages",
+    "https://aclanthology.org/2025.acl-long.776.pdf",
+    "irrelevant"
+  ],
+  [
+    "Enhancing Human Evaluation in Machine Translation with Comparative Judgement",
+    "https://aclanthology.org/2025.acl-long.1002.pdf",
+    "irrelevant"
+  ],
+  [
+    "Watching the Watchers: Exposing Gender Disparities in Machine Translation Quality Estimation",
+    "https://aclanthology.org/2025.acl-long.1228.pdf",
+    "irrelevant"
+  ],
+  [
+    "Magnet: Multi-turn Tool-use Data Synthesis and Distillation via Graph Translation",
+    "https://aclanthology.org/2025.acl-long.1566.pdf",
+    "irrelevant"
+  ],
+  [
+    "ReMedy: Learning Machine Translation Evaluation from Human Preferences with Reward Modeling",
+    "https://aclanthology.org/2025.emnlp-main.217.pdf",
+    "irrelevant"
+  ],
+  [
+    "ExeCoder: Empowering Large Language Models with Executability Representation for Code Translation",
+    "https://aclanthology.org/2025.emnlp-main.362.pdf",
+    "irrelevant"
+  ],
+  [
+    "Same evaluation, more tokens: On the effect of input length for machine translation evaluation using Large Language Models",
+    "https://aclanthology.org/2025.emnlp-main.402.pdf",
+    "irrelevant"
+  ],
+  [
+    "Evaluating Language Translation Models by Playing Telephone",
+    "https://aclanthology.org/2025.emnlp-main.524.pdf",
+    "irrelevant"
+  ],
+  [
+    "From Tens of Hours to Tens of Thousands: Scaling Back-Translation for Speech Recognition",
+    "https://aclanthology.org/2025.emnlp-main.629.pdf",
+    "irrelevant"
+  ],
+  [
+    "Translationese-index: Using Likelihood Ratios for Graded and Generalizable Measurement of Translationese",
+    "https://aclanthology.org/2025.emnlp-main.633.pdf",
+    "irrelevant"
+  ],
+  [
+    "Translation in the Hands of Many: Centering Lay Users in Machine Translation Interactions",
+    "https://aclanthology.org/2025.emnlp-main.700.pdf",
+    "irrelevant"
+  ],
+  [
+    "Unsupervised Word-level Quality Estimation for Machine Translation Through the Lens of Annotators (Dis)agreement",
+    "https://aclanthology.org/2025.emnlp-main.924.pdf",
+    "irrelevant"
+  ],
+  [
+    "Multimodal Neural Machine Translation: A Survey of the State of the Art",
+    "https://aclanthology.org/2025.emnlp-main.1125.pdf",
+    "irrelevant"
+  ],
+  [
+    "An Interdisciplinary Approach to Human-Centered Machine Translation",
+    "https://aclanthology.org/2025.emnlp-main.1164.pdf",
+    "irrelevant"
+  ],
+  [
+    "Explicit Learning and the LLM in Machine Translation",
+    "https://aclanthology.org/2025.emnlp-main.1599.pdf",
+    "irrelevant"
+  ],
+  [
+    "Automatic Annotation Augmentation Boosts Translation between Molecules and Natural Language",
+    "https://aclanthology.org/2025.findings-naacl.345.pdf",
+    "irrelevant"
+  ],
+  [
+    "Fingerspelling within Sign Language Translation",
+    "https://aclanthology.org/2025.naacl-long.19.pdf",
+    "irrelevant"
+  ],
+  [
+    "MSc-SQL: Multi-Sample Critiquing Small Language Models For Text-To-SQL Translation",
+    "https://aclanthology.org/2025.naacl-long.107.pdf",
+    "irrelevant"
+  ],
+  [
+    "AI-Assisted Human Evaluation of Machine Translation",
+    "https://aclanthology.org/2025.naacl-long.255.pdf",
+    "irrelevant"
+  ],
+  [
+    "Few-Shot Natural Language to First-Order Logic Translation via Code Generation",
+    "https://aclanthology.org/2025.naacl-long.547.pdf",
+    "irrelevant"
+  ],
+  [
+    "LLM-Supported Natural Language to Bash Translation",
+    "https://aclanthology.org/2025.naacl-long.555.pdf",
+    "irrelevant"
+  ],
+  [
+    "SSA-COMET: Do LLMs Outperform Learned Metrics in Evaluating MT for Under-Resourced African Languages?",
+    "https://aclanthology.org/2025.emnlp-main.656.pdf",
+    "irrelevant"
+  ],
+  [
+    "PromptOptMe: Error-Aware Prompt Compression for LLM-based MT Evaluation Metrics",
+    "https://aclanthology.org/2025.naacl-long.592.pdf",
+    "irrelevant"
+  ]
+]
