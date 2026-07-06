@@ -3,7 +3,7 @@
     "protocol": "cESA",
     "assignment": "task-based"
   },
-  "campaign_id": "esa_zh-TWen_tutorial",
+  "campaign_id": "cesa_zh-TWen_tutorial",
   "data": [
     [
       [
@@ -13,7 +13,7 @@
           "tgt": {
             "model-tutorial": "Since the 2009 World Games, Kaohsiung has accumulated experience in building large venues and operating events, among them the World Games Main Stadium, the only one in Taiwan able to hold around fifty thousand people, which has become a factor in attracting international-level artists to Taiwan."
           },
-          "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Chinese (Traditional Taiwan) to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
+          "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Chinese (Traditional Taiwan) to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br><b>Tutorial 1/7:</b><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
           "validation": {
             "model-tutorial": {
               "warning": "This translation is perfect! Please set the score to 100% and do not mark any error spans.",
@@ -35,14 +35,14 @@
           "tgt": {
             "model-tutorial": "This southern city, once renowned for its harbor and heavy industry, is gradually transforming into an emerging \"concert capital\" in the hearts of Asian music lovers."
           },
-          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"music lovers\" is incorrect in the following translation. The Chinese (Traditional Taiwan) word \"歌迷\" means \"fans\" not \"music lovers\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"music lovers\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>75–85%</b> to reflect the reduced quality.<br></div>",
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 2/7:</b><br><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"music lovers\" is incorrect in the following translation. The Chinese (Traditional Taiwan) word \"歌迷\" means \"fans\" not \"music lovers\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"music lovers\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>75–80%</b> to reflect the reduced quality.<br></div>",
           "validation": {
             "model-tutorial": {
-              "warning": "Please mark the word \"music lovers\" as a minor error (light pink) and set the score to 75-85%.",
+              "warning": "Please mark the word \"music lovers\" as a minor error (light pink) and set the score to 75-80%.",
               "score": [
-                75,
-                85
-              ],
+                  75,
+                  80
+                ],
               "error_spans": [
                 {
                   "start_i": [
@@ -69,14 +69,14 @@
           "tgt": {
             "model-tutorial": "Currently, Taipei's largest concert venue is the Taipei Dome, but it is the smallest, holding only forty thousand spectators."
           },
-          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much those errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"the smallest\" is completely wrong in the given translation; it means the opposite of the Chinese (Traditional Taiwan)\"台北最大的演唱會場館\" (Taipei's largest concert venue).<br>1. Select and mark \"the smallest\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 3/7:</b><br><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much those errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"the smallest\" is completely wrong in the given translation; it means the opposite of the Chinese (Traditional Taiwan)\"台北最大的演唱會場館\" (Taipei's largest concert venue).<br>1. Select and mark \"the smallest\" as a major error.<br>2. Move the slider to 25-30% due to the serious error.<br></div>",
           "validation": {
             "model-tutorial": {
-              "warning": "Please mark \"the smallest\" as a major error (dark pink) and set the score to 15-30%.",
+              "warning": "Please mark \"the smallest\" as a major error (dark pink) and set the score to 25-30%.",
               "score": [
-                15,
-                30
-              ],
+                  25,
+                  30
+                ],
               "error_spans": [
                 {
                   "start_i": [
@@ -103,14 +103,14 @@
           "tgt": {
             "model-tutorial": "Flying from Hong Kong to Kaohsiung takes about an hour and a half, and she said this star-chasing trip not only has a low time cost, but the expense is also not far from watching a concert in Hong Kong."
           },
-          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may have noticed, the translation of \"跨境\" (meaning \"cross-border\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>75–85%</b>.<br></div>",
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 4/7:</b><br><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may have noticed, the translation of \"跨境\" (meaning \"cross-border\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>65–75%</b>.<br></div>",
           "validation": {
             "model-tutorial": {
-              "warning": "Please mark the [missing] tag as a Minor error and set the score to 75–85%.",
+              "warning": "Please mark the [missing] tag as a Minor error and set the score to 65–75%.",
               "score": [
-                75,
-                85
-              ],
+                  65,
+                  75
+                ],
               "error_spans": [
                 {
                   "start_i": 202,
@@ -131,14 +131,14 @@
           "tgt": {
             "model-tutorial": "By 2025, the number of shows was higher than the previous year, but both of South Korea's major girl groups, BLACKPINK and TWICE, chose to perform in Kaohsiung on their world tours. Some of these shows were the only ones in Taiwan, drawing large numbers of fans to make a special pilgrimage to Kaohsiung."
           },
-          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 5/7:</b><br><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
           "validation": {
             "model-tutorial": {
-              "warning": "Mark the word \"higher\" as a major error and set the score to 35-45%.",
+              "warning": "Mark the word \"higher\" as a major error and set the score to 35-40%.",
               "score": [
-                35,
-                45
-              ],
+                  35,
+                  40
+                ],
               "error_spans": [
                 {
                   "start_i": [
@@ -185,7 +185,7 @@
             "model-tutorial-A": "What differs from ordinary concerts in other cities is that Kaohsiung does not treat concerts as a single event, but instead links up official and private-sector bodies, elevating fan support into a \"city-wide support\" activity.",
             "model-tutorial-B": "What differs from ordinary concerts in other cities is that Kaohsiung treats concerts as a single event, but instead links up only official bodies, elevating fan support into a \"city-wide support\" activity."
           },
-          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The phrases \"不把演唱會當成單一活動\" (does not treat concerts as a single event) and \"官方與民間單位\" (official and private-sector bodies) are translated incorrectly, dropping the negation and dropping the private-sector bodies to become \"treats concerts as a single event\" and \"only official bodies\", respectively.  Having two major errors, set the score to 20-35%.</div>",
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 6/7:</b><br><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The phrases \"不把演唱會當成單一活動\" (does not treat concerts as a single event) and \"官方與民間單位\" (official and private-sector bodies) are translated incorrectly, dropping the negation and dropping the private-sector bodies to become \"treats concerts as a single event\" and \"only official bodies\", respectively.  Having two major errors, set the score to 10-20%.</div>",
           "skippable": true
         },
         {
@@ -195,7 +195,7 @@
             "model-tutorial-A": "Starting in 2023, the current mayor of Kaohsiung, Chen Chi-mai, first put forward the concept of a concert economy in his policy report, combining venue discounts, business subsidies, and cross-department cooperation mechanisms to systematically bring in international performances, a plan that has already generated over one billion in tax revenue.",
             "model-tutorial-B": "Starting in 2023, the former mayor of Kaohsiung, Chen Chi-mai, first put forward the concept of a concert economy in his policy report, combining venue discounts, business subsidies, and cross-department cooperation mechanisms to systematically bring in international performances."
           },
-          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"a plan that has already generated over one billion in tax revenue\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"現任\" (current) is mistakenly translated as \"former\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 30-40%.<br></div>",
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 7/7:</b><br><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"a plan that has already generated over one billion in tax revenue\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"現任\" (current) is mistakenly translated as \"former\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 30-40%.<br></div>",
           "skippable": true
         }
       ],

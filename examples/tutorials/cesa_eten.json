@@ -3,7 +3,7 @@
       "protocol": "cESA",
       "assignment": "task-based"
     },
-    "campaign_id": "esa_eten_tutorial",
+    "campaign_id": "cesa_eten_tutorial",
     "data": [
       [
         [
@@ -13,7 +13,7 @@
             "tgt": {
                 "model-tutorial": "In summer theater, people who usually do not work together often come together — for those involved, it is a real sweet treat."
             },
-            "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Estonian to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
+            "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Estonian to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br><b>Tutorial 1/7:</b><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
             "validation": {
               "model-tutorial": {
                 "warning": "This translation is perfect! Please set the score to 100% and do not mark any error spans.",
@@ -35,7 +35,7 @@
             "tgt": {
                 "model-tutorial": "Another difference lies in the fact that in summer the audience is more exploratory, people eagerly seek experiences and gladly come to strange places to see drama."
             },
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"drama\" is incorrect in the following translation. The Estonian word \"teatrit\" means \"theatre\" not \"drama\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"drama\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>70-80%</b> to reflect the reduced quality.<br></div>",
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 2/7:</b><br><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"drama\" is incorrect in the following translation. The Estonian word \"teatrit\" means \"theatre\" not \"drama\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"drama\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>70-80%</b> to reflect the reduced quality.<br></div>",
             "validation": {
               "model-tutorial": {
                 "warning": "Please mark the word \"drama\" as a minor error (light pink) and set the score to 70-80%.",
@@ -69,12 +69,12 @@
             "tgt": {
               "model-tutorial": "In the case of \"amletH,\" everything began with the main character and the understanding that he must not be played by Sten Karpov — this major role strongly aligns with his psychophysique and personality."
             },
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much those errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"not\" is completely wrong in the given translation; it means the opposite of the Estonian \"peab mängima\" (must be played by).<br>1. Select and mark \"not\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 3/7:</b><br><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much those errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"not\" is completely wrong in the given translation; it means the opposite of the Estonian \"peab mängima\" (must be played by).<br>1. Select and mark \"not\" as a major error.<br>2. Move the slider to 25-30% due to the serious error.<br></div>",
             "validation": {
               "model-tutorial": {
-                "warning": "Please mark \"not\" as a major error (dark pink) and set the score to 15-30%.",
+                "warning": "Please mark \"not\" as a major error (dark pink) and set the score to 25-30%.",
                 "score": [
-                  15,
+                  25,
                   30
                 ],
                 "error_spans": [
@@ -103,13 +103,13 @@
             "tgt": {
               "model-tutorial": "Connected to the \"Tikutoos\" production is an audio and visual journey \"The Town in a Matchbox,\" during which one walks from the Rakvere theatre building to the Köster Gööck house."
             },
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may have noticed, the translation of \"kahel korral\" (meaning \"on two occasions\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>75–85%</b>.<br></div>",
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 4/7:</b><br><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may have noticed, the translation of \"kahel korral\" (meaning \"on two occasions\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>65–75%</b>.<br></div>",
             "validation": {
               "model-tutorial": {
-                "warning": "Please mark the [missing] tag as a Minor error and set the score to 75–85%.",
+                "warning": "Please mark the [missing] tag as a Minor error and set the score to 65–75%.",
                 "score": [
-                  75,
-                  85
+                  65,
+                  75
                 ],
                 "error_spans": [
                   {
@@ -131,13 +131,13 @@
             "tgt": {
               "model-tutorial": "In the case of \"Raim,\" it is crucial that it is performed indoors at the Pärnu spa hall, in the very place where Valgre once played his instrument during his Pärnu summers."
             },
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 5/7:</b><br><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
             "validation": {
               "model-tutorial": {
-                "warning": "Mark the word \"indoors\" as a major error and set the score to 35-45%.",
+                "warning": "Mark the word \"indoors\" as a major error and set the score to 35-40%.",
                 "score": [
                   35,
-                  45
+                  40
                 ],
                 "error_spans": [
                   {
@@ -185,7 +185,7 @@
               "model-tutorial-A": "What makes the playing space special this time is that the audience sits only on the balcony, while the actors perform on the hall floor, playing from below upward. An entirely different perspective emerges.",
               "model-tutorial-B": "What makes the playing space special this time is that the audience sits only on the floor, while the actors perform on the hall balcony, playing from above downward. An entirely different perspective emerges."
             },
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The words \"rõdul\" (balcony) and \"alt üles\" (from below upward) are translated incorrectly to \"floor\" and \"above downward\", respectively. Having two major errors, set the score to 10-25%.</div>",
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 6/7:</b><br><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The words \"rõdul\" (balcony) and \"alt üles\" (from below upward) are translated incorrectly to \"floor\" and \"above downward\", respectively. Having two major errors, set the score to 10-20%.</div>",
             "skippable": true
           },
           {
@@ -195,7 +195,7 @@
               "model-tutorial-A": "But if one casts a glance at history, in the school that operated in this same building, Friedrich Reinhold Kreutzwald, Friedrich Robert Faehlmann, Juhan Kunder, Kristjan Raud, Ernst Peterson-Särgava and many others worked or studied as teachers or pupils, and it was on this very building, now a protected national monument, that the blue-black-white flag was first raised in Rakvere in 1918.",
               "model-tutorial-B": "But if one casts a glance at history, in the school that operated in this same building, Friedrich Reinhold Kreutzwald, Friedrich Robert Faehlmann, Juhan Kunder, Kristjan Raud, Ernst Peterson-Särgava and many others worked or studied as teachers or pupils, and it was on this very building that the blue-black-white flag was last raised in Rakvere in 1918."
             },
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"now a protected national monument\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"esimesena\" is mistakenly translated as \"last\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 20-30%.<br></div>",
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 7/7:</b><br><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"now a protected national monument\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"esimesena\" is mistakenly translated as \"last\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 25-30%.<br></div>",
             "skippable": true
           }
         ],
