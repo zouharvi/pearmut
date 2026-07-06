@@ -3,7 +3,7 @@
       "protocol": "cESA",
       "assignment": "task-based"
     },
-    "campaign_id": "esa_seen_tutorial",
+    "campaign_id": "cesa_seen_tutorial",
     "data": [
       [
         [
@@ -13,7 +13,7 @@
             "tgt": {
                 "model-tutorial": "The establishment of NANU – Sámi Arts International will be marked at the Corner Bar venue at Tate Modern in London, on October 16."
             },
-            "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Northern Sámi to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
+            "instructions": "<script>document.getElementById(\"instructions_global\").innerHTML = \"<b>Welcome to the Annotation Tutorial!</b><br><br>In this task, you will evaluate translations from <b>Northern Sámi to English</b>. You will complete three connected tasks for each translation:<br><ol><li><b>Mark error spans:</b> click the start and end of a problematic span in the English target text.</li><li><b>Assign severity:</b> label each span as Minor or Major.</li><li><b>Give an overall quality score:</b> use the 0–100 slider.</li></ol><br><b>Tutorial 1/7:</b><br>Let's start with an easy one. This translation is <b>completely correct</b>. Please use the slider to set the quality score to <b>100%</b> and do not mark any error spans.<br>\"</script>",
             "validation": {
               "model-tutorial": {
                 "warning": "This translation is perfect! Please set the score to 100% and do not mark any error spans.",
@@ -35,13 +35,13 @@
             "tgt": {
                 "model-tutorial": "Sámi artists often encounter big obstacles when they have to go to international arenas where there is little knowledge about Sámi art and culture."
             },
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"obstacles\" is incorrect in the following translation. The Northern Sámi word \"hástalusaid\" means \"challenges\" not \"obstacles\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"obstacles\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>75–85%</b> to reflect the reduced quality.<br></div>",
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 2/7:</b><br><b>Minor vs Major errors:</b><br>Every error span you mark must be assigned one of two severity levels:<br><b>Minor:</b>The meaning is essentially preserved. A reader would notice the translation is slightly awkward or imprecise, but would still understand the message correctly. Minor errors include small word choice differences, minor grammar issues, or slight shifts in tone that do not change the core meaning.<br><b>Major:</b>The meaning is changed, lost, or seriously misleading. The reader could misunderstand the intent or act on wrong information. Major errors include hallucinated translation, reversed meanings, dropped key information, or incorrect numbers.<br>Once you detect an error, click on the beginning and end of the span to mark it as a minor or major error. You will have the above short description of minor and major errors during the annotation.<br><br><b>Now let's try an example:</b><br>The word \"obstacles\" is incorrect in the following translation. The Northern Sámi word \"hástalusaid\" means \"challenges\" not \"obstacles\".<br>This is a <b>Minor</b> error: the meaning is fully preserved, it is just a small word choice issue.<br>1. Select and mark the word \"obstacles\" as a <b>Minor</b> error.<br>2. Move the slider to around <b>75–80%</b> to reflect the reduced quality.<br></div>",
             "validation": {
               "model-tutorial": {
-                "warning": "Please mark the word \"obstacles\" as a minor error (light pink) and set the score to 75-85%.",
+                "warning": "Please mark the word \"obstacles\" as a minor error (light pink) and set the score to 75-80%.",
                 "score": [
                   75,
-                  85
+                  80
                 ],
                 "error_spans": [
                   {
@@ -69,12 +69,12 @@
             "tgt": {
                 "model-tutorial": "Sara is the last Indigenous artist — and the first artist from Norway — to exhibit her art there in the Turbine Hall at Tate Modern."
             },
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much those errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"last\" is completely wrong in the given translation; it means the opposite of the Northern Sámi \"vuosttaš\" (first).<br>1. Select and mark \"last\" as an error<br>2. Move the slider to 15-30% due to the serious error.<br></div>",
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 3/7:</b><br><b>Using the 0-100 quality score slider:</b><br><br> The slider captures your overall judgment. It is not just a count of errors, but how much those errors hurt the translation quality.<br><br><b>Considering the above guideline on the range of scores, let's mark a major error and set a proper score.</b><br>The word \"last\" is completely wrong in the given translation; it means the opposite of the Northern Sámi \"vuosttaš\" (first).<br>1. Select and mark \"last\" as a major error.<br>2. Move the slider to 25-30% due to the serious error.<br></div>",
             "validation": {
               "model-tutorial": {
-                "warning": "Please mark \"last\" as a major error (dark pink) and set the score to 15-30%.",
+                "warning": "Please mark \"last\" as a major error (dark pink) and set the score to 25-30%.",
                 "score": [
-                  15,
+                  25,
                   30
                 ],
                 "error_spans": [
@@ -103,13 +103,13 @@
             "tgt": {
                 "model-tutorial": "NANU has chosen a logo that shows the strength of the work that is beginning. The word \"nanu/nanus\" tells that something is strong, and the patterns show a Sámi form."
             },
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may have noticed, the translation of \"dál\" (meaning \"now\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>75–85%</b>.<br></div>",
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 4/7:</b><br><b>Handling omitted content with [missing]:</b><br><br>When a source content is completely missing from the translation, you cannot click a span on words that are not there. In this case, use the [missing] tag to mark the location of the omission.<br><br><b>Let's tag the missing part:</b><br>Read the given source text carefully. As you may have noticed, the translation of \"dál\" (meaning \"now\") is missing from the target text. This is a minor error since this omission has not changed the meaning of text.<br>1. Mark the [missing] tag as a <b>Minor</b> error.<br>2. Set the score to <b>65–75%</b>.<br></div>",
             "validation": {
               "model-tutorial": {
-                "warning": "Please mark the [missing] tag as a Minor error and set the score to 75–85%.",
+                "warning": "Please mark the [missing] tag as a Minor error and set the score to 65–75%.",
                 "score": [
-                  75,
-                  85
+                  65,
+                  75
                 ],
                 "error_spans": [
                   {
@@ -131,13 +131,13 @@
             "tgt": {
                 "model-tutorial": "The Dáiddadállu and the Indigenous festival Riddu Riđđu have together established a new export office and institution that is meant to suppress Sámi art internationally. The aim is that Sámi artists themselves should set the conditions for how their art is presented."
             },
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 5/7:</b><br><b>Full Practice Round</b><br><br>Review the following translations given the source texts carefully. Remember better translations should get higher scores than worse ones.<br>1. Mark all <b>Minor</b> and <b>Major</b> errors.<br>2. Set the slider accordingly.<br></div>",
             "validation": {
               "model-tutorial": {
-                "warning": "Mark the word \"suppress\" as a major error and set the score to 35-45%.",
+                "warning": "Mark the word \"suppress\" as a major error and set the score to 35-40%.",
                 "score": [
                   35,
-                  45
+                  40
                 ],
                 "error_spans": [
                   {
@@ -185,7 +185,7 @@
               "model-tutorial-A": "Through NANU, Sámi artists are to receive a professional institution that can support their efforts internationally.",
               "model-tutorial-B": "Through NANU, Norwegian artists are to receive a professional institution that can hinder their efforts internationally."
             },
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The words \"sámi\" (Sámi) and \"doarjut\" (support) are translated incorrectly to \"Norwegian\" and \"hinder\", respectively. Having two major errors, set the score to 10-25%.</div>",
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 6/7:</b><br><b>Annotating more than one translation for a source text:</b><br><br>Here you are given <b>two translations</b> of the same source. You need to follow the rules from the previous examples and mark the error spans, assign severities, and give a 0–100% score to each translation separately. Remember lower quality translations should be assigned lower scores.<br>One of the translations is accurate. Set the score to 90-100%.<br>The other translation has two major errors. The words \"sámi\" (Sámi) and \"doarjut\" (support) are translated incorrectly to \"Norwegian\" and \"hinder\", respectively. Having two major errors, set the score to 10-20%.</div>",
             "skippable": true
           },
           {
@@ -195,9 +195,17 @@
               "model-tutorial-A": "NANU – Sámi Arts International is announced when Sara's solo exhibition opens at Tate Modern. This is a historic event for Sámi and Indigenous art, drawing record crowds of over fifty thousand visitors, and that is exactly why we are in London — the international art metropolis.",
               "model-tutorial-B": "NANU – Sámi Arts International is announced when Sara's group exhibition opens at Tate Modern. This is a historic event for Sámi and Indigenous art, and that is exactly why we are in London — the international art metropolis."
             },
-            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"drawing record crowds of over fifty thousand visitors\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"sierračájáhus\" (solo exhibition) is mistakenly translated as \"group exhibition\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 40-50%.<br></div>",
+            "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-30px; margin-bottom:20px; margin-right: 10px;'><b>Tutorial 7/7:</b><br><b>Document-level annotation</b><br><br>In some cases you are given multiple source texts from <b>the same document</b>. While annotating each target text, keep in mind the dependencies across source texts when identifying error spans.<br><br>Now let's walk through the following example. In one translation, \"drawing record crowds of over fifty thousand visitors\" is a hallucinated phrase that does not appear in the source text. Mark the entire phrase as a major error span and set the score to 0. In the second translation, \"sierračájáhus\" (solo exhibition) is mistakenly translated as \"group exhibition\". Since this changes the meaning of the sentence, mark it as a major error and set the score to 45-50%.<br></div>",
             "skippable": true
           }
+        ],
+        [
+          {
+          "src": "",
+          "tgt": {},
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right:10px;'><b>Congrats🎉</b><br><br>You have finished the tutorial. You are now ready to annotate data on Pearmut🚀</div>",
+          "skippable": true
+        }
         ]
       ]
     ]
