@@ -18,6 +18,7 @@ Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.
   - Better time tracking
   - Allow loading an existing campagin with `add-existing`
   - Add a button for downloading campaign sources
+  - Move campaign source data storate from `data/tasks/` to `data/campaigns/` with automatic migration
 - v1.1.4
   - Make span toolboxes stick for 0.5 second after selection
 - v1.1.3

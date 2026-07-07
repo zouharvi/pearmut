@@ -22,7 +22,7 @@ class TestOverwriteData:
         if campaign_id in progress_data:
             del progress_data[campaign_id]
             save_progress_data(progress_data)
-        task_file = f"{ROOT}/data/tasks/{campaign_id}.json"
+        task_file = f"{ROOT}/data/campaigns/{campaign_id}.json"
         if os.path.exists(task_file):
             os.remove(task_file)
         output_file = f"{ROOT}/data/outputs/{campaign_id}.jsonl"
@@ -161,7 +161,7 @@ class TestAssetsValidation:
         from pearmut.cli import ROOT, _add_single_campaign
 
         # Create data directory
-        data_dir = f"{ROOT}/data/tasks"
+        data_dir = f"{ROOT}/data/campaigns"
         os.makedirs(data_dir, exist_ok=True)
 
         campaign_data = {

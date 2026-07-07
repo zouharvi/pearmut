@@ -42,7 +42,7 @@ progress_data = load_progress_data(
 
 # load all tasks into data_all
 for campaign_id in progress_data.keys():
-    with open(f"{ROOT}/data/tasks/{campaign_id}.json", "r") as f:
+    with open(f"{ROOT}/data/campaigns/{campaign_id}.json", "r") as f:
         tasks_data[campaign_id] = json.load(f)
 
 
@@ -323,7 +323,7 @@ async def _purge_campaign(request: PurgeCampaignRequest):
             os.remove(symlink_path)
 
     # Remove task file
-    task_file = f"{ROOT}/data/tasks/{campaign_id}.json"
+    task_file = f"{ROOT}/data/campaigns/{campaign_id}.json"
     if os.path.exists(task_file):
         os.remove(task_file)
 
@@ -370,7 +370,7 @@ async def _add_campaign(request: AddCampaignRequest):
             _add_single_campaign(campaign_data, overwrite=False, url=None)
 
             campaign_id = campaign_data["campaign_id"]
-            with open(f"{ROOT}/data/tasks/{campaign_id}.json", "r") as f:
+            with open(f"{ROOT}/data/campaigns/{campaign_id}.json", "r") as f:
                 tasks_data[campaign_id] = json.load(f)
             
             added_campaigns.append({
@@ -431,7 +431,7 @@ async def _download_campaigns(
 ):
     output = []
     for cid in campaign_id:
-        task_path = f"{ROOT}/data/tasks/{cid}.json"
+        task_path = f"{ROOT}/data/campaigns/{cid}.json"
         if cid not in progress_data:
             return JSONResponse(
                 content=f"Unknown campaign ID {cid}", status_code=400

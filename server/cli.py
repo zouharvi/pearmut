@@ -7,6 +7,7 @@ import atexit
 import hashlib
 import json
 import os
+import shutil
 import urllib.parse
 
 from .utils import (
@@ -17,8 +18,22 @@ from .utils import (
     save_progress_data,
 )
 
-os.makedirs(f"{ROOT}/data/tasks", exist_ok=True)
+os.makedirs(f"{ROOT}/data/campaigns", exist_ok=True)
 os.makedirs(f"{ROOT}/data/outputs", exist_ok=True)
+
+# migration to move data/tasks to data/campaigns if it exists
+if os.path.exists(f"{ROOT}/data/tasks"):
+    for item in os.listdir(f"{ROOT}/data/tasks"):
+        src = os.path.join(f"{ROOT}/data/tasks", item)
+        dst = os.path.join(f"{ROOT}/data/campaigns", item)
+        if not os.path.exists(dst):
+            shutil.move(src, dst)
+    # if empty
+    if not os.listdir(f"{ROOT}/data/tasks"):
+        shutil.rmtree(f"{ROOT}/data/tasks")
+    else:
+        print(f"Warning: {ROOT}/data/tasks is not empty after migration. Please investigate.")
+
 load_progress_data(warn=None)
 
 
@@ -564,7 +579,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
             for other_campaign_id in progress_data.keys():
                 if other_campaign_id == current_campaign_id:
                     continue
-                with open(f"{ROOT}/data/tasks/{other_campaign_id}.json", "r") as f:
+                with open(f"{ROOT}/data/campaigns/{other_campaign_id}.json", "r") as f:
                     other_campaign = json.load(f)
                     other_assets = other_campaign.get("info", {}).get("assets")
                     if other_assets:
@@ -593,7 +608,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
         _shuffle_campaign_data(campaign_data, rng)
 
     # commit to transaction
-    with open(f"{ROOT}/data/tasks/{campaign_data['campaign_id']}.json", "w") as f:
+    with open(f"{ROOT}/data/campaigns/{campaign_data['campaign_id']}.json", "w") as f:
         json.dump(campaign_data, f, indent=2, ensure_ascii=False)
 
     progress_data[campaign_data["campaign_id"]] = user_progress
@@ -735,7 +750,7 @@ def _add_existing(args_unknown):
                 
                 local_progress[campaign_id] = ext_progress[campaign_id]
                 
-                with open(f"{ROOT}/data/tasks/{campaign_id}.json", "w") as f:
+                with open(f"{ROOT}/data/campaigns/{campaign_id}.json", "w") as f:
                     json.dump(campaign, f, indent=2, ensure_ascii=False)
                 
                 os.makedirs(f"{ROOT}/data/outputs", exist_ok=True)
@@ -803,7 +818,7 @@ def main():
 
         def _unlink_assets(campaign_id):
             """Unlink assets symlink for a campaign if it exists."""
-            task_file = f"{ROOT}/data/tasks/{campaign_id}.json"
+            task_file = f"{ROOT}/data/campaigns/{campaign_id}.json"
             if not os.path.exists(task_file):
                 return
             with open(task_file, "r") as f:
@@ -842,7 +857,7 @@ def main():
                 # Unlink assets before removing task file
                 _unlink_assets(campaign_id)
                 # Remove task file
-                task_file = f"{ROOT}/data/tasks/{campaign_id}.json"
+                task_file = f"{ROOT}/data/campaigns/{campaign_id}.json"
                 if os.path.exists(task_file):
                     os.remove(task_file)
                 # Remove output file
@@ -866,7 +881,7 @@ def main():
                 # Unlink all assets first
                 for campaign_id in progress_data.keys():
                     _unlink_assets(campaign_id)
-                shutil.rmtree(f"{ROOT}/data/tasks", ignore_errors=True)
+                shutil.rmtree(f"{ROOT}/data/campaigns", ignore_errors=True)
                 shutil.rmtree(f"{ROOT}/data/outputs", ignore_errors=True)
                 if os.path.exists(f"{ROOT}/data/progress.json"):
                     os.remove(f"{ROOT}/data/progress.json")
