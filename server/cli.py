@@ -18,6 +18,7 @@ from .utils import (
 )
 
 os.makedirs(f"{ROOT}/data/tasks", exist_ok=True)
+os.makedirs(f"{ROOT}/data/outputs", exist_ok=True)
 load_progress_data(warn=None)
 
 
@@ -331,6 +332,9 @@ def _add_single_campaign(campaign_data, overwrite, url):
 
     if assignment == "task-based":
         tasks = campaign_data["data"]
+        if isinstance(tasks, dict) and all(isinstance(v, list) for v in tasks.values()):
+            # Already a dict mapping user_id -> tasks (probably from a running campaign), extract just the tasks
+            tasks = list(tasks.values())
         if not isinstance(tasks, list):
             raise ValueError("Task-based campaign 'data' must be a list of tasks.")
         if not all(isinstance(task, list) for task in tasks):
@@ -612,7 +616,11 @@ def _add_campaign(args_unknown):
     """
     Add campaigns from one or more JSON data files.
     """
-    args = argparse.ArgumentParser()
+    args = argparse.ArgumentParser(
+        prog="pearmut add",
+        description="Add campaigns from one or more JSON data files."
+    )
+        
     args.add_argument(
         "data_files",
         type=str,
@@ -646,6 +654,113 @@ def _add_campaign(args_unknown):
             exit(1)
 
 
+def _add_existing(args_unknown):
+    """
+    Add existing campaigns from JSON data files, importing their progress and annotations.
+    """
+    args = argparse.ArgumentParser(
+        prog="pearmut add-existing",
+        description="Import campaigns with existing progress and annotations from external files."
+    )
+    if not args_unknown:
+        args.print_help()
+        import sys
+        sys.exit(1)
+        
+    args.add_argument(
+        "data_files",
+        type=str,
+        nargs="+",
+        help="One or more paths to campaign data files",
+    )
+    args.add_argument(
+        "--progress",
+        type=str,
+        required=True,
+        help="Path to the progress.json file to import",
+    )
+    args.add_argument(
+        "--annotations",
+        type=str,
+        required=True,
+        help="Path to the directory containing annotation JSONL files or the file itself",
+    )
+    args.add_argument(
+        "-o",
+        "--overwrite",
+        action="store_true",
+        help="Overwrite existing campaign if it exists",
+    )
+    args.add_argument(
+        "--url",
+        default="http://localhost:8001",
+        help="Prefix server URL for protocol links",
+    )
+    args = args.parse_args(args_unknown)
+
+    with open(f"{ROOT}/data/progress.json", "r") as f:
+        local_progress = json.load(f)
+
+    with open(args.progress, "r") as f:
+        ext_progress = json.load(f)
+
+    with open(args.annotations, "r") as f:
+        ext_annotations = json.load(f)
+
+    for data_file in args.data_files:
+        try:
+            with open(data_file, "r") as f:
+                data = json.load(f)
+            
+            campaigns = data if isinstance(data, list) else [data]
+            
+            for campaign in campaigns:
+                campaign_id = campaign.get("campaign_id")
+                if not campaign_id:
+                    print(f"Skipping a campaign without campaign_id in {data_file}")
+                    continue
+                
+                if campaign_id in local_progress and not args.overwrite:
+                    raise ValueError(f"Campaign {campaign_id} already exists locally. Use -o to overwrite.")
+                
+                if campaign_id not in ext_progress:
+                    raise ValueError(f"Campaign {campaign_id} not found in the provided progress.json.")
+                
+                if campaign_id not in ext_annotations:
+                    raise ValueError(f"Campaign {campaign_id} not found in the provided annotations file.")
+                
+                import hashlib, random
+                if "token" not in campaign:
+                    campaign["token"] = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
+                
+                local_progress[campaign_id] = ext_progress[campaign_id]
+                
+                with open(f"{ROOT}/data/tasks/{campaign_id}.json", "w") as f:
+                    json.dump(campaign, f, indent=2, ensure_ascii=False)
+                
+                os.makedirs(f"{ROOT}/data/outputs", exist_ok=True)
+                with open(f"{ROOT}/data/outputs/{campaign_id}.jsonl", "w") as f_out:
+                    for record in ext_annotations[campaign_id]:
+                        f_out.write(json.dumps(record, ensure_ascii=False) + "\n")
+                
+                print(f"Successfully imported campaign {campaign_id}")
+                print(
+                    "🎛️ ",
+                    f"{args.url}/dashboard.html"
+                    f"?campaign_id={urllib.parse.quote_plus(campaign['campaign_id'])}"
+                    f"&token={campaign['token']}",
+                )
+                for user_id, user_val in ext_progress[campaign_id].items():
+                    print(f"🧑 {args.url}/{user_val['url']}")
+                print()
+                
+        except Exception as e:
+            print(f"Error processing {data_file}: {e}")
+            exit(1)
+
+    save_progress_data(local_progress)
+
+
 def main():
     """
     Main entry point for the CLI.
@@ -671,7 +786,7 @@ def main():
     args.add_argument(
         "command",
         type=str,
-        choices=["run", "add", "purge"],
+        choices=["run", "add", "purge", "add-existing"],
         default="run",
         nargs="?",
     )
@@ -681,6 +796,8 @@ def main():
         _run(args_unknown)
     elif args.command == "add":
         _add_campaign(args_unknown)
+    elif args.command == "add-existing":
+        _add_existing(args_unknown)
     elif args.command == "purge":
         import shutil
 

@@ -466,6 +466,8 @@ Files from `videos/` become accessible at `localhost:8001/assets/my_videos/`. Cr
 - **`pearmut run`**: Start server
   - `--port <port>`: Server port (default: 8001)
   - `--url <url>`: Server URL prefix
+- **`pearmut add-existing <file(s)> --progress <file> --annotations <file>`**: Import campaigns with existing progress and annotations.
+  - `-o/--overwrite`: Replace existing campaigns with same ID
 - **`pearmut purge [campaign]`**: Remove campaign data
   - Without args: Purge all campaigns
   - With campaign name: Purge specific campaign only

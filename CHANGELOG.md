@@ -16,6 +16,7 @@ Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.
   - Various frontend bugfixes
   - Allow for campaign files to contain multiple campaigns in a list
   - Better time tracking
+  - Allow loading an existing campagin with `add-existing`
 - v1.1.4
   - Make span toolboxes stick for 0.5 second after selection
 - v1.1.3
