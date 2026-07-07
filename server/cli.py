@@ -744,7 +744,8 @@ def _add_existing(args_unknown):
                 if campaign_id not in ext_annotations:
                     raise ValueError(f"Campaign {campaign_id} not found in the provided annotations file.")
                 
-                import hashlib, random
+                import hashlib
+                import random
                 if "token" not in campaign:
                     campaign["token"] = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
                 
