@@ -30,6 +30,7 @@ import {
     MQM_SEVERITIES,
 } from './utils';
 
+
 // Check if frozen mode is enabled (view-only, no annotations)
 const searchParams = new URLSearchParams(window.location.search)
 const frozenMode = searchParams.has("frozen")
@@ -66,6 +67,16 @@ window.addEventListener('beforeunload', (event) => {
         event.preventDefault()
     }
 })
+
+// Log mouse movement at most once per 60s
+function registerMouseTracking() {
+    $("body").one("mousemove", () => {
+        console.log("PUSHING", Date.now())
+        state.action_log.push({ "time": Date.now() / 1000, "action": "mouse_moved" })
+        setTimeout(registerMouseTracking, 60 * 1000)
+    })
+}
+setTimeout(registerMouseTracking, 60 * 1000)
 
 $("#toggle_differences").on("change", function () {
     if ($(this).is(":checked")) {
