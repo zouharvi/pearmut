@@ -430,6 +430,13 @@ $("#download_annotations").on("click", (e) => {
     handleDownload(annotationsUrl, "annotations.json");
 });
 
+const campaignsUrl = `download-campaigns?${campaign_ids.map((id, i) => `campaign_id=${encodeURIComponent(id)}&${tokens[i] ? `token=${encodeURIComponent(tokens[i])}` : ''}`).join('&')}`;
+$("#download_campaigns").attr("href", campaignsUrl);
+$("#download_campaigns").on("click", (e) => {
+    e.preventDefault();
+    handleDownload(campaignsUrl, "campaigns.json");
+});
+
 
 // add campaign requires main token
 if (tokenMain === "") {

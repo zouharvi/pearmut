@@ -423,6 +423,38 @@ async def _download_annotations(
     )
 
 
+@app.get("/download-campaigns")
+async def _download_campaigns(
+    campaign_id: list[str] = Query(),
+    filename: str = Query("campaigns.json"),
+    # NOTE: currently not checking tokens for campaigns download as it is non-destructive
+):
+    output = []
+    for cid in campaign_id:
+        task_path = f"{ROOT}/data/tasks/{cid}.json"
+        if cid not in progress_data:
+            return JSONResponse(
+                content=f"Unknown campaign ID {cid}", status_code=400
+            )
+        if not os.path.exists(task_path):
+            pass # Or handle missing?
+        else:
+            with open(task_path, "r") as f:
+                output.append(json.load(f))
+
+    if not filename.endswith('.json'):
+        filename += '.json'
+
+    return JSONResponse(
+        content=output,
+        status_code=200,
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+        },
+    )
+
+
+
 @app.get("/download-progress")
 async def _download_progress(
     campaign_id: list[str] = Query(), 
