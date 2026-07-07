@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any
+from typing import Any, Union
 
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -342,7 +342,7 @@ async def _purge_campaign(request: PurgeCampaignRequest):
 
 
 class AddCampaignRequest(BaseModel):
-    campaign_data: dict[str, Any]
+    campaign_data: Union[dict[str, Any], list[dict[str, Any]]]
     token_main: str
 
 
@@ -359,20 +359,30 @@ async def _add_campaign(request: AddCampaignRequest):
         )
 
     try:
-        # url=None to skip printing since this is from the dashboard console
-        _add_single_campaign(request.campaign_data, overwrite=False, url=None)
+        if isinstance(request.campaign_data, list):
+            campaigns = request.campaign_data
+        else:
+            campaigns = [request.campaign_data]
 
-        campaign_id = request.campaign_data["campaign_id"]
-        with open(f"{ROOT}/data/tasks/{campaign_id}.json", "r") as f:
-            tasks_data[campaign_id] = json.load(f)
+        added_campaigns = []
+        for campaign_data in campaigns:
+            _add_single_campaign(campaign_data, overwrite=False, url=None)
+
+            campaign_id = campaign_data["campaign_id"]
+            with open(f"{ROOT}/data/tasks/{campaign_id}.json", "r") as f:
+                tasks_data[campaign_id] = json.load(f)
+            
+            added_campaigns.append({
+                "campaign_id": campaign_id,
+                "token": tasks_data[campaign_id]["token"]
+            })
 
         progress_data = load_progress_data(warn=None)
 
         return JSONResponse(
             content={
                 "status": "ok",
-                "campaign_id": campaign_id,
-                "token": tasks_data[campaign_id]["token"],
+                "campaigns": added_campaigns,
             },
             status_code=200,
         )

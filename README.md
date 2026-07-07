@@ -460,7 +460,7 @@ Files from `videos/` become accessible at `localhost:8001/assets/my_videos/`. Cr
 
 ## CLI Commands
 
-- **`pearmut add <file(s)>`**: Add campaign JSON files (supports wildcards)
+- **`pearmut add <file(s)>`**: Add campaign JSON files (supports wildcards). Campaign JSON file can also be a list of multiple campaign dictionaries.
   - `-o/--overwrite`: Replace existing campaigns with same ID
   - `--url <url>`: Server URL prefix (default: `http://localhost:8001`)
 - **`pearmut run`**: Start server

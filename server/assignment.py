@@ -234,7 +234,8 @@ def get_i_item_taskbased(
                 content="Complete all welcome items before accessing regular items",
                 status_code=400,
             )
-        if item_i < 0 or item_i >= len(tasks_data[campaign_id]["data"][user_id]): # type: ignore
+        assert isinstance(item_i, int)
+        if item_i < 0 or item_i >= len(tasks_data[campaign_id]["data"][user_id]):
             return JSONResponse(content="Item index out of range", status_code=400)
         payload = tasks_data[campaign_id]["data"][user_id][item_i]
 
@@ -265,7 +266,8 @@ def get_i_item_singlestream(
     actual_index = item_i
     is_welcome_item = isinstance(item_i, str) and item_i.startswith("welcome_")
     if is_welcome_item:
-        actual_index = int(item_i.split("_")[1]) # type: ignore
+        assert isinstance(item_i, str)
+        actual_index = int(item_i.split("_")[1])
         # Validate against total number of welcome items
         if actual_index < 0 or actual_index >= len(progress_welcome):
             return JSONResponse(
@@ -281,7 +283,8 @@ def get_i_item_singlestream(
             )
         payload = tasks_data[campaign_id]["data"][actual_index]
 
-    if actual_index < 0 or actual_index >= len(tasks_data[campaign_id]["data"]): # type: ignore
+    assert isinstance(actual_index, int)
+    if actual_index < 0 or actual_index >= len(tasks_data[campaign_id]["data"]):
         return JSONResponse(content="Item index out of range", status_code=400)
 
     return render_item_response(
@@ -622,7 +625,7 @@ def get_next_item_dynamic(
         model_weights_dict = {
             model: 1 / (rank + 1)
             for rank, model in enumerate(
-                sorted(model_avg_scores, key=model_avg_scores.get, reverse=True) # type: ignore
+                sorted(model_avg_scores.keys(), key=lambda x: model_avg_scores[x], reverse=True)
             )
         }
         model_weights_arr = np.array([model_weights_dict[model] for model in all_models], dtype=float)

@@ -62,7 +62,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         // Calculate regular progress - count "completed" items
         let progress_count = progress.filter(v => v === "completed").length
         if (assignment == "dynamic") {
-            progress_count = progress.map(l => Object.values(l).filter(v => v === "completed").length).reduce((a, b) => a + b, 0)
+            progress_count = progress.map(l => Object.values(l).filter((v: string) => v === "completed").length).reduce((a, b) => a + b, 0)
         }
 
         // Calculate welcome progress separately
@@ -465,8 +465,10 @@ $("#campaign_file_input").on("change", async function (event: JQuery.ChangeEvent
         });
 
         const url = new URL(window.location.href);
-        url.searchParams.append("campaign_id", response.campaign_id);
-        url.searchParams.append("token", response.token);
+        response.campaigns.forEach((campaign: any) => {
+            url.searchParams.append("campaign_id", campaign.campaign_id);
+            url.searchParams.append("token", campaign.token);
+        });
         window.location.href = url.toString();
     } catch (error) {
         const errorMsg = (error as any)?.responseJSON?.error || "Error adding campaign";

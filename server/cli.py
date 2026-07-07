@@ -23,6 +23,7 @@ load_progress_data(warn=None)
 
 def _run(args_unknown):
     import uvicorn
+    import uvicorn.config
 
     from .app import app, tasks_data
 
@@ -496,7 +497,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
                 if assignment == "task-based"
                 else [None] * len(campaign_data["data"])
                 if assignment == "single-stream"
-                else [{model: None for model in all_models}]
+                else [{model: None for model in all_models}] # pyright: ignore[reportPossiblyUnboundVariable]
                 * len(campaign_data["data"])
                 if assignment == "dynamic"
                 else int(f"Invalid assignment: {assignment}")
@@ -634,7 +635,12 @@ def _add_campaign(args_unknown):
     for data_file in args.data_files:
         try:
             with open(data_file, "r") as f:
-                _add_single_campaign(json.load(f), args.overwrite, args.url)
+                data = json.load(f)
+                if isinstance(data, list):
+                    for campaign in data:
+                        _add_single_campaign(campaign, args.overwrite, args.url)
+                else:
+                    _add_single_campaign(data, args.overwrite, args.url)
         except Exception as e:
             print(f"Error processing {data_file}: {e}")
             exit(1)
