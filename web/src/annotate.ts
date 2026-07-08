@@ -1098,6 +1098,9 @@ async function display_next_payload(response: DataPayload) {
         })
     })
 
+    $("#output_div img").on("click", function () {
+        $(this).toggleClass("zoomed-img");
+    })
 
     $("#button_next").off("click")
     $("#button_next").on("click", async function () {

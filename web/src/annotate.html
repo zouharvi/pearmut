@@ -175,6 +175,23 @@
     :is(.output_tgt, .output_src)> :is(h1, h2, h3) {
       margin: 0;
     }
+    #output_div img:not(.zoomed-img) {
+      cursor: zoom-in;
+    }
+    .zoomed-img {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      object-fit: contain;
+      background: rgba(0,0,0,0.8);
+      padding: 20px;
+      box-sizing: border-box;
+      cursor: zoom-out;
+      margin: 0;
+    }
   </style>
 </head>
 
