@@ -2,6 +2,7 @@
 # by default ignore, override with -.f
 data/
 data_*/
+demo/
 .vscode/
 server/static/
 examples/

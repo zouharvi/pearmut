@@ -285,10 +285,11 @@ def _add_single_campaign(campaign_data, overwrite, url):
 
     if "campaign_id" not in campaign_data:
         raise ValueError("Campaign data must contain 'campaign_id' field.")
-    if "info" not in campaign_data:
-        raise ValueError("Campaign data must contain 'info' field.")
     if "data" not in campaign_data:
         raise ValueError("Campaign data must contain 'data' field.")
+    
+    # this should be fine, can rely on defaults
+    campaign_data["info"] = campaign_data.get("info", {})
 
     with open(f"{ROOT}/data/progress.json", "r") as f:
         progress_data = json.load(f)
@@ -300,7 +301,12 @@ def _add_single_campaign(campaign_data, overwrite, url):
         )
 
     if "assignment" not in campaign_data["info"]:
-        raise ValueError("Campaign 'info' must contain 'assignment' field.")
+        campaign_data["info"]["assignment"] = "single-stream"
+        print("Warning: 'assignment' not specified in campaign info. Defaulting to 'single-stream'.")
+
+    if "users" not in campaign_data["info"]:
+        campaign_data["info"]["users"] = 1
+        print("Warning: 'users' not specified in campaign info. Defaulting to 1 user.")
 
     # Template defaults to "annotate" if not specified
     assignment = campaign_data["info"]["assignment"]
@@ -309,7 +315,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
     rword = wonderwords.RandomWord(rng=rng)
 
     # Parse users specification from info
-    users_spec = campaign_data["info"].get("users", 1)
+    users_spec = campaign_data["info"]["users"]
     user_tokens = {}  # user_id -> {"pass": ..., "fail": ...}
 
     # Validate and process data_welcome if present
@@ -453,12 +459,10 @@ def _add_single_campaign(campaign_data, overwrite, url):
         raise ValueError("'users' must be an integer or a list.")
 
     if "protocol" not in campaign_data["info"]:
-        campaign_data["info"]["protocol"] = "ESA"
-        print(
-            "Warning: 'protocol' not specified in campaign info. Defaulting to 'ESA'."
-        )
+        campaign_data["info"]["protocol"] = "cESA"
+        print("Warning: 'protocol' not specified in campaign info. Defaulting to 'cESA'.")
 
-    protocol = campaign_data["info"].get("protocol", "ESA")
+    protocol = campaign_data["info"]["protocol"]
     if "special_tokens" not in campaign_data["info"]:
         if protocol in {"ESA", "cESA", "MQM"}:
             campaign_data["info"]["special_tokens"] = ["[missing]"]
