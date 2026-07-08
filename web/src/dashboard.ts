@@ -46,7 +46,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
     html += `
     <table class="dashboard-table">
         <thead><tr>
-            <th style="min-width: 300px;">User ID</th>
+            <th style="min-width: 300px;">User</th>
             <th style="min-width: 50px;">Progress</th>
             <th style="min-width: 80px;">First</th>
             <th style="min-width: 80px;">Last</th>
@@ -57,12 +57,13 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         <tbody>`
     for (let user_id in data) {
         const progress = data[user_id]["progress"] as Array<string | object>
-        const progress_total = progress.length
+        let progress_total = progress.length
 
         // Calculate regular progress - count "completed" items
         let progress_count = progress.filter(v => v === "completed").length
         if (assignment == "dynamic") {
             progress_count = progress.map(l => Object.values(l).filter((v: string) => v === "completed").length).reduce((a, b) => a + b, 0)
+            progress_total = progress.map(l => Object.keys(l).length).reduce((a, b) => a + b, 0)
         }
 
         // Calculate welcome progress separately
@@ -76,9 +77,9 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
             welcome_total = welcome_progress.length
         }
 
-        // For single-stream and dynamic, show: finished_by_user
-        // For task-based, show finished_by_user/total
-        if (assignment === "single-stream" || assignment === "dynamic") {
+        // For single-stream, show: finished_by_user
+        // For task-based and dynamic, show finished_by_user/total
+        if (assignment === "single-stream") {
             if (welcome_total > 0) {
                 // Show as "welcome_done/welcome_total+finished"
                 progress_display = `${welcome_count}/${welcome_total}+${progress_count}`
@@ -105,7 +106,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         let status = ''
         if (data[user_id]["time"] == 0)
             status = '💤'
-        else if (data[user_id]["time"] != 0 && total_count == total_total) {
+        else if (data[user_id]["time"] != 0 && (total_count == total_total || threshold_passed !== null)) {
             // Use threshold_passed to determine if user passed/failed
             // threshold_passed is null if not complete, true if passed, false if failed
             if (threshold_passed === false)
@@ -150,6 +151,10 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
             html += `
             &nbsp;&nbsp;
             <span class="reset-task" user_id="${user_id}" ${token == null ? "disabled" : ""}>🗑️</span>`
+        } else {
+            html += `
+            &nbsp;&nbsp;
+            <span style="visibility: hidden;">🗑️</span>`
         }
 
         html += `</td>`
@@ -160,19 +165,66 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
     // link to campaign-specific dashboard
     let dashboard_url = `dashboard.html?campaign_id=${encodeURIComponent(campaign_id)}${token != null ? `&token=${encodeURIComponent(token)}` : ''}`
 
+    let campaign_progress = 0;
+    let campaign_total = 0;
+    let user_ids = Object.keys(data);
+    
+    if (user_ids.length > 0) {
+        if (assignment === "task-based") {
+            for (let user_id of user_ids) {
+                const progress = data[user_id]["progress"] as Array<string>;
+                campaign_progress += progress.filter(v => v === "completed").length;
+                campaign_total += progress.length;
+            }
+        } else if (assignment === "single-stream") {
+            const first_progress = data[user_ids[0]]["progress"] as Array<string>;
+            campaign_total = first_progress.length;
+            for (let user_id of user_ids) {
+                const progress = data[user_id]["progress"] as Array<string>;
+                campaign_progress += progress.filter(v => v === "completed").length;
+            }
+        } else if (assignment === "dynamic") {
+            const first_progress = data[user_ids[0]]["progress"] as Array<any>;
+            campaign_total = 0;
+            
+            for (let i = 0; i < first_progress.length; i++) {
+                let models = Object.keys(first_progress[i]);
+                campaign_total += models.length;
+                for (let model of models) {
+                    let model_annotated = false;
+                    for (let user_id of user_ids) {
+                        const progress = data[user_id]["progress"] as Array<any>;
+                        if (progress[i] && progress[i][model] === "completed") {
+                            model_annotated = true;
+                            break;
+                        }
+                    }
+                    if (model_annotated) {
+                        campaign_progress++;
+                    }
+                }
+            }
+        }
+    }
+
     let el = $(`
-        <div class="white-box">
-            <div style="">
-                <h3 style="margin: 0;">
+        <div class="white-box" style="display: flex; gap: 20px;">
+            <div>
+                <h3 style="margin: 0; padding-bottom: 5px;">
                 ${campaign_id} 
-                <a href="${dashboard_url}">🔗</a>
-                <a class="show-ranking-btn">⚖️</a>
-                ${token !== null ? '<a class="purge-campaign-btn" style="cursor: pointer;">🗑️</a>' : ''}
+                <span style="font-weight: normal; font-size: 0.8em; color: #666; margin-left: 5px;" title="Campaign progress (regular items)">(${campaign_progress}/${campaign_total})</span>
+                <span style="float: right; margin-right: 20px;">
+                    <a href="${dashboard_url}">🔗</a>
+                    &nbsp;
+                    <a class="show-ranking-btn" style="cursor: pointer; opacity: 1;">⚖️</a>
+                    ${token !== null ? '&nbsp;<a class="purge-campaign-btn" style="cursor: pointer;">🗑️</a>' : ''}
+                </span>
                 </h3>
+                <div class="dashboard-content">
+                    ${html}
+                </div>
             </div>
-            <div class="dashboard-content">
-                ${html}
-            </div><div class="ranking-content" style="display: none; margin-top: -30px;">
+            <div class="ranking-content" style="display: none; padding-top: 29px;">
             </div>
         </div>
         <br>
@@ -184,9 +236,20 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
     el.find(".show-ranking-btn").on("click", async function () {
         const $content = el.find(".ranking-content");
 
-        $(this).remove()
+        if ($content.is(":visible")) {
+            $content.hide();
+            $(this).css("opacity", "1");
+            return;
+        }
+
+        $(this).css("opacity", "0.5");
 
         // Check if data is already loaded
+        if ($content.children().length > 0) {
+            $content.show();
+            return;
+        }
+
         // Fetch results data
         try {
             const resultsData = await $.ajax({
