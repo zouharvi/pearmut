@@ -137,6 +137,8 @@ function check_unlock() {
         // Check if all incomplete items are skippable
         if (debugMode || incomplete_items_i.every(item_i => state.payload_items[item_i].skippable)) {
             $("#button_skip").show()
+            $("#button_skip").removeAttr("disabled")
+            $("#button_skip").val("Skip ⏭️")
         } else {
             $("#button_skip").hide()
         }
@@ -1117,6 +1119,8 @@ async function display_next_payload(response: DataPayload) {
         // disable while communicating with the server
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Next 📶")
+        $("#button_skip").attr("disabled", "disabled")
+        $("#button_skip").val("Skip 📶")
         state.action_log.push({ "time": Date.now() / 1000, "action": "submit" + (state.skip_mode ? "_skip" : "") })
 
         // Build payload
