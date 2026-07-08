@@ -35,6 +35,7 @@ import {
 const searchParams = new URLSearchParams(window.location.search)
 const frozenMode = searchParams.has("frozen")
 const debugMode = searchParams.has("debug")
+const bakedMode = searchParams.has("baked");
 
 const state = {
     response_log: [] as Array<DocumentResponse>,
@@ -71,7 +72,6 @@ window.addEventListener('beforeunload', (event) => {
 // Log mouse movement at most once per 60s
 function registerMouseTracking() {
     $("body").one("mousemove", () => {
-        console.log("PUSHING", Date.now())
         state.action_log.push({ "time": Date.now() / 1000, "action": "mouse_moved" })
         setTimeout(registerMouseTracking, 60 * 1000)
     })
@@ -1138,7 +1138,20 @@ async function display_next_payload(response: DataPayload) {
             $("#settings_comment").val("")
         }
 
-        let outcome = await log_response(payload_local, response.info.item_i)
+        let outcome: boolean | null = true
+        if (bakedMode) {
+            notify("Responses are not saved in baked mode.")
+            let current_i = parseInt(searchParams.get("bakedItemI") || "0");
+            let next_i = current_i + 1;
+            if (response && response.progress && next_i >= response.progress.length) {
+                next_i = 0;
+            }
+            searchParams.set("bakedItemI", next_i.toString());
+            window.history.pushState({}, "", `${window.location.pathname}?${searchParams.toString()}`);
+        } else {
+            outcome = await log_response(payload_local, response.info.item_i)
+        }
+
         if (outcome == null || outcome == false) {
             notify("Error submitting the annotations. Please try again.")
             $("#button_next").removeAttr("disabled")
@@ -1308,7 +1321,19 @@ function display_form(response: DataForm) {
         }
 
         // Log the form responses
-        let outcome = await log_response(payload_local, response.info.item_i)
+        let outcome: boolean | null = true
+        if (bakedMode) {
+            notify("Responses are not saved in baked mode.")
+            let current_i = parseInt(searchParams.get("bakedItemI") || "0");
+            let next_i = current_i + 1;
+            if (response && response.progress && next_i >= response.progress.length) {
+                next_i = 0;
+            }
+            searchParams.set("bakedItemI", next_i.toString());
+            window.history.pushState({}, "", `${window.location.pathname}?${searchParams.toString()}`);
+        } else {
+            outcome = await log_response(payload_local, response.info.item_i)
+        }
 
         if (outcome == null || outcome == false) {
             notify("Error submitting the form. Please try again.")
@@ -1367,6 +1392,14 @@ async function navigate_to_item(item_i: number | string) {
     let response = await get_i_item<DataPayload | DataGoodbye | DataForm>(item_i)
     state.has_unsaved_work = false
 
+    if (bakedMode && response) {
+        let i = typeof item_i === 'number' ? item_i : parseInt(item_i.toString());
+        if (!isNaN(i)) {
+            searchParams.set("bakedItemI", i.toString());
+            window.history.pushState({}, "", `${window.location.pathname}?${searchParams.toString()}`);
+        }
+    }
+
     if (response == null) {
         notify("Error fetching the item. Please try again later.")
         return
@@ -1386,7 +1419,14 @@ async function navigate_to_item(item_i: number | string) {
 }
 
 async function display_next_item() {
-    let response = await get_next_item<DataPayload | DataGoodbye | DataForm>()
+    let response: DataPayload | DataGoodbye | DataForm | null = null;
+    if (bakedMode) {
+        let current_i = parseInt(searchParams.get("bakedItemI") || "0");
+        response = await get_i_item<DataPayload | DataGoodbye | DataForm>(current_i);
+    } else {
+        response = await get_next_item<DataPayload | DataGoodbye | DataForm>();
+    }
+
     state.has_unsaved_work = false
 
     if (response == null) {

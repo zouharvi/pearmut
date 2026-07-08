@@ -21,7 +21,11 @@ module.exports = (env, argv) => {
     },
     output: {
       filename: '[name].bundle.js',
-      path: path.resolve(__dirname, '../server/static'),
+      path: (
+        process.env.OUTPUT_PATH
+        ? path.resolve(process.env.OUTPUT_PATH) 
+        : path.resolve(__dirname, '../server/static')
+      ),
       clean: true,
     },
     optimization: {
@@ -91,11 +95,6 @@ module.exports = (env, argv) => {
         ],
       }),
     ],
-    devServer: {
-      static: '../server/static',
-      port: 8000,
-      open: true,
-    },
     // Set the mode based on the CLI argument
     mode: argv.mode || 'development',
 

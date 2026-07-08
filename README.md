@@ -458,6 +458,7 @@ Host local assets (audio, images, videos) using the `assets` key:
 
 Files from `videos/` become accessible at `localhost:8001/assets/my_videos/`. Creates a symlink, so source directory must exist throughout annotation. Destination paths must be unique across campaigns.
 
+
 ## CLI Commands
 
 - **`pearmut add <file(s)>`**: Add campaign JSON files (supports wildcards). Campaign JSON file can also be a list of multiple campaign dictionaries.
@@ -468,6 +469,8 @@ Files from `videos/` become accessible at `localhost:8001/assets/my_videos/`. Cr
   - `--url <url>`: Server URL prefix
 - **`pearmut add-existing <file(s)> --progress <file> --annotations <file>`**: Import campaigns with existing progress and annotations.
   - `-o/--overwrite`: Replace existing campaigns with same ID
+- **`pearmut bake-existing <file(s)> --progress <file> --annotations <file>`**: Bake an existing campaign into a static standalone web frontend.
+  - `-o/--output`: Specify the output directory (default: `baked_output`)
 - **`pearmut purge [campaign]`**: Remove campaign data
   - Without args: Purge all campaigns
   - With campaign name: Purge specific campaign only
@@ -561,6 +564,20 @@ pearmut run
 3. Reference as `info->template` in campaign JSON
 
 See [web/src/annotate.ts](web/src/annotate.ts) for example.
+
+### Baking existing annotations into a static frontend
+
+Pearmut allows you to export existing campaigns and their annotations into a standalone static site that can be hosted anywhere (e.g., GitHub Pages, FTP) without needing a Python backend server.
+This is especially useful for creating a publicly browsable, read-only archive of completed annotation campaigns to share alongside a publication.
+
+**How to bake a frontend:**
+1. **Export Data**: First, access your live Pearmut instance's management dashboard. Download the overall `progress.json` and `annotations.jsonl` files. You will also need the original campaign source data (e.g., `campaign.json`).
+2. **Bake**: Run the `bake-existing` command, providing the campaign data, progress, and exported annotations:
+   ```bash
+   pearmut bake-existing campaign.json --progress path/to/progress.json --annotations path/to/annotations.jsonl -o my_baked_site/
+   ```
+3. **Host & Share**: The command flattens all collected annotations and packages them as static JSON files. Upload the resulting `my_baked_site/` directory to any static file hosting service. 
+4. **Access**: You can then share direct links to the public archive by providing the `?baked` flag and the campaign ID. For example: `your-domain.com?baked&campaign_id=my_campaign`. The interface will load the annotations and allow users to page through all annotated items and interact with the interface without it being saved.
 
 ### Deployment
 

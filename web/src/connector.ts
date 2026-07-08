@@ -3,6 +3,8 @@ import $ from 'jquery';
 
 let searchParams = new URLSearchParams(window.location.search)
 
+const bakedMode = searchParams.has("baked");
+
 export async function get_next_item<T>(): Promise<T | null> {
   /* Fetch the next item for the user from the server. */
   let user_id = searchParams.get("user_id");
@@ -89,6 +91,18 @@ export async function get_i_item<T>(item_i: number | string): Promise<T | null> 
   /* Fetch a specific item by index for the user from the server. */
   let user_id = searchParams.get("user_id");
   let campaign_id = searchParams.get("campaign_id");
+
+  if (bakedMode) {
+    try {
+      const response = await fetch(`api/${campaign_id}/${item_i}.json`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json() as T;
+    } catch (e: any) {
+      console.error("Error fetching baked item:", e);
+      notify(`Error fetching baked item. <br><br> ${e}`);
+      return null;
+    }
+  }
 
   let delay = 1
   while (true) {

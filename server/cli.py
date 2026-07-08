@@ -702,7 +702,7 @@ def _add_existing(args_unknown):
         "--annotations",
         type=str,
         required=True,
-        help="Path to the directory containing annotation JSONL files or the file itself",
+        help="Path to the file containing annotation JSONL",
     )
     args.add_argument(
         "-o",
@@ -806,7 +806,7 @@ def main():
     args.add_argument(
         "command",
         type=str,
-        choices=["run", "add", "purge", "add-existing"],
+        choices=["run", "add", "purge", "add-existing", "bake-existing"],
         default="run",
         nargs="?",
     )
@@ -893,3 +893,181 @@ def main():
                 print("All campaign data purged.")
             else:
                 print("Cancelled.")
+    elif args.command == "bake-existing":
+        _bake_existing(args_unknown)
+
+
+def _bake_existing(args_unknown):
+    import subprocess
+    import json
+    import os
+    from .utils import is_form_document
+    from .assignment import _get_instructions, CAMPAIGN_INFO_PUBLIC
+
+    args = argparse.ArgumentParser(
+        prog="pearmut bake-existing",
+        description="Bake an existing campaign into static files."
+    )
+    args.add_argument(
+        "data_files",
+        type=str,
+        nargs="+",
+        help="One or more paths to campaign data files",
+    )
+    args.add_argument(
+        "--progress",
+        type=str,
+        required=True,
+        help="Path to the progress.json file to import",
+    )
+    args.add_argument(
+        "--annotations",
+        type=str,
+        required=True,
+        help="Path to the annotation JSONL file",
+    )
+    args.add_argument(
+        "--output",
+        "-o",
+        type=str,
+        default="baked_output",
+        help="Output directory for the baked static files",
+    )
+    args = args.parse_args(args_unknown)
+    
+    with open(args.progress, "r") as f:
+        ext_progress = json.load(f)
+
+    with open(args.annotations, "r") as f:
+        ext_annotations = json.load(f)
+
+    tasks_data = {}
+    for data_file in args.data_files:
+        with open(data_file, "r") as f:
+            data = json.load(f)
+            campaigns = data if isinstance(data, list) else [data]
+            for campaign in campaigns:
+                tasks_data[campaign["campaign_id"]] = campaign
+                
+    web_dir = os.path.abspath(os.path.join(ROOT, "web"))
+    output_dir = os.path.abspath(args.output)
+    
+    env = os.environ.copy()
+    env["OUTPUT_PATH"] = output_dir
+    
+    result = subprocess.run(["npm", "run", "build"], cwd=web_dir, env=env)
+    if result.returncode != 0:
+        print("Failed to build frontend")
+        exit(1)
+    
+    for campaign_id, campaign in tasks_data.items():
+        if campaign_id not in ext_progress:
+            continue
+            
+        assignment = campaign["info"].get("assignment", "single-stream")
+        virtual_sequence = []
+        
+        if assignment == "task-based":
+            for user_id, user_progress in ext_progress[campaign_id].items():
+                num_items = len(user_progress.get("progress", []))
+                for item_i in range(num_items):
+                    payload = campaign["data"][user_id][item_i]
+                    is_form = is_form_document(payload)
+                    
+                    items_existing = []
+                    for row in ext_annotations.get(campaign_id, []):
+                        if row.get("item_i") == item_i and row.get("user_id") == user_id:
+                            items_existing.append(row)
+                            
+                    payload_existing = None
+                    if items_existing:
+                        latest_item = items_existing[-1]
+                        payload_existing = {"annotation": latest_item["annotation"]}
+                        if "comment" in latest_item:
+                            payload_existing["comment"] = latest_item["comment"]
+                            
+                    virtual_sequence.append({
+                        "payload": payload,
+                        "payload_existing": payload_existing,
+                        "is_form": is_form
+                    })
+        else:
+            num_items = len(campaign.get("data", []))
+            for item_i in range(num_items):
+                payload = campaign["data"][item_i]
+                is_form = is_form_document(payload)
+                
+                items_existing = []
+                for row in ext_annotations.get(campaign_id, []):
+                    if row.get("item_i") == item_i:
+                        items_existing.append(row)
+                        
+                payload_existing = None
+                if items_existing:
+                    latest_item = items_existing[-1]
+                    payload_existing = {"annotation": latest_item["annotation"]}
+                    if "comment" in latest_item:
+                        payload_existing["comment"] = latest_item["comment"]
+                        
+                virtual_sequence.append({
+                    "payload": payload,
+                    "payload_existing": payload_existing,
+                    "is_form": is_form
+                })
+                
+        num_virtual_items = len(virtual_sequence)
+        virtual_progress = ["completed"] * num_virtual_items
+        
+        for i, item_data in enumerate(virtual_sequence):
+            response_content = {
+                "status": "form" if item_data["is_form"] else "ok",
+                "time": 0,
+                "progress": virtual_progress,
+                "progress_welcome": [],
+                "info": {
+                    "item_i": i,
+                    "instructions": _get_instructions(tasks_data, campaign_id),
+                } | {
+                    k: v
+                    for k, v in campaign.get("info", {}).items()
+                    if k in CAMPAIGN_INFO_PUBLIC
+                },
+                "payload": item_data["payload"],
+            }
+            if item_data["payload_existing"]:
+                response_content["payload_existing"] = item_data["payload_existing"]
+                
+            out_path = os.path.join(output_dir, "api", campaign_id, f"{i}.json")
+            os.makedirs(os.path.dirname(out_path), exist_ok=True)
+            with open(out_path, "w") as f:
+                json.dump(response_content, f)
+
+    import glob
+    
+    # Remove original index files
+    for f in glob.glob(os.path.join(output_dir, "index.*")):
+        if os.path.isfile(f):
+            os.remove(f)
+            
+    # Rename annotate.* to index.*
+    for f in glob.glob(os.path.join(output_dir, "annotate.*")):
+        new_name = f.replace("annotate.", "index.")
+        os.rename(f, new_name)
+        
+    # Update HTML references
+    index_html_path = os.path.join(output_dir, "index.html")
+    if os.path.exists(index_html_path):
+        with open(index_html_path, "r") as f:
+            content = f.read()
+        content = content.replace("annotate.bundle.js", "index.bundle.js")
+        with open(index_html_path, "w") as f:
+            f.write(content)
+            
+    # Remove any other top-level HTML or JS files
+    allowed_files = {"index.html", "index.bundle.js", "style.css", "favicon.svg"}
+    for item in os.listdir(output_dir):
+        item_path = os.path.join(output_dir, item)
+        if os.path.isfile(item_path) and item not in allowed_files:
+            os.remove(item_path)
+
+    print(f"Baked annotations into a static site into {output_dir}")
