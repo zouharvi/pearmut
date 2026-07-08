@@ -644,15 +644,15 @@ def get_next_item_dynamic(
     incomplete_indices = [
         i
         for i, mv in enumerate(user_progress["progress"])
-        if not any(v in {"completed", "completed_foreign"} for v in mv.values())
+        if all(mv[model] not in {"completed", "completed_foreign"} for model in selected_models)
     ]
 
     # If no incomplete items, user (and everyone) is done
     if not incomplete_indices:
         return _completed_response(tasks_data, progress_data, campaign_id, user_id)
 
-    # Select a random incomplete item
-    item_i = random.choice(incomplete_indices)
+    # Select the first incomplete item
+    item_i = incomplete_indices[0]
 
     # Prune the payload to only include selected models
     original_item = campaign_data["data"][item_i]
