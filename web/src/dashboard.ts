@@ -66,6 +66,10 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
             progress_total = progress.map(l => Object.keys(l).length).reduce((a, b) => a + b, 0)
         }
 
+        if ((assignment === "dynamic" || assignment === "single-stream") && x.docs_per_user != null) {
+            progress_total = x.docs_per_user
+        }
+
         // Calculate welcome progress separately
         let welcome_count = 0
         let welcome_total = 0
@@ -77,25 +81,12 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
             welcome_total = welcome_progress.length
         }
 
-        // For single-stream, show: finished_by_user
-        // For task-based and dynamic, show finished_by_user/total
-        if (assignment === "single-stream") {
-            if (welcome_total > 0) {
-                // Show as "welcome_done/welcome_total+finished"
-                progress_display = `${welcome_count}/${welcome_total}+${progress_count}`
-            } else {
-                // No welcome items, show as "finished"
-                progress_display = `${progress_count}`
-            }
+        if (welcome_total > 0) {
+            // Show as "welcome_done/welcome_total+regular_done/regular_total"
+            progress_display = `${welcome_count}/${welcome_total}+${progress_count}/${progress_total}`
         } else {
-            // Task-based: use traditional format
-            if (welcome_total > 0) {
-                // Show as "welcome_done/welcome_total+regular_done/regular_total"
-                progress_display = `${welcome_count}/${welcome_total}+${progress_count}/${progress_total}`
-            } else {
-                // No welcome items, just show regular progress
-                progress_display = `${progress_count}/${progress_total}`
-            }
+            // No welcome items, just show regular progress
+            progress_display = `${progress_count}/${progress_total}`
         }
 
         // Calculate total for status determination

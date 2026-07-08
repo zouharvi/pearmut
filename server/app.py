@@ -208,6 +208,7 @@ async def _dashboard_data(request: DashboardDataRequest):
             "data": progress_new,
             "validation_threshold": validation_threshold,
             "assignment": assignment,
+            "docs_per_user": tasks_data[campaign_id]["info"].get("docs_per_user"),
         },
         status_code=200,
     )
