@@ -623,6 +623,7 @@ def get_next_item_dynamic(
             for model in all_models
         }
         model_weights_dict = {
+            # 1/(rank + 1) to give higher weight to better performing models
             model: 1 / (rank + 1)
             for rank, model in enumerate(
                 sorted(model_avg_scores.keys(), key=lambda x: model_avg_scores[x], reverse=True)
@@ -639,10 +640,11 @@ def get_next_item_dynamic(
         )
 
     # Find incomplete items (None or completed_foreign status)
+    # if any chosen model for an item is not completed, it's considered incomplete
     incomplete_indices = [
         i
         for i, mv in enumerate(user_progress["progress"])
-        if not all(v in {"completed", "completed_foreign"} for v in mv.values())
+        if not any(v in {"completed", "completed_foreign"} for v in mv.values())
     ]
 
     # If no incomplete items, user (and everyone) is done
