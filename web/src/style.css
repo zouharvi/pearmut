@@ -44,7 +44,7 @@ input[type="button"] {
 }
 
 
-input[type="button"]:hover:not(:disabled) {
+input[type="button"]:hover:not(:disabled):not(.button-disabled) {
     background: #ffd;
     cursor: pointer;
 }
@@ -52,6 +52,11 @@ input[type="button"]:hover:not(:disabled) {
 input[type="button"]:disabled {
     background: #bbb;
     cursor: not-allowed;
+}
+
+input[type="button"].button-disabled {
+    background: #bbb;
+    cursor: help;
 }
 
 label {
@@ -320,3 +325,14 @@ input[type="button"][selected] {
     border-color: #4CAF50;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
 }
+
+@keyframes flash-red {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: #ff6666; }
+}
+
+.flash-red-animation {
+    animation: flash-red 0.5s ease-in-out 6;
+    border-radius: 4px;
+}
+

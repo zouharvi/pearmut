@@ -42,6 +42,8 @@ const state = {
     action_log: [] as Array<any>,
     validations: [] as Array<Record<string, Validation> | undefined>,
     payload_items: [] as Array<DataPayloadItem>,  // Store current payload items to check skippable
+    incomplete_items_i: [] as number[],
+    incomplete_targets: [] as Array<{i: number, model: string | null, subTarget?: string}>,
     output_blocks: [] as Array<JQuery<HTMLElement>>,
     settings: {
         show_alignment: true,
@@ -95,47 +97,66 @@ function check_unlock() {
         return
     }
 
+    state.incomplete_items_i = []
+    state.incomplete_targets = []
+
     // Check if all error spans are complete (have required severity and category based on protocol)
     if (state.protocol_error_spans || state.protocol_error_categories) {
-        for (const doc_responses of state.response_log) {
-            for (const r of Object.values(doc_responses)) {
+        state.response_log.forEach((doc_responses, i) => {
+            let hasIncompleteSpan = false;
+            for (const [model, r] of Object.entries(doc_responses)) {
+                let modelHasIncomplete = false;
                 for (const span of r.error_spans) {
                     if (!isSpanComplete(span, state.protocol_error_categories)) {
-                        $("#button_next").attr("disabled", "disabled")
-                        $("#button_next").val("Incomplete 🚧")
-                        return
+                        modelHasIncomplete = true;
                     }
                 }
+                if (modelHasIncomplete) {
+                    state.incomplete_targets.push({ i, model })
+                    hasIncompleteSpan = true;
+                }
             }
-        }
+            if (hasIncompleteSpan) {
+                state.incomplete_items_i.push(i)
+            }
+        })
     }
-
-
-    let incomplete_items_i = Array<number>()
 
     // Check if all scores are set
     state.response_log.forEach((doc_responses, i) =>
-        Object.values(doc_responses).forEach(r => {
+        Object.entries(doc_responses).forEach(([model, r]) => {
+            let modelHasIncomplete = false;
             if (r.sliders) {
                 // Custom sliders mode: all sliders must be non-null (no score required)
-                // Note: when sliders is {} (empty, from sliders: []), Object.values returns []
-                // and every() returns true (vacuous truth), allowing immediate progression
-                if (!Object.values(r.sliders).every(val => val !== null)) {
-                    incomplete_items_i.push(i)
+                for (const [sliderName, val] of Object.entries(r.sliders)) {
+                    if (val === null) {
+                        modelHasIncomplete = true;
+                        if (!state.incomplete_targets.some(t => t.i === i && t.model === model && t.subTarget === sliderName)) {
+                            state.incomplete_targets.push({ i, model, subTarget: sliderName })
+                        }
+                    }
                 }
             } else {
                 // Single score mode: the score must be set
                 if (r.score == null) {
-                    incomplete_items_i.push(i)
+                    modelHasIncomplete = true;
+                    if (!state.incomplete_targets.some(t => t.i === i && t.model === model && t.subTarget === "score")) {
+                        state.incomplete_targets.push({ i, model, subTarget: "score" })
+                    }
+                }
+            }
+            if (modelHasIncomplete) {
+                if (!state.incomplete_items_i.includes(i)) {
+                    state.incomplete_items_i.push(i)
                 }
             }
         })
     )
-    if (incomplete_items_i.length > 0) {
-        $("#button_next").attr("disabled", "disabled")
+    if (state.incomplete_items_i.length > 0) {
+        $("#button_next").addClass("button-disabled")
         $("#button_next").val("Incomplete 🚧")
         // Check if all incomplete items are skippable
-        if (debugMode || incomplete_items_i.every(item_i => state.payload_items[item_i].skippable)) {
+        if (debugMode || state.incomplete_items_i.every(item_i => state.payload_items[item_i].skippable)) {
             $("#button_skip").show()
             $("#button_skip").removeAttr("disabled")
             $("#button_skip").val("Skip ⏭️")
@@ -146,7 +167,7 @@ function check_unlock() {
     }
 
     // All items complete - enable Next button and hide Skip button
-    $("#button_next").removeAttr("disabled")
+    $("#button_next").removeClass("button-disabled")
     $("#button_next").val("Next ✅")
     $("#button_skip").hide()
 }
@@ -1105,7 +1126,44 @@ async function display_next_payload(response: DataPayload) {
     })
 
     $("#button_next").off("click")
-    $("#button_next").on("click", async function () {
+    $("#button_next").on("click", async function (e) {
+        if ($(this).hasClass("button-disabled")) {
+            e.preventDefault()
+            if (state.incomplete_targets && state.incomplete_targets.length > 0) {
+                const target = state.incomplete_targets[0]
+                let targetBlock = state.output_blocks[target.i]
+                if (targetBlock) {
+                    if (target.model) {
+                        const candidate = targetBlock.find(`.output_candidate[data-model='${CSS.escape(target.model)}']`)
+                        if (candidate.length > 0) targetBlock = candidate
+                        
+                        if (target.subTarget) {
+                            let sub: JQuery<HTMLElement>;
+                            if (target.subTarget === "score") {
+                                sub = targetBlock.find("input[type='range']").closest(".output_response, .slider_anchor_parent")
+                            } else {
+                                sub = targetBlock.find(`[data-slider='${CSS.escape(target.subTarget)}']`).closest(".slider_container")
+                            }
+                            if (sub.length > 0) targetBlock = sub
+                        }
+                    }
+                    let flashTarget = targetBlock;
+                    const visibleToolbox = $(".span_toolbox_parent:visible").first();
+                    if (visibleToolbox.length > 0) {
+                        flashTarget = visibleToolbox;
+                    }
+                    if (flashTarget.offset()) {
+                        $('html, body').animate({ scrollTop: flashTarget.offset()!.top - 100 }, 500)
+                        flashTarget.addClass("flash-red-animation")
+                        setTimeout(() => {
+                            flashTarget.removeClass("flash-red-animation")
+                        }, 3000)
+                    }
+                }
+            }
+            return
+        }
+
         // Perform validation unless in skip tutorial mode
         let validationResult: boolean[] | null = null
         if (!state.skip_mode) {
@@ -1226,6 +1284,7 @@ function display_form(response: DataForm) {
     // Create form fields
     response.payload.forEach((item, index) => {
         const fieldDiv = $('<div class="form-field"></div>')
+        state.output_blocks.push(fieldDiv)
 
         // Add the text/label
         const label = $(`<div class="form-label">${item.text}</div>`)
@@ -1297,7 +1356,44 @@ function display_form(response: DataForm) {
 
     // Set up submit button
     $("#button_next").off("click")
-    $("#button_next").on("click", async function () {
+    $("#button_next").on("click", async function (e) {
+        if ($(this).hasClass("button-disabled")) {
+            e.preventDefault()
+            if (state.incomplete_targets && state.incomplete_targets.length > 0) {
+                const target = state.incomplete_targets[0]
+                let targetBlock = state.output_blocks[target.i]
+                if (targetBlock) {
+                    if (target.model) {
+                        const candidate = targetBlock.find(`.output_candidate[data-model='${CSS.escape(target.model)}']`)
+                        if (candidate.length > 0) targetBlock = candidate
+                        
+                        if (target.subTarget) {
+                            let sub: JQuery<HTMLElement>;
+                            if (target.subTarget === "score") {
+                                sub = targetBlock.find("input[type='range']").closest(".output_response, .slider_anchor_parent")
+                            } else {
+                                sub = targetBlock.find(`[data-slider='${CSS.escape(target.subTarget)}']`).closest(".slider_container")
+                            }
+                            if (sub.length > 0) targetBlock = sub
+                        }
+                    }
+                    let flashTarget = targetBlock;
+                    const visibleToolbox = $(".span_toolbox_parent:visible").first();
+                    if (visibleToolbox.length > 0) {
+                        flashTarget = visibleToolbox;
+                    }
+                    if (flashTarget.offset()) {
+                        $('html, body').animate({ scrollTop: flashTarget.offset()!.top - 100 }, 500)
+                        flashTarget.addClass("flash-red-animation")
+                        setTimeout(() => {
+                            flashTarget.removeClass("flash-red-animation")
+                        }, 3000)
+                    }
+                }
+            }
+            return
+        }
+
         // Disable button during submission
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Next 📶")
@@ -1364,21 +1460,29 @@ function check_form_unlock(responses: Array<string | number | null>, payload: Ar
         return
     }
 
+    state.incomplete_items_i = []
+    state.incomplete_targets = []
+
     // Check if all form fields (non-null form type) are filled
     for (let i = 0; i < payload.length; i++) {
         if (payload[i].form !== null) {
             const response = responses[i]
             // Check if response is null or empty string
             if (response === null || response === "") {
-                $("#button_next").attr("disabled", "disabled")
-                $("#button_next").val("Next 🚧")
-                return
+                state.incomplete_items_i.push(i)
+                state.incomplete_targets.push({ i, model: null })
             }
         }
     }
 
+    if (state.incomplete_items_i.length > 0) {
+        $("#button_next").addClass("button-disabled")
+        $("#button_next").val("Next 🚧")
+        return
+    }
+
     // All required fields are filled
-    $("#button_next").removeAttr("disabled")
+    $("#button_next").removeClass("button-disabled")
     $("#button_next").val("Next ✅")
 }
 
