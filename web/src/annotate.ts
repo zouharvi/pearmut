@@ -1545,8 +1545,10 @@ async function display_next_item() {
     if (response.status == "goodbye") {
         display_goodbye(response as DataGoodbye, navigate_to_item)
     } else if (response.status == "form") {
+        $("#button_next").removeAttr("disabled")
         display_form(response as DataForm)
     } else if (response.status == "ok") {
+        $("#button_next").removeAttr("disabled")
         display_next_payload(response as DataPayload)
     } else {
         console.error("Non-ok response", response)
