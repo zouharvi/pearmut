@@ -647,6 +647,14 @@ def get_next_item_dynamic(
         if all(mv[model] not in {"completed", "completed_foreign"} for model in selected_models)
     ]
 
+    # if we dont find any incomplete items for the selected models, we can relax the condition to include items that are partially completed (some models completed, some not)
+    if not incomplete_indices:
+        incomplete_indices = [
+            i
+            for i, mv in enumerate(user_progress["progress"])
+            if any(mv[model] not in {"completed", "completed_foreign"} for model in selected_models)
+        ]
+
     # If no incomplete items, user (and everyone) is done
     if not incomplete_indices:
         return _completed_response(tasks_data, progress_data, campaign_id, user_id)
