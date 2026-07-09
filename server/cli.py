@@ -898,11 +898,12 @@ def main():
 
 
 def _bake_existing(args_unknown):
-    import subprocess
     import json
     import os
+    import subprocess
+
+    from .assignment import CAMPAIGN_INFO_PUBLIC, _get_instructions
     from .utils import is_form_document
-    from .assignment import _get_instructions, CAMPAIGN_INFO_PUBLIC
 
     args = argparse.ArgumentParser(
         prog="pearmut bake-existing",
