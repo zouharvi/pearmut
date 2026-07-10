@@ -576,7 +576,7 @@ export type SliderConfig = {
 
 // Shared protocol info type
 export type ProtocolInfo = {
-    protocol: "DA" | "cESA" | "ESA" | "MQM" | "XSTSRP",
+    protocol: "DA" | "cESA" | "ESA" | "MQM",
     item_i: number,
     sliders?: SliderConfig[],  // Optional custom slider configurations
     instructions?: string,
