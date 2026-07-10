@@ -1,0 +1,157 @@
+{
+    "info": {
+        "assignment": "task-based",
+        "protocol": "DA",
+        "sliders": [
+            {"min": 1, "max": 5, "step": 1, "name": "Overall"}
+        ],
+        "instructions": "<ul>\n <li><strong>The goal</strong> is to assess the degree of correspondence/equivalence of meaning and register \n (style) between a source paragraph and its translation. You will need to read the source and the translation, \n compare them sentence by sentence, and assign a score to each sentence.</li>\n <li>Notes:\n <ul>\n <li>The examples below are phrase or sentence-based for simplicity purposes. You will work with longer \n paragraphs and will need to take the whole paragraph context into account.</li>\n <li>Please ignore minor typos and grammatical errors if they do not affect your understanding of the\n texts.</li>\n <li>Please ignore capitalization and punctuation differences if they do not affect your\n understanding.</li>\n </ul>\n </li>\n <li>Score each sentence pair using the following scale from 1 to 5:\n <ul>\n <li><strong>[1]</strong> The source paragraph and its translation are not semantically equivalent,\n share very little detail, and may be about different topics.\n <details>\n <summary>Examples</summary>\n <ul>\n <li><em>Example A (different topics)</em><br>\n Text 1 (English): Train station<br>\n Text 2 (Spanish): Restaurante vegano (Vegan restaurant)</li>\n <li><em>Example B (false equivalents)</em><br>\n Text 1: When I get home, I always lock the door. It gives me peace of mind.<br>\n Text 2: Cuando llego a casa siempre loqueo la puerta. Me da tranquilidad.</li>\n <li><em>Example C (very little overlap and unrelated entities)</em><br>\n Text 1: Open museums<br>\n Text 2: Centros comerciales abiertos (Open malls)</li>\n <li><em>Example D (indecipherable on one side or the other)</em><br>\n Text 1: lorbo lorbo lorl room<br>\n Text 2: Habitación doble (double room)</li>\n <li><em>Example E (untranslated text)</em><br>\n Text 1: Should you have any questions, please let me know.<br>\n Text 2: Si tiene cualquier duda, please let me know.</li>\n <li><em>Example F (hallucinations)</em><br>\n Text 1: Thank you for joining us today. We're so happy you're here.<br>\n Text 2: Gracias por acompañarnos hoy. Nos alegra mucho que estéis aquí. Esta noche la vamos a\n recordar toda la vida. (We will remember this night for the rest of our lives).</li>\n </ul>\n </details>\n </li>\n <li><strong>[2]</strong> The source paragraph and its translation share some details, but are not\n equivalent. Some important information related to the primary subject/verb/object differs or is\n missing, which alters the intent or meaning of the paragraph. Alternatively, the register differs so\n much that this translation will be a big mistake. A significant change in register will always score\n no more than 2 points.\n <details>\n <summary>Examples</summary>\n <ul>\n <li><em>Example A (opposite polarity)</em><br>\n Text 1: Flight to London<br>\n Text 2: Vuelo desde Londres (Flight from London)</li>\n <li><em>Example B (non-equivalent numbers)</em><br>\n Text 1: Two rooms for three people<br>\n Text 2: Tres habitaciones para dos personas (Three rooms for two people)</li>\n <li><em>Example C (substitution/change in named entity)</em><br>\n Text 1: Flight to Valencia<br>\n Text 2: Vuelo a Valladolid (Flight to Valladolid)</li>\n <li><em>Example D (different meaning due to word order)</em><br>\n Text 1: I like pizza<br>\n Text 2: Yo gusto a la pizza (Pizza likes me)</li>\n <li><em>Example E (equivalent constructions with different meanings)</em><br>\n Text 1: The bus is arriving at 2.<br>\n Text 2: El autobús está llegando a las 2.<br>\n <span style=\"font-style: italic\">Explanation: Spanish present progressive cannot be used to\n refer to the future.</span></li>\n <li><em>Example F (missing salient information)</em><br>\n Text 1: Vegan Italian restaurant<br>\n Text 2: Restaurante italiano (Italian restaurant)</li>\n <li><em>Example G (omitted relevant chunks)</em><br>\n Text 1: The company's new product (a flask with temperature regulation) is expected to be a\n success.<br>\n Text 2: Se espera que el nuevo producto de la empresa sea un éxito.</li>\n <li><em>Example H (register difference)</em><br>\n Text 1: What's up, dude?<br>\n Text 2: ¿Cómo se encuentra, señor? (How are you, sir?)</li>\n </ul>\n </details>\n </li>\n <li><strong>[3]</strong> The two paragraphs are mostly equivalent, but some unimportant details can\n differ. There cannot be any significant conflicts in intent, meaning or register between the\n sentences, no matter how long the sentences are.\n <details>\n <summary>Examples</summary>\n <ul>\n <li><em>Example A (omitted non-critical information, but no contradictory info introduced)</em><br>\n Text 1: Table for 3 adults<br>\n Text 2: Mesa para 3 (Table for 3)</li>\n <li><em>Example B (unit of measurement differences)</em><br>\n Text 1: I want 2 pounds of cheese.<br>\n Text 2: Quería 1 kg de queso. (I wanted 1kg of cheese.)</li>\n <li><em>Example C (minor verb tense differences)</em><br>\n Text 1: When he arrived at the station, the train had already left.<br>\n Text 2: Cuando llegue a la estación, el tren ya se habrá ido. (When he arrives at the station,\n the train will have already left.)</li>\n <li><em>Example D (small, non-conflicting differences in meaning)</em><br>\n Text 1: I love running.<br>\n Text 2: Me gusta correr. (I like running.)</li>\n <li><em>Example E (non-critical information added)</em><br>\n Text 1: Photos of the trip<br>\n Text 2: Fotos de mi viaje (Photos of my trip)</li>\n <li><em>Example F (non-equivalent constructions)</em><br>\n Text 1: The president finally signed the new education bill yesterday at noon.<br>\n Text 2: La nueva ley de educación finalmente fue firmada por el presidente ayer al mediodía.\n (The new education bill was finally signed by the president yesterday at noon.)</li>\n <li><em>Example G (inconsistent register)</em><br>\n Text 1: First, you will need to purchase all the painting supplies you need. Then, film and\n tape everything that is not to be painted.<br>\n Text 2: Primero, tendrás que comprar todo lo que necesitas para pintar. Luego proteja con film\n y cinta de pintor todo lo que no deba ser pintado.<br>\n <span style=\"font-style: italic\">Explanation: \"proteja\" is a formal second person imperative\n form (\"usted\"), but the verb in the previous sentence (\"tendrás\") uses an informal second\n person form (\"tú\").</span></li>\n <li><em>Example H (inconsistent target)</em><br>\n Text 1: It's pretty flashy, but remember that you have to wash it often.<br>\n Text 2: Es bien chido, pero acordate que tienes que lavarlo frecuentemente.<br>\n <span style=\"font-style: italic\">Explanation: The translation mixes lexical and/or grammatical\n forms from different varieties/dialects (\"bien chido\" is broadly Mexican, \"acordate\" is\n broadly Rioplatense and \"tienes\" is from a non-voseo variety like European Spanish).</span></li>\n </ul>\n </details>\n </li>\n <li><strong>[4]</strong> The two paragraphs are paraphrases of each other. Their meanings are\n near-equivalent, with no major differences or information missing. There can only be minor\n differences in meaning due to differences in expression (e.g., formality level, style, emphasis,\n potential implication, idioms, common metaphors). For single word texts, there might be multiple\n meanings depending on the context they would be used in, but the one presented is still correct.\n <details>\n <summary>Examples</summary>\n <ul>\n <li><em>Example A</em><br>\n Text 1: This is great<br>\n Text 2: Esto es la leche (Lit: This is the milk)<br>\n <span style=\"font-style: italic\">Explanation: \"Esto es la leche\" is an idiom, \"this is great\"\n is not.</span></li>\n <li><em>Example B</em><br>\n Text 1: The day that comes after the day of today<br>\n Text 2: Mañana (Tomorrow)<br>\n <span style=\"font-style: italic\">Explanation: Differences in phrasing, text 1 is oddly phrased\n and more verbose than text 2.</span></li>\n <li><em>Example C</em><br>\n Text 1: Bird<br>\n Text 2: Pajarito (birdie)<br>\n <span style=\"font-style: italic\">Explanation: Different level of formality (\"Birdie\" vs\n \"bird\").</span></li>\n </ul>\n </details>\n </li>\n <li><strong>[5]</strong> The two paragraphs are exactly and completely equivalent in meaning and usage\n expression (e.g., formality level, style, emphasis, potential implication, idioms, common\n metaphors). In other words, nuance is completely preserved and there is a faithful correspondence.\n Fidelity is also preserved.\n <details>\n <summary>Examples</summary>\n <ul>\n <li><em>Example A</em><br>\n Text 1: I am so happy.<br>\n Text 2: Estoy lleno de felicidad (I am filled with happiness).</li>\n <li><em>Example B</em><br>\n Text 1: Hi friends<br>\n Text 2: Hola chicos (Hello guys)</li>\n <li><em>Example C</em><br>\n Text 1: Hello, how are you<br>\n Text 2: Hola cómo estás (Hello how are you)</li>\n </ul>\n </details>\n </li>\n </ul>\n </li>\n </ul>"
+    },
+    "campaign_id": "example XSTS+R+P",
+    "data": [
+        [
+            [
+                {
+                    "item_id": "en-es-0-0",
+                    "src": "I am a tweakment holdout.",
+                    "tgt": {
+                        "Baseline-0": "Soy reacia a los retoques."
+                    },
+                    "instructions": "Evaluate translation from English to Spanish."
+                },
+                {
+                    "item_id": "en-es-0-1",
+                    "src": "When will wrinkles, bad teeth and big pores be back in fashion?",
+                    "tgt": {
+                        "Baseline-0": "¿Cuándo volverán a estar de moda las arrugas, los dientes en mal estado y los poros dilatados?"
+                    }
+                },
+                {
+                    "item_id": "en-es-0-2",
+                    "src": "Totally neutral question, no right or wrong answer: how do you feel about salmon sperm?",
+                    "tgt": {
+                        "Baseline-0": "Pregunta totalmente neutral, sin respuesta correcta ni incorrecta: ¿qué opinas del esperma de salmón?"
+                    }
+                },
+                {
+                    "item_id": "en-es-1-0",
+                    "src": "It's not a Nordic culinary microtrend or a sex thing, but a beauty treatment, in which \"Polydeoxyribonucleotides (PDRN) derived from purified fragments of DNA extracted from yes, \"salmon sperm\"\" are injected into your face.",
+                    "tgt": {
+                        "Baseline-0": "No es una microtendencia culinaria nórdica ni algo sexual, sino un tratamiento de belleza, en el que se inyectan \"Polideoxirribonucleótidos (PDRN) derivados de fragmentos purificados de ADN extraídos de sí, \"esperma de salmón\"\" en tu rostro."
+                    }
+                }, 
+                {
+                    "item_id": "en-es-1-1",
+                    "src": "It does seem to work: proper research has found PDRN has wound-repairing properties in hard-to-treat contexts such as diabetic ulcers and deep burns.",
+                    "tgt": {
+                        "Baseline-0": "Parece que funciona: investigaciones adecuadas han encontrado que el PDRN tiene propiedades reparadoras de heridas en contextos difíciles de tratar, como úlceras diabéticas y quemaduras profundas."
+                    }
+                },
+                                {
+                    "item_id": "en-es-1-2",
+                    "src": "Good news (unless you're a male salmon).",
+                    "tgt": {
+                        "Baseline-0": "Buenas noticias (a menos que seas un salmón macho)."
+                    }
+                },
+                {
+                    "item_id": "en-es-1-3",
+                    "src": "But what is it doing in healthy faces?",
+                    "tgt": {
+                        "Baseline-0": "Pero, ¿qué hace en rostros sanos?"
+                    }
+                }
+            ],
+            [
+                {
+                    "item_id": "en-es-2-0",
+                    "src": "I learned about salmon sperm in a Sunday Times article on the \"skincare secrets\" of \"26 tastemakers,\" which I read, increasingly aghast.",
+                    "tgt": {
+                        "Baseline-0": "Me enteré del esperma de salmón en un artículo del Sunday Times sobre los \"secretos del cuidado de la piel\" de \"26 creadores de tendencias\", que leí cada vez más horrorizada."
+                    },
+                    "instructions": "Evaluate translation from English to Spanish."
+                },
+                {
+                    "item_id": "en-es-2-1",
+                    "src": "It was a litany of lasers, microneedling, injectables and proprietary treatments with silly names that left me shouting crossly at my laptop: \"But what does it do?\"",
+                    "tgt": {
+                        "Baseline-0": "Era una letanía de láseres, microneedling, inyectables y tratamientos patentados con nombres tontos que me hicieron gritar con enojo a mi portátil: \"¿Pero qué hace?\""
+                    }
+                },
+                {
+                    "item_id": "en-es-2-2",
+                    "src": "The only treatment I related to at all was Marina Abramović recounting how a friend of her mother's put hot mashed potato on her face to temporarily erase wrinkles; Abramović herself uses \"thermage radiofrequency.\"",
+                    "tgt": {
+                        "Baseline-0": "El único tratamiento con el que me relacioné fue Marina Abramović contando cómo una amiga de su madre le ponía puré de patatas caliente en la cara para borrar temporalmente las arrugas; la propia Abramović usa \"radiofrecuencia thermage.\""
+                    }
+                },
+                {
+                    "item_id": "en-es-2-3",
+                    "src": "No wonder a salmon sperm practitioner says it's \"an exciting time in the aesthetic industry.\"",
+                    "tgt": {
+                        "Baseline-0": "No es de extrañar que un practicante de esperma de salmón diga que es \"un momento emocionante en la industria estética.\""
+                    }
+                },
+                {
+                    "item_id": "en-es-3-0",
+                    "src": "Some contributors were celebs, regularly running the unforgiving gauntlet of high-definition television, and the rest were at least very interested, if not professionally involved, in beauty, so they probably aren't typical.",
+                    "tgt": {
+                        "Baseline-0": "Algunos colaboradores eran celebridades, que regularmente enfrentan el implacable desafío de la televisión de alta definición, y el resto estaban al menos muy interesados, si no profesionalmente involucrados, en la belleza, por lo que probablemente no son típicos."
+                    }
+                },
+                {
+                    "item_id": "en-es-3-1",
+                    "src": "And there's a certain honesty to it, at least.",
+                    "tgt": {
+                        "Baseline-0": "Y hay cierta honestidad en ello, al menos."
+                    }
+                },
+                {
+                    "item_id": "en-es-3-2",
+                    "src": "No one is making out their dewy glow is \"just good genes\" and \"loads of water.\"",
+                    "tgt": {
+                        "Baseline-0": "Nadie pretende que su brillo radiante sea \"solo buenos genes\" y \"mucha agua.\""
+                    }
+                },
+                {
+                    "item_id": "en-es-3-3",
+                    "src": "But I also think this newfound willingness to talk about \"tweakments\" (a jaunty portmanteau that makes me queasy) is a product of them being absolutely everywhere.",
+                    "tgt": {
+                        "Baseline-0": "Pero también creo que esta nueva disposición a hablar sobre los \"retoques\" (un alegre acrónimo que me da náuseas) es un producto de que están absolutamente en todas partes."
+                    }
+                }
+            ],
+            [
+                {
+                    "item_id": "en-es-4-0",
+                    "src": "Because they are everywhere, for everyone.",
+                    "tgt": {
+                        "Baseline-0": "Porque están en todas partes, para todos."
+                    },
+                    "instructions": "Evaluate translation from English to Spanish."
+                },
+                {
+                    "item_id": "en-es-4-1",
+                    "src": "According to researchers at University College London, the UK injectables market will be worth £11.7bn by next year, with Botox and fillers available anywhere from Harley Street to high-street hairdressers.",
+                    "tgt": {
+                        "Baseline-0": "Según investigadores del University College de Londres, el mercado británico de inyectables alcanzará los 11.700 millones de libras el año que viene, con bótox y rellenos disponibles en cualquier lugar, desde Harley Street hasta las peluquerías más tradicionales."
+                    }
+                },
+                {
+                    "item_id": "en-es-4-2",
+                    "src": "Writing in Grazia last week, the Guardian beauty columnist Sali Hughes described how \"women in teaching, policing and the civil service\" ask her advice on where to get \"good injections.\"",
+                    "tgt": {
+                        "Baseline-0": "La semana pasada, en un artículo publicado en Grazia, la columnista de belleza del Guardian, Sali Hughes, describió cómo «las mujeres en la docencia, la policía y la administración pública» le piden consejo sobre dónde conseguir «buenas inyecciones»."
+                    }
+                },
+                {
+                    "item_id": "en-es-4-3",
+                    "src": "In the US, Botox use by 20- to 29-year-olds has increased 28% since 2010, with gen Z buying into \"prejuvenation\" (another awful portmanteau), fuelled by the poreless perfection offered by filters, staring at themselves on pandemic screens and social media skinfluencers (argh).",
+                    "tgt": {
+                        "Baseline-0": "En Estados Unidos, el uso de bótox entre las jóvenes de 20 a 29 años ha aumentado un 28 % desde 2010, con la generación Z adquiriendo el «prejuvenecimiento» (otro acrónimo horrible), impulsada por la perfección sin poros que ofrecen los filtros, mirándose en las pantallas de la pandemia y las influencers de piel de las redes sociales (¡argh!)."
+                    }
+                }
+            ]
+        ]
+    ]
+}
