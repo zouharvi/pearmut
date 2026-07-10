@@ -123,6 +123,5 @@ PROTOCOL_INSTRUCTIONS = {
               definitions</a>.
           </li>
         </ul>
-    """
-    # XSTS+R+P instructions adapted from the Omnilingual MT paper (https://arxiv.org/abs/2603.16309), Appendix B.1.
+    """,
 }
