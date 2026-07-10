@@ -160,16 +160,19 @@ function check_unlock() {
             $("#button_skip").show()
             $("#button_skip").removeAttr("disabled")
             $("#button_skip").val("Skip ⏭️")
+            return true
         } else {
             $("#button_skip").hide()
+            return false
         }
-        return
     }
 
     // All items complete - enable Next button and hide Skip button
     $("#button_next").removeClass("button-disabled")
     $("#button_next").val("Next ✅")
     $("#button_skip").hide()
+
+    return true
 }
 
 /**
@@ -1127,7 +1130,7 @@ async function display_next_payload(response: DataPayload) {
 
     $("#button_next").off("click")
     $("#button_next").on("click", async function (e) {
-        if ($(this).hasClass("button-disabled")) {
+        if ($(this).hasClass("button-disabled") && !state.skip_mode) {
             e.preventDefault()
             if (state.incomplete_targets && state.incomplete_targets.length > 0) {
                 const target = state.incomplete_targets[0]
