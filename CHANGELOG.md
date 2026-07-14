@@ -3,7 +3,9 @@
 
 Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
 
-- v1.1.5 (unreleased)
+- v1.1.6 (unreleased)
+  - Ship `web/` in the package so that `bake-existing` can run
+- v1.1.5
   - Add `show_progress` flag to dashboard
   - Default to a single user for single-stream and dynamic campaigns if not specified
   - Increase idle time

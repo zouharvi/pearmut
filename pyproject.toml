@@ -31,8 +31,8 @@ Repository = "https://github.com/zouharvi/pearmut"
 Issues = "https://github.com/zouharvi/pearmut/issues"
 
 [tool.setuptools]
-package-dir = { pearmut = "server" }
-packages = ["pearmut"]
+package-dir = { pearmut = "server", "pearmut.web" = "web" }
+packages = ["pearmut", "pearmut.web"]
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
@@ -40,3 +40,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.package-data]
 "pearmut" = ["static/**"]
+"pearmut.web" = ["*", "**/*"]
+
+[tool.setuptools.exclude-package-data]
+"pearmut.web" = ["node_modules/**", "node_modules", "package-lock.json"]

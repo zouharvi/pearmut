@@ -949,16 +949,19 @@ def _bake_existing(args_unknown):
             campaigns = data if isinstance(data, list) else [data]
             for campaign in campaigns:
                 tasks_data[campaign["campaign_id"]] = campaign
-                
-    web_dir = os.path.abspath(os.path.join(ROOT, "web"))
+    web_dir = os.path.abspath(__file__ + "/../web")
     output_dir = os.path.abspath(args.output)
     
     env = os.environ.copy()
     env["OUTPUT_PATH"] = output_dir
     
+    result = subprocess.run(["npm", "install"], cwd=web_dir, env=env)
+    if result.returncode != 0:
+        print("Failed to build frontend (install)")
+        exit(1)
     result = subprocess.run(["npm", "run", "build"], cwd=web_dir, env=env)
     if result.returncode != 0:
-        print("Failed to build frontend")
+        print("Failed to build frontend (build)")
         exit(1)
     
     for campaign_id, campaign in tasks_data.items():
@@ -969,10 +972,11 @@ def _bake_existing(args_unknown):
         virtual_sequence = []
         
         if assignment == "task-based":
-            for user_id, user_progress in ext_progress[campaign_id].items():
+            is_processed = isinstance(campaign["data"], dict)
+            for user_i, (user_id, user_progress) in enumerate(ext_progress[campaign_id].items()):
                 num_items = len(user_progress.get("progress", []))
                 for item_i in range(num_items):
-                    payload = campaign["data"][user_id][item_i]
+                    payload = campaign["data"][user_id][item_i] if is_processed else campaign["data"][user_i][item_i]
                     is_form = is_form_document(payload)
                     
                     items_existing = []
