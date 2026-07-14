@@ -25,7 +25,7 @@ def _clear_test_logs():
     from pearmut.utils import ROOT
     _logs.clear()
     # Also delete any test log files
-    for log_file in glob.glob(f"{ROOT}/data/outputs/*.jsonl"):
+    for log_file in glob.glob(f"{ROOT}/data/annotations/*.jsonl"):
         try:
             os.remove(log_file)
         except OSError:

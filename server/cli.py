@@ -20,6 +20,7 @@ from .utils import (
 
 os.makedirs(f"{ROOT}/data/campaigns", exist_ok=True)
 os.makedirs(f"{ROOT}/data/outputs", exist_ok=True)
+os.makedirs(f"{ROOT}/data/annotations", exist_ok=True)
 
 # migration to move data/tasks to data/campaigns if it exists
 if os.path.exists(f"{ROOT}/data/tasks"):
@@ -33,6 +34,20 @@ if os.path.exists(f"{ROOT}/data/tasks"):
         shutil.rmtree(f"{ROOT}/data/tasks")
     else:
         print(f"Warning: {ROOT}/data/tasks is not empty after migration. Please investigate.")
+
+# migration to move data/outputs to data/annotations if it exists
+if os.path.exists(f"{ROOT}/data/outputs"):
+    for item in os.listdir(f"{ROOT}/data/outputs"):
+        src = os.path.join(f"{ROOT}/data/outputs", item)
+        dst = os.path.join(f"{ROOT}/data/annotations", item)
+        if not os.path.exists(dst):
+            shutil.move(src, dst)
+    # if empty
+    if not os.listdir(f"{ROOT}/data/outputs"):
+        shutil.rmtree(f"{ROOT}/data/outputs")
+    else:
+        print(f"Warning: {ROOT}/data/outputs is not empty after migration. Please investigate.")
+
 
 load_progress_data(warn=None)
 
@@ -487,7 +502,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
 
     # Remove output file when overwriting (after all validations pass)
     if overwrite and campaign_data["campaign_id"] in progress_data:
-        output_file = f"{ROOT}/data/outputs/{campaign_data['campaign_id']}.jsonl"
+        output_file = f"{ROOT}/data/annotations/{campaign_data['campaign_id']}.jsonl"
         if os.path.exists(output_file):
             os.remove(output_file)
 
@@ -759,7 +774,7 @@ def _add_existing(args_unknown):
                     json.dump(campaign, f, indent=2, ensure_ascii=False)
                 
                 os.makedirs(f"{ROOT}/data/outputs", exist_ok=True)
-                with open(f"{ROOT}/data/outputs/{campaign_id}.jsonl", "w") as f_out:
+                with open(f"{ROOT}/data/annotations/{campaign_id}.jsonl", "w") as f_out:
                     for record in ext_annotations[campaign_id]:
                         f_out.write(json.dumps(record, ensure_ascii=False) + "\n")
                 
@@ -866,7 +881,7 @@ def main():
                 if os.path.exists(task_file):
                     os.remove(task_file)
                 # Remove output file
-                output_file = f"{ROOT}/data/outputs/{campaign_id}.jsonl"
+                output_file = f"{ROOT}/data/annotations/{campaign_id}.jsonl"
                 if os.path.exists(output_file):
                     os.remove(output_file)
                 # Remove from progress data

@@ -36,7 +36,7 @@ def get_db_log(campaign_id: str) -> list[dict]:
     """
     if campaign_id not in _logs:
         # create a new one if it doesn't exist
-        log_path = f"{ROOT}/data/outputs/{campaign_id}.jsonl"
+        log_path = f"{ROOT}/data/annotations/{campaign_id}.jsonl"
         if os.path.exists(log_path):
             with open(log_path, "r") as f:
                 _logs[campaign_id] = [json.loads(line) for line in f.readlines()]
@@ -88,7 +88,7 @@ def save_db_payload(campaign_id: str, payload: dict):
     # to avoid reading back the same entry we're about to append
     log = get_db_log(campaign_id)
 
-    log_path = f"{ROOT}/data/outputs/{campaign_id}.jsonl"
+    log_path = f"{ROOT}/data/annotations/{campaign_id}.jsonl"
     os.makedirs(os.path.dirname(log_path), exist_ok=True)
     with open(log_path, "a") as log_file:
         log_file.write(

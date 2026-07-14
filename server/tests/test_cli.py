@@ -25,7 +25,7 @@ class TestOverwriteData:
         task_file = f"{ROOT}/data/campaigns/{campaign_id}.json"
         if os.path.exists(task_file):
             os.remove(task_file)
-        output_file = f"{ROOT}/data/outputs/{campaign_id}.jsonl"
+        output_file = f"{ROOT}/data/annotations/{campaign_id}.jsonl"
         if os.path.exists(output_file):
             os.remove(output_file)
         

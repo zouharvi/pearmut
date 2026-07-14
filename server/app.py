@@ -329,7 +329,7 @@ async def _purge_campaign(request: PurgeCampaignRequest):
         os.remove(task_file)
 
     # Remove output file
-    output_file = f"{ROOT}/data/outputs/{campaign_id}.jsonl"
+    output_file = f"{ROOT}/data/annotations/{campaign_id}.jsonl"
     if os.path.exists(output_file):
         os.remove(output_file)
 
@@ -401,7 +401,7 @@ async def _download_annotations(
 ):
     output = {}
     for cid in campaign_id:
-        output_path = f"{ROOT}/data/outputs/{cid}.jsonl"
+        output_path = f"{ROOT}/data/annotations/{cid}.jsonl"
         if cid not in progress_data:
             return JSONResponse(
                 content=f"Unknown campaign ID {cid}", status_code=400

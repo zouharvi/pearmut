@@ -5,6 +5,7 @@ Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.
 
 - v1.1.6 (unreleased)
   - Ship `web/` in the package so that `bake-existing` can run
+  - Move campaign annotations storage from `data/outputs/` to `data/annotations/` with automatic migration
 - v1.1.5
   - Add `show_progress` flag to dashboard
   - Default to a single user for single-stream and dynamic campaigns if not specified
@@ -20,7 +21,7 @@ Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.
   - Better time tracking
   - Add loading of an existing campagin with `add-existing`
   - Add a button for downloading campaign sources
-  - Move campaign source data storate from `data/tasks/` to `data/campaigns/` with automatic migration
+  - Move campaign source data storage from `data/tasks/` to `data/campaigns/` with automatic migration
   - Add global progress tracking to the dashboard
   - Restyle dashboard
   - Add image zoom on click
