@@ -624,7 +624,7 @@ def get_next_item_dynamic(
         }
         model_weights_dict = {
             # 1/(rank + 1) to give higher weight to better performing models
-            model: 1 / (rank + 1)**0.5
+            model: 1 / (rank + 1)
             for rank, model in enumerate(
                 sorted(model_avg_scores.keys(), key=lambda x: model_avg_scores[x], reverse=True)
             )
