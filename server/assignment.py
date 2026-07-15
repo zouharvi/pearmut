@@ -3,6 +3,7 @@ Each assignment (task-based, single-stream, dynamic) has to support two main act
 """
 
 import collections
+import math
 import random
 import statistics
 from typing import Any
@@ -96,10 +97,22 @@ def render_item_response(
         log_user_id = user_id if fetch_existing == "within_user" else None
         items_existing = get_db_log_item(campaign_id, log_user_id, item_i)
         if items_existing:
-            latest_item = items_existing[-1]
-            payload_existing = {"annotation": latest_item["annotation"]}
-            if "comment" in latest_item:
-                payload_existing["comment"] = latest_item["comment"]
+            payload_existing = {"annotation": []}
+            # collate multiple annotations together
+            for item in items_existing:
+                if item.get("annotation") == RESET_MARKER:
+                    payload_existing["annotation"] = []
+                else:
+                    if payload_existing["annotation"] == []:
+                        payload_existing["annotation"] = item["annotation"]
+                    else:
+                        for old, new in zip(payload_existing["annotation"], item["annotation"]):
+                            old.update(new)
+                        
+                    if "comment" in item:
+                        payload_existing["comment"] = item["comment"]
+
+            print(payload_existing)
 
     return JSONResponse(
         content={
@@ -547,14 +560,20 @@ def get_next_item_dynamic(
     # Get all unique models in the campaign (all items must have all models)
     all_models = list(set(campaign_data["data"][0][0]["tgt"].keys()))
 
+    # Get configuration parameters
+    dynamic_coldstart = campaign_data["info"].get("dynamic_coldstart", 5)
+    dynamic_models = campaign_data["info"].get("dynamic_models", 1)
+    dynamic_coldstart_pool = campaign_data["info"].get("dynamic_coldstart_pool")
+
     # Check if completed
     # First check if docs_per_user limit is reached
     if (docs_per_user := campaign_data["info"].get("docs_per_user")) is not None:
         # Count specifically number of annotations across models
+        # and approximate the number of items completed by dividing by dynamic_models
         completed_docs = sum(
             v == "completed" for mv in user_progress["progress"] for v in mv.values()
         )
-        if completed_docs >= docs_per_user:
+        if math.ceil(completed_docs / dynamic_models) >= docs_per_user:
             return _completed_response(tasks_data, progress_data, campaign_id, user_id)
     # Otherwise check if all models completed for all items
     elif all(
@@ -563,11 +582,6 @@ def get_next_item_dynamic(
         for v in mv.values()
     ):
         return _completed_response(tasks_data, progress_data, campaign_id, user_id)
-
-    # Get configuration parameters
-    dynamic_coldstart = campaign_data["info"].get("dynamic_coldstart", 5)
-    dynamic_models = campaign_data["info"].get("dynamic_models", 1)
-    dynamic_coldstart_pool = campaign_data["info"].get("dynamic_coldstart_pool")
 
     # Count completed annotations per model using user_progress
     model_total_counts = {
@@ -582,8 +596,6 @@ def get_next_item_dynamic(
     in_coldstart_phase = any(
         model_total_counts.get(model, 0) < dynamic_coldstart for model in all_models
     )
-
-    print(in_coldstart_phase, dynamic_coldstart, {model: model_total_counts.get(model, 0) for model in all_models})
 
     # Select which models to show
     if in_coldstart_phase:
