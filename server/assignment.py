@@ -569,24 +569,21 @@ def get_next_item_dynamic(
     dynamic_models = campaign_data["info"].get("dynamic_models", 1)
     dynamic_coldstart_pool = campaign_data["info"].get("dynamic_coldstart_pool")
 
-    # Count annotations per (model, item) pair to track coverage
-    annotations = get_db_log(campaign_id)
-    model_item_counts = collections.defaultdict(int)  # (model, item_i) -> count
-    model_total_counts = collections.defaultdict(int)  # model -> total count
-
-    for annotation_line in annotations:
-        if (item_i := annotation_line.get("item_i")) is not None:
-            # Count which models were annotated in this annotation
-            for annotation_item in annotation_line.get("annotation", []):
-                # we don't skip empty annotations from skippable items as they won't be assigned anyway
-                for model in annotation_item:
-                    model_item_counts[(model, item_i)] += 1
-                    model_total_counts[model] += 1
+    # Count completed annotations per model using user_progress
+    model_total_counts = {
+        model: sum(
+            mv.get(model) in {"completed", "completed_foreign"}
+            for mv in user_progress["progress"]
+        )
+        for model in all_models
+    }
 
     # Check if we're still in the first phase (collecting initial data)
     in_coldstart_phase = any(
         model_total_counts.get(model, 0) < dynamic_coldstart for model in all_models
     )
+
+    print(in_coldstart_phase, dynamic_coldstart, {model: model_total_counts.get(model, 0) for model in all_models})
 
     # Select which models to show
     if in_coldstart_phase:
@@ -608,9 +605,12 @@ def get_next_item_dynamic(
     else:
         import numpy as np
 
+        annotations = get_db_log(campaign_id)
         # Calculate model scores from annotations
         model_scores = collections.defaultdict(list)
         for annotation_line in annotations:
+            if annotation_line.get("annotation") == RESET_MARKER:
+                continue
             for annotation_item in annotation_line.get("annotation", {}):
                 if annotation_item is None:  # skippable items have no annotation
                     continue
@@ -623,19 +623,30 @@ def get_next_item_dynamic(
             model: statistics.mean(model_scores[model]) if model_scores[model] else 0.0
             for model in all_models
         }
+        # find unfinished models
+        available_models = [
+            model
+            for model in all_models
+            if model_total_counts.get(model, 0) < len(campaign_data["data"])
+        ]
+        if len(available_models) < dynamic_models:
+            # If not enough unfinished models, include all models to fill the slots
+            available_models += [
+                model for model in shuffled(all_models) if model not in available_models
+            ][: dynamic_models - len(available_models)]
         model_weights_dict = {
             # 1/(rank + 1) to give higher weight to better performing models
             model: 1 / (rank + 1)
             for rank, model in enumerate(
-                sorted(model_avg_scores.keys(), key=lambda x: model_avg_scores[x], reverse=True)
+                sorted(available_models, key=lambda x: model_avg_scores[x], reverse=True)
             )
         }
-        model_weights_arr = np.array([model_weights_dict[model] for model in all_models], dtype=float)
+        model_weights_arr = np.array([model_weights_dict[model] for model in available_models], dtype=float)
         model_weights_arr /= model_weights_arr.sum()
         model_weights = model_weights_arr.tolist()
         selected_models = np.random.choice(
-            all_models,
-            size=min(dynamic_models, len(all_models)),
+            available_models,
+            size=min(dynamic_models, len(available_models)),
             replace=False,
             p=model_weights,
         )
