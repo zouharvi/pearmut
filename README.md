@@ -395,6 +395,8 @@ All items must contain outputs from all models for this assignment type to work 
         "users": 10,                           # number of annotators
         "dynamic_models": 2,                   # how many models to compare per item (optional, default: 1)
         "dynamic_coldstart": 5,                # annotations per model before dynamic kicks in (optional, default: 5)
+        "dynamic_coldstart_pool": 5,           # optional: from how many of the first N items the coldstart should sample from. 
+                                               # this is useful if you want to ensure that coldstarted models are evaluated on the same set
         "docs_per_user": 20,                   # optional: show goodbye after N documents per user
     },
     "data": [...], # list of all items (shared among all annotators)
