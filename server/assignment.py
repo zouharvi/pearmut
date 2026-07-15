@@ -517,7 +517,7 @@ def get_next_item_dynamic(
     NOTE: All items must contain all model outputs for this assignment type to work.
 
     In this mode, items are selected based on the current performance of models:
-    1. Warmup phase: Each model gets `dynamic_coldstart` annotations with fully random selection
+    1. Coldstart phase: Each model gets `dynamic_coldstart` annotations with fully random selection
     2. Contrastive comparison: `dynamic_models` models are randomly selected and shown per itemem
     3. Items with least annotations for the selected models are prioritized
     """
@@ -567,6 +567,7 @@ def get_next_item_dynamic(
     # Get configuration parameters
     dynamic_coldstart = campaign_data["info"].get("dynamic_coldstart", 5)
     dynamic_models = campaign_data["info"].get("dynamic_models", 1)
+    dynamic_coldstart_pool = campaign_data["info"].get("dynamic_coldstart_pool")
 
     # Count annotations per (model, item) pair to track coverage
     annotations = get_db_log(campaign_id)
@@ -583,12 +584,12 @@ def get_next_item_dynamic(
                     model_total_counts[model] += 1
 
     # Check if we're still in the first phase (collecting initial data)
-    in_warmup_phase = any(
+    in_coldstart_phase = any(
         model_total_counts.get(model, 0) < dynamic_coldstart for model in all_models
     )
 
     # Select which models to show
-    if in_warmup_phase:
+    if in_coldstart_phase:
         # First phase: select models that don't have enough annotations yet
         available_models = [
             model
@@ -596,7 +597,7 @@ def get_next_item_dynamic(
             if model_total_counts.get(model, 0) < dynamic_coldstart
         ]
         if len(available_models) < dynamic_models:
-            # If not enough models in warmup, include all models to fill the slots
+            # If not enough models in coldstart phase, include all models to fill the slots
             available_models += [
                 model for model in shuffled(all_models) if model not in available_models
             ][: dynamic_models - len(available_models)]
@@ -642,25 +643,21 @@ def get_next_item_dynamic(
     # Find incomplete items (None or completed_foreign status)
     # if any chosen model for an item is not completed, it's considered incomplete
     incomplete_indices = [
-        i
-        for i, mv in enumerate(user_progress["progress"])
-        if all(mv[model] not in {"completed", "completed_foreign"} for model in selected_models)
+        (i, sum(mv[model] not in {"completed", "completed_foreign"} for model in selected_models))
+        # cap to dynamic_coldstart_pool first items if we're in coldstart phase
+        for i, mv in enumerate(user_progress["progress"][:dynamic_coldstart_pool if in_coldstart_phase else None])
     ]
 
-    # if we dont find any incomplete items for the selected models, we can relax the condition to include items that are partially completed (some models completed, some not)
-    if not incomplete_indices:
-        incomplete_indices = [
-            i
-            for i, mv in enumerate(user_progress["progress"])
-            if any(mv[model] not in {"completed", "completed_foreign"} for model in selected_models)
-        ]
+    incomplete_indices_max = max(count for _, count in incomplete_indices) if incomplete_indices else 0
 
-    # If no incomplete items, user (and everyone) is done
-    if not incomplete_indices:
+    if incomplete_indices_max == 0:
+        # All items are completed for the selected models
         return _completed_response(tasks_data, progress_data, campaign_id, user_id)
+    
 
-    # Select the first incomplete item
-    item_i = incomplete_indices[0]
+    # take first item with the maximum number of incomplete models (lowest overlap)
+    # worst case this will mean only one model has not been evaluated on this item
+    item_i = [i for i, count in incomplete_indices if count == incomplete_indices_max][0]
 
     # Prune the payload to only include selected models
     original_item = campaign_data["data"][item_i]
