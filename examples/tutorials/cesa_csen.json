@@ -203,7 +203,7 @@
           {
           "src": "",
           "tgt": {},
-          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right:10px;'><b>Congrats🎉</b><br><br>You have finished the tutorial. You are now ready to annotate data on Pearmut🚀</div>",
+          "instructions": "<div class='white-box' style='background:#d6d0bb; border-radius:8px; padding:10px 15px; margin-top:-80px; margin-bottom:20px; margin-right:10px;'>You have finished the tutorial. You are now ready to annotate data on Pearmut. 🍐</div>",
           "skippable": true
         }
         ]
