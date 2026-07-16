@@ -13,7 +13,7 @@ class TestOverwriteData:
     def test_overwrite_removes_output_file(self):
         """Test that overwrite removes existing output file (annotations)."""
         from pearmut.cli import ROOT, _add_single_campaign
-        from pearmut.utils import load_progress_data, save_progress_data
+        from pearmut.utils import load_progress_data
 
         campaign_id = "test_overwrite_campaign"
         
