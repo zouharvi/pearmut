@@ -530,7 +530,7 @@ def get_next_item_dynamic(
     In this mode, items are selected based on the current performance of models:
     1. Coldstart phase: Each model gets `dynamic_coldstart` annotations with fully random selection
     2. Contrastive comparison: `dynamic_models` models are randomly selected and shown per itemem
-    3. Items with least annotations for the selected models are prioritized
+    3. Items with least annotations for the selected models are prioritized;
     """
     import random
 

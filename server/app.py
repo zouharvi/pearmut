@@ -62,9 +62,9 @@ async def _log_response(request: LogResponseRequest):
     item_i = request.item_i
 
     if campaign_id not in progress_data:
-        return JSONResponse(content="Unknown campaign ID", status_code=400)
+        return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
     if user_id not in progress_data[campaign_id]:
-        return JSONResponse(content="Unknown user ID", status_code=400)
+        return JSONResponse(content="Unknown user ID. Maybe the campaign was restarted?", status_code=400)
 
     # append response to the output log
     save_db_payload(
@@ -110,9 +110,9 @@ async def _get_next_item(request: NextItemRequest):
     user_id = request.user_id
 
     if campaign_id not in progress_data:
-        return JSONResponse(content="Unknown campaign ID", status_code=400)
+        return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
     if user_id not in progress_data[campaign_id]:
-        return JSONResponse(content="Unknown user ID", status_code=400)
+        return JSONResponse(content="Unknown user ID. Maybe the campaign was restarted?", status_code=400)
 
     return get_next_item(
         campaign_id,
@@ -135,9 +135,9 @@ async def _get_i_item(request: GetItemRequest):
     item_i = request.item_i
 
     if campaign_id not in progress_data:
-        return JSONResponse(content="Unknown campaign ID", status_code=400)
+        return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
     if user_id not in progress_data[campaign_id]:
-        return JSONResponse(content="Unknown user ID", status_code=400)
+        return JSONResponse(content="Unknown user ID. Maybe the campaign was restarted?", status_code=400)
 
     return get_i_item(
         campaign_id,
@@ -158,7 +158,7 @@ async def _dashboard_data(request: DashboardDataRequest):
     campaign_id = request.campaign_id
 
     if campaign_id not in progress_data:
-        return JSONResponse(content="Unknown campaign ID", status_code=400)
+        return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
 
     is_privileged = request.token == tasks_data[campaign_id]["token"]
 
@@ -225,7 +225,7 @@ async def _dashboard_results(request: DashboardResultsRequest):
     token = request.token
 
     if campaign_id not in progress_data:
-        return JSONResponse(content="Unknown campaign ID", status_code=400)
+        return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
 
     # Check if token is valid
     if token != tasks_data[campaign_id]["token"]:
@@ -242,7 +242,7 @@ async def _export_results(
     format: str = Query(),
 ):
     if campaign_id not in progress_data:
-        return JSONResponse(content="Unknown campaign ID", status_code=400)
+        return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
 
     # Check if token is valid
     if token != tasks_data[campaign_id]["token"]:
@@ -286,11 +286,11 @@ async def _reset_task(request: ResetTaskRequest):
     token = request.token
 
     if campaign_id not in progress_data:
-        return JSONResponse(content="Unknown campaign ID", status_code=400)
+        return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
     if token != tasks_data[campaign_id]["token"]:
         return JSONResponse(content="Invalid token", status_code=400)
     if user_id not in progress_data[campaign_id]:
-        return JSONResponse(content="Unknown user ID", status_code=400)
+        return JSONResponse(content="Unknown user ID. Maybe the campaign was restarted?", status_code=400)
 
     response = reset_task(campaign_id, user_id, tasks_data, progress_data)
     save_progress_data(progress_data)
@@ -310,7 +310,7 @@ async def _purge_campaign(request: PurgeCampaignRequest):
     token = request.token
 
     if campaign_id not in progress_data:
-        return JSONResponse(content="Unknown campaign ID", status_code=400)
+        return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
     if token != tasks_data[campaign_id]["token"]:
         return JSONResponse(content="Invalid token", status_code=400)
 
@@ -404,7 +404,7 @@ async def _download_annotations(
         output_path = f"{ROOT}/data/annotations/{cid}.jsonl"
         if cid not in progress_data:
             return JSONResponse(
-                content=f"Unknown campaign ID {cid}", status_code=400
+                content=f"Unknown campaign ID. Maybe it was removed? {cid}", status_code=400
             )
         if not os.path.exists(output_path):
             output[cid] = []
@@ -435,7 +435,7 @@ async def _download_campaigns(
         task_path = f"{ROOT}/data/campaigns/{cid}.json"
         if cid not in progress_data:
             return JSONResponse(
-                content=f"Unknown campaign ID {cid}", status_code=400
+                content=f"Unknown campaign ID. Maybe it was removed? {cid}", status_code=400
             )
         if not os.path.exists(task_path):
             pass # Or handle missing?
@@ -470,7 +470,7 @@ async def _download_progress(
     output = {}
     for i, cid in enumerate(campaign_id):
         if cid not in progress_data:
-            return JSONResponse(content=f"Unknown campaign ID {cid}", status_code=400)
+            return JSONResponse(content=f"Unknown campaign ID. Maybe it was removed? {cid}", status_code=400)
         if token[i] != tasks_data[cid]["token"]:
             return JSONResponse(
                 content=f"Invalid token for campaign ID {cid}", status_code=400
