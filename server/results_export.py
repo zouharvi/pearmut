@@ -44,21 +44,23 @@ def compute_model_scores(campaign_id):
     for entry in log:
         if "item" not in entry or "annotation" not in entry:
             continue
+
+        # skip non-standard items (data_welcome, data_random, data_goodbye)
+        item_i = entry.get("item_i")
+        if isinstance(item_i, str) and (
+            item_i.startswith("welcome_")
+            or item_i.startswith("random_")
+            or item_i.startswith("goodbye_")
+        ):
+            continue
+
         for item, item_annotation in zip(entry["item"], entry["annotation"]):
             if item_annotation is None:  # skippable items have no annotation
                 continue
 
-            item_id = item.get("item_id")
-            if isinstance(item_id, str) and (
-                item_id.startswith("welcome_")
-                or item_id.startswith("random_")
-                or item_id.startswith("goodbye_")
-            ):
-                continue
-
             for model, annotation in item_annotation.items():
                 if "score" in annotation and annotation["score"] is not None:
-                    final_item_id = item_id or json.dumps(item | {"tgt": None})
+                    final_item_id = item.get("item_id", json.dumps(item | {"tgt": None}))
                     model_scores[model][final_item_id] = annotation["score"]
 
     model_scores = list(model_scores.items())
