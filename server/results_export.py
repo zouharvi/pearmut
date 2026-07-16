@@ -20,11 +20,11 @@ def comparison_significant(
     if len(common_items) < 2:
         return False
 
-    scores1 = [scores1[k] for k in common_items]
-    scores2 = [scores2[k] for k in common_items]
+    _scores1 = [scores1[k] for k in common_items]
+    _scores2 = [scores2[k] for k in common_items]
 
     return bool(
-        scipy.stats.ttest_rel(scores1, scores2, alternative="two-sided").pvalue < 0.05
+        scipy.stats.ttest_rel(_scores1, _scores2, alternative="two-sided").pvalue < 0.05
     )
 
 
@@ -44,13 +44,22 @@ def compute_model_scores(campaign_id):
     for entry in log:
         if "item" not in entry or "annotation" not in entry:
             continue
-        for item, annotation in zip(entry["item"], entry["annotation"]):
-            if annotation is None:  # skippable items have no annotation
+        for item, item_annotation in zip(entry["item"], entry["annotation"]):
+            if item_annotation is None:  # skippable items have no annotation
                 continue
-            for model, annotation in annotation.items():
+
+            item_id = item.get("item_id")
+            if isinstance(item_id, str) and (
+                item_id.startswith("welcome_")
+                or item_id.startswith("random_")
+                or item_id.startswith("goodbye_")
+            ):
+                continue
+
+            for model, annotation in item_annotation.items():
                 if "score" in annotation and annotation["score"] is not None:
-                    item_id = item.get("item_id") or json.dumps(item | {"tgt": None})
-                    model_scores[model][item_id] = annotation["score"]
+                    final_item_id = item_id or json.dumps(item | {"tgt": None})
+                    model_scores[model][final_item_id] = annotation["score"]
 
     model_scores = list(model_scores.items())
     model_scores.sort(key=lambda x: statistics.mean(x[1].values()), reverse=True)
