@@ -112,8 +112,6 @@ def render_item_response(
                     if "comment" in item:
                         payload_existing["comment"] = item["comment"]
 
-            print(payload_existing)
-
     return JSONResponse(
         content={
             "status": "form" if is_form else "ok",
