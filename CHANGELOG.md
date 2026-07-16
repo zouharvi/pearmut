@@ -6,6 +6,7 @@ Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.
 - v1.1.6 (unreleased)
   - Ship `web/` in the package so that `bake-existing` can run
   - Move campaign annotations storage from `data/outputs/` to `data/annotations/` with automatic migration
+  - Move campaign progress storage from a single `data/progress.json` to `data/progress/*.json` one file per each campaign.
   - Make dynamic assignment optimize allocation with best effort, especially during coldstart
   - Various bugfixed to dynamic assignment, recovering prior annotations, and progress tracking
 - v1.1.5
