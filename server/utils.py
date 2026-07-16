@@ -24,7 +24,7 @@ def load_progress_data(warn: str | None = None):
 
 def save_progress_data(data):
     with open(f"{ROOT}/data/progress.json", "w") as f:
-        json.dump(data, f, indent=2)
+        json.dump(data, f, ensure_ascii=False)
 
 
 _logs = {}
