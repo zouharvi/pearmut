@@ -11,20 +11,25 @@ RESET_MARKER = "__RESET__"
 
 
 def load_progress_data(warn: str | None = None):
-    if not os.path.exists(f"{ROOT}/data/progress.json"):
-        if warn is not None:
-            print(warn)
-        with open(f"{ROOT}/data/progress.json", "w") as f:
-            f.write(json.dumps({}))
-    with open(f"{ROOT}/data/progress.json", "r") as f:
-        data = json.load(f)
+    data = {}
+    progress_dir = f"{ROOT}/data/progress"
+        
+    for filename in os.listdir(progress_dir):
+        if filename.endswith(".json"):
+            campaign_id = filename.removesuffix(".json")
+            with open(os.path.join(progress_dir, filename), "r") as f:
+                data[campaign_id] = json.load(f)
 
+    if not data and warn is not None:
+        print(warn)
     return data
 
 
-def save_progress_data(data):
-    with open(f"{ROOT}/data/progress.json", "w") as f:
-        json.dump(data, f, ensure_ascii=False)
+def save_progress_data(campaign_id: str, campaign_progress: dict):
+    progress_dir = f"{ROOT}/data/progress"
+    os.makedirs(progress_dir, exist_ok=True)
+    with open(f"{progress_dir}/{campaign_id}.json", "w") as f:
+        json.dump(campaign_progress, f, ensure_ascii=False)
 
 
 _logs = {}

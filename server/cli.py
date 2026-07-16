@@ -21,6 +21,9 @@ from .utils import (
 os.makedirs(f"{ROOT}/data/campaigns", exist_ok=True)
 os.makedirs(f"{ROOT}/data/outputs", exist_ok=True)
 os.makedirs(f"{ROOT}/data/annotations", exist_ok=True)
+os.makedirs(f"{ROOT}/data/progress", exist_ok=True)
+
+# NOTE: migration scripts will be removed in the next minor release, i.e. 1.2.0
 
 # migration to move data/tasks to data/campaigns if it exists
 if os.path.exists(f"{ROOT}/data/tasks"):
@@ -47,6 +50,20 @@ if os.path.exists(f"{ROOT}/data/outputs"):
         shutil.rmtree(f"{ROOT}/data/outputs")
     else:
         print(f"Warning: {ROOT}/data/outputs is not empty after migration. Please investigate.")
+
+# migration to split progress.json into per-campaign files
+if os.path.exists(f"{ROOT}/data/progress.json"):
+    print("Migrating progress.json to per-campaign files...")
+    os.makedirs(f"{ROOT}/data/progress", exist_ok=True)
+    with open(f"{ROOT}/data/progress.json", "r") as f:
+        try:
+            old_progress = json.load(f)
+        except json.JSONDecodeError:
+            old_progress = {}
+    for c_id, data in old_progress.items():
+        with open(f"{ROOT}/data/progress/{c_id}.json", "w") as f:
+            json.dump(data, f, ensure_ascii=False)
+    os.remove(f"{ROOT}/data/progress.json")
 
 
 load_progress_data(warn=None)
@@ -306,8 +323,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
     # this should be fine, can rely on defaults
     campaign_data["info"] = campaign_data.get("info", {})
 
-    with open(f"{ROOT}/data/progress.json", "r") as f:
-        progress_data = json.load(f)
+    progress_data = load_progress_data()
 
     if campaign_data["campaign_id"] in progress_data and not overwrite:
         raise ValueError(
@@ -631,7 +647,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
         json.dump(campaign_data, f, indent=2, ensure_ascii=False)
 
     progress_data[campaign_data["campaign_id"]] = user_progress
-    save_progress_data(progress_data)
+    save_progress_data(campaign_data["campaign_id"], progress_data[campaign_data["campaign_id"]])
 
     if url is not None:
         print(
@@ -732,8 +748,7 @@ def _add_existing(args_unknown):
     )
     args = args.parse_args(args_unknown)
 
-    with open(f"{ROOT}/data/progress.json", "r") as f:
-        local_progress = json.load(f)
+    local_progress = load_progress_data()
 
     with open(args.progress, "r") as f:
         ext_progress = json.load(f)
@@ -769,6 +784,7 @@ def _add_existing(args_unknown):
                     campaign["token"] = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
                 
                 local_progress[campaign_id] = ext_progress[campaign_id]
+                save_progress_data(campaign_id, local_progress[campaign_id])
                 
                 with open(f"{ROOT}/data/campaigns/{campaign_id}.json", "w") as f:
                     json.dump(campaign, f, indent=2, ensure_ascii=False)
@@ -792,8 +808,6 @@ def _add_existing(args_unknown):
         except Exception as e:
             print(f"Error processing {data_file}: {e}")
             exit(1)
-
-    save_progress_data(local_progress)
 
 
 def main():
@@ -888,7 +902,9 @@ def main():
                 progress_data = load_progress_data()
                 if campaign_id in progress_data:
                     del progress_data[campaign_id]
-                    save_progress_data(progress_data)
+                    progress_file = f"{ROOT}/data/progress/{campaign_id}.json"
+                    if os.path.exists(progress_file):
+                        os.remove(progress_file)
                 print(f"Campaign '{campaign_id}' purged.")
             else:
                 print("Cancelled.")
@@ -903,8 +919,8 @@ def main():
                     _unlink_assets(campaign_id)
                 shutil.rmtree(f"{ROOT}/data/campaigns", ignore_errors=True)
                 shutil.rmtree(f"{ROOT}/data/outputs", ignore_errors=True)
-                if os.path.exists(f"{ROOT}/data/progress.json"):
-                    os.remove(f"{ROOT}/data/progress.json")
+                if os.path.exists(f"{ROOT}/data/progress"):
+                    shutil.rmtree(f"{ROOT}/data/progress", ignore_errors=True)
                 print("All campaign data purged.")
             else:
                 print("Cancelled.")

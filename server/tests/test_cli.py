@@ -21,7 +21,9 @@ class TestOverwriteData:
         progress_data = load_progress_data()
         if campaign_id in progress_data:
             del progress_data[campaign_id]
-            save_progress_data(progress_data)
+            progress_file = f"{ROOT}/data/progress/{campaign_id}.json"
+            if os.path.exists(progress_file):
+                os.remove(progress_file)
         task_file = f"{ROOT}/data/campaigns/{campaign_id}.json"
         if os.path.exists(task_file):
             os.remove(task_file)
@@ -64,7 +66,9 @@ class TestOverwriteData:
         progress_data = load_progress_data()
         if campaign_id in progress_data:
             del progress_data[campaign_id]
-            save_progress_data(progress_data)
+            progress_file = f"{ROOT}/data/progress/{campaign_id}.json"
+            if os.path.exists(progress_file):
+                os.remove(progress_file)
         if os.path.exists(task_file):
             os.remove(task_file)
 

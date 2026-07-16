@@ -37,7 +37,7 @@ app.add_middleware(
 
 tasks_data = {}
 progress_data = load_progress_data(
-    warn="No progress.json found. Running, but no campaign will be available."
+    warn="No progress files found. Running, but no campaign will be available."
 )
 
 # load all tasks into data_all
@@ -94,7 +94,7 @@ async def _log_response(request: LogResponseRequest):
     update_progress(
         campaign_id, user_id, tasks_data, progress_data, request.item_i, request.payload
     )
-    save_progress_data(progress_data)
+    save_progress_data(campaign_id, progress_data[campaign_id])
 
     return JSONResponse(content="ok", status_code=200)
 
@@ -293,7 +293,7 @@ async def _reset_task(request: ResetTaskRequest):
         return JSONResponse(content="Unknown user ID. Maybe the campaign was restarted?", status_code=400)
 
     response = reset_task(campaign_id, user_id, tasks_data, progress_data)
-    save_progress_data(progress_data)
+    save_progress_data(campaign_id, progress_data[campaign_id])
     return response
 
 
@@ -337,8 +337,10 @@ async def _purge_campaign(request: PurgeCampaignRequest):
     del tasks_data[campaign_id]
     del progress_data[campaign_id]
 
-    # Save updated progress data
-    save_progress_data(progress_data)
+    # Remove progress file
+    progress_file = f"{ROOT}/data/progress/{campaign_id}.json"
+    if os.path.exists(progress_file):
+        os.remove(progress_file)
 
     return JSONResponse(content="ok", status_code=200)
 
