@@ -652,7 +652,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
     if url is not None:
         print(
             "🎛️ ",
-            f"{url}/dashboard.html"
+            f"{url}/dashboard"
             f"?campaign_id={urllib.parse.quote_plus(campaign_data['campaign_id'])}"
             f"&token={campaign_data['token']}",
         )
@@ -797,7 +797,7 @@ def _add_existing(args_unknown):
                 print(f"Successfully imported campaign {campaign_id}")
                 print(
                     "🎛️ ",
-                    f"{args.url}/dashboard.html"
+                    f"{args.url}/dashboard"
                     f"?campaign_id={urllib.parse.quote_plus(campaign['campaign_id'])}"
                     f"&token={campaign['token']}",
                 )

@@ -154,7 +154,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
     html += '</tbody></table>'
 
     // link to campaign-specific dashboard
-    let dashboard_url = `dashboard.html?campaign_id=${encodeURIComponent(campaign_id)}${token != null ? `&token=${encodeURIComponent(token)}` : ''}`
+    let dashboard_url = `dashboard?campaign_id=${encodeURIComponent(campaign_id)}${token != null ? `&token=${encodeURIComponent(token)}` : ''}`
 
     let campaign_progress = 0;
     let campaign_total = 0;
