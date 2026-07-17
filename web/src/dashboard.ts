@@ -199,7 +199,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
     }
 
     let el = $(`
-        <div class="white-box" style="display: flex; gap: 20px;">
+        <div class="white-box" style="display: flex; gap: 20px; min-width: 1000px;">
             <div>
                 <h3 style="margin: 0; padding-bottom: 5px;">
                 ${campaign_id} 
