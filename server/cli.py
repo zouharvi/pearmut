@@ -88,6 +88,7 @@ def _run(args_unknown):
 
     if args.url in {"localhost", "127.0.0.1", "0.0.0.0"}:
         args.url = f"http://{args.url}:{args.port}"
+    args.url = args.url.rstrip("/")
 
     # print access dashboard URL for all campaigns
     dashboard_url = (
@@ -689,6 +690,7 @@ def _add_campaign(args_unknown):
         help="Prefix server URL for protocol links",
     )
     args = args.parse_args(args_unknown)
+    args.url = args.url.rstrip("/")
 
     for data_file in args.data_files:
         try:
