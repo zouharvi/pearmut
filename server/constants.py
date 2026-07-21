@@ -65,7 +65,7 @@ PROTOCOL_INSTRUCTIONS = {
         <ul>
           <li><strong>Multiple errors:</strong> Use separate highlights for each error.</li>
           <li><strong>Hallucinations:</strong> Highlight unsupported extra text; mark as major error.</li>
-          <li><strong>Wrong language/dialect:</strong> Mark the text as a major error similar like untranslation; borrowed words are allowed if they are valid in given language.</li>
+          <li><strong>Wrong language/dialect:</strong> Mark the text as a major error; borrowed words are allowed if they are valid in given language.</li>
           <li><strong>Consistency:</strong> Check translation consistency (e.g., technical terms) across the document.</li>
         </ul>
       </li>
