@@ -620,6 +620,10 @@ def get_next_item_dynamic(
         model_scores = collections.defaultdict(list)
         for annotation_line in annotations:
             if annotation_line.get("annotation") == RESET_MARKER:
+                # reset annotations
+                # TODO: this should only reset for a single user, but it just so happens that we only allow
+                # resetting all users at the same time in dynamic assignment, so this is fine for now.
+                model_scores = collections.defaultdict(list)
                 continue
             for annotation_item in annotation_line.get("annotation", {}):
                 if annotation_item is None:  # skippable items have no annotation
@@ -832,6 +836,8 @@ def reset_task(
         _reset_user_time(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "dynamic":
+        # NOTE: In dynamic assignment, we call this only when we reset all users.
+
         # Reset only this user's completed items
         for item_i, item_progress in enumerate(
             progress_data[campaign_id][user_id]["progress"]
