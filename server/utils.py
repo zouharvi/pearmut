@@ -108,7 +108,7 @@ def save_db_payload(campaign_id: str, payload: dict):
 
 
 def check_validation_threshold(
-    tasks_data: dict,
+    campaigns_data: dict,
     progress_data: dict,
     campaign_id: str,
     user_id: str,
@@ -124,7 +124,7 @@ def check_validation_threshold(
 
     Returns True if validation passes, False otherwise.
     """
-    threshold = tasks_data[campaign_id]["info"].get("validation_threshold", 0)
+    threshold = campaigns_data[campaign_id]["info"].get("validation_threshold", 0)
 
     user_progress = progress_data[campaign_id][user_id]
     validations = user_progress.get("validations", {})

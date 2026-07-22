@@ -141,7 +141,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         if (assignment !== "dynamic") {
             html += `
             &nbsp;&nbsp;
-            <span class="reset-task" user_id="${user_id}" ${token == null ? "disabled" : ""}>🗑️</span>`
+            <span class="reset-campaign" user_id="${user_id}" ${token == null ? "disabled" : ""}>🗑️</span>`
         } else {
             html += `
             &nbsp;&nbsp;
@@ -372,7 +372,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 for (let user_id in data) {
                     resetPromises.push(
                         $.ajax({
-                            url: `reset-task`,
+                            url: `reset-campaign`,
                             method: "POST",
                             data: JSON.stringify({ "campaign_id": campaign_id, "user_id": user_id, "token": token }),
                             contentType: "application/json",
@@ -397,14 +397,14 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
     }
 
     if (token != null) {
-        el.find(".reset-task").on("click", function () {
+        el.find(".reset-campaign").on("click", function () {
             let user_id = $(this).attr("user_id")
             // show dialog to confirm
             if (!confirm(`Are you sure you want to reset progress for user ${$(this).attr("user_id")} in ${campaign_id}?\n\nThe user will annotate new data which will be stored alongside the already-collected data. This action cannot be undone.`)) {
                 return
             }
             $.ajax({
-                url: `reset-task`,
+                url: `reset-campaign`,
                 method: "POST",
                 data: JSON.stringify({ "campaign_id": campaign_id, "user_id": user_id, "token": token }),
                 contentType: "application/json",

@@ -5,7 +5,7 @@ import json
 from pearmut.assignment import (
     get_i_item,
     get_next_item,
-    reset_task,
+    reset_campaign,
     update_progress,
 )
 from pearmut.utils import (
@@ -37,7 +37,7 @@ class TestTaskBased:
 
     def test_get_next_item_returns_first_incomplete(self):
         """Test that task-based returns the first incomplete item."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -63,14 +63,14 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"item_i":1' in content
 
     def test_get_next_item_completed_returns_token(self):
         """Test that task-based returns completion token when all items done."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -94,7 +94,7 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -102,7 +102,7 @@ class TestTaskBased:
 
     def test_update_progress_marks_item_complete(self):
         """Test that update_progress marks the item as complete."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -118,13 +118,13 @@ class TestTaskBased:
                 }
             }
         }
-        update_progress("campaign1", "user1", tasks_data, progress_data, 1, {})
+        update_progress("campaign1", "user1", campaigns_data, progress_data, 1, {})
         assert progress_data["campaign1"]["user1"]["progress"] == [
             None, "completed", None]
 
-    def test_reset_task_clears_progress(self):
-        """Test that reset_task clears the progress."""
-        tasks_data = {
+    def test_reset_campaign_clears_progress(self):
+        """Test that reset_campaign clears the progress."""
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -148,7 +148,7 @@ class TestTaskBased:
                 }
             }
         }
-        reset_task("campaign1", "user1", tasks_data, progress_data)
+        reset_campaign("campaign1", "user1", campaigns_data, progress_data)
         assert progress_data["campaign1"]["user1"]["progress"] == [
             None, None]
         assert progress_data["campaign1"]["user1"]["time"] == 0.0
@@ -157,7 +157,7 @@ class TestTaskBased:
 
     def test_get_i_item_returns_specific_item(self):
         """Test that task-based get_i_item returns the requested item."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -184,7 +184,7 @@ class TestTaskBased:
         }
         # Request item 2 specifically
         response = get_i_item("campaign1", "user1",
-                              tasks_data, progress_data, 2)
+                              campaigns_data, progress_data, 2)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"item_i":2' in content
@@ -192,7 +192,7 @@ class TestTaskBased:
 
     def test_get_i_item_exposes_alignment_defaults(self):
         """Test that campaign defaults for alignment UI settings are exposed."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -217,7 +217,7 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_i_item("campaign1", "user1", tasks_data, progress_data, 0)
+        response = get_i_item("campaign1", "user1", campaigns_data, progress_data, 0)
         assert response.status_code == 200
         data = json.loads(response.body.decode())
         assert data["info"]["show_alignment"] is False
@@ -225,7 +225,7 @@ class TestTaskBased:
 
     def test_get_i_item_out_of_range(self):
         """Test that task-based get_i_item returns error for invalid index."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -249,14 +249,14 @@ class TestTaskBased:
             }
         }
         response = get_i_item("campaign1", "user1",
-                              tasks_data, progress_data, 10)
+                              campaigns_data, progress_data, 10)
         assert response.status_code == 400
         content = response.body.decode()
         assert 'out of range' in content
 
     def test_instructions_goodbye_default(self):
         """Test that default instructions_goodbye message is used when not specified."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -279,7 +279,7 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -289,7 +289,7 @@ class TestTaskBased:
 
     def test_instructions_goodbye_custom(self):
         """Test that custom instructions_goodbye message with variables is used."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -313,7 +313,7 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -324,7 +324,7 @@ class TestTaskBased:
 
     def test_instructions_goodbye_incorrect_token(self):
         """Test that instructions_goodbye uses incorrect token when validation fails."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -352,7 +352,7 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -362,7 +362,7 @@ class TestTaskBased:
 
     def test_instructions_goodbye_html_injection(self):
         """Test that HTML can be injected in instructions_goodbye via variables."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -386,7 +386,7 @@ class TestTaskBased:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -400,7 +400,7 @@ class TestSingleStream:
 
     def test_get_next_item_returns_random_incomplete(self):
         """Test that single-stream returns a random incomplete item."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "single-stream",
@@ -424,7 +424,7 @@ class TestSingleStream:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         # Should return item 1 or 2 (incomplete items)
@@ -432,7 +432,7 @@ class TestSingleStream:
 
     def test_singlestream_completed_returns_token(self):
         """Test that single-stream returns completion token when all items done."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "single-stream",
@@ -453,16 +453,16 @@ class TestSingleStream:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
         assert 'correct_token' in content
 
-    def test_reset_task_resets_completed_items_for_all_users(self):
-        """Test that single-stream reset_task resets items the user originally completed, for all users in the shared pool."""
+    def test_reset_campaign_resets_completed_items_for_all_users(self):
+        """Test that single-stream reset_campaign resets items the user originally completed, for all users in the shared pool."""
         _clear_test_logs()
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "single-stream",
@@ -518,7 +518,7 @@ class TestSingleStream:
             "annotation": {"score": 85}
         })
 
-        reset_task("campaign1", "user1", tasks_data, progress_data)
+        reset_campaign("campaign1", "user1", campaigns_data, progress_data)
 
         # Items user1 originally completed (0 and 3) are reset for both users in the shared pool
         # Item 2 was completed_foreign for user1 (not originally theirs) so it is NOT reset
@@ -545,7 +545,7 @@ class TestSingleStream:
 
     def test_update_progress_updates_all_users(self):
         """Test that single-stream update_progress updates all users."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "single-stream",
@@ -564,7 +564,7 @@ class TestSingleStream:
                 }
             }
         }
-        update_progress("campaign1", "user1", tasks_data, progress_data, 1, {})
+        update_progress("campaign1", "user1", campaigns_data, progress_data, 1, {})
         # User1 completed item 1, so gets "completed"
         # User2 gets "completed_foreign" since someone else completed it
         assert progress_data["campaign1"]["user1"]["progress"] == [None, "completed", None]
@@ -572,7 +572,7 @@ class TestSingleStream:
 
     def test_get_i_item_returns_specific_item(self):
         """Test that single-stream get_i_item returns the requested item."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "single-stream",
@@ -596,7 +596,7 @@ class TestSingleStream:
             }
         }
         # Request item 2 specifically
-        response = get_i_item("campaign1", "user1", tasks_data, progress_data, 2)
+        response = get_i_item("campaign1", "user1", campaigns_data, progress_data, 2)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"item_i":2' in content
@@ -604,7 +604,7 @@ class TestSingleStream:
 
     def test_docs_per_user_triggers_goodbye(self):
         """Test that single-stream with docs_per_user shows goodbye after specified items."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "single-stream",
@@ -630,7 +630,7 @@ class TestSingleStream:
             }
         }
         # User has completed 2 items (indices 0 and 2), should get goodbye
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -638,7 +638,7 @@ class TestSingleStream:
 
     def test_docs_per_user_continues_before_limit(self):
         """Test that single-stream continues returning items before docs_per_user limit."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "single-stream",
@@ -664,7 +664,7 @@ class TestSingleStream:
             }
         }
         # User has completed 2 items, limit is 3, should get next item
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"ok"' in content
@@ -673,7 +673,7 @@ class TestSingleStream:
 
     def test_get_next_item_returns_welcome_data_during_tutorial(self):
         """Test that single-stream returns data_welcome items (not data) during tutorial."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "single-stream",
@@ -697,7 +697,7 @@ class TestSingleStream:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         # Should return welcome item, not regular data item
@@ -804,12 +804,12 @@ class TestResetMasking:
         assert len(items_user2) == 1
         assert items_user2[0]["annotation"] == {"score": 70}
 
-    def test_reset_task_clears_welcome_form_data(self):
-        """Test that reset_task clears welcome form data by saving reset markers."""
+    def test_reset_campaign_clears_welcome_form_data(self):
+        """Test that reset_campaign clears welcome form data by saving reset markers."""
         _clear_test_logs()
         campaign_id = "test_welcome_form_reset"
         
-        tasks_data = {
+        campaigns_data = {
             campaign_id: {
                 "info": {
                     "assignment": "task-based",
@@ -856,18 +856,18 @@ class TestResetMasking:
         assert items[0]["annotation"] == ["John", 30]
         
         # Reset task
-        reset_task(campaign_id, "user1", tasks_data, progress_data)
+        reset_campaign(campaign_id, "user1", campaigns_data, progress_data)
         
         # Verify welcome form data is masked
         items = get_db_log_item(campaign_id, "user1", "welcome_0")
         assert len(items) == 0
 
-    def test_reset_task_single_stream_only_resets_completed_welcome_items(self):
-        """Test that reset_task in single-stream only saves reset markers for completed welcome items."""
+    def test_reset_campaign_single_stream_only_resets_completed_welcome_items(self):
+        """Test that reset_campaign in single-stream only saves reset markers for completed welcome items."""
         _clear_test_logs()
         campaign_id = "test_singlestream_welcome_reset"
         
-        tasks_data = {
+        campaigns_data = {
             campaign_id: {
                 "info": {
                     "assignment": "single-stream",
@@ -921,7 +921,7 @@ class TestResetMasking:
         assert len(items1) == 1
         
         # Reset task
-        reset_task(campaign_id, "user1", tasks_data, progress_data)
+        reset_campaign(campaign_id, "user1", campaigns_data, progress_data)
         
         # Verify only completed welcome item (welcome_0) is masked
         items0 = get_db_log_item(campaign_id, "user1", "welcome_0")
@@ -935,7 +935,7 @@ class TestValidationThreshold:
 
     def test_no_threshold_defaults_to_zero(self):
         """Test that no threshold defaults to 0 (fail on any failure)."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -953,15 +953,15 @@ class TestValidationThreshold:
                 }
             }
         }
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is False
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is False
         
         # With all passed, should pass
         progress_data["campaign1"]["user1"]["validations"][0] = [True, True, True]
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is True
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is True
 
     def test_integer_threshold_zero_fails_on_any_failure(self):
         """Test that threshold 0 fails if there's any failed check."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -978,11 +978,11 @@ class TestValidationThreshold:
                 }
             }
         }
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is False
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is False
 
     def test_integer_threshold_zero_passes_on_all_success(self):
         """Test that threshold 0 passes if all checks pass."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -999,11 +999,11 @@ class TestValidationThreshold:
                 }
             }
         }
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is True
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is True
 
     def test_integer_threshold_allows_failures_up_to_limit(self):
         """Test that integer threshold allows failures up to the limit."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -1021,15 +1021,15 @@ class TestValidationThreshold:
                 }
             }
         }
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is True
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is True
 
         # 3 failures should fail
         progress_data["campaign1"]["user1"]["validations"][0] = [False, None, None]
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is False
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is False
 
     def test_float_threshold_proportion_based(self):
         """Test that float threshold is proportion-based."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -1047,15 +1047,15 @@ class TestValidationThreshold:
                 }
             }
         }
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is True
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is True
 
         # 3/4 = 75% failed should fail
         progress_data["campaign1"]["user1"]["validations"][0] = [None, None, None, "completed"]
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is False
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is False
 
     def test_float_threshold_zero_proportion_based(self):
         """Test that float 0.0 threshold is proportion-based (0% failures allowed)."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -1073,15 +1073,15 @@ class TestValidationThreshold:
                 }
             }
         }
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is True
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is True
 
         # Any failure should fail (0% proportion exceeded)
         progress_data["campaign1"]["user1"]["validations"][0] = [True, True, False]
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is False
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is False
 
     def test_float_threshold_above_one_always_fails(self):
         """Test that float threshold >= 1 always fails."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -1098,11 +1098,11 @@ class TestValidationThreshold:
                 }
             }
         }
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is False
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is False
 
     def test_empty_validations_passes(self):
         """Test that no validations means pass."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -1117,11 +1117,11 @@ class TestValidationThreshold:
                 }
             }
         }
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is True
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is True
 
     def test_missing_validations_passes(self):
         """Test that missing validations key means pass."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -1136,11 +1136,11 @@ class TestValidationThreshold:
                 }
             }
         }
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is True
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is True
 
     def test_multiple_items_aggregated(self):
         """Test that validations from multiple items are aggregated."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "task-based",
@@ -1159,11 +1159,11 @@ class TestValidationThreshold:
                 }
             }
         }
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is True
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is True
 
         # Add another failure to exceed threshold
         progress_data["campaign1"]["user1"]["validations"][2] = [False]
-        assert check_validation_threshold(tasks_data, progress_data, "campaign1", "user1") is False
+        assert check_validation_threshold(campaigns_data, progress_data, "campaign1", "user1") is False
 
 
 class TestDynamic:
@@ -1171,7 +1171,7 @@ class TestDynamic:
 
     def test_get_i_item_returns_annotated_models(self):
         """Test that dynamic get_i_item returns only annotated models."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "dynamic",
@@ -1197,7 +1197,7 @@ class TestDynamic:
             }
         }
         # Item 0 has model1 and model2 annotated, model3 not
-        response = get_i_item("campaign1", "user1", tasks_data, progress_data, 0)
+        response = get_i_item("campaign1", "user1", campaigns_data, progress_data, 0)
         assert response.status_code == 200
         import json
         data = json.loads(response.body.decode())
@@ -1208,7 +1208,7 @@ class TestDynamic:
 
     def test_get_i_item_returns_all_models_when_none_annotated(self):
         """Test that dynamic get_i_item returns all models when none are annotated."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "dynamic",
@@ -1230,7 +1230,7 @@ class TestDynamic:
             }
         }
         # No models annotated - should return full item
-        response = get_i_item("campaign1", "user1", tasks_data, progress_data, 0)
+        response = get_i_item("campaign1", "user1", campaigns_data, progress_data, 0)
         assert response.status_code == 200
         import json
         data = json.loads(response.body.decode())
@@ -1239,7 +1239,7 @@ class TestDynamic:
 
     def test_get_i_item_out_of_range(self):
         """Test that dynamic get_i_item returns error for invalid index."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "dynamic",
@@ -1260,12 +1260,12 @@ class TestDynamic:
                 }
             }
         }
-        response = get_i_item("campaign1", "user1", tasks_data, progress_data, 5)
+        response = get_i_item("campaign1", "user1", campaigns_data, progress_data, 5)
         assert response.status_code == 400
 
     def test_get_next_item_returns_item_from_pool(self):
         """Test that dynamic returns an item from the shared pool."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "dynamic",
@@ -1290,7 +1290,7 @@ class TestDynamic:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         # Should return one of the incomplete items
@@ -1298,7 +1298,7 @@ class TestDynamic:
 
     def test_dynamic_completed_returns_token(self):
         """Test that dynamic returns completion token when all items done."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "dynamic",
@@ -1321,7 +1321,7 @@ class TestDynamic:
                 }
             }
         }
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -1329,7 +1329,7 @@ class TestDynamic:
 
     def test_update_progress_updates_all_users(self):
         """Test that dynamic update_progress updates all users."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "dynamic",
@@ -1350,17 +1350,17 @@ class TestDynamic:
         }
         # Simulate an annotation with model1
         payload = {"annotation": [{"model1": {"score": 5}}]}
-        update_progress("campaign1", "user1", tasks_data, progress_data, 1, payload)
+        update_progress("campaign1", "user1", campaigns_data, progress_data, 1, payload)
         # User1 completed item 1, user2 gets completed_foreign
         assert progress_data["campaign1"]["user1"]["progress"][1]["model1"] == "completed"
         assert progress_data["campaign1"]["user2"]["progress"][1]["model1"] == "completed_foreign"
         assert progress_data["campaign1"]["user1"]["progress"][0]["model1"] is None
         assert progress_data["campaign1"]["user2"]["progress"][0]["model1"] is None
 
-    def test_reset_task_resets_only_requesting_user(self):
-        """Test that dynamic reset_task resets only the requesting user's completed items."""
+    def test_reset_campaign_resets_only_requesting_user(self):
+        """Test that dynamic reset_campaign resets only the requesting user's completed items."""
         _clear_test_logs()
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "dynamic",
@@ -1398,7 +1398,7 @@ class TestDynamic:
         save_db_payload("campaign1", {"user_id": "user1", "item_i": 1, "annotation": [{"model1": {"score": 4}}]})
         save_db_payload("campaign1", {"user_id": "user1", "item_i": 3, "annotation": [{"model1": {"score": 3}}]})
 
-        response = reset_task("campaign1", "user1", tasks_data, progress_data)
+        response = reset_campaign("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
 
         # User1's completed items (0, 1, 3) reset to None; item 2 was already None
@@ -1419,7 +1419,7 @@ class TestDynamic:
 
     def test_docs_per_user_triggers_goodbye(self):
         """Test that dynamic with docs_per_user shows goodbye after specified items."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "dynamic",
@@ -1446,7 +1446,7 @@ class TestDynamic:
             }
         }
         # User has completed 2 items (indices 0 and 2 have annotations), should get goodbye
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"goodbye"' in content
@@ -1454,7 +1454,7 @@ class TestDynamic:
 
     def test_docs_per_user_continues_before_limit(self):
         """Test that dynamic continues returning items before docs_per_user limit."""
-        tasks_data = {
+        campaigns_data = {
             "campaign1": {
                 "info": {
                     "assignment": "dynamic",
@@ -1481,7 +1481,7 @@ class TestDynamic:
             }
         }
         # User has completed 2 items, limit is 3, should get next item
-        response = get_next_item("campaign1", "user1", tasks_data, progress_data)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
         assert response.status_code == 200
         content = response.body.decode()
         assert '"status":"ok"' in content

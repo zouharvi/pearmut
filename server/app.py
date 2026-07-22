@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from .assignment import get_i_item, get_next_item, reset_task, update_progress
+from .assignment import get_i_item, get_next_item, reset_campaign, update_progress
 from .results_export import (
     compute_model_scores,
     generate_latex_table,
@@ -35,7 +35,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-tasks_data = {}
+campaigns_data = {}
 progress_data = load_progress_data(
     warn="No progress files found. Running, but no campaign will be available."
 )
@@ -43,7 +43,7 @@ progress_data = load_progress_data(
 # load all tasks into data_all
 for campaign_id in progress_data.keys():
     with open(f"{ROOT}/data/campaigns/{campaign_id}.json", "r") as f:
-        tasks_data[campaign_id] = json.load(f)
+        campaigns_data[campaign_id] = json.load(f)
 
 
 class LogResponseRequest(BaseModel):
@@ -92,7 +92,7 @@ async def _log_response(request: LogResponseRequest):
         )
 
     update_progress(
-        campaign_id, user_id, tasks_data, progress_data, request.item_i, request.payload
+        campaign_id, user_id, campaigns_data, progress_data, request.item_i, request.payload
     )
     save_progress_data(campaign_id, progress_data[campaign_id])
 
@@ -117,7 +117,7 @@ async def _get_next_item(request: NextItemRequest):
     return get_next_item(
         campaign_id,
         user_id,
-        tasks_data,
+        campaigns_data,
         progress_data,
     )
 
@@ -142,7 +142,7 @@ async def _get_i_item(request: GetItemRequest):
     return get_i_item(
         campaign_id,
         user_id,
-        tasks_data,
+        campaigns_data,
         progress_data,
         item_i,
     )
@@ -160,17 +160,17 @@ async def _dashboard_data(request: DashboardDataRequest):
     if campaign_id not in progress_data:
         return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
 
-    is_privileged = request.token == tasks_data[campaign_id]["token"]
+    is_privileged = request.token == campaigns_data[campaign_id]["token"]
 
     progress_new = {}
-    assignment = tasks_data[campaign_id]["info"]["assignment"]
+    assignment = campaigns_data[campaign_id]["info"]["assignment"]
     if assignment not in ["task-based", "single-stream", "dynamic"]:
         return JSONResponse(
             content="Unsupported campaign assignment type", status_code=400
         )
 
     # Get threshold info for the campaign
-    validation_threshold = tasks_data[campaign_id]["info"].get("validation_threshold")
+    validation_threshold = campaigns_data[campaign_id]["info"].get("validation_threshold")
 
     for user_id, user_val in progress_data[campaign_id].items():
         # shallow copy
@@ -181,10 +181,10 @@ async def _dashboard_data(request: DashboardDataRequest):
 
         # Add threshold pass/fail status (only when user is complete)
         if (
-            tasks_data[campaign_id]["info"]["assignment"] != "dynamic"
+            campaigns_data[campaign_id]["info"]["assignment"] != "dynamic"
             and all(v in {"completed", "completed_foreign"} for v in entry["progress"])
         ) or (
-            tasks_data[campaign_id]["info"]["assignment"] == "dynamic"
+            campaigns_data[campaign_id]["info"]["assignment"] == "dynamic"
             and all(
                 v in {"completed", "completed_foreign"}
                 for mv in entry["progress"]
@@ -192,7 +192,7 @@ async def _dashboard_data(request: DashboardDataRequest):
             )
         ):
             entry["threshold_passed"] = check_validation_threshold(
-                tasks_data, progress_data, campaign_id, user_id
+                campaigns_data, progress_data, campaign_id, user_id
             )
         else:
             entry["threshold_passed"] = None
@@ -208,7 +208,7 @@ async def _dashboard_data(request: DashboardDataRequest):
             "data": progress_new,
             "validation_threshold": validation_threshold,
             "assignment": assignment,
-            "docs_per_user": tasks_data[campaign_id]["info"].get("docs_per_user"),
+            "docs_per_user": campaigns_data[campaign_id]["info"].get("docs_per_user"),
         },
         status_code=200,
     )
@@ -228,7 +228,7 @@ async def _dashboard_results(request: DashboardResultsRequest):
         return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
 
     # Check if token is valid
-    if token != tasks_data[campaign_id]["token"]:
+    if token != campaigns_data[campaign_id]["token"]:
         return JSONResponse(content="Invalid token", status_code=400)
 
     results = compute_model_scores(campaign_id)
@@ -245,7 +245,7 @@ async def _export_results(
         return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
 
     # Check if token is valid
-    if token != tasks_data[campaign_id]["token"]:
+    if token != campaigns_data[campaign_id]["token"]:
         return JSONResponse(content="Invalid token", status_code=400)
 
     results = compute_model_scores(campaign_id)
@@ -278,8 +278,8 @@ class ResetTaskRequest(BaseModel):
     token: str
 
 
-@app.post("/reset-task")
-async def _reset_task(request: ResetTaskRequest):
+@app.post("/reset-campaign")
+async def _reset_campaign(request: ResetTaskRequest):
     # ruff: noqa: F841
     campaign_id = request.campaign_id
     user_id = request.user_id
@@ -287,12 +287,12 @@ async def _reset_task(request: ResetTaskRequest):
 
     if campaign_id not in progress_data:
         return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
-    if token != tasks_data[campaign_id]["token"]:
+    if token != campaigns_data[campaign_id]["token"]:
         return JSONResponse(content="Invalid token", status_code=400)
     if user_id not in progress_data[campaign_id]:
         return JSONResponse(content="Unknown user ID. Maybe the campaign was restarted?", status_code=400)
 
-    response = reset_task(campaign_id, user_id, tasks_data, progress_data)
+    response = reset_campaign(campaign_id, user_id, campaigns_data, progress_data)
     save_progress_data(campaign_id, progress_data[campaign_id])
     return response
 
@@ -304,19 +304,19 @@ class PurgeCampaignRequest(BaseModel):
 
 @app.post("/purge-campaign")
 async def _purge_campaign(request: PurgeCampaignRequest):
-    global progress_data, tasks_data
+    global progress_data, campaigns_data
 
     campaign_id = request.campaign_id
     token = request.token
 
     if campaign_id not in progress_data:
         return JSONResponse(content="Unknown campaign ID. Maybe it was removed?", status_code=400)
-    if token != tasks_data[campaign_id]["token"]:
+    if token != campaigns_data[campaign_id]["token"]:
         return JSONResponse(content="Invalid token", status_code=400)
 
     # Unlink assets if they exist
     destination = (
-        tasks_data[campaign_id].get("info", {}).get("assets", {}).get("destination")
+        campaigns_data[campaign_id].get("info", {}).get("assets", {}).get("destination")
     )
     if destination:
         symlink_path = f"{ROOT}/data/{destination}".rstrip("/")
@@ -334,7 +334,7 @@ async def _purge_campaign(request: PurgeCampaignRequest):
         os.remove(output_file)
 
     # Remove from in-memory data structures
-    del tasks_data[campaign_id]
+    del campaigns_data[campaign_id]
     del progress_data[campaign_id]
 
     # Remove progress file
@@ -352,7 +352,7 @@ class AddCampaignRequest(BaseModel):
 
 @app.post("/add-campaign")
 async def _add_campaign(request: AddCampaignRequest):
-    global progress_data, tasks_data
+    global progress_data, campaigns_data
 
     from .cli import _add_single_campaign
 
@@ -374,11 +374,11 @@ async def _add_campaign(request: AddCampaignRequest):
 
             campaign_id = campaign_data["campaign_id"]
             with open(f"{ROOT}/data/campaigns/{campaign_id}.json", "r") as f:
-                tasks_data[campaign_id] = json.load(f)
+                campaigns_data[campaign_id] = json.load(f)
             
             added_campaigns.append({
                 "campaign_id": campaign_id,
-                "token": tasks_data[campaign_id]["token"]
+                "token": campaigns_data[campaign_id]["token"]
             })
 
         progress_data = load_progress_data(warn=None)
@@ -473,7 +473,7 @@ async def _download_progress(
     for i, cid in enumerate(campaign_id):
         if cid not in progress_data:
             return JSONResponse(content=f"Unknown campaign ID. Maybe it was removed? {cid}", status_code=400)
-        if token[i] != tasks_data[cid]["token"]:
+        if token[i] != campaigns_data[cid]["token"]:
             return JSONResponse(
                 content=f"Invalid token for campaign ID {cid}", status_code=400
             )

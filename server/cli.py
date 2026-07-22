@@ -73,7 +73,7 @@ def _run(args_unknown):
     import uvicorn
     import uvicorn.config
 
-    from .app import app, tasks_data
+    from .app import app, campaigns_data
 
     args = argparse.ArgumentParser()
     args.add_argument(
@@ -97,7 +97,7 @@ def _run(args_unknown):
         + "".join(
             [
                 f"&campaign_id={urllib.parse.quote_plus(campaign_id)}&token={campaign_data['token']}"
-                for campaign_id, campaign_data in tasks_data.items()
+                for campaign_id, campaign_data in campaigns_data.items()
             ]
         )
     )
@@ -975,13 +975,13 @@ def _bake_existing(args_unknown):
     with open(args.annotations, "r") as f:
         ext_annotations = json.load(f)
 
-    tasks_data = {}
+    campaigns_data = {}
     for data_file in args.data_files:
         with open(data_file, "r") as f:
             data = json.load(f)
             campaigns = data if isinstance(data, list) else [data]
             for campaign in campaigns:
-                tasks_data[campaign["campaign_id"]] = campaign
+                campaigns_data[campaign["campaign_id"]] = campaign
     web_dir = os.path.abspath(__file__ + "/../web")
     output_dir = os.path.abspath(args.output)
     
@@ -997,7 +997,7 @@ def _bake_existing(args_unknown):
         print("Failed to build frontend (build)")
         exit(1)
     
-    for campaign_id, campaign in tasks_data.items():
+    for campaign_id, campaign in campaigns_data.items():
         if campaign_id not in ext_progress:
             continue
             
@@ -1064,7 +1064,7 @@ def _bake_existing(args_unknown):
                 "progress_welcome": [],
                 "info": {
                     "item_i": i,
-                    "instructions": _get_instructions(tasks_data, campaign_id),
+                    "instructions": _get_instructions(campaigns_data, campaign_id),
                 } | {
                     k: v
                     for k, v in campaign.get("info", {}).items()
