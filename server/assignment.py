@@ -648,7 +648,8 @@ def get_next_item_dynamic(
             # 1/(rank + 1) to give higher weight to better performing models
             model: 1 / (rank + 1)
             for rank, model in enumerate(
-                sorted(available_models, key=lambda x: model_avg_scores[x], reverse=True)
+                # add secondary random sort to break ties in average score
+                sorted(available_models, key=lambda x: (model_avg_scores[x], random.random()), reverse=True)
             )
         }
         model_weights_arr = np.array([model_weights_dict[model] for model in available_models], dtype=float)
