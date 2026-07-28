@@ -72,6 +72,9 @@ def compute_model_scores(campaign_id):
                     item_i_to_item_id[item_i].append(final_item_id)
 
     model_scores = list(model_scores.items())
+    # filter empty
+    model_scores = [(model, scores) for model, scores in model_scores if scores]
+    # sort by mean score
     model_scores.sort(key=lambda x: statistics.mean(x[1].values()), reverse=True)
 
     results = []
