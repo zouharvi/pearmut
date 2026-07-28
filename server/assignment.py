@@ -683,7 +683,7 @@ def get_next_item_dynamic(
 
     # take first item with the maximum number of incomplete models (lowest overlap)
     # worst case this will mean only one model has not been evaluated on this item
-    item_i = [i for i, count in incomplete_indices if count == incomplete_indices_max][0]
+    item_i = next(i for i, count in incomplete_indices if count == incomplete_indices_max)
 
     # Prune the payload to only include selected models
     original_item = campaign_data["data"][item_i]
@@ -746,9 +746,12 @@ def _get_user_annotated_items(campaign_id: str, user_id: str) -> set[int | str]:
     log = get_db_log(campaign_id)
     user_items = set()
     for entry in log:
-        if entry.get("user_id") == user_id and entry.get("annotation") != RESET_MARKER:
-            if (item_i := entry.get("item_i")) is not None:
-                user_items.add(item_i)
+        if (
+            entry.get("user_id") == user_id
+            and entry.get("annotation") != RESET_MARKER
+            and (item_i := entry.get("item_i")) is not None
+        ):
+            user_items.add(item_i)
     return user_items
 
 
@@ -923,7 +926,7 @@ def update_progress(
         return JSONResponse(content="ok", status_code=200)
     if assignment == "dynamic":
         # Mark as completed for the current user, completed_foreign for others
-        for model in payload["annotation"][0].keys():
+        for model in payload["annotation"][0]:
             for uid in progress_data[campaign_id]:
                 current_status = progress_data[campaign_id][uid]["progress"][item_i][
                     model
