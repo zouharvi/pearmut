@@ -837,6 +837,7 @@ def reset_campaign(
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "dynamic":
         # NOTE: In dynamic assignment, we call this only when we reset all users.
+        # TODO: allow per-user reset
 
         # Reset only this user's completed items
         for item_i, item_progress in enumerate(
@@ -848,6 +849,7 @@ def reset_campaign(
                     {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
                 )
                 for model in item_progress:
+                    # NOTE: Because we're resetting all users, let's clear everything
                     if item_progress[model] in {"completed", "completed_foreign"}:
                         item_progress[model] = None
         # Reset welcome items progress if it exists
