@@ -848,7 +848,7 @@ def reset_campaign(
                     {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
                 )
                 for model in item_progress:
-                    if item_progress[model] == "completed":
+                    if item_progress[model] in {"completed", "completed_foreign"}:
                         item_progress[model] = None
         # Reset welcome items progress if it exists
         if "progress_welcome" in progress_data[campaign_id][user_id]:
