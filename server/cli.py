@@ -793,8 +793,7 @@ def _add_existing(args_unknown):
                 
                 os.makedirs(f"{ROOT}/data/outputs", exist_ok=True)
                 with open(f"{ROOT}/data/annotations/{campaign_id}.jsonl", "w") as f_out:
-                    for record in ext_annotations[campaign_id]:
-                        f_out.write(json.dumps(record, ensure_ascii=False) + "\n")
+                    f_out.writelines(json.dumps(record, ensure_ascii=False) + "\n" for record in ext_annotations[campaign_id])
                 
                 print(f"Successfully imported campaign {campaign_id}")
                 print(

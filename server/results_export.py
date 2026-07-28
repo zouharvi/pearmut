@@ -3,7 +3,7 @@ import json
 import os
 import statistics
 
-from .utils import get_db_log, RESET_MARKER
+from .utils import RESET_MARKER, get_db_log
 
 
 def comparison_significant(

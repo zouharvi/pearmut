@@ -44,7 +44,7 @@ def get_db_log(campaign_id: str) -> list[dict]:
         log_path = f"{ROOT}/data/annotations/{campaign_id}.jsonl"
         if os.path.exists(log_path):
             with open(log_path, "r") as f:
-                _logs[campaign_id] = [json.loads(line) for line in f.readlines()]
+                _logs[campaign_id] = [json.loads(line) for line in f]
         else:
             _logs[campaign_id] = []
 

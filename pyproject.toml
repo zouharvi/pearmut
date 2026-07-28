@@ -21,7 +21,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = [
+    "pytest >= 8.4",
+    "ruff >= 0.16",
+]
 
 [project.scripts]
 pearmut = "pearmut.cli:main"

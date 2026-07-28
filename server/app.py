@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any, Union
+from typing import Any
 
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -280,7 +280,6 @@ class ResetTaskRequest(BaseModel):
 
 @app.post("/reset-campaign")
 async def _reset_campaign(request: ResetTaskRequest):
-    # ruff: noqa: F841
     campaign_id = request.campaign_id
     user_id = request.user_id
     token = request.token
@@ -346,7 +345,7 @@ async def _purge_campaign(request: PurgeCampaignRequest):
 
 
 class AddCampaignRequest(BaseModel):
-    campaign_data: Union[dict[str, Any], list[dict[str, Any]]]
+    campaign_data: dict[str, Any] | list[dict[str, Any]]
     token_main: str
 
 
@@ -412,7 +411,7 @@ async def _download_annotations(
             output[cid] = []
         else:
             with open(output_path, "r") as f:
-                output[cid] = [json.loads(x) for x in f.readlines()]
+                output[cid] = [json.loads(x) for x in f]
 
     if not filename.endswith('.json'):
         filename += '.json'
