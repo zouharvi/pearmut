@@ -38,6 +38,7 @@ def compute_model_scores(campaign_id):
     """
     # Compute model scores from annotations
     model_scores = collections.defaultdict(dict)
+    item_i_to_item_id = collections.defaultdict(list)
 
     # Iterate through all tasks to find items with 'models' field (annotate template)
     log = get_db_log(campaign_id)
@@ -46,8 +47,8 @@ def compute_model_scores(campaign_id):
             # clear all scores for this item, since it was reset
             if (item_i := entry.get("item_i")) is not None:
                 for model in model_scores:
-                    if item_i in model_scores[model]:
-                        del model_scores[model][item_i]
+                    for item_id in item_i_to_item_id[item_i]:
+                        model_scores[model].pop(item_id, None)
         if "item" not in entry or "annotation" not in entry:
             continue
 
@@ -68,6 +69,7 @@ def compute_model_scores(campaign_id):
                 if "score" in annotation and annotation["score"] is not None:
                     final_item_id = item.get("item_id", json.dumps(item | {"tgt": None}))
                     model_scores[model][final_item_id] = annotation["score"]
+                    item_i_to_item_id[item_i].append(final_item_id)
 
     model_scores = list(model_scores.items())
     model_scores.sort(key=lambda x: statistics.mean(x[1].values()), reverse=True)
