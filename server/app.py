@@ -1,6 +1,7 @@
 import json
 import os
-from typing import Any
+from itertools import pairwise
+from typing import Annotated, Any
 
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,6 +20,7 @@ from .utils import (
     ROOT,
     TOKEN_MAIN,
     check_validation_threshold,
+    get_db_log,
     load_progress_data,
     save_db_payload,
     save_progress_data,
@@ -40,9 +42,22 @@ progress_data = load_progress_data(
     warn="No progress files found. Running, but no campaign will be available."
 )
 
+
+def _validate_campaign_id(campaign_id: str) -> str:
+    if not campaign_id or campaign_id in {".", ".."}:
+        raise ValueError("Invalid campaign ID")
+    if os.path.sep in campaign_id or (os.path.altsep and os.path.altsep in campaign_id):
+        raise ValueError("Invalid campaign ID")
+    return campaign_id
+
+
+def _campaign_json_path(campaign_id: str) -> str:
+    return f"{ROOT}/data/campaigns/{_validate_campaign_id(campaign_id)}.json"
+
+
 # load all tasks into data_all
-for campaign_id in progress_data.keys():
-    with open(f"{ROOT}/data/campaigns/{campaign_id}.json", "r") as f:
+for campaign_id in progress_data:
+    with open(_campaign_json_path(campaign_id), "r") as f:
         campaigns_data[campaign_id] = json.load(f)
 
 
@@ -55,8 +70,6 @@ class LogResponseRequest(BaseModel):
 
 @app.post("/log-response")
 async def _log_response(request: LogResponseRequest):
-    global progress_data
-
     campaign_id = request.campaign_id
     user_id = request.user_id
     item_i = request.item_i
@@ -79,7 +92,7 @@ async def _log_response(request: LogResponseRequest):
         progress_data[campaign_id][user_id]["time_end"] = max(times)
         # use one "minute" as the maximum time between actions to avoid logging long pauses
         progress_data[campaign_id][user_id]["time"] += sum(
-            [min(b - a, 61) for a, b in zip(times, times[1:])]
+            min(b - a, 61) for a, b in pairwise(times)
         )
 
     # Initialize validation_checks if it doesn't exist
@@ -303,8 +316,6 @@ class PurgeCampaignRequest(BaseModel):
 
 @app.post("/purge-campaign")
 async def _purge_campaign(request: PurgeCampaignRequest):
-    global progress_data, campaigns_data
-
     campaign_id = request.campaign_id
     token = request.token
 
@@ -350,8 +361,8 @@ class AddCampaignRequest(BaseModel):
 
 
 @app.post("/add-campaign")
-async def _add_campaign(request: AddCampaignRequest):
-    global progress_data, campaigns_data
+def _add_campaign(request: AddCampaignRequest):
+    global progress_data
 
     from .cli import _add_single_campaign
 
@@ -372,13 +383,12 @@ async def _add_campaign(request: AddCampaignRequest):
             _add_single_campaign(campaign_data, overwrite=False, url=None)
 
             campaign_id = campaign_data["campaign_id"]
-            with open(f"{ROOT}/data/campaigns/{campaign_id}.json", "r") as f:
-                campaigns_data[campaign_id] = json.load(f)
+            _validate_campaign_id(campaign_id)
+            campaigns_data[campaign_id] = campaign_data
             
-            added_campaigns.append({
-                "campaign_id": campaign_id,
-                "token": campaigns_data[campaign_id]["token"]
-            })
+            added_campaigns.append(
+                {"campaign_id": campaign_id, "token": campaigns_data[campaign_id]["token"]}
+            )
 
         progress_data = load_progress_data(warn=None)
 
@@ -389,32 +399,31 @@ async def _add_campaign(request: AddCampaignRequest):
             },
             status_code=200,
         )
-    except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=400)
+    except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError):
+        return JSONResponse(content={"error": "Failed to add campaign data."}, status_code=400)
 
 
 @app.get("/download-annotations")
-async def _download_annotations(
-    campaign_id: list[str] = Query(),
-    filename: str = Query("annotations.json"),
+def _download_annotations(
+    campaign_id: Annotated[list[str], Query()],
+    filename: Annotated[str, Query()] = "annotations.json",
     # NOTE: currently not checking tokens for progress download as it is non-destructive
     # token: list[str] = Query()
 ):
     output = {}
     for cid in campaign_id:
-        output_path = f"{ROOT}/data/annotations/{cid}.jsonl"
+        try:
+            _validate_campaign_id(cid)
+        except ValueError:
+            return JSONResponse(content=f"Invalid campaign ID. {cid}", status_code=400)
         if cid not in progress_data:
             return JSONResponse(
                 content=f"Unknown campaign ID. Maybe it was removed? {cid}", status_code=400
             )
-        if not os.path.exists(output_path):
-            output[cid] = []
-        else:
-            with open(output_path, "r") as f:
-                output[cid] = [json.loads(x) for x in f]
+        output[cid] = get_db_log(cid)
 
-    if not filename.endswith('.json'):
-        filename += '.json'
+    if not filename.endswith(".json"):
+        filename += ".json"
 
     return JSONResponse(
         content=output,
@@ -426,26 +435,26 @@ async def _download_annotations(
 
 
 @app.get("/download-campaigns")
-async def _download_campaigns(
-    campaign_id: list[str] = Query(),
-    filename: str = Query("campaigns.json"),
+def _download_campaigns(
+    campaign_id: Annotated[list[str], Query()],
+    filename: Annotated[str, Query()] = "campaigns.json",
     # NOTE: currently not checking tokens for campaigns download as it is non-destructive
 ):
     output = []
     for cid in campaign_id:
-        task_path = f"{ROOT}/data/campaigns/{cid}.json"
+        try:
+            _validate_campaign_id(cid)
+        except ValueError:
+            return JSONResponse(content=f"Invalid campaign ID. {cid}", status_code=400)
         if cid not in progress_data:
             return JSONResponse(
                 content=f"Unknown campaign ID. Maybe it was removed? {cid}", status_code=400
             )
-        if not os.path.exists(task_path):
-            pass # Or handle missing?
-        else:
-            with open(task_path, "r") as f:
-                output.append(json.load(f))
+        if cid in campaigns_data:
+            output.append(campaigns_data[cid])
 
-    if not filename.endswith('.json'):
-        filename += '.json'
+    if not filename.endswith(".json"):
+        filename += ".json"
 
     return JSONResponse(
         content=output,
@@ -459,9 +468,9 @@ async def _download_campaigns(
 
 @app.get("/download-progress")
 async def _download_progress(
-    campaign_id: list[str] = Query(), 
-    token: list[str] = Query(),
-    filename: str = Query("progress.json"),
+    campaign_id: Annotated[list[str], Query()],
+    token: Annotated[list[str], Query()],
+    filename: Annotated[str, Query()] = "progress.json",
 ):
     if len(campaign_id) != len(token):
         return JSONResponse(
@@ -479,8 +488,8 @@ async def _download_progress(
 
         output[cid] = progress_data[cid]
 
-    if not filename.endswith('.json'):
-        filename += '.json'
+    if not filename.endswith(".json"):
+        filename += ".json"
 
     return JSONResponse(
         content=output,

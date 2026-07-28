@@ -43,22 +43,17 @@ def compute_model_scores(campaign_id):
     # Iterate through all tasks to find items with 'models' field (annotate template)
     log = get_db_log(campaign_id)
     for entry in log:
-        if entry.get("annotation") == RESET_MARKER:
+        if entry.get("annotation") == RESET_MARKER and (item_i := entry.get("item_i")) is not None:
             # clear all scores for this item, since it was reset
-            if (item_i := entry.get("item_i")) is not None:
-                for model in model_scores:
-                    for item_id in item_i_to_item_id[item_i]:
-                        model_scores[model].pop(item_id, None)
+            for model in model_scores:
+                for item_id in item_i_to_item_id[item_i]:
+                    model_scores[model].pop(item_id, None)
         if "item" not in entry or "annotation" not in entry:
             continue
 
         # skip non-standard items (data_welcome, data_random, data_goodbye)
         item_i = entry.get("item_i")
-        if isinstance(item_i, str) and (
-            item_i.startswith("welcome_")
-            or item_i.startswith("random_")
-            or item_i.startswith("goodbye_")
-        ):
+        if isinstance(item_i, str) and item_i.startswith(("welcome_", "random_", "goodbye_")):
             continue
 
         for item, item_annotation in zip(entry["item"], entry["annotation"]):

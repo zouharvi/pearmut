@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 import shutil
+import sys
 import urllib.parse
 
 from .utils import (
@@ -67,6 +68,10 @@ if os.path.exists(f"{ROOT}/data/progress.json"):
 
 
 load_progress_data(warn=None)
+
+
+class ValidationTypeError(TypeError, ValueError):
+    pass
 
 
 def _run(args_unknown):
@@ -135,7 +140,7 @@ def _validate_item_structure(items):
         items: List of item dictionaries to validate
     """
     if not isinstance(items, list):
-        raise ValueError("Items must be a list")
+        raise ValidationTypeError("Items must be a list")
 
     if not items:
         raise ValueError("Items list cannot be empty")
@@ -143,13 +148,13 @@ def _validate_item_structure(items):
     # Check if first item is a form item or evaluation item
     first_item = items[0]
     if not isinstance(first_item, dict):
-        raise ValueError("Each item must be a dictionary")
+        raise ValidationTypeError("Each item must be a dictionary")
 
     first_item_is_form = "text" in first_item and "form" in first_item
 
     for item in items:
         if not isinstance(item, dict):
-            raise ValueError("Each item must be a dictionary")
+            raise ValidationTypeError("Each item must be a dictionary")
 
         # Check consistency: all items must be same type (form or evaluation)
         current_is_form = "text" in item and "form" in item
@@ -192,7 +197,7 @@ def _validate_item_structure(items):
                 # Validate that model names don't contain only numbers (JavaScript ordering issue)
                 for model_name, translation in item["tgt"].items():
                     if not isinstance(model_name, str):
-                        raise ValueError(
+                        raise ValidationTypeError(
                             "Model names in 'tgt' dictionary must be strings"
                         )
                     if model_name.isdigit():
@@ -200,7 +205,7 @@ def _validate_item_structure(items):
                             f"Model name '{model_name}' cannot be only numeric digits (would cause issues in JS/TS)"
                         )
                     if not isinstance(translation, str):
-                        raise ValueError(
+                        raise ValidationTypeError(
                             f"Translation for model '{model_name}' must be a string"
                         )
             else:
@@ -216,7 +221,7 @@ def _validate_item_structure(items):
                     )
                 for model_name, spans in item["error_spans"].items():
                     if not isinstance(spans, list):
-                        raise ValueError(
+                        raise ValidationTypeError(
                             f"Error spans for model '{model_name}' must be a list"
                         )
 
@@ -228,7 +233,7 @@ def _validate_item_structure(items):
                     )
                 for model_name, val_rule in item["validation"].items():
                     if not isinstance(val_rule, dict):
-                        raise ValueError(
+                        raise ValidationTypeError(
                             f"Validation rule for model '{model_name}' must be a dictionary"
                         )
 
@@ -299,7 +304,7 @@ def _shuffle_campaign_data(campaign_data, rng):
 
     if assignment == "task-based":
         # After transformation, data is a dict mapping user_id -> tasks
-        for user_id, task in campaign_data["data"].items():
+        for task in campaign_data["data"].values():
             for doc in task:
                 shuffle_document(doc)
     elif assignment in ["single-stream", "dynamic"]:
@@ -358,7 +363,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
         # Validate welcome documents structure - each should be a list of items
         for doc_i, doc in enumerate(data_welcome):
             if not isinstance(doc, list):
-                raise ValueError(f"Welcome document {doc_i} must be a list of items.")
+                raise ValidationTypeError(f"Welcome document {doc_i} must be a list of items.")
             try:
                 _validate_item_structure(doc)
             except ValueError as e:
@@ -372,7 +377,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
         # Validate random documents structure - each should be a list of items
         for doc_i, doc in enumerate(data_random):
             if not isinstance(doc, list):
-                raise ValueError(f"Random document {doc_i} must be a list of items.")
+                raise ValidationTypeError(f"Random document {doc_i} must be a list of items.")
             try:
                 _validate_item_structure(doc)
             except ValueError as e:
@@ -502,8 +507,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
             campaign_data["info"]["special_tokens"] = []
 
     # Validate sliders structure if present
-    if "sliders" in campaign_data["info"]:
-        if not all(
+    if "sliders" in campaign_data["info"] and not all(
             isinstance(s, dict)
             and all(k in s for k in ("name", "min", "max", "step"))
             and isinstance(s.get("min"), (int, float))
@@ -512,7 +516,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
             and s["min"] <= s["max"]
             and s["step"] > 0
             for s in campaign_data["info"]["sliders"]
-        ):
+    ):
             raise ValueError(
                 "Each slider must be a dict with 'name', 'min', 'max', and 'step' keys, where min/max/step are numeric, min <= max, and step > 0"
             )
@@ -612,17 +616,16 @@ def _add_single_campaign(campaign_data, overwrite, url):
             # Check if any other campaign is using this destination
             current_campaign_id = campaign_data["campaign_id"]
 
-            for other_campaign_id in progress_data.keys():
+            for other_campaign_id in progress_data:
                 if other_campaign_id == current_campaign_id:
                     continue
                 with open(f"{ROOT}/data/campaigns/{other_campaign_id}.json", "r") as f:
                     other_campaign = json.load(f)
                     other_assets = other_campaign.get("info", {}).get("assets")
-                    if other_assets:
-                        if other_assets.get("destination") == assets_destination:
-                            raise ValueError(
-                                f"Assets destination '{assets_destination}' is already used by campaign '{other_campaign_id}'."
-                            )
+                    if other_assets and other_assets.get("destination") == assets_destination:
+                        raise ValueError(
+                            f"Assets destination '{assets_destination}' is already used by campaign '{other_campaign_id}'."
+                        )
             # Only allow overwrite if it's the same campaign
             if overwrite:
                 os.remove(symlink_path)
@@ -657,7 +660,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
             f"?campaign_id={urllib.parse.quote_plus(campaign_data['campaign_id'])}"
             f"&token={campaign_data['token']}",
         )
-        for user_id, user_val in user_progress.items():
+        for user_val in user_progress.values():
             # point to the protocol URL
             print(f"🧑 {url}/{user_val['url']}")
         print()
@@ -701,9 +704,9 @@ def _add_campaign(args_unknown):
                         _add_single_campaign(campaign, args.overwrite, args.url)
                 else:
                     _add_single_campaign(data, args.overwrite, args.url)
-        except Exception as e:
+        except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError) as e:
             print(f"Error processing {data_file}: {e}")
-            exit(1)
+            sys.exit(1)
 
 
 def _add_existing(args_unknown):
@@ -802,13 +805,13 @@ def _add_existing(args_unknown):
                     f"?campaign_id={urllib.parse.quote_plus(campaign['campaign_id'])}"
                     f"&token={campaign['token']}",
                 )
-                for user_id, user_val in ext_progress[campaign_id].items():
+                for user_val in ext_progress[campaign_id].values():
                     print(f"🧑 {args.url}/{user_val['url']}")
                 print()
                 
-        except Exception as e:
+        except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError) as e:
             print(f"Error processing {data_file}: {e}")
-            exit(1)
+            sys.exit(1)
 
 
 def main():
@@ -824,7 +827,7 @@ def main():
         print(
             f"Another instance (PID {pid}) is already running in the same directory. We know this because {lock_file} exists."
         )
-        exit(1)
+        sys.exit(1)
 
     with open(lock_file, "w") as f:
         f.write(str(os.getpid()))
@@ -916,7 +919,7 @@ def main():
             )
             if confirm.lower() == "y":
                 # Unlink all assets first
-                for campaign_id in progress_data.keys():
+                for campaign_id in progress_data:
                     _unlink_assets(campaign_id)
                 shutil.rmtree(f"{ROOT}/data/campaigns", ignore_errors=True)
                 shutil.rmtree(f"{ROOT}/data/outputs", ignore_errors=True)
@@ -987,14 +990,14 @@ def _bake_existing(args_unknown):
     env = os.environ.copy()
     env["OUTPUT_PATH"] = output_dir
     
-    result = subprocess.run(["npm", "install"], cwd=web_dir, env=env)
+    result = subprocess.run(["npm", "install"], cwd=web_dir, env=env, check=False)
     if result.returncode != 0:
         print("Failed to build frontend (install)")
-        exit(1)
-    result = subprocess.run(["npm", "run", "build"], cwd=web_dir, env=env)
+        sys.exit(1)
+    result = subprocess.run(["npm", "run", "build"], cwd=web_dir, env=env, check=False)
     if result.returncode != 0:
         print("Failed to build frontend (build)")
-        exit(1)
+        sys.exit(1)
     
     for campaign_id, campaign in campaigns_data.items():
         if campaign_id not in ext_progress:
