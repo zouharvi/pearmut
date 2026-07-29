@@ -38,10 +38,10 @@ Install and run locally without cloning:
 ```bash
 pip install pearmut
 # Download example campaigns
-wget https://raw.githubusercontent.com/zouharvi/pearmut/refs/heads/main/examples/esa.json
+wget https://raw.githubusercontent.com/zouharvi/pearmut/refs/heads/main/examples/cesa.json
 wget https://raw.githubusercontent.com/zouharvi/pearmut/refs/heads/main/examples/da.json
 # Load and start
-pearmut add esa.json da.json
+pearmut add cesa.json da.json
 pearmut run
 ```
 
