@@ -1234,9 +1234,11 @@ function display_goodbye(response: DataGoodbye, navigate_to_item: (i: number | s
     // Use instructions_goodbye if provided, otherwise use default message
     // Note: instructions_goodbye may contain arbitrary HTML including variables that are replaced server-side
 
+    $("#progress").toggle(response.info.show_progress !== false)
+
     $("#output_div").html(`
     <div class='white-box' style='width: max-content'>
-    <h2>🎉 All done, thank you for your annotations!</h2>
+    <h2>All done, thank you for your annotations!</h2>
 
     ${response.instructions_goodbye}
     <br>
@@ -1246,7 +1248,7 @@ function display_goodbye(response: DataGoodbye, navigate_to_item: (i: number | s
     redrawProgress(null, response.progress_welcome, response.progress, navigate_to_item)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
     $("#button_next").prop("disabled", true)
-    $("#button_next").val("Next 💯")
+    $("#button_next").val("Finished")
 }
 
 

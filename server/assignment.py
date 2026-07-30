@@ -63,8 +63,10 @@ def _completed_response(
     )
 
     # Replace variables ${TOKEN} and ${USER_ID}
-    instructions_goodbye = instructions_goodbye.replace("${TOKEN}", token).replace(
-        "${USER_ID}", user_id
+    instructions_goodbye = (
+        instructions_goodbye
+        .replace("${TOKEN}", token)
+        .replace("${USER_ID}", user_id)
     )
 
     return JSONResponse(
@@ -75,6 +77,11 @@ def _completed_response(
             "time": user_progress["time"],
             "token": token,
             "instructions_goodbye": instructions_goodbye,
+            "info": {
+                k: v
+                for k, v in campaigns_data[campaign_id]["info"].items()
+                if k in CAMPAIGN_INFO_PUBLIC
+            }
         },
         status_code=200,
     )

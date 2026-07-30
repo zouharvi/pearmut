@@ -8,7 +8,8 @@ Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.
   - Move campaign annotations storage from `data/outputs/` to `data/annotations/` with automatic migration
   - Move campaign progress storage from a single `data/progress.json` to `data/progress/*.json` one file per each campaign.
   - Make dynamic assignment optimize allocation with best effort, especially during coldstart
-  - Various bugfixed to dynamic assignment, recovering prior annotations, and progress tracking
+  - Various bugfixes to dynamic assignment, recovering prior annotations, and progress tracking
+  - Various bugfixes to the annotation interface
 - v1.1.5
   - Add `show_progress` flag to dashboard
   - Default to a single user for single-stream and dynamic campaigns if not specified

@@ -564,6 +564,7 @@ export type DataGoodbye = {
     time: number,
     token: string,
     instructions_goodbye?: string,
+    info: ProtocolInfo,
 }
 
 // Slider configuration type
