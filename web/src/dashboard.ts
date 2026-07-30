@@ -32,15 +32,15 @@ function delta_to_human(delta: number): string {
 }
 
 async function fetchAndRenderCampaign(campaign_id: string, token: string | null) {
-    let x = await $.ajax({
+    let campaign = await $.ajax({
         url: `dashboard-data`,
         method: "POST",
         data: JSON.stringify({ "campaign_id": campaign_id, "token": token }),
         contentType: "application/json",
         dataType: "json",
     });
-    let data = x.data;
-    let assignment = x.assignment;
+    let data = campaign.data;
+    let assignment = campaign.assignment;
 
     let html = ""
     html += `
@@ -63,11 +63,12 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         let progress_count = progress.filter(v => v === "completed").length
         if (assignment == "dynamic") {
             progress_count = progress.map(l => Object.values(l).filter((v: string) => v === "completed").length).reduce((a, b) => a + b, 0)
+            progress_count = Math.ceil(progress_count / campaign.dynamic_models)
             progress_total = progress.map(l => Object.keys(l).length).reduce((a, b) => a + b, 0)
         }
 
-        if ((assignment === "dynamic" || assignment === "single-stream") && x.docs_per_user != null) {
-            progress_total = x.docs_per_user
+        if ((assignment === "dynamic" || assignment === "single-stream") && campaign.docs_per_user != null) {
+            progress_total = campaign.docs_per_user
         }
 
         // Calculate welcome progress separately

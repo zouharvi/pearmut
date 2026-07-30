@@ -222,6 +222,7 @@ async def _dashboard_data(request: DashboardDataRequest):
             "validation_threshold": validation_threshold,
             "assignment": assignment,
             "docs_per_user": campaigns_data[campaign_id]["info"].get("docs_per_user"),
+            "dynamic_models": campaigns_data[campaign_id]["info"].get("dynamic_models"),
         },
         status_code=200,
     )
