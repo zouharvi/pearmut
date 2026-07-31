@@ -676,7 +676,7 @@ def _add_campaign(args_unknown):
     )
         
     args.add_argument(
-        "data_files",
+        "campaigns",
         type=str,
         nargs="+",
         help="One or more paths to campaign data files",
@@ -695,9 +695,9 @@ def _add_campaign(args_unknown):
     args = args.parse_args(args_unknown)
     args.url = args.url.rstrip("/")
 
-    for data_file in args.data_files:
+    for campaign_file in args.campaigns:
         try:
-            with open(data_file, "r") as f:
+            with open(campaign_file, "r") as f:
                 data = json.load(f)
                 if isinstance(data, list):
                     for campaign in data:
@@ -705,7 +705,7 @@ def _add_campaign(args_unknown):
                 else:
                     _add_single_campaign(data, args.overwrite, args.url)
         except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError) as e:
-            print(f"Error processing {data_file}: {e}")
+            print(f"Error processing {campaign_file}: {e}")
             sys.exit(1)
 
 
@@ -945,7 +945,7 @@ def _bake_existing(args_unknown):
         description="Bake an existing campaign into static files."
     )
     args.add_argument(
-        "data_files",
+        "campaigns",
         type=str,
         nargs="+",
         help="One or more paths to campaign data files",
@@ -978,8 +978,8 @@ def _bake_existing(args_unknown):
         ext_annotations = json.load(f)
 
     campaigns_data = {}
-    for data_file in args.data_files:
-        with open(data_file, "r") as f:
+    for campaign_file in args.campaigns:
+        with open(campaign_file, "r") as f:
             data = json.load(f)
             campaigns = data if isinstance(data, list) else [data]
             for campaign in campaigns:
