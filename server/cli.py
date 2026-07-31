@@ -723,7 +723,7 @@ def _add_existing(args_unknown):
         sys.exit(1)
         
     args.add_argument(
-        "data_files",
+        "campaigns",
         type=str,
         nargs="+",
         help="One or more paths to campaign data files",
@@ -761,9 +761,9 @@ def _add_existing(args_unknown):
     with open(args.annotations, "r") as f:
         ext_annotations = json.load(f)
 
-    for data_file in args.data_files:
+    for campaign_file in args.campaigns:
         try:
-            with open(data_file, "r") as f:
+            with open(campaign_file, "r") as f:
                 data = json.load(f)
             
             campaigns = data if isinstance(data, list) else [data]
@@ -771,7 +771,7 @@ def _add_existing(args_unknown):
             for campaign in campaigns:
                 campaign_id = campaign.get("campaign_id")
                 if not campaign_id:
-                    print(f"Skipping a campaign without campaign_id in {data_file}")
+                    print(f"Skipping a campaign without campaign_id in {campaign_file}")
                     continue
                 
                 if campaign_id in local_progress and not args.overwrite:
@@ -810,7 +810,7 @@ def _add_existing(args_unknown):
                 print()
                 
         except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError) as e:
-            print(f"Error processing {data_file}: {e}")
+            print(f"Error processing {campaign_file}: {e}")
             sys.exit(1)
 
 
