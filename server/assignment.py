@@ -657,7 +657,8 @@ def get_next_item_dynamic(
             ][: dynamic_models - len(available_models)]
         model_weights_dict = {
             # 1/(rank + 1) to give higher weight to better performing models
-            model: 1 / (rank + 1)
+            # make the two top performers have equal weight for comparison
+            model: 1 / (rank + 1) if rank > 0 else 0.5
             for rank, model in enumerate(
                 # add secondary random sort to break ties in average score
                 sorted(available_models, key=lambda x: (model_avg_scores[x], random.random()), reverse=True)
