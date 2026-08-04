@@ -63,8 +63,9 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         let progress_count = progress.filter(v => v === "completed").length
         if (assignment == "dynamic") {
             progress_count = progress.map(l => Object.values(l).filter((v: string) => v === "completed").length).reduce((a, b) => a + b, 0)
-            progress_count = Math.ceil(progress_count / campaign.dynamic_models)
             progress_total = progress.map(l => Object.keys(l).length).reduce((a, b) => a + b, 0)
+            progress_count = Math.ceil(progress_count / campaign.dynamic_models)
+            progress_total = Math.ceil(progress_total / campaign.dynamic_models)
         }
 
         if ((assignment === "dynamic" || assignment === "single-stream") && campaign.docs_per_user != null) {
