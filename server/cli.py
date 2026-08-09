@@ -719,14 +719,12 @@ def _add_existing(args_unknown):
     )
     if not args_unknown:
         args.print_help()
-        import sys
         sys.exit(1)
         
     args.add_argument(
-        "campaigns",
+        "--campaigns",
         type=str,
-        nargs="+",
-        help="One or more paths to campaign data files",
+        help="Path to the campaigns.json file to import",
     )
     args.add_argument(
         "--progress",
@@ -738,7 +736,7 @@ def _add_existing(args_unknown):
         "--annotations",
         type=str,
         required=True,
-        help="Path to the file containing annotation JSONL",
+        help="Path to the annotations.jsonl file to import",
     )
     args.add_argument(
         "-o",
@@ -756,61 +754,56 @@ def _add_existing(args_unknown):
     local_progress = load_progress_data()
 
     with open(args.progress, "r") as f:
-        ext_progress = json.load(f)
+        progress_data = json.load(f)
 
     with open(args.annotations, "r") as f:
-        ext_annotations = json.load(f)
+        annotations_data = json.load(f)
 
-    for campaign_file in args.campaigns:
-        try:
-            with open(campaign_file, "r") as f:
-                data = json.load(f)
+    campaigns_data = {}
+    with open(args.campaigns, "r") as f:
+        data = json.load(f)
+        for campaign in data if isinstance(data, list) else [data]:
+            campaigns_data[campaign["campaign_id"]] = campaign
+
+    for campaign_id, campaign in campaigns_data.items():
+        try:            
+            if campaign_id in local_progress and not args.overwrite:
+                raise ValueError(f"Campaign {campaign_id} already exists locally. Use -o to overwrite.")
             
-            campaigns = data if isinstance(data, list) else [data]
+            if campaign_id not in progress_data:
+                raise ValueError(f"Campaign {campaign_id} not found in the provided progress.json.")
             
-            for campaign in campaigns:
-                campaign_id = campaign.get("campaign_id")
-                if not campaign_id:
-                    print(f"Skipping a campaign without campaign_id in {campaign_file}")
-                    continue
-                
-                if campaign_id in local_progress and not args.overwrite:
-                    raise ValueError(f"Campaign {campaign_id} already exists locally. Use -o to overwrite.")
-                
-                if campaign_id not in ext_progress:
-                    raise ValueError(f"Campaign {campaign_id} not found in the provided progress.json.")
-                
-                if campaign_id not in ext_annotations:
-                    raise ValueError(f"Campaign {campaign_id} not found in the provided annotations file.")
-                
-                import hashlib
-                import random
-                if "token" not in campaign:
-                    campaign["token"] = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
-                
-                local_progress[campaign_id] = ext_progress[campaign_id]
-                save_progress_data(campaign_id, local_progress[campaign_id])
-                
-                with open(f"{ROOT}/data/campaigns/{campaign_id}.json", "w") as f:
-                    json.dump(campaign, f, indent=2, ensure_ascii=False)
-                
-                os.makedirs(f"{ROOT}/data/outputs", exist_ok=True)
-                with open(f"{ROOT}/data/annotations/{campaign_id}.jsonl", "w") as f_out:
-                    f_out.writelines(json.dumps(record, ensure_ascii=False) + "\n" for record in ext_annotations[campaign_id])
-                
-                print(f"Successfully imported campaign {campaign_id}")
-                print(
-                    "🎛️ ",
-                    f"{args.url}/dashboard"
-                    f"?campaign_id={urllib.parse.quote_plus(campaign['campaign_id'])}"
-                    f"&token={campaign['token']}",
-                )
-                for user_val in ext_progress[campaign_id].values():
-                    print(f"🧑 {args.url}/{user_val['url']}")
-                print()
-                
+            if campaign_id not in annotations_data:
+                raise ValueError(f"Campaign {campaign_id} not found in the provided annotations file.")
+            
+            import hashlib
+            import random
+            if "token" not in campaign:
+                campaign["token"] = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
+            
+            local_progress[campaign_id] = progress_data[campaign_id]
+            save_progress_data(campaign_id, local_progress[campaign_id])
+            
+            with open(f"{ROOT}/data/campaigns/{campaign_id}.json", "w") as f:
+                json.dump(campaign, f, indent=2, ensure_ascii=False)
+            
+            os.makedirs(f"{ROOT}/data/outputs", exist_ok=True)
+            with open(f"{ROOT}/data/annotations/{campaign_id}.jsonl", "w") as f_out:
+                f_out.writelines(json.dumps(record, ensure_ascii=False) + "\n" for record in annotations_data[campaign_id])
+            
+            print(f"Successfully imported campaign {campaign_id}")
+            print(
+                "🎛️ ",
+                f"{args.url}/dashboard"
+                f"?campaign_id={urllib.parse.quote_plus(campaign['campaign_id'])}"
+                f"&token={campaign['token']}",
+            )
+            for user_val in progress_data[campaign_id].values():
+                print(f"🧑 {args.url}/{user_val['url']}")
+            print()
+            
         except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError) as e:
-            print(f"Error processing {campaign_file}: {e}")
+            print(f"Error processing {campaign_id}: {e}")
             sys.exit(1)
 
 
@@ -945,22 +938,22 @@ def _bake_existing(args_unknown):
         description="Bake an existing campaign into static files."
     )
     args.add_argument(
-        "campaigns",
+        "--campaigns",
         type=str,
-        nargs="+",
-        help="One or more paths to campaign data files",
+        required=True,
+        help="Path to the downloaded campaigns.json file.",
     )
     args.add_argument(
         "--progress",
         type=str,
         required=True,
-        help="Path to the progress.json file to import",
+        help="Path to the downloaded progress.json file.",
     )
     args.add_argument(
         "--annotations",
         type=str,
         required=True,
-        help="Path to the annotation JSONL file",
+        help="Path to the downloaded annotations.json file.",
     )
     args.add_argument(
         "--output",
@@ -972,19 +965,26 @@ def _bake_existing(args_unknown):
     args = args.parse_args(args_unknown)
     
     with open(args.progress, "r") as f:
-        ext_progress = json.load(f)
+        progress_data = json.load(f)
 
     with open(args.annotations, "r") as f:
-        ext_annotations = json.load(f)
+        annotations_data = json.load(f)
 
     campaigns_data = {}
-    for campaign_file in args.campaigns:
-        with open(campaign_file, "r") as f:
-            data = json.load(f)
-            campaigns = data if isinstance(data, list) else [data]
-            for campaign in campaigns:
-                campaigns_data[campaign["campaign_id"]] = campaign
-    web_dir = os.path.abspath(__file__ + "/../web")
+    with open(args.campaigns, "r") as f:
+        _campaigns_data = json.load(f)
+        for campaign in _campaigns_data:
+            campaigns_data[campaign["campaign_id"]] = campaign
+
+    web_dir1 = os.path.abspath(__file__ + "/../web")
+    web_dir2 = os.path.abspath(__file__ + "/../../web")
+    if os.path.exists(web_dir1):
+        web_dir = web_dir1
+    elif os.path.exists(web_dir2):
+        web_dir = web_dir2
+    else:
+        raise FileNotFoundError("Could not find the web directory for building the frontend.")
+
     output_dir = os.path.abspath(args.output)
     
     env = os.environ.copy()
@@ -1000,7 +1000,7 @@ def _bake_existing(args_unknown):
         sys.exit(1)
     
     for campaign_id, campaign in campaigns_data.items():
-        if campaign_id not in ext_progress:
+        if campaign_id not in progress_data:
             continue
             
         assignment = campaign["info"].get("assignment", "single-stream")
@@ -1008,20 +1008,21 @@ def _bake_existing(args_unknown):
         
         if assignment == "task-based":
             is_processed = isinstance(campaign["data"], dict)
-            for user_i, (user_id, user_progress) in enumerate(ext_progress[campaign_id].items()):
+            for user_i, (user_id, user_progress) in enumerate(progress_data[campaign_id].items()):
                 num_items = len(user_progress.get("progress", []))
                 for item_i in range(num_items):
                     payload = campaign["data"][user_id][item_i] if is_processed else campaign["data"][user_i][item_i]
                     is_form = is_form_document(payload)
                     
                     items_existing = []
-                    for row in ext_annotations.get(campaign_id, []):
+                    for row in annotations_data.get(campaign_id, []):
                         if row.get("item_i") == item_i and row.get("user_id") == user_id:
                             items_existing.append(row)
                             
                     payload_existing = None
                     if items_existing:
                         latest_item = items_existing[-1]
+                        print(latest_item.keys())
                         payload_existing = {"annotation": latest_item["annotation"]}
                         if "comment" in latest_item:
                             payload_existing["comment"] = latest_item["comment"]
@@ -1038,7 +1039,7 @@ def _bake_existing(args_unknown):
                 is_form = is_form_document(payload)
                 
                 items_existing = []
-                for row in ext_annotations.get(campaign_id, []):
+                for row in annotations_data.get(campaign_id, []):
                     if row.get("item_i") == item_i:
                         items_existing.append(row)
                         
