@@ -11,6 +11,7 @@ Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.
   - Various bugfixes to dynamic assignment, recovering prior annotations, and progress tracking
   - Various bugfixes to the annotation interface
   - Simplify `bake-existing` and `add-existing` commands to always take downloaded packaged JSON files.
+  - Add button to dynamically add new users to existing running campaigns
 - v1.1.5
   - Add `show_progress` flag to dashboard
   - Default to a single user for single-stream and dynamic campaigns if not specified

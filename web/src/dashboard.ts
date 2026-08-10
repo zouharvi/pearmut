@@ -207,10 +207,11 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 ${campaign_id} 
                 <span style="font-weight: normal; font-size: 0.8em; color: #666; margin-left: 5px;" title="Campaign progress (regular items)">(${campaign_progress}/${campaign_total})</span>
                 <span style="float: right; margin-right: 20px;">
-                    <a href="${dashboard_url}">🔗</a>
+                    ${(token !== null && (assignment === "single-stream" || assignment === "dynamic")) ? '<a class="add-user-btn" style="cursor: pointer;" title="Add new user">🧑</a>' : ''}
                     &nbsp;
-                    <a class="show-ranking-btn" style="cursor: pointer; opacity: 1;">⚖️</a>
-                    ${token !== null ? '&nbsp;<a class="purge-campaign-btn" style="cursor: pointer;">🗑️</a>' : ''}
+                    <a href="${dashboard_url}" title="Link to dashboard">🔗</a>&nbsp;
+                    <a class="show-ranking-btn" style="cursor: pointer; opacity: 1;" title="Show ranking">⚖️</a>&nbsp;
+                    ${token !== null ? '&nbsp;<a class="purge-campaign-btn" style="cursor: pointer;" title="Purge/reset campaign">🗑️</a>' : ''}
                 </span>
                 </h3>
                 <div class="dashboard-content">
@@ -301,6 +302,27 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
 
         $content.show();
     });
+
+    // Add event listener for add user button
+    if (token !== null && (assignment === "single-stream" || assignment === "dynamic")) {
+        el.find(".add-user-btn").on("click", function () {            
+            $.ajax({
+                url: `add-new-user`,
+                method: "POST",
+                data: JSON.stringify({ "campaign_id": campaign_id, "token": token }),
+                contentType: "application/json",
+                dataType: "json",
+                success: (data) => {
+                    notify(`Added new user ${data.user_id} to campaign ${campaign_id}.`);
+                    location.reload();
+                },
+                error: (XMLHttpRequest) => {
+                    const errorMsg = XMLHttpRequest.responseJSON?.error || XMLHttpRequest.responseText || XMLHttpRequest.statusText || "An unknown error occurred";
+                    notify("Error adding new user: " + errorMsg);
+                },
+            });
+        });
+    }
 
     // Add event listener for purge/reset campaign button
     if (token !== null) {

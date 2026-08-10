@@ -169,3 +169,15 @@ def shuffled(lst):
     lst_copy = list(lst)
     random.shuffle(lst_copy)
     return lst_copy
+
+
+def generate_user_name(existing_ids=None, rng=None):
+    import wonderwords
+    rng = rng or random.Random()
+    rword = wonderwords.RandomWord(rng=rng)
+    existing_ids = set(existing_ids) if existing_ids else set()
+    while True:
+        new_id = f"{rword.random_words(amount=1, include_parts_of_speech=['adjective'])[0]}-{rword.random_words(amount=1, include_parts_of_speech=['noun'])[0]}"
+        new_id = f"{new_id}-{rng.randint(0, 999):03d}"
+        if new_id not in existing_ids:
+            return new_id

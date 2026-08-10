@@ -14,6 +14,7 @@ import urllib.parse
 from .utils import (
     ROOT,
     TOKEN_MAIN,
+    generate_user_name,
     is_form_document,
     load_progress_data,
     save_progress_data,
@@ -319,8 +320,6 @@ def _add_single_campaign(campaign_data, overwrite, url):
     """
     import random
 
-    import wonderwords
-
     if "campaign_id" not in campaign_data:
         raise ValueError("Campaign data must contain 'campaign_id' field.")
     if "data" not in campaign_data:
@@ -349,7 +348,6 @@ def _add_single_campaign(campaign_data, overwrite, url):
     assignment = campaign_data["info"]["assignment"]
     # use random words for identifying users
     rng = random.Random()
-    rword = wonderwords.RandomWord(rng=rng)
 
     # Parse users specification from info
     users_spec = campaign_data["info"]["users"]
@@ -466,11 +464,8 @@ def _add_single_campaign(campaign_data, overwrite, url):
     if users_spec is None or isinstance(users_spec, int):
         # Generate random user IDs
         user_ids = []
-        while len(user_ids) < num_users:
-            new_id = f"{rword.random_words(amount=1, include_parts_of_speech=['adjective'])[0]}-{rword.random_words(amount=1, include_parts_of_speech=['noun'])[0]}"
-            if new_id not in user_ids:
-                user_ids.append(new_id)
-        user_ids = [f"{user_id}-{rng.randint(0, 999):03d}" for user_id in user_ids]
+        for _ in range(num_users):
+            user_ids.append(generate_user_name(existing_ids=user_ids, rng=rng))
     elif isinstance(users_spec, list):
         if len(users_spec) != num_users:
             raise ValueError(
