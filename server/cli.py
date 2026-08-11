@@ -340,17 +340,15 @@ def _add_single_campaign(campaign_data, overwrite, url):
         campaign_data["info"]["assignment"] = "single-stream"
         print("Warning: 'assignment' not specified in campaign info. Defaulting to 'single-stream'.")
 
-    if "users" not in campaign_data["info"]:
-        campaign_data["info"]["users"] = 1
+    if "users" not in campaign_data["info"] and campaign_data["info"]["assignment"] != "task-based":
         print("Warning: 'users' not specified in campaign info. Defaulting to 1 user.")
-
+    users_spec = campaign_data["info"].get("users", 1)
+    
     # Template defaults to "annotate" if not specified
     assignment = campaign_data["info"]["assignment"]
     # use random words for identifying users
     rng = random.Random()
 
-    # Parse users specification from info
-    users_spec = campaign_data["info"]["users"]
     user_tokens = {}  # user_id -> {"pass": ..., "fail": ...}
 
     # Validate and process data_welcome if present
