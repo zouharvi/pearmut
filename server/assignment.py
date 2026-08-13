@@ -74,8 +74,8 @@ def _completed_response(
         content={
             "status": "goodbye",
             "progress": user_progress["progress"],
-            "progress_welcome": user_progress["progress_welcome"],
-            "progress_goodbye": user_progress["progress_goodbye"],
+            "progress_welcome": user_progress.get("progress_welcome", []),
+            "progress_goodbye": user_progress.get("progress_goodbye", []),
             "time": user_progress["time"],
             "token": token,
             "info": {
@@ -124,8 +124,8 @@ def render_item_response(
             "status": "form" if is_form else "ok",
             "time": user_progress["time"],
             "progress": user_progress["progress"],
-            "progress_welcome": user_progress["progress_welcome"],
-            "progress_goodbye": user_progress["progress_goodbye"],
+            "progress_welcome": user_progress.get("progress_welcome", []),
+            "progress_goodbye": user_progress.get("progress_goodbye", []),
             "info": {
                 "item_i": item_i,
                 "instructions": _get_instructions(campaigns_data, campaign_id),
@@ -214,7 +214,7 @@ def get_next_item(
     if item_to_send is not None:
         return item_to_send
 
-    progress_goodbye = user_progress["progress_goodbye"]
+    progress_goodbye = user_progress.get("progress_goodbye", [])
 
     # Check if there are incomplete goodbye items first - must complete all before proceeding
     if not all(progress_goodbye):
@@ -347,7 +347,7 @@ def get_i_item_singlestream(
         assert isinstance(item_i, str)
         actual_index = int(item_i.split("_")[1])
         # Validate against total number of goodbye items
-        if actual_index < 0 or actual_index >= len(user_progress["progress_goodbye"]):
+        if actual_index < 0 or actual_index >= len(user_progress.get("progress_goodbye", [])):
             return JSONResponse(
                 content="Goodbye item index out of range", status_code=400
             )
@@ -512,7 +512,7 @@ def get_i_item_dynamic(
 
     if isinstance(item_i, str) and item_i.startswith("goodbye_"):
         actual_index = int(item_i.split("_")[1])
-        if actual_index < 0 or actual_index >= len(user_progress["progress_goodbye"]):
+        if actual_index < 0 or actual_index >= len(user_progress.get("progress_goodbye", [])):
             return JSONResponse(
                 content="Goodbye item index out of range", status_code=400
             )
@@ -855,6 +855,8 @@ def update_progress(
     if isinstance(item_i, str) and item_i.startswith("goodbye_"):
         goodbye_index = int(item_i.split("_")[1])
         # Update only this user's progress_goodbye (not shared)
+        if "progress_goodbye" not in progress_data[campaign_id][user_id]:
+            progress_data[campaign_id][user_id]["progress_goodbye"] = [None] * len(campaigns_data[campaign_id].get("data_goodbye", []))
         progress_data[campaign_id][user_id]["progress_goodbye"][goodbye_index] = (
             "completed"
         )

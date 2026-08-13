@@ -523,8 +523,9 @@ class TestSingleStream:
         # Items user1 originally completed (0 and 3) are reset for both users in the shared pool
         # Item 2 was completed_foreign for user1 (not originally theirs) so it is NOT reset
         assert progress_data["campaign1"]["user1"]["progress"] == [None, None, "completed_foreign", None]
-        # User2's items 0 and 3 are also reset (shared pool), item 2 is unaffected
-        assert progress_data["campaign1"]["user2"]["progress"] == [None, None, "completed", None]
+        # User2's item 3 was completed_foreign, so it is reset to None.
+        # However, User2's item 0 was "completed", meaning User 2 independently completed it. It should NOT be wiped.
+        assert progress_data["campaign1"]["user2"]["progress"] == ["completed", None, "completed", None]
         # Only user1's time should be reset
         assert progress_data["campaign1"]["user1"]["time"] == 0.0
         assert progress_data["campaign1"]["user1"]["time_start"] is None
@@ -862,8 +863,8 @@ class TestResetMasking:
         items = get_db_log_item(campaign_id, "user1", "welcome_0")
         assert len(items) == 0
 
-    def test_reset_campaign_single_stream_only_resets_completed_welcome_items(self):
-        """Test that reset_campaign in single-stream only saves reset markers for completed welcome items."""
+    def test_reset_campaign_resets_all_welcome_items(self):
+        """Test that reset_campaign saves a global reset marker, masking all welcome items."""
         _clear_test_logs()
         campaign_id = "test_singlestream_welcome_reset"
         
@@ -923,11 +924,11 @@ class TestResetMasking:
         # Reset task
         reset_campaign(campaign_id, "user1", campaigns_data, progress_data)
         
-        # Verify only completed welcome item (welcome_0) is masked
+        # Verify both welcome items are masked by the global reset marker
         items0 = get_db_log_item(campaign_id, "user1", "welcome_0")
         items1 = get_db_log_item(campaign_id, "user1", "welcome_1")
         assert len(items0) == 0, "Completed welcome item should be masked after reset"
-        assert len(items1) == 1, "Uncompleted welcome item should NOT be masked after reset"
+        assert len(items1) == 0, "Uncompleted welcome item should also be masked after reset"
 
 
 class TestValidationThreshold:

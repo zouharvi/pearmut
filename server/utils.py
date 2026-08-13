@@ -18,12 +18,7 @@ def load_progress_data(warn: str | None = None):
         if filename.endswith(".json"):
             campaign_id = filename.removesuffix(".json")
             with open(os.path.join(progress_dir, filename), "r") as f:
-                data_local = json.load(f)
-                # NOTE: migration scripts will be removed in the next minor release, i.e. 1.2.0
-                # add progress_goodbye if not present (for backwards compatibility)
-                for user_progress in data_local.values():
-                    user_progress["progress_goodbye"] = user_progress.get("progress_welcome", [])
-                data[campaign_id] = data_local
+                data[campaign_id] = json.load(f)
 
     if not data and warn is not None:
         print(warn)
