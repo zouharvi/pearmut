@@ -306,14 +306,24 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
     // Add event listener for add user button
     if (token !== null && (assignment === "single-stream" || assignment === "dynamic")) {
         el.find(".add-user-btn").on("click", function () {            
+            const usersStr = prompt(`How many new users do you want to add to ${campaign_id}?`, "1");
+            if (usersStr === null) {
+                return;
+            }
+            const users = parseInt(usersStr);
+            if (isNaN(users) || users < 1) {
+                notify("Invalid number of users");
+                return;
+            }
+            
             $.ajax({
                 url: `add-new-user`,
                 method: "POST",
-                data: JSON.stringify({ "campaign_id": campaign_id, "token": token }),
+                data: JSON.stringify({ "campaign_id": campaign_id, "token": token, "users": users }),
                 contentType: "application/json",
                 dataType: "json",
                 success: (data) => {
-                    notify(`Added new user ${data.user_id} to campaign ${campaign_id}.`);
+                    notify(`Added ${users} new user(s) ${data.user_id} to campaign ${campaign_id}.`);
                     location.reload();
                 },
                 error: (XMLHttpRequest) => {

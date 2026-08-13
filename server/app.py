@@ -313,6 +313,7 @@ async def _reset_campaign(request: ResetTaskRequest):
 class AddNewUserRequest(BaseModel):
     campaign_id: str
     token: str
+    users: int = 1
 
 
 @app.post("/add-new-user")
@@ -340,48 +341,51 @@ async def _add_new_user(request: AddNewUserRequest):
     if not existing_ids:
         return JSONResponse(content="Campaign has no existing users to clone from", status_code=400)
     
-    first_user_progress = progress_data[campaign_id][existing_ids[0]]
-    new_user_id = generate_user_name(existing_ids)
-    
-    new_progress_entry = copy.deepcopy(first_user_progress)
-    
-    if assignment == "single-stream":
-        for i in range(len(new_progress_entry["progress"])):
-            if new_progress_entry["progress"][i] in {"completed", "completed_foreign"}:
-                new_progress_entry["progress"][i] = "completed_foreign"
-    elif assignment == "dynamic":
-        for i in range(len(new_progress_entry["progress"])):
-            for k in new_progress_entry["progress"][i]:
-                if new_progress_entry["progress"][i][k] in {"completed", "completed_foreign"}:
-                    new_progress_entry["progress"][i][k] = "completed_foreign"
+    for _ in range(request.users):
+        existing_ids = list(progress_data[campaign_id].keys())
+        first_user_progress = progress_data[campaign_id][existing_ids[0]]
+        new_user_id = generate_user_name(existing_ids)
+        
+        new_progress_entry = copy.deepcopy(first_user_progress)
+        
+        if assignment == "single-stream":
+            for i in range(len(new_progress_entry["progress"])):
+                if new_progress_entry["progress"][i] in {"completed", "completed_foreign"}:
+                    new_progress_entry["progress"][i] = "completed_foreign"
+        elif assignment == "dynamic":
+            for i in range(len(new_progress_entry["progress"])):
+                for k in new_progress_entry["progress"][i]:
+                    if new_progress_entry["progress"][i][k] in {"completed", "completed_foreign"}:
+                        new_progress_entry["progress"][i][k] = "completed_foreign"
 
-    if "progress_welcome" in new_progress_entry:
-        for i in range(len(new_progress_entry["progress_welcome"])):
-            new_progress_entry["progress_welcome"][i] = None
-            
-    # Also handle data_goodbye if it ever is tracked in progress_goodbye
-    if "progress_goodbye" in new_progress_entry:
-        for i in range(len(new_progress_entry["progress_goodbye"])):
-            new_progress_entry["progress_goodbye"][i] = None
-    
-    new_progress_entry["time_start"] = None
-    new_progress_entry["time_end"] = None
-    new_progress_entry["time"] = 0
-    if "validations" in new_progress_entry:
-        new_progress_entry["validations"] = {}
-    
-    new_progress_entry["url"] = (
-        f"{campaigns_data[campaign_id]['info'].get('template', 'annotate')}"
-        f"?campaign_id={urllib.parse.quote_plus(campaign_id)}"
-        f"&user_id={new_user_id}"
-    )
-    new_progress_entry["token_correct"] = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
-    new_progress_entry["token_incorrect"] = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
-    
-    progress_data[campaign_id][new_user_id] = new_progress_entry
+        if "progress_welcome" in new_progress_entry:
+            for i in range(len(new_progress_entry["progress_welcome"])):
+                new_progress_entry["progress_welcome"][i] = None
+                
+        # Also handle data_goodbye if it ever is tracked in progress_goodbye
+        if "progress_goodbye" in new_progress_entry:
+            for i in range(len(new_progress_entry["progress_goodbye"])):
+                new_progress_entry["progress_goodbye"][i] = None
+        
+        new_progress_entry["time_start"] = None
+        new_progress_entry["time_end"] = None
+        new_progress_entry["time"] = 0
+        if "validations" in new_progress_entry:
+            new_progress_entry["validations"] = {}
+        
+        new_progress_entry["url"] = (
+            f"{campaigns_data[campaign_id]['info'].get('template', 'annotate')}"
+            f"?campaign_id={urllib.parse.quote_plus(campaign_id)}"
+            f"&user_id={new_user_id}"
+        )
+        new_progress_entry["token_correct"] = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
+        new_progress_entry["token_incorrect"] = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
+        
+        progress_data[campaign_id][new_user_id] = new_progress_entry
+        
     save_progress_data(campaign_id, progress_data[campaign_id])
     
-    return JSONResponse(content={"user_id": new_user_id}, status_code=200)
+    return JSONResponse(content={"status": "ok"}, status_code=200)
 
 
 class PurgeCampaignRequest(BaseModel):
