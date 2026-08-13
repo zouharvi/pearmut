@@ -903,7 +903,7 @@ async function display_next_payload(response: DataPayload) {
         $("#settings_word_level").trigger("change")
     }
 
-    redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
+    redrawProgress(response.info.item_i, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
     $("#progress").toggle(response.info.show_progress !== false)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
 
@@ -986,10 +986,10 @@ async function display_next_payload(response: DataPayload) {
     if (response.info.instructions) {
         $("#instructions_global").html(response.info.instructions)
     } else {
-        $("#instructions_global").html("")
+        $("#instructions_global").empty()
     }
 
-    $("#output_div").html("")
+    $("#output_div").empty()
 
     for (let item_i = 0; item_i < data.length; item_i++) {
         let item = data[item_i]
@@ -1234,18 +1234,11 @@ function display_goodbye(response: DataGoodbye, navigate_to_item: (i: number | s
     // Use instructions_goodbye if provided, otherwise use default message
     // Note: instructions_goodbye may contain arbitrary HTML including variables that are replaced server-side
 
+    $("#output_div").empty()
     $("#progress").toggle(response.info.show_progress !== false)
+    $("#instructions_global").html(response.info.instructions || "Completed")
 
-    $("#output_div").html(`
-    <div class='white-box' style='width: max-content'>
-    <h2>All done, thank you for your annotations!</h2>
-
-    ${response.instructions_goodbye}
-    <br>
-    <br>
-    </div>
-    `)
-    redrawProgress(null, response.progress_welcome, response.progress, navigate_to_item)
+    redrawProgress(null, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
     $("#button_next").prop("disabled", true)
     $("#button_next").val("Finished")
@@ -1261,7 +1254,7 @@ function display_form(response: DataForm) {
     state.output_blocks = []
     state.action_log = [{ "time": Date.now() / 1000, "action": "load" }]
 
-    redrawProgress(response.info.item_i, response.progress_welcome, response.progress, navigate_to_item)
+    redrawProgress(response.info.item_i, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
     $("#progress").toggle(response.info.show_progress !== false)
     $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
 

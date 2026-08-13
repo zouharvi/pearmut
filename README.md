@@ -126,7 +126,7 @@ The `shuffle` parameter in campaign `info` controls this behavior:
   "data": [...]
 }
 ```
-Documents in `data_welcome` are not shuffled and so don't require to have the same models in all documents.
+Documents in `data_welcome` and `data_goodbye` are not shuffled and so don't require to have the same models in all documents.
 
 ### Showing Model Names
 
@@ -330,6 +330,7 @@ To use it, simply extract the `data` attribute and prefix it to each task in you
 
 #### Universal Tutorial Items with `data_welcome`
 Use `data_welcome` to add tutorial items that users must complete before starting regular tasks. The structure is a list of documents (same as `data`). Welcome items have IDs `welcome_0`, `welcome_1`, etc. and are tracked separately via `progress_welcome`.
+This works similarly with `data_goodbye`.
 
 #### Attention Checks with `data_random`
 Use `data_random` to add items that will be shown to users randomly during their annotation process (with a probability `data_random_prob` set in `info`). 

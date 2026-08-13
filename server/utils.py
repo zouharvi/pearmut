@@ -18,7 +18,12 @@ def load_progress_data(warn: str | None = None):
         if filename.endswith(".json"):
             campaign_id = filename.removesuffix(".json")
             with open(os.path.join(progress_dir, filename), "r") as f:
-                data[campaign_id] = json.load(f)
+                data_local = json.load(f)
+                # NOTE: migration scripts will be removed in the next minor release, i.e. 1.2.0
+                # add progress_goodbye if not present (for backwards compatibility)
+                for user_progress in data_local.values():
+                    user_progress["progress_goodbye"] = user_progress.get("progress_welcome", [])
+                data[campaign_id] = data_local
 
     if not data and warn is not None:
         print(warn)
@@ -51,35 +56,53 @@ def get_db_log(campaign_id: str) -> list[dict]:
     return _logs[campaign_id]
 
 
+def get_active_db_log(campaign_id: str) -> list[dict]:
+    """
+    Returns the up to date log for the given campaign_id, but respects reset markers.
+    If a user has a reset marker, only their log entries after the last reset are returned.
+    """
+    log = get_db_log(campaign_id)
+
+    # Find the last reset marker for each user
+    last_resets = {}
+    for i, entry in enumerate(log):
+        if entry.get("annotation") == RESET_MARKER:
+            last_resets[entry.get("user_id")] = i
+
+    active_log = []
+    for i, entry in enumerate(log):
+        uid = entry.get("user_id")
+        
+        # Ignore entries that are invalidated by a reset
+        if uid in last_resets and i <= last_resets[uid]:
+            continue
+            
+        if entry.get("annotation") == RESET_MARKER:
+            continue
+            
+        active_log.append(entry)
+
+    return active_log
+
+
 def get_db_log_item(
     campaign_id: str, user_id: str | None, item_i: int | str | None
 ) -> list[dict]:
     """
     Returns the log item for the given campaign_id, user_id and item_i.
     Can be empty. Respects reset markers - if a reset marker is found,
-    only entries after the last reset are returned.
+    only entries after the last reset for a user are returned.
     """
-    log = get_db_log(campaign_id)
+    log = get_active_db_log(campaign_id)
 
-    # Filter matching entries
-    matching = [
-        entry
-        for entry in log
+    matching = []
+    for entry in log:
+        uid = entry.get("user_id")
         if (
-            (user_id is None or entry.get("user_id") == user_id)
+            (user_id is None or uid == user_id)
             and (item_i is None or entry.get("item_i") == item_i)
-        )
-    ]
-
-    # Find the last reset marker for this user (if any)
-    last_reset_idx = -1
-    for i, entry in enumerate(matching):
-        if entry.get("annotation") == RESET_MARKER:
-            last_reset_idx = i
-
-    # Return only entries after the last reset
-    if last_reset_idx >= 0:
-        matching = matching[last_reset_idx + 1 :]
+        ):
+            matching.append(entry)
 
     return matching
 

@@ -3,7 +3,7 @@ import json
 import os
 import statistics
 
-from .utils import RESET_MARKER, get_db_log
+from .utils import get_active_db_log
 
 
 def comparison_significant(
@@ -41,13 +41,8 @@ def compute_model_scores(campaign_id):
     item_i_to_item_id = collections.defaultdict(list)
 
     # Iterate through all tasks to find items with 'models' field (annotate template)
-    log = get_db_log(campaign_id)
+    log = get_active_db_log(campaign_id)
     for entry in log:
-        if entry.get("annotation") == RESET_MARKER and (item_i := entry.get("item_i")) is not None:
-            # clear all scores for this item, since it was reset
-            for model in model_scores:
-                for item_id in item_i_to_item_id[item_i]:
-                    model_scores[model].pop(item_id, None)
         if "item" not in entry or "annotation" not in entry:
             continue
 

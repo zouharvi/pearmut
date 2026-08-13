@@ -68,6 +68,7 @@ export type DataPayload = {
     status: string,
     progress: Array<string | null | Record<string, string | null>>,
     progress_welcome?: Array<boolean>,  // Optional welcome progress
+    progress_goodbye?: Array<boolean>,  // Optional goodbye progress
     time: number,
     payload: Array<DataPayloadItem>,
     payload_existing?: {
@@ -90,6 +91,7 @@ export type DataForm = {
     status: string,
     progress: Array<string | null | Record<string, string | null>>,
     progress_welcome?: Array<boolean>,  // Optional welcome progress
+    progress_goodbye?: Array<boolean>,  // Optional goodbye progress
     time: number,
     payload: Array<DataFormItem>,
     payload_existing?: {
@@ -203,10 +205,11 @@ export const MQM_ERROR_CATEGORIES: { [key: string]: string[] } = {
 export function redrawProgress(
     current_i: number | string | null,
     progress_welcome: Array<boolean> | undefined,
+    progress_goodbye: Array<boolean> | undefined,
     progress: Array<string | null | Record<string, string | null>>,
     onItemClick?: (i: number | string) => void
 ): void {
-    // Combine progress_welcome and progress for display
+    // Combine progress_welcome, progress, and progress_goodbye for display
     const combinedProgress: Array<{ complete: boolean, id: number | string }> = [];
 
     // Add welcome items first
@@ -226,6 +229,13 @@ export function redrawProgress(
             : v !== null;
         combinedProgress.push({ complete: isComplete, id: i });
     });
+
+    // Add goodbye items last
+    if (progress_goodbye && progress_goodbye.length > 0) {
+        progress_goodbye.forEach((v, i) => {
+            combinedProgress.push({ complete: v, id: `goodbye_${i}` });
+        });
+    }
 
     let html = combinedProgress.map((item, displayIndex) => {
         const isCurrent = item.id === current_i;
@@ -561,9 +571,9 @@ export type DataGoodbye = {
     status: string,
     progress: Array<string | null | Record<string, string | null>>,
     progress_welcome?: Array<boolean>,  // Optional welcome progress
+    progress_goodbye?: Array<boolean>,  // Optional goodbye progress
     time: number,
     token: string,
-    instructions_goodbye?: string,
     info: ProtocolInfo,
 }
 

@@ -365,6 +365,20 @@ def _add_single_campaign(campaign_data, overwrite, url):
             except ValueError as e:
                 raise ValueError(f"Welcome document {doc_i}: {e}")
 
+    # Validate and process data_goodbye if present
+    data_goodbye = campaign_data.get("data_goodbye", [])
+    if data_goodbye:
+        if not isinstance(data_goodbye, list):
+            raise ValueError("'data_goodbye' must be a list of documents.")
+        # Validate goodbye documents structure - each should be a list of items
+        for doc_i, doc in enumerate(data_goodbye):
+            if not isinstance(doc, list):
+                raise ValidationTypeError(f"Goodbye document {doc_i} must be a list of items.")
+            try:
+                _validate_item_structure(doc)
+            except ValueError as e:
+                raise ValueError(f"Goodbye document {doc_i}: {e}")
+
     # Validate and process data_random if present
     data_random = campaign_data.get("data_random", [])
     if data_random:
@@ -555,6 +569,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
                 else int(f"Invalid assignment: {assignment}")
             ),
             "progress_welcome": [None] * len(data_welcome),
+            "progress_goodbye": [None] * len(data_goodbye),
             "time_start": None,
             "time_end": None,
             "time": 0,
@@ -1058,6 +1073,7 @@ def _bake_existing(args_unknown):
                 "time": 0,
                 "progress": virtual_progress,
                 "progress_welcome": [],
+                "progress_goodbye": [],
                 "info": {
                     "item_i": i,
                     "instructions": _get_instructions(campaigns_data, campaign_id),

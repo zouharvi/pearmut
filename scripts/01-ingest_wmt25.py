@@ -1,11 +1,12 @@
-import os
-import json
 import collections
+import json
+import os
 import random
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)) + "/../")
 
 with open("../wmt25-general-mt/data/wmt25-genmt-humeval.jsonl", "r") as f:
-    data_wmt = [json.loads(line) for line in f.readlines()]
+    data_wmt = [json.loads(line) for line in f]
 
 documents = collections.defaultdict(list)
 

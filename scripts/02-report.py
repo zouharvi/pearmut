@@ -3,11 +3,12 @@ This script creates small annotation campaigns, speed test, and bibliography stu
 """
 
 # %%
-import random
-import json
 import collections
-import numpy as np
+import json
+import random
 import statistics
+
+import numpy as np
 import scipy.stats
 
 LANG2_TO_LANG3 = {
@@ -63,7 +64,7 @@ At the end, please evaluate the two tools each on scale of 0 (worst) to 10 (best
 - How much effort, excluding the evaluation task itself, was required to interact with the interface?
 """
 
-import subset2evaluate.utils # type: ignore
+import subset2evaluate.utils  # type: ignore
 
 data_raw = subset2evaluate.utils.load_data_wmt(
     "wmt25", "en-cs_CZ", normalize=False, include_human=True, include_ref=True
@@ -127,7 +128,9 @@ EXAMPLE_OUTPUT = {
 # %%
 
 
-def shuffled(lst, rng=random.Random()):
+def shuffled(lst, rng=None):
+    if rng is None:
+        rng = random.Random()
     lst = list(lst)
     rng.shuffle(lst)
     return lst
@@ -198,11 +201,11 @@ for langs in [
                     "mqm": [],
                     "documentID": item["doc_id"].split("_#_")[0],
                     "sourceID": "abc",
-                    "targetID": "abc.ref" + list(item["tgt"].keys())[0],
+                    "targetID": "abc.ref" + next(iter(item["tgt"].keys())),
                     "sourceText": item["src"],
-                    "targetText": list(item["tgt"].values())[0],
+                    "targetText": next(iter(item["tgt"].values())),
                     "itemType": "TGT",
-                    "_item": item["doc_id"] + " | " + list(item["tgt"].keys())[0],
+                    "_item": item["doc_id"] + " | " + next(iter(item["tgt"].keys())),
                     "itemID": item_i + doc_i * 3 + 1,
                     "isCompleteDocument": False,
                 }
@@ -248,9 +251,9 @@ python3 manage.py ExportSystemScoresToCSV abc24 > ~/pearmut/scripts/abc_data/res
 mv ~/Downloads/annotations.json ./scripts/abc_data/results/pearmut_raw.json
 """
 
+import copy
 import csv
 import glob
-import copy
 
 data_pearmut = {}
 for fname in glob.glob("abc_data/pearmut/*.json"):
@@ -326,11 +329,11 @@ with open("abc_data/results/pearmut_raw.json", "r") as f:
     data = json.load(f)
 
 tmp_counter = collections.Counter()
-for campaign_id, data in data.items():
+for campaign_id, data_local in data.items():
     if not campaign_id.startswith("abc_"):
         continue
     langs = campaign_id.removeprefix("abc_")
-    for line in data:
+    for line in data_local:
         if (
             "item" not in line
             or line["user_id"].endswith("2")
@@ -338,13 +341,13 @@ for campaign_id, data in data.items():
         ):
             continue
 
-        for item, annotation in zip(line["item"], line["annotation"]):
+        for item, annotation_global in zip(line["item"], line["annotation"]):
             found_doc = False
             # try to find the document in data_pearmut
             for doc in data_pearmut[langs]:
                 for doc_item in doc:
                     if doc_item["doc_id"] == item["doc_id"]:
-                        for model, annotation in annotation.items():
+                        for model, annotation in annotation_global.items():
                             tmp_counter[line["user_id"], model] += 1
                             doc_item["score"][model] = annotation["score"]
                             doc_item["error_spans"][model] = annotation["error_spans"]
@@ -385,7 +388,7 @@ annotations_tool = {
 }
 
 results = collections.defaultdict(lambda: collections.defaultdict(list))
-for user in responses_data["times"].keys():
+for user in responses_data["times"]:
     for tool in ["appraise", "pearmut"]:
         results["Time/item (s)"][tool] += times_by_user[user][tool]
         results["Time/char (ms)"][tool] += [
@@ -466,9 +469,9 @@ for quantity in results:
 
 
 # %%
-import scipy.stats
 import itertools
-import numpy as np
+
+import scipy.stats
 
 # inter-annotator agreement for English->Czech
 users = ["encs", "enfi", "enno"]
@@ -546,6 +549,7 @@ for tool in ["pearmut", "appraise"]:
 """
 
 import json
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -722,9 +726,10 @@ This tests Pearmut and Appraise speeds, used in the Pearmut report.
 
 # pearmut
 
-import requests
-import time
 import statistics
+import time
+
+import requests
 import scipy.stats
 
 
@@ -916,10 +921,11 @@ print(
 
 # run bash command 100 times
 
+import statistics
 import subprocess
 import time
+
 import scipy.stats
-import statistics
 
 times = []
 for _ in range(100):
@@ -950,10 +956,11 @@ print(
 
 # run bash command 100 times
 
+import statistics
 import subprocess
 import time
+
 import scipy.stats
-import statistics
 
 times = []
 for _ in range(100):

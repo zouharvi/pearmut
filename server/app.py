@@ -361,8 +361,7 @@ async def _add_new_user(request: AddNewUserRequest):
         if "progress_welcome" in new_progress_entry:
             for i in range(len(new_progress_entry["progress_welcome"])):
                 new_progress_entry["progress_welcome"][i] = None
-                
-        # Also handle data_goodbye if it ever is tracked in progress_goodbye
+        
         if "progress_goodbye" in new_progress_entry:
             for i in range(len(new_progress_entry["progress_goodbye"])):
                 new_progress_entry["progress_goodbye"][i] = None
@@ -486,7 +485,7 @@ def _add_campaign(request: AddCampaignRequest):
 def _download_annotations(
     campaign_id: Annotated[list[str], Query()],
     filename: Annotated[str, Query()] = "annotations.json",
-    # NOTE: currently not checking tokens for progress download as it is non-destructive
+    # NOTE: not checking tokens for progress download as it is non-destructive
     # token: list[str] = Query()
 ):
     output = {}

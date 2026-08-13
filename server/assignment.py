@@ -8,13 +8,14 @@ import random
 import statistics
 from typing import Any
 
+import numpy as np
 from fastapi.responses import JSONResponse
 
 from .constants import PROTOCOL_INSTRUCTIONS
 from .utils import (
     RESET_MARKER,
     check_validation_threshold,
-    get_db_log,
+    get_active_db_log,
     get_db_log_item,
     is_form_document,
     save_db_payload,
@@ -59,7 +60,7 @@ def _completed_response(
     # Get instructions_goodbye from campaign info, with default value
     instructions_goodbye = campaigns_data[campaign_id]["info"].get(
         "instructions_goodbye",
-        "If someone asks you for a token of completion, show them: ${TOKEN}",
+        "<h2>All done, thank you for your annotations!</h2><p>If someone asks you for a token of completion, show them: ${TOKEN}</p>",
     )
 
     # Replace variables ${TOKEN} and ${USER_ID}
@@ -74,13 +75,15 @@ def _completed_response(
             "status": "goodbye",
             "progress": user_progress["progress"],
             "progress_welcome": user_progress["progress_welcome"],
+            "progress_goodbye": user_progress["progress_goodbye"],
             "time": user_progress["time"],
             "token": token,
-            "instructions_goodbye": instructions_goodbye,
             "info": {
                 k: v
                 for k, v in campaigns_data[campaign_id]["info"].items()
                 if k in CAMPAIGN_INFO_PUBLIC
+            } | {
+                "instructions": instructions_goodbye,
             }
         },
         status_code=200,
@@ -107,17 +110,14 @@ def render_item_response(
             payload_existing = {"annotation": []}
             # collate multiple annotations together
             for item in items_existing:
-                if item.get("annotation") == RESET_MARKER:
-                    payload_existing["annotation"] = []
+                if payload_existing["annotation"] == []:
+                    payload_existing["annotation"] = item["annotation"]
                 else:
-                    if payload_existing["annotation"] == []:
-                        payload_existing["annotation"] = item["annotation"]
-                    else:
-                        for old, new in zip(payload_existing["annotation"], item["annotation"]):
-                            old.update(new)
-                        
-                    if "comment" in item:
-                        payload_existing["comment"] = item["comment"]
+                    for old, new in zip(payload_existing["annotation"], item["annotation"]):
+                        old.update(new)
+                    
+                if "comment" in item:
+                    payload_existing["comment"] = item["comment"]
 
     return JSONResponse(
         content={
@@ -125,6 +125,7 @@ def render_item_response(
             "time": user_progress["time"],
             "progress": user_progress["progress"],
             "progress_welcome": user_progress["progress_welcome"],
+            "progress_goodbye": user_progress["progress_goodbye"],
             "info": {
                 "item_i": item_i,
                 "instructions": _get_instructions(campaigns_data, campaign_id),
@@ -151,14 +152,32 @@ def get_next_item(
     Get the next item for the user in the specified campaign.
     """
     user_progress = progress_data[campaign_id][user_id]
-    progress_welcome = user_progress.get("progress_welcome", [])
+    progress_welcome = user_progress["progress_welcome"]
+
+    # Check if there are incomplete welcome items first - must complete all before proceeding
+    if not all(progress_welcome):
+        # Find first incomplete welcome item (sequential, not random)
+        item_i = next(i for i, v in enumerate(progress_welcome) if not v)
+        item_id = f"welcome_{item_i}"
+
+        payload = campaigns_data[campaign_id]["data_welcome"][item_i]
+
+        return render_item_response(
+            campaign_id,
+            campaigns_data,
+            user_id,
+            user_progress,
+            item_id,
+            payload,
+            fetch_existing="within_user",
+        )
     
     # Random check
     campaign_info = campaigns_data[campaign_id]["info"]
     data_random = campaigns_data[campaign_id].get("data_random")
     
     if all(progress_welcome) and data_random and random.random() < campaign_info["data_random_prob"]:
-        log = get_db_log(campaign_id)
+        log = get_active_db_log(campaign_id)
         seen_random = {
             int(entry["item_i"].split("_")[1])
             for entry in log
@@ -172,7 +191,6 @@ def get_next_item(
             item_id = f"random_{chosen_i}"
             payload = data_random[chosen_i]
 
-
             return render_item_response(
                 campaign_id,
                 campaigns_data,
@@ -185,15 +203,38 @@ def get_next_item(
 
     assignment = campaigns_data[campaign_id]["info"]["assignment"]
     if assignment == "task-based":
-        return get_next_item_taskbased(campaign_id, user_id, campaigns_data, progress_data)
+        item_to_send = get_next_item_taskbased(campaign_id, user_id, campaigns_data, progress_data)
     elif assignment == "single-stream":
-        return get_next_item_singlestream(
-            campaign_id, user_id, campaigns_data, progress_data
-        )
+        item_to_send = get_next_item_singlestream(campaign_id, user_id, campaigns_data, progress_data)
     elif assignment == "dynamic":
-        return get_next_item_dynamic(campaign_id, user_id, campaigns_data, progress_data)
+        item_to_send = get_next_item_dynamic(campaign_id, user_id, campaigns_data, progress_data)
     else:
         return JSONResponse(content="Unknown campaign assignment type", status_code=400)
+
+    if item_to_send is not None:
+        return item_to_send
+
+    progress_goodbye = user_progress["progress_goodbye"]
+
+    # Check if there are incomplete goodbye items first - must complete all before proceeding
+    if not all(progress_goodbye):
+        # Find first incomplete goodbye item (sequential)
+        item_i = next(i for i, v in enumerate(progress_goodbye) if not v)
+        item_id = f"goodbye_{item_i}"
+        payload = campaigns_data[campaign_id]["data_goodbye"][item_i]
+
+        return render_item_response(
+            campaign_id,
+            campaigns_data,
+            user_id,
+            user_progress,
+            item_id,
+            payload,
+            fetch_existing="within_user",
+        )
+
+    return _completed_response(campaigns_data, progress_data, campaign_id, user_id)
+        
 
 
 def get_i_item(
@@ -245,6 +286,15 @@ def get_i_item_taskbased(
                 content="Welcome item index out of range", status_code=400
             )
         payload = campaigns_data[campaign_id]["data_welcome"][actual_index]
+    elif isinstance(item_i, str) and item_i.startswith("goodbye_"):
+        actual_index = int(item_i.split("_")[1])
+        if actual_index < 0 or actual_index >= len(
+            campaigns_data[campaign_id]["data_goodbye"]
+        ):
+            return JSONResponse(
+                content="Goodbye item index out of range", status_code=400
+            )
+        payload = campaigns_data[campaign_id]["data_goodbye"][actual_index]
     else:
         # Prevent accessing regular items unless all welcome items are complete
         if not all(progress_welcome):
@@ -283,6 +333,7 @@ def get_i_item_singlestream(
     # Convert welcome_X string to integer index
     actual_index = item_i
     is_welcome_item = isinstance(item_i, str) and item_i.startswith("welcome_")
+    is_goodbye_item = isinstance(item_i, str) and item_i.startswith("goodbye_")
     if is_welcome_item:
         assert isinstance(item_i, str)
         actual_index = int(item_i.split("_")[1])
@@ -292,6 +343,15 @@ def get_i_item_singlestream(
                 content="Welcome item index out of range", status_code=400
             )
         payload = campaigns_data[campaign_id]["data_welcome"][actual_index]
+    elif is_goodbye_item:
+        assert isinstance(item_i, str)
+        actual_index = int(item_i.split("_")[1])
+        # Validate against total number of goodbye items
+        if actual_index < 0 or actual_index >= len(user_progress["progress_goodbye"]):
+            return JSONResponse(
+                content="Goodbye item index out of range", status_code=400
+            )
+        payload = campaigns_data[campaign_id]["data_goodbye"][actual_index]
     else:
         # Prevent accessing regular items unless all welcome items are complete
         if not all(progress_welcome):
@@ -312,7 +372,7 @@ def get_i_item_singlestream(
         user_progress,
         item_i,
         payload,
-        fetch_existing="within_user" if is_welcome_item else "across_all",
+        fetch_existing="within_user" if (is_welcome_item or is_goodbye_item) else "across_all",
     )
 
 
@@ -321,7 +381,7 @@ def get_next_item_taskbased(
     user_id: str,
     campaigns_data: dict,
     progress_data: dict,
-) -> JSONResponse:
+) -> JSONResponse | None:
     """
     Get the next item for task-based assignment.
     """
@@ -347,7 +407,7 @@ def get_next_item_taskbased(
 
     # All welcome items complete, proceed with regular items
     if all(v == "completed" for v in user_progress["progress"]):
-        return _completed_response(campaigns_data, progress_data, campaign_id, user_id)
+        return None
 
     # find first incomplete item
     item_i = min(
@@ -371,7 +431,7 @@ def get_next_item_singlestream(
     user_id: str,
     campaigns_data: dict,
     progress_data: dict,
-) -> JSONResponse:
+) -> JSONResponse | None:
     """
     Get the next item for single-stream assignment.
     In this mode, all users share the same pool of items.
@@ -382,36 +442,15 @@ def get_next_item_singlestream(
     """
     user_progress = progress_data[campaign_id][user_id]
     progress = user_progress["progress"]
-    progress_welcome = user_progress["progress_welcome"]
-
-    # Check if there are incomplete welcome items first - must complete all before proceeding
-    if not all(progress_welcome):
-        # Find first incomplete welcome item (sequential, not random)
-        item_i = next(i for i, v in enumerate(progress_welcome) if not v)
-        item_id = f"welcome_{item_i}"
-
-        payload = campaigns_data[campaign_id]["data_welcome"][item_i]
-
-        return render_item_response(
-            campaign_id,
-            campaigns_data,
-            user_id,
-            user_progress,
-            item_id,
-            payload,
-            fetch_existing="within_user",
-        )
 
     # All welcome items complete, proceed with regular items
     # Check if user reached docs_per_user limit (if specified)
-    if (
-        docs_per_user := campaigns_data[campaign_id]["info"].get("docs_per_user")
-    ) is not None:
+    if (docs_per_user := campaigns_data[campaign_id]["info"].get("docs_per_user")) is not None :
         completed_docs = sum(v == "completed" for v in progress if v)
         if completed_docs >= docs_per_user:
-            return _completed_response(campaigns_data, progress_data, campaign_id, user_id)
+            return None
     elif all(v in {"completed", "completed_foreign"} for v in progress):
-        return _completed_response(campaigns_data, progress_data, campaign_id, user_id)
+        return None
 
     # find a random incomplete item
     incomplete_indices = [
@@ -471,6 +510,23 @@ def get_i_item_dynamic(
             status_code=400,
         )
 
+    if isinstance(item_i, str) and item_i.startswith("goodbye_"):
+        actual_index = int(item_i.split("_")[1])
+        if actual_index < 0 or actual_index >= len(user_progress["progress_goodbye"]):
+            return JSONResponse(
+                content="Goodbye item index out of range", status_code=400
+            )
+
+        return render_item_response(
+            campaign_id,
+            campaigns_data,
+            user_id,
+            user_progress,
+            item_i,
+            campaign_data["data_goodbye"][actual_index],
+            fetch_existing="within_user",
+        )
+
     if (
         not isinstance(item_i, int)
         or item_i < 0
@@ -528,7 +584,7 @@ def get_next_item_dynamic(
     user_id: str,
     campaigns_data: dict,
     progress_data: dict,
-) -> JSONResponse:
+) -> JSONResponse | None:
     """
     Get the next item for dynamic assignment based on model performance.
 
@@ -543,24 +599,6 @@ def get_next_item_dynamic(
 
     user_progress = progress_data[campaign_id][user_id]
     campaign_data = campaigns_data[campaign_id]
-    progress_welcome = user_progress["progress_welcome"]
-
-    # Check if there are incomplete welcome items first - must complete all before proceeding
-    if not all(progress_welcome):
-        # Find first incomplete welcome item (sequential)
-        item_i = next(i for i, v in enumerate(progress_welcome) if not v)
-        item_id = f"welcome_{item_i}"
-
-        return render_item_response(
-            campaign_id,
-            campaigns_data,
-            user_id,
-            user_progress,
-            item_id,
-            campaign_data["data_welcome"][item_i],
-            fetch_existing="within_user",
-        )
-
 
     # Get all unique models in the campaign (all items must have all models)
     all_models = list(set(campaign_data["data"][0][0]["tgt"].keys()))
@@ -579,14 +617,14 @@ def get_next_item_dynamic(
             v == "completed" for mv in user_progress["progress"] for v in mv.values()
         )
         if math.ceil(completed_docs / dynamic_models) >= docs_per_user:
-            return _completed_response(campaigns_data, progress_data, campaign_id, user_id)
+            return None
     # Otherwise check if all models completed for all items
     elif all(
         v in {"completed", "completed_foreign"}
         for mv in user_progress["progress"]
         for v in mv.values()
     ):
-        return _completed_response(campaigns_data, progress_data, campaign_id, user_id)
+        return None
 
     # Count completed annotations per model using user_progress
     model_total_counts = {
@@ -620,18 +658,10 @@ def get_next_item_dynamic(
             k=min(dynamic_models, len(available_models)),
         )
     else:
-        import numpy as np
+        annotations = get_active_db_log(campaign_id)
 
-        annotations = get_db_log(campaign_id)
-        # Calculate model scores from annotations
         model_scores = collections.defaultdict(list)
         for annotation_line in annotations:
-            if annotation_line.get("annotation") == RESET_MARKER:
-                # reset annotations
-                # TODO: this should only reset for a single user, but it just so happens that we only allow
-                # resetting all users at the same time in dynamic assignment, so this is fine for now.
-                model_scores = collections.defaultdict(list)
-                continue
             for annotation_item in annotation_line.get("annotation", {}):
                 if annotation_item is None:  # skippable items have no annotation
                     continue
@@ -686,7 +716,7 @@ def get_next_item_dynamic(
 
     if incomplete_indices_max == 0:
         # All items are completed for the selected models
-        return _completed_response(campaigns_data, progress_data, campaign_id, user_id)
+        return None
     
 
     # take first item with the maximum number of incomplete models (lowest overlap)
@@ -731,38 +761,6 @@ def get_next_item_dynamic(
     )
 
 
-def _reset_user_time(progress_data: dict, campaign_id: str, user_id: str) -> None:
-    """Reset time tracking fields for a user."""
-    progress_data[campaign_id][user_id]["time"] = 0.0
-    progress_data[campaign_id][user_id]["time_start"] = None
-    progress_data[campaign_id][user_id]["time_end"] = None
-    progress_data[campaign_id][user_id]["validations"] = {}
-
-
-def _get_user_annotated_items(campaign_id: str, user_id: str) -> set[int | str]:
-    """
-    Get the set of item indices that a specific user has annotated.
-
-    Args:
-        campaign_id: The campaign identifier
-        user_id: The user identifier
-
-    Returns:
-        Set of item indices (item_i) that the user has annotated.
-        Can include both int indices for regular items and string IDs like "welcome_0" for welcome items.
-    """
-    log = get_db_log(campaign_id)
-    user_items = set()
-    for entry in log:
-        if (
-            entry.get("user_id") == user_id
-            and entry.get("annotation") != RESET_MARKER
-            and (item_i := entry.get("item_i")) is not None
-        ):
-            user_items.add(item_i)
-    return user_items
-
-
 def reset_campaign(
     campaign_id: str,
     user_id: str,
@@ -771,117 +769,63 @@ def reset_campaign(
 ) -> JSONResponse:
     """
     Reset the task progress for the user in the specified campaign.
-    Saves a reset marker to mask existing annotations.
-    Only resets items originally completed by this user (not completed_foreign).
+    Saves a single user-level reset marker to mask all existing annotations.
     """
+    save_db_payload(
+        campaign_id,
+        {"user_id": user_id, "annotation": RESET_MARKER},
+    )
+
+    def _reset_user_meta(progress_data: dict, campaign_id: str, user_id: str) -> None:
+        """Reset time tracking fields for a user."""
+        progress_data[campaign_id][user_id]["time"] = 0.0
+        progress_data[campaign_id][user_id]["time_start"] = None
+        progress_data[campaign_id][user_id]["time_end"] = None
+        progress_data[campaign_id][user_id]["validations"] = {}
+
+        if "progress_welcome" in progress_data[campaign_id][user_id]:
+            progress_data[campaign_id][user_id]["progress_welcome"] = [None] * len(progress_data[campaign_id][user_id]["progress_welcome"])
+
+        if "progress_goodbye" in progress_data[campaign_id][user_id]:
+            progress_data[campaign_id][user_id]["progress_goodbye"] = [None] * len(progress_data[campaign_id][user_id]["progress_goodbye"])
+
+
     assignment = campaigns_data[campaign_id]["info"]["assignment"]
     if assignment == "task-based":
-        # Save reset marker for this user to mask existing annotations
         num_items = len(campaigns_data[campaign_id]["data"][user_id])
-        for item_i in range(num_items):
-            save_db_payload(
-                campaign_id,
-                {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
-            )
         progress_data[campaign_id][user_id]["progress"] = [None] * num_items
-        # Reset welcome items progress if it exists
-        if "progress_welcome" in progress_data[campaign_id][user_id]:
-            num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
-            progress_data[campaign_id][user_id]["progress_welcome"] = [
-                False
-            ] * num_welcome
-            # Save reset markers for welcome items
-            for i in range(num_welcome):
-                save_db_payload(
-                    campaign_id,
-                    {
-                        "user_id": user_id,
-                        "item_i": f"welcome_{i}",
-                        "annotation": RESET_MARKER,
-                    },
-                )
-        _reset_user_time(progress_data, campaign_id, user_id)
+
+        _reset_user_meta(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "single-stream":
-        # Find all items that this user has annotated (has "completed")
         user_items_to_reset = [
             i
             for i, status in enumerate(progress_data[campaign_id][user_id]["progress"])
             if status == "completed"
         ]
 
-        # Save reset markers for all items this user has touched
         for item_i in user_items_to_reset:
-            save_db_payload(
-                campaign_id,
-                {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
-            )
+            progress_data[campaign_id][user_id]["progress"][item_i] = None
+            for other_uid in progress_data[campaign_id]:
+                if other_uid != user_id and progress_data[campaign_id][other_uid]["progress"][item_i] == "completed_foreign":
+                        progress_data[campaign_id][other_uid]["progress"][item_i] = None
 
-        # Reset the completed items in all users' progress (shared pool)
-        for uid in progress_data[campaign_id]:
-            for item_i in user_items_to_reset:
-                progress_data[campaign_id][uid]["progress"][item_i] = None
-
-        # Reset all welcome items progress for this user (per-user, not shared)
-        if "progress_welcome" in progress_data[campaign_id][user_id]:
-            # Save reset markers only for completed welcome items
-            for i, status in enumerate(
-                progress_data[campaign_id][user_id]["progress_welcome"]
-            ):
-                if status:  # If completed (True or "completed")
-                    save_db_payload(
-                        campaign_id,
-                        {
-                            "user_id": user_id,
-                            "item_i": f"welcome_{i}",
-                            "annotation": RESET_MARKER,
-                        },
-                    )
-            # Reset progress to False for all welcome items
-            num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
-            progress_data[campaign_id][user_id]["progress_welcome"] = [
-                False
-            ] * num_welcome
-
-        # Reset only the specified user's time
-        _reset_user_time(progress_data, campaign_id, user_id)
+        _reset_user_meta(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
     elif assignment == "dynamic":
-        # NOTE: In dynamic assignment, we call this only when we reset all users.
-        # TODO: allow per-user reset
-
-        # Reset only this user's completed items
         for item_i, item_progress in enumerate(
             progress_data[campaign_id][user_id]["progress"]
         ):
-            if any(v == "completed" for v in item_progress.values()):
-                save_db_payload(
-                    campaign_id,
-                    {"user_id": user_id, "item_i": item_i, "annotation": RESET_MARKER},
-                )
-                for model in item_progress:
-                    # NOTE: Because we're resetting all users, let's clear everything
-                    if item_progress[model] in {"completed", "completed_foreign"}:
-                        item_progress[model] = None
-        # Reset welcome items progress if it exists
-        if "progress_welcome" in progress_data[campaign_id][user_id]:
-            for i, status in enumerate(
-                progress_data[campaign_id][user_id]["progress_welcome"]
-            ):
-                if status:
-                    save_db_payload(
-                        campaign_id,
-                        {
-                            "user_id": user_id,
-                            "item_i": f"welcome_{i}",
-                            "annotation": RESET_MARKER,
-                        },
-                    )
-            num_welcome = len(progress_data[campaign_id][user_id]["progress_welcome"])
-            progress_data[campaign_id][user_id]["progress_welcome"] = [
-                False
-            ] * num_welcome
-        _reset_user_time(progress_data, campaign_id, user_id)
+            for model in item_progress:
+                if item_progress[model] == "completed":
+                    item_progress[model] = None
+                    for other_uid in progress_data[campaign_id]:
+                        if other_uid != user_id:
+                            other_progress = progress_data[campaign_id][other_uid]["progress"][item_i]
+                            if other_progress.get(model) == "completed_foreign":
+                                other_progress[model] = None
+
+        _reset_user_meta(progress_data, campaign_id, user_id)
         return JSONResponse(content="ok", status_code=200)
 
     return JSONResponse(content="Unknown assignment type", status_code=400)
@@ -907,6 +851,15 @@ def update_progress(
         )
         return JSONResponse(content={"status": "ok"}, status_code=200)
 
+    # Check if it's a goodbye item
+    if isinstance(item_i, str) and item_i.startswith("goodbye_"):
+        goodbye_index = int(item_i.split("_")[1])
+        # Update only this user's progress_goodbye (not shared)
+        progress_data[campaign_id][user_id]["progress_goodbye"][goodbye_index] = (
+            "completed"
+        )
+        return JSONResponse(content={"status": "ok"}, status_code=200)
+
     # Check if it's an item from data_random
     if isinstance(item_i, str) and item_i.startswith("random_"):
         # We don't store random item completion in progress_data,
@@ -919,7 +872,8 @@ def update_progress(
         progress_data[campaign_id][user_id]["progress"][item_i] = "completed"
         return JSONResponse(content={"status": "ok"}, status_code=200)
     elif assignment == "single-stream":
-        # Mark as completed for the current user, completed_foreign for others
+        # Mark as completed (or skipped) for the current user, completed_foreign for others
+        # This intentionally removes skipped items from the shared pool for everyone.
         for uid in progress_data[campaign_id]:
             current_status = progress_data[campaign_id][uid]["progress"][item_i]
             if uid == user_id:
@@ -933,8 +887,15 @@ def update_progress(
             # If already "completed", keep it as "completed"
         return JSONResponse(content="ok", status_code=200)
     if assignment == "dynamic":
+        annotation_data = payload.get("annotation", [])
+        if not annotation_data or annotation_data[0] is None:
+            # If skipped, mark all models for this item as completed
+            models_to_update = list(progress_data[campaign_id][user_id]["progress"][item_i].keys())
+        else:
+            models_to_update = list(annotation_data[0].keys())
+            
         # Mark as completed for the current user, completed_foreign for others
-        for model in payload["annotation"][0]:
+        for model in models_to_update:
             for uid in progress_data[campaign_id]:
                 current_status = progress_data[campaign_id][uid]["progress"][item_i][
                     model
