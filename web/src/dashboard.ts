@@ -47,7 +47,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
     <table class="dashboard-table">
         <thead><tr>
             <th style="min-width: 300px;">User</th>
-            <th style="min-width: 50px;">Progress</th>
+            <th style="min-width: 100px;">Progress</th>
             <th style="min-width: 80px;">First</th>
             <th style="min-width: 80px;">Last</th>
             <th style="min-width: 80px;">Time</th>
@@ -249,7 +249,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 let tableHtml = `
                     <table class="results-table">
                         <thead><tr>
-                            <th>Model</th>
+                            <th style="min-width: 200px;">Model</th>
                             <th>Score</th>
                             <th>Count</th>
                         </tr></thead>
