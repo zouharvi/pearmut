@@ -1,5 +1,5 @@
 import './style.css';
-import { notify } from "./utils"
+import { notify, computeProgressString } from "./utils"
 import $ from 'jquery';
 
 let searchParams = new URLSearchParams(window.location.search)
@@ -57,43 +57,12 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         <tbody>`
     for (let user_id in data) {
         const progress = data[user_id]["progress"] as Array<string | object>
-        let progress_total = progress.length
-
-        // Calculate regular progress - count "completed" items
-        let progress_count = progress.filter(v => v === "completed").length
-        if (assignment == "dynamic") {
-            progress_count = progress.map(l => Object.values(l).filter((v: string) => v === "completed").length).reduce((a, b) => a + b, 0)
-            progress_total = progress.map(l => Object.keys(l).length).reduce((a, b) => a + b, 0)
-            progress_count = Math.ceil(progress_count / campaign.dynamic_models)
-            progress_total = Math.ceil(progress_total / campaign.dynamic_models)
-        }
-
-        if ((assignment === "dynamic" || assignment === "single-stream") && campaign.docs_per_user != null) {
-            progress_total = campaign.docs_per_user
-        }
-
-        // Calculate welcome progress separately
-        let welcome_count = 0
-        let welcome_total = 0
-        let progress_display = ''
-
-        if (data[user_id]["progress_welcome"]) {
-            const welcome_progress = data[user_id]["progress_welcome"] as Array<boolean>
-            welcome_count = welcome_progress.reduce((a, b) => a + (b ? 1 : 0), 0)
-            welcome_total = welcome_progress.length
-        }
-
-        if (welcome_total > 0) {
-            // Show as "welcome_done/welcome_total+regular_done/regular_total"
-            progress_display = `${welcome_count}/${welcome_total}+${progress_count}/${progress_total}`
-        } else {
-            // No welcome items, just show regular progress
-            progress_display = `${progress_count}/${progress_total}`
-        }
+        const progressResult = computeProgressString(progress, assignment, campaign.dynamic_models, campaign.docs_per_user, data[user_id]["progress_welcome"] as Array<boolean> | undefined, data[user_id]["progress_goodbye"] as Array<boolean> | undefined);
+        let progress_display = progressResult.display;
 
         // Calculate total for status determination
-        let total_count = welcome_count + progress_count
-        let total_total = welcome_total + progress_total
+        let total_count = progressResult.total_count;
+        let total_total = progressResult.total_total;
 
         let threshold_passed = data[user_id]["threshold_passed"]
         let status = ''

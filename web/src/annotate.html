@@ -201,29 +201,24 @@
       style="max-width: 1800px; min-width: 800px; margin-left: auto; margin-right: auto; margin-top: 20px; padding-left: 10px;">
       <div class="white-box" style="margin-right: 10px; background-color: #e7e2cf; padding: 5px 15px 5px 5px;">
 
-        <span id="instructions_global" style="display: inline-block; font-size: 11pt; width: calc(100% - 175px);">
+        <span id="instructions_global" style="display: inline-block; font-size: 11pt; width: calc(100% - 250px);">
         </span>
 
-        <div id="progress_div"
-          style="width: 170px; display: inline-block; vertical-align: top; text-align: right; padding-top: 5px;">
+        <div id="progress_div" style="width: 250px; display: inline-block; vertical-align: top; padding-top: 5px; text-align: center;">
 
-          <span id="time" style="width: 135px; text-align: left; display: inline-block; font-size: 11pt;"
-            title="Approximation of total annotation time.">Time:
-            0m</span>
-          <input type="button" value="⚙️" id="button_settings" style="height: 1.5em; width: 30px; padding: 0;">
-
+          <div id="progress_text" style="font-size: 11pt; margin-top: 5px;" title="Annotation time; Completed / Total screens"></div>
+          
           <br>
           <br>
-
+          
           <div id="progress" style="text-align: center;"></div>
-
+          
           <br>
           <br>
-
+          
           <input type="button" value="Next 🛠️" id="button_next" class="button-disabled" style="width: 170px; height: 2.5em;">
-
-          <input type="button" value="Skip ⏭️" id="button_skip"
-            style="width: 170px; font-size: 11pt; height: 30px; margin-top: 10px; display: none;">
+          <input type="button" value="Skip ⏭️" id="button_skip" style="width: 170px; font-size: 11pt; height: 30px; margin-top: 10px; display: none;">
+          <input type="button" value="⚙️" id="button_settings" style="height: 1.5em; width: 30px; padding: 0; margin-right: -50px;">
         </div>
       </div>
       <div id="settings_div" class="white-box"

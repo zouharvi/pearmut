@@ -14,6 +14,7 @@ Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.
   - Add button to dynamically add new users to existing running campaigns
   - Add `data_goodbye`
   - Enable per-user reset in single-stream and dynamic campaigns
+  - Add user-facing tracker
 - v1.1.5
   - Add `show_progress` flag to dashboard
   - Default to a single user for single-stream and dynamic campaigns if not specified

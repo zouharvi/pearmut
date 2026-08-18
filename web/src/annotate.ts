@@ -28,6 +28,7 @@ import {
     DataPayloadItem,
     MQM_ERROR_CATEGORIES,
     MQM_SEVERITIES,
+    computeProgressString,
 } from './utils';
 
 
@@ -905,7 +906,8 @@ async function display_next_payload(response: DataPayload) {
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
     $("#progress").toggle(response.info.show_progress !== false)
-    $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
+    const progressResult = computeProgressString(response.progress, undefined, undefined, undefined, response.progress_welcome, response.progress_goodbye);
+    $("#progress_text").html(`Time: ${Math.round(response.time / 60)}m&nbsp;&nbsp;&nbsp;&nbsp;Progress: ${progressResult.display}`)
 
     let data = response.payload
     // Initialize response log - use payload_existing if available
@@ -1239,7 +1241,8 @@ function display_goodbye(response: DataGoodbye, navigate_to_item: (i: number | s
     $("#instructions_global").html(response.info.instructions || "Completed")
 
     redrawProgress(null, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
-    $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
+    const progressResult = computeProgressString(response.progress, undefined, undefined, undefined, response.progress_welcome, response.progress_goodbye);
+    $("#progress_text").html(`Time: ${Math.round(response.time / 60)}m&nbsp;&nbsp;&nbsp;&nbsp;Progress: ${progressResult.display}`)
     $("#button_next").prop("disabled", true)
     $("#button_next").val("Finished")
 }
@@ -1256,7 +1259,8 @@ function display_form(response: DataForm) {
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
     $("#progress").toggle(response.info.show_progress !== false)
-    $("#time").text(`Time: ${Math.round(response.time / 60)}m`)
+    const progressResult = computeProgressString(response.progress, undefined, undefined, undefined, response.progress_welcome, response.progress_goodbye);
+    $("#progress_text").html(`Time: ${Math.round(response.time / 60)}m&nbsp;&nbsp;&nbsp;&nbsp;Progress: ${progressResult.display}`)
 
     // Display instructions if present
     if (response.info.instructions) {

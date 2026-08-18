@@ -719,3 +719,74 @@ export function debounce2(fn: Function, delay: number): (...args: any[]) => void
         timer = window.setTimeout(() => timer = undefined, delay)
     }
 }
+
+/**
+ * Computes a human-readable progress string (e.g. "5/10" or "2/2+5/10").
+ * Factored out from dashboard.ts to be used in both dashboard.ts and annotate.ts.
+ */
+export function computeProgressString(
+    progress: Array<any>,
+    assignment: string | undefined,
+    dynamic_models: number | undefined,
+    docs_per_user: number | undefined | null,
+    progress_welcome: Array<boolean> | undefined,
+    progress_goodbye: Array<boolean> | undefined = undefined
+): { display: string, total_count: number, total_total: number } {
+    let progress_total = progress.length
+    
+    // Calculate regular progress - count "completed" items
+    let progress_count = progress.filter(v => v === "completed").length
+    if (assignment === "dynamic") {
+        progress_count = progress.map(l => Object.values(l).filter((v: any) => v === "completed").length).reduce((a, b) => a + b, 0)
+        progress_total = progress.map(l => Object.keys(l).length).reduce((a, b) => a + b, 0)
+        if (dynamic_models) {
+            progress_count = Math.ceil(progress_count / dynamic_models)
+            progress_total = Math.ceil(progress_total / dynamic_models)
+        }
+    } else if (assignment === undefined) {
+        // Fallback if assignment is unknown (e.g. from annotate.ts)
+        let is_dynamic = progress.length > 0 && typeof progress[0] === 'object' && progress[0] !== null;
+        if (is_dynamic) {
+            // Count a screen as completed if any model on it is completed
+            progress_count = progress.filter(v => typeof v === 'object' && v !== null && Object.values(v).some(status => status === "completed")).length
+        } else {
+            progress_count = progress.filter(v => v === "completed").length
+        }
+    }
+
+    if ((assignment === "dynamic" || assignment === "single-stream") && docs_per_user != null) {
+        progress_total = docs_per_user
+    }
+
+    // Calculate welcome progress separately
+    let welcome_count = 0
+    let welcome_total = 0
+
+    if (progress_welcome) {
+        welcome_count = progress_welcome.reduce((a, b) => a + (b ? 1 : 0), 0)
+        welcome_total = progress_welcome.length
+    }
+
+    // Calculate goodbye progress separately
+    let goodbye_count = 0
+    let goodbye_total = 0
+
+    if (progress_goodbye) {
+        goodbye_count = progress_goodbye.reduce((a, b) => a + (b ? 1 : 0), 0)
+        goodbye_total = progress_goodbye.length
+    }
+
+    let display = "";
+    if (welcome_total > 0 || goodbye_total > 0) {
+        let parts = [];
+        if (welcome_total > 0) parts.push(`${welcome_count}/${welcome_total}`);
+        parts.push(`${progress_count}/${progress_total}`);
+        if (goodbye_total > 0) parts.push(`${goodbye_count}/${goodbye_total}`);
+        display = parts.join('+');
+    } else {
+        // No welcome items, just show regular progress
+        display = `${progress_count}/${progress_total}`
+    }
+
+    return { display, total_count: welcome_count + progress_count + goodbye_count, total_total: welcome_total + progress_total + goodbye_total }
+}
