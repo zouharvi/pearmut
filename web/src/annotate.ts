@@ -906,7 +906,7 @@ async function display_next_payload(response: DataPayload) {
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
     $("#progress").toggle(response.info.show_progress !== false)
-    const progressResult = computeProgressString(response.progress, undefined, undefined, undefined, response.progress_welcome, response.progress_goodbye);
+    const progressResult = computeProgressString(response.progress, response.info.assignment, response.info.dynamic_models, response.info.docs_per_user, response.progress_welcome, response.progress_goodbye);
     $("#progress_text").html(`Time: ${Math.round(response.time / 60)}m&nbsp;&nbsp;&nbsp;&nbsp;Progress: ${progressResult.display}`)
 
     let data = response.payload
@@ -1241,7 +1241,7 @@ function display_goodbye(response: DataGoodbye, navigate_to_item: (i: number | s
     $("#instructions_global").html(response.info.instructions || "Completed")
 
     redrawProgress(null, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
-    const progressResult = computeProgressString(response.progress, undefined, undefined, undefined, response.progress_welcome, response.progress_goodbye);
+    const progressResult = computeProgressString(response.progress, response.info.assignment, response.info.dynamic_models, response.info.docs_per_user, response.progress_welcome, response.progress_goodbye);
     $("#progress_text").html(`Time: ${Math.round(response.time / 60)}m&nbsp;&nbsp;&nbsp;&nbsp;Progress: ${progressResult.display}`)
     $("#button_next").prop("disabled", true)
     $("#button_next").val("Finished")
@@ -1259,7 +1259,7 @@ function display_form(response: DataForm) {
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
     $("#progress").toggle(response.info.show_progress !== false)
-    const progressResult = computeProgressString(response.progress, undefined, undefined, undefined, response.progress_welcome, response.progress_goodbye);
+    const progressResult = computeProgressString(response.progress, response.info.assignment, response.info.dynamic_models, response.info.docs_per_user, response.progress_welcome, response.progress_goodbye);
     $("#progress_text").html(`Time: ${Math.round(response.time / 60)}m&nbsp;&nbsp;&nbsp;&nbsp;Progress: ${progressResult.display}`)
 
     // Display instructions if present

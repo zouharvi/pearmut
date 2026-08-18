@@ -35,6 +35,9 @@ CAMPAIGN_INFO_PUBLIC = {
     "mqm_severities",
     "slider_colors",
     "special_tokens",
+    "assignment",
+    "dynamic_models",
+    "docs_per_user",
 }
 
 

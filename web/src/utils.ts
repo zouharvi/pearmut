@@ -256,8 +256,8 @@ export function redrawProgress(
     if (onItemClick) {
         $("#progress span").on("click", function () {
             const id = $(this).data("id");
-            // Convert back to number if it's not a welcome item
-            const itemId = typeof id === "string" && id.startsWith("welcome_") ? id : parseInt(id);
+            // Convert back to number if it's a regular item
+            const itemId = typeof id === "string" && (id.startsWith("welcome_") || id.startsWith("goodbye_")) ? id : parseInt(id);
             onItemClick(itemId);
         });
     }
@@ -600,6 +600,9 @@ export type ProtocolInfo = {
     mqm_severities?: string[],  // Optional custom MQM severities
     slider_colors?: boolean,  // Optional slider colors
     special_tokens?: string[],  // Optional custom special tokens
+    assignment?: string,
+    dynamic_models?: number,
+    docs_per_user?: number,
 }
 
 
@@ -730,7 +733,7 @@ export function computeProgressString(
     dynamic_models: number | undefined,
     docs_per_user: number | undefined | null,
     progress_welcome: Array<boolean> | undefined,
-    progress_goodbye: Array<boolean> | undefined = undefined
+    progress_goodbye: Array<boolean> | undefined,
 ): { display: string, total_count: number, total_total: number } {
     let progress_total = progress.length
     
@@ -742,15 +745,6 @@ export function computeProgressString(
         if (dynamic_models) {
             progress_count = Math.ceil(progress_count / dynamic_models)
             progress_total = Math.ceil(progress_total / dynamic_models)
-        }
-    } else if (assignment === undefined) {
-        // Fallback if assignment is unknown (e.g. from annotate.ts)
-        let is_dynamic = progress.length > 0 && typeof progress[0] === 'object' && progress[0] !== null;
-        if (is_dynamic) {
-            // Count a screen as completed if any model on it is completed
-            progress_count = progress.filter(v => typeof v === 'object' && v !== null && Object.values(v).some(status => status === "completed")).length
-        } else {
-            progress_count = progress.filter(v => v === "completed").length
         }
     }
 

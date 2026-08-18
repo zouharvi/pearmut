@@ -57,7 +57,10 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         <tbody>`
     for (let user_id in data) {
         const progress = data[user_id]["progress"] as Array<string | object>
-        const progressResult = computeProgressString(progress, assignment, campaign.dynamic_models, campaign.docs_per_user, data[user_id]["progress_welcome"] as Array<boolean> | undefined, data[user_id]["progress_goodbye"] as Array<boolean> | undefined);
+        const progressResult = computeProgressString(
+            progress, assignment, campaign.dynamic_models, campaign.docs_per_user,
+            data[user_id]["progress_welcome"] as Array<boolean> | undefined, data[user_id]["progress_goodbye"] as Array<boolean> | undefined
+        );
         let progress_display = progressResult.display;
 
         // Calculate total for status determination
