@@ -18,13 +18,13 @@ if (tokens.length != 0 && tokens.length != campaign_ids.length) {
     throw new Error("Mismatched number of tokens and campaign IDs")
 }
 
-function delta_to_human(delta: number): string {
+function delta_to_human(delta: number, no_days: boolean): string {
     /* Convert a time delta in seconds to a human-readable format */
     if (delta < 60) {
         return `${Math.round(delta)}s`
     } else if (delta < 60 * 60) {
         return `${Math.round(delta / 60)}m`
-    } else if (delta < 60 * 60 * 24) {
+    } else if (delta < 60 * 60 * 24 || no_days) {
         return `${Math.round(delta / 60 / 60)}h`
     } else {
         return `${Math.round(delta / 60 / 60 / 24)}d`
@@ -92,12 +92,12 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         if (data[user_id]["time_start"] == null) {
             html += `<td title="N/A"></td>`
         } else {
-            html += `<td title="${new Date(data[user_id]["time_start"] * 1000).toLocaleString()}">${delta_to_human(Date.now() / 1000 - data[user_id]["time_start"])} ago</td>`
+            html += `<td title="${new Date(data[user_id]["time_start"] * 1000).toLocaleString()}">${delta_to_human(Date.now() / 1000 - data[user_id]["time_start"], false)} ago</td>`
         }
         if (data[user_id]["time_end"] == null) {
             html += `<td title="N/A"></td>`
         } else {
-            html += `<td title="${new Date(data[user_id]["time_end"] * 1000).toLocaleString()}">${delta_to_human(Date.now() / 1000 - data[user_id]["time_end"])} ago</td>`
+            html += `<td title="${new Date(data[user_id]["time_end"] * 1000).toLocaleString()}">${delta_to_human(Date.now() / 1000 - data[user_id]["time_end"], false)} ago</td>`
         }
         html += `<td title="Active time; idle at most 1 minute (click, mouse movement, ...)">${Math.round(data[user_id]["time"] / 60)}m</td>`
 
@@ -173,7 +173,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 <h3 style="margin: 0; padding-bottom: 5px;">
                 ${campaign_id} 
                 <span style="font-weight: normal; font-size: 0.8em; color: #666; margin-left: 5px;" title="Campaign progress (regular items)">${campaign_progress}/${campaign_total}</span>
-                <span style="font-weight: normal; font-size: 0.8em; color: #666; margin-left: 5px;" title="Active time; idle at most 1 minute (click, mouse movement, ...)">${delta_to_human(campaign_time)}</span>
+                <span style="font-weight: normal; font-size: 0.8em; color: #666; margin-left: 5px;" title="Active time; idle at most 1 minute (click, mouse movement, ...)">${delta_to_human(campaign_time, false)}</span>
                 <span style="float: right; margin-right: 20px;">
                     ${(token !== null && (assignment === "single-stream" || assignment === "dynamic")) ? '<a class="add-user-btn" style="cursor: pointer;" title="Add new user">🧑</a>' : ''}
                     &nbsp;
