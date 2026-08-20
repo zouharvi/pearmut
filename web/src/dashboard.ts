@@ -173,7 +173,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 <h3 style="margin: 0; padding-bottom: 5px;">
                 ${campaign_id} 
                 <span style="font-weight: normal; font-size: 0.8em; color: #666; margin-left: 5px;" title="Campaign progress (regular items)">${campaign_progress}/${campaign_total}</span>
-                <span style="font-weight: normal; font-size: 0.8em; color: #666; margin-left: 5px;" title="Active time; idle at most 1 minute (click, mouse movement, ...)">${delta_to_human(campaign_time, false)}</span>
+                <span style="font-weight: normal; font-size: 0.8em; color: #666; margin-left: 5px;" title="Active time; idle at most 1 minute (click, mouse movement, ...)">${delta_to_human(campaign_time, true)}</span>
                 <span style="float: right; margin-right: 20px;">
                     ${(token !== null && (assignment === "single-stream" || assignment === "dynamic")) ? '<a class="add-user-btn" style="cursor: pointer;" title="Add new user">🧑</a>' : ''}
                     &nbsp;
