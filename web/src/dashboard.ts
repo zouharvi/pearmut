@@ -50,7 +50,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
             <th style="min-width: 100px;">Progress</th>
             <th style="min-width: 80px;">First</th>
             <th style="min-width: 80px;">Last</th>
-            <th style="min-width: 80px;">Time</th>
+            <th style="min-width: 80px;" title="Idle at most 1 minute between actions (click, mouse movement, ...)">Active time</th>
             <th style="min-width: 70px;">Checks</th>
             <th style="min-width: 50px;">Actions</th>
         </tr></thead>
@@ -99,7 +99,7 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         } else {
             html += `<td title="${new Date(data[user_id]["time_end"] * 1000).toLocaleString()}">${delta_to_human(Date.now() / 1000 - data[user_id]["time_end"])} ago</td>`
         }
-        html += `<td>${Math.round(data[user_id]["time"] / 60)}m</td>`
+        html += `<td title="Active time; idle at most 1 minute (click, mouse movement, ...)">${Math.round(data[user_id]["time"] / 60)}m</td>`
 
         let validation_passed = data[user_id]["validations"].reduce((a: number, b: boolean) => a + (b ? 1 : 0), 0)
         let validation_total = data[user_id]["validations"].length
@@ -123,9 +123,13 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
 
     let campaign_progress = 0;
     let campaign_total = 0;
+    let campaign_time = 0;
     let user_ids = Object.keys(data);
     
     if (user_ids.length > 0) {
+        for (let user_id of user_ids) {
+            campaign_time += data[user_id]["time"] || 0;
+        }
         if (assignment === "task-based") {
             for (let user_id of user_ids) {
                 const progress = data[user_id]["progress"] as Array<string>;
@@ -168,7 +172,8 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
             <div>
                 <h3 style="margin: 0; padding-bottom: 5px;">
                 ${campaign_id} 
-                <span style="font-weight: normal; font-size: 0.8em; color: #666; margin-left: 5px;" title="Campaign progress (regular items)">(${campaign_progress}/${campaign_total})</span>
+                <span style="font-weight: normal; font-size: 0.8em; color: #666; margin-left: 5px;" title="Campaign progress (regular items)">${campaign_progress}/${campaign_total}</span>
+                <span style="font-weight: normal; font-size: 0.8em; color: #666; margin-left: 5px;" title="Active time; idle at most 1 minute (click, mouse movement, ...)">${delta_to_human(campaign_time)}</span>
                 <span style="float: right; margin-right: 20px;">
                     ${(token !== null && (assignment === "single-stream" || assignment === "dynamic")) ? '<a class="add-user-btn" style="cursor: pointer;" title="Add new user">🧑</a>' : ''}
                     &nbsp;
