@@ -55,6 +55,9 @@ def compute_model_scores(campaign_id):
             if item_annotation is None:  # skippable items have no annotation
                 continue
 
+            if not isinstance(item_annotation, dict):
+                continue
+
             for model, annotation in item_annotation.items():
                 if "score" in annotation and annotation["score"] is not None:
                     final_item_id = item.get("item_id", json.dumps(item | {"tgt": None}))
