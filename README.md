@@ -445,22 +445,10 @@ Some basic HTML tags are supported: `b`, `strong`, `em`, `i`, `br`, `h1`, `h2`, 
 
 ### Hosting Assets
 
-Host local assets (audio, images, videos) using the `assets` key:
-
-```python
-{
-    "campaign_id": "my_campaign",
-    "info": { 
-      "assets": {
-        "source": "videos",                    # Source directory
-        "destination": "assets/my_videos"      # Mount path (must start with "assets/")
-      }
-    },
-    "data": [ ... ]
-}
-```
-
-Files from `videos/` become accessible at `localhost:8001/assets/my_videos/`. Creates a symlink, so source directory must exist throughout annotation. Destination paths must be unique across campaigns.
+Host local assets (audio, images, videos) by manually copying them into the `data/assets/` directory.
+This directory is automatically created by the server upon startup and becomes accessible at the `/assets/` URL path.
+For example, if you place a video at `data/assets/video.mp4`, it will be available at `localhost:8001/assets/video.mp4`.
+You can then reference this URL in your campaign definitions by `data/assets/video.mp4`.
 
 
 ## CLI Commands

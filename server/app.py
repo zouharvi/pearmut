@@ -428,15 +428,6 @@ async def _purge_campaign(request: PurgeCampaignRequest):
     if token != campaigns_data[campaign_id]["token"]:
         return JSONResponse(content="Invalid token", status_code=400)
 
-    # Unlink assets if they exist
-    destination = (
-        campaigns_data[campaign_id].get("info", {}).get("assets", {}).get("destination")
-    )
-    if destination:
-        symlink_path = f"{ROOT}/data/{destination}".rstrip("/")
-        if os.path.islink(symlink_path):
-            os.remove(symlink_path)
-
     # Remove task file
     task_file = f"{ROOT}/data/campaigns/{campaign_id}.json"
     if os.path.exists(task_file):

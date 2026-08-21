@@ -585,70 +585,6 @@ def _add_single_campaign(campaign_data, overwrite, url):
         for user_id in user_ids
     }
 
-    # Handle assets symlink if specified
-    if "assets" in campaign_data["info"]:
-        assets_config = campaign_data["info"]["assets"]
-
-        # assets must be a dictionary with source and destination keys
-        if not isinstance(assets_config, dict):
-            raise ValueError(
-                "Assets must be a dictionary with 'source' and 'destination' keys."
-            )
-        if "source" not in assets_config or "destination" not in assets_config:
-            raise ValueError(
-                "Assets config must contain 'source' and 'destination' keys."
-            )
-
-        assets_source = assets_config["source"]
-        assets_destination = assets_config["destination"]
-
-        # Validate destination starts with 'assets/'
-        if not assets_destination.startswith("assets/"):
-            raise ValueError(
-                f"Assets destination '{assets_destination}' must start with 'assets/'."
-            )
-
-        # Resolve relative paths from the caller's current working directory
-        assets_real_path = os.path.abspath(assets_source)
-
-        if not os.path.isdir(assets_real_path):
-            raise ValueError(
-                f"Assets source path '{assets_real_path}' must be an existing directory."
-            )
-
-        # Symlink path is based on the destination, stripping the 'assets/' prefix
-        # User assets are now stored under data/assets/ instead of static/assets/
-        symlink_path = f"{ROOT}/data/{assets_destination}".rstrip("/")
-
-        # Remove existing symlink if present and we are overriding the same campaign
-        if os.path.lexists(symlink_path):
-            # Check if any other campaign is using this destination
-            current_campaign_id = campaign_data["campaign_id"]
-
-            for other_campaign_id in progress_data:
-                if other_campaign_id == current_campaign_id:
-                    continue
-                with open(f"{ROOT}/data/campaigns/{other_campaign_id}.json", "r") as f:
-                    other_campaign = json.load(f)
-                    other_assets = other_campaign.get("info", {}).get("assets")
-                    if other_assets and other_assets.get("destination") == assets_destination:
-                        raise ValueError(
-                            f"Assets destination '{assets_destination}' is already used by campaign '{other_campaign_id}'."
-                        )
-            # Only allow overwrite if it's the same campaign
-            if overwrite:
-                os.remove(symlink_path)
-            else:
-                raise ValueError(
-                    f"Assets destination '{assets_destination}' is already taken."
-                )
-
-        # Ensure the assets directory exists
-        # get parent of symlink_path dir
-        os.makedirs(os.path.dirname(symlink_path), exist_ok=True)
-
-        os.symlink(assets_real_path, symlink_path, target_is_directory=True)
-        print(f"Assets symlinked: {symlink_path} -> {assets_real_path}")
 
     # Shuffle data if shuffle parameter is true (defaults to true)
     should_shuffle = campaign_data["info"].get("shuffle", True)
@@ -856,22 +792,6 @@ def main():
     elif args.command == "purge":
         import shutil
 
-        def _unlink_assets(campaign_id):
-            """Unlink assets symlink for a campaign if it exists."""
-            task_file = f"{ROOT}/data/campaigns/{campaign_id}.json"
-            if not os.path.exists(task_file):
-                return
-            with open(task_file, "r") as f:
-                campaign_data = json.load(f)
-            destination = (
-                campaign_data.get("info", {}).get("assets", {}).get("destination")
-            )
-            if destination:
-                symlink_path = f"{ROOT}/data/{destination}".rstrip("/")
-                if os.path.islink(symlink_path):
-                    os.remove(symlink_path)
-                    print(f"Assets symlink removed: {symlink_path}")
-
         # Parse optional campaign name
         purge_args = argparse.ArgumentParser()
         purge_args.add_argument(
@@ -894,8 +814,6 @@ def main():
                 f"Are you sure you want to purge campaign '{campaign_id}'? This action cannot be undone. [y/n] "
             )
             if confirm.lower() == "y":
-                # Unlink assets before removing task file
-                _unlink_assets(campaign_id)
                 # Remove task file
                 task_file = f"{ROOT}/data/campaigns/{campaign_id}.json"
                 if os.path.exists(task_file):
@@ -920,9 +838,6 @@ def main():
                 "Are you sure you want to purge all campaign data? This action cannot be undone. [y/n] "
             )
             if confirm.lower() == "y":
-                # Unlink all assets first
-                for campaign_id in progress_data:
-                    _unlink_assets(campaign_id)
                 shutil.rmtree(f"{ROOT}/data/campaigns", ignore_errors=True)
                 shutil.rmtree(f"{ROOT}/data/outputs", ignore_errors=True)
                 if os.path.exists(f"{ROOT}/data/progress"):
