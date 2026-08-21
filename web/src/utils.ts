@@ -106,10 +106,10 @@ export type DataForm = {
  * For MQM protocol, category must contain "/" to indicate both main category and subcategory are set.
  * For ESA protocol (no categories), only severity is required.
  */
-export function isSpanComplete(span: ErrorSpan, protocol_error_categories: boolean): boolean {
+export function isSpanComplete(span: ErrorSpan, protocol_error_categories: boolean, mqm_categories: { [key: string]: string[] } | "input"): boolean {
     if (span.severity == null) return false
     // MQM categories require format "MainCategory/SubCategory" (e.g., "Accuracy/Mistranslation")
-    if (protocol_error_categories && (span.category == null || !span.category.includes("/"))) return false
+    if (protocol_error_categories && (span.category == null || (!span.category.includes("/") && mqm_categories != "input"))) return false
     return true
 }
 
@@ -287,18 +287,21 @@ export function createSpanToolbox(
     onDelete: () => void,
     onUpdate: () => void,
     frozenMode: boolean = false,
-    mqm_categories: { [key: string]: string[] } = MQM_ERROR_CATEGORIES,
+    mqm_categories: { [key: string]: string[] } | "input" = MQM_ERROR_CATEGORIES,
     mqm_severities: string[] = MQM_SEVERITIES
 ): JQuery<HTMLElement> {
+    let mqmHtml = mqm_categories === "input" 
+        ? `<input type="text" placeholder="Category" class="mqm_input_text" style="height: 2em; width: 100%; border-radius: 4px; padding: 2px 4px; border: 1px solid #ccc; font-size: 14px;" />`
+        : `<select style="height: 2em; width: 100%;"></select><br><select style="height: 2em; width: 100%; margin-top: 3px;" disabled></select>`;
+
     let toolbox = $(`
     <div class='span_toolbox_parent'>
     <div class='span_toolbox'>
       <div class="span_toolbox_esa" style="display: inline-block; width: 70px; padding-right: 5px;">
         <input type="button" class="error_delete" style="border-radius: 8px;" value="Remove">
       </div>
-      <div class="span_toolbox_mqm" style="display: inline-block; width: 140px; vertical-align: top;">
-        <select style="height: 2em; width: 100%;"></select><br>
-        <select style="height: 2em; width: 100%; margin-top: 3px;" disabled></select>
+      <div class="span_toolbox_mqm" style="display: inline-block; width: 140px; vertical-align: top; padding-right: 10px;">
+        ${mqmHtml}
       </div>
     </div>
     </div>
@@ -312,9 +315,13 @@ export function createSpanToolbox(
 
     let cat1_select = toolbox.find("select").eq(0)
     let cat2_select = toolbox.find("select").eq(1)
+    let input_text = toolbox.find(".mqm_input_text")
 
-    for (let category1 of Object.keys(mqm_categories)) {
-        cat1_select.append(`<option value="${category1}">${category1}</option>`)
+    if (mqm_categories !== "input") {
+        const mqm_cats = mqm_categories as { [key: string]: string[] };
+        for (let category1 of Object.keys(mqm_cats)) {
+            cat1_select.append(`<option value="${category1}">${category1}</option>`)
+        }
     }
 
     if (!protocol_error_categories) {
@@ -323,40 +330,49 @@ export function createSpanToolbox(
     }
 
     if (!frozenMode) {
-        // MQM Category Change
-        cat1_select.on("change", function () {
-            let cat1 = (<HTMLSelectElement>this).value
-            error_span.category = cat1
-            cat2_select.empty()
-            let cat2s = mqm_categories[cat1]
-            cat2_select.prop("disabled", false)
-            for (let subcat of cat2s) {
-                cat2_select.append(`<option value="${subcat}">${subcat}</option>`)
-            }
-            if (cat1 == "") {
-                cat2_select.prop("disabled", true)
-                error_span.category = ""
-            } else if (cat2s.length == 1) {
-                // No subcategories - disable subcategory select and use category alone
-                cat2_select.prop("disabled", true)
-                error_span.category = `${cat1}/${cat1}`
-            } else {
-                error_span.category = `${cat1}`
-            }
-            onUpdate()
-        })
+        if (mqm_categories === "input") {
+            input_text.on("input", function () {
+                error_span.category = (<HTMLInputElement>this).value
+                onUpdate()
+            })
+        } else {
+            let mqm_cats = mqm_categories as { [key: string]: string[] };
+            // MQM Category Change
+            cat1_select.on("change", function () {
+                let cat1 = (<HTMLSelectElement>this).value
+                error_span.category = cat1
+                cat2_select.empty()
+                let cat2s = mqm_cats[cat1]
+                cat2_select.prop("disabled", false)
+                for (let subcat of cat2s) {
+                    cat2_select.append(`<option value="${subcat}">${subcat}</option>`)
+                }
+                if (cat1 == "") {
+                    cat2_select.prop("disabled", true)
+                    error_span.category = ""
+                } else if (cat2s.length == 1) {
+                    // No subcategories - disable subcategory select and use category alone
+                    cat2_select.prop("disabled", true)
+                    error_span.category = `${cat1}/${cat1}`
+                } else {
+                    error_span.category = `${cat1}`
+                }
+                onUpdate()
+            })
 
-        // MQM Subcategory Change
-        cat2_select.on("change", function () {
-            let cat1 = cat1_select.val() as string
-            let cat2 = (<HTMLSelectElement>this).value
-            if (cat2 == "" && mqm_categories[cat1].length > 0) {
-                error_span.category = `${cat1}`
-            } else {
-                error_span.category = `${cat1}/${cat2}`
-            }
-            onUpdate()
-        })
+            // MQM Subcategory Change
+            cat2_select.on("change", function () {
+                let cat1 = cat1_select.val() as string
+                let cat2 = (<HTMLSelectElement>this).value
+                if (cat2 == "" && mqm_cats[cat1].length > 0) {
+                    error_span.category = `${cat1}`
+                } else {
+                    error_span.category = `${cat1}/${cat2}`
+                }
+                onUpdate()
+            })
+        }
+
 
         // Delete
         toolbox.find(".error_delete").on("click", () => {
@@ -390,31 +406,40 @@ export function createSpanToolbox(
         // Frozen mode disabling
         toolbox.find(".span_toolbox_esa input[type='button']").prop("disabled", true)
         toolbox.find("select").prop("disabled", true)
+        toolbox.find("input[type='text']").prop("disabled", true)
     }
 
     // Restore State
     if (protocol_error_categories && error_span.category) {
-        let parts = error_span.category.split("/")
-        let cat1 = parts[0]
-        let cat2 = parts.length > 1 ? parts[1] : null
-
-        // Handle case where category might not exist in the taxonomy
-        if (mqm_categories[cat1] === undefined && cat1 !== "" && error_span.category !== "") {
-            // fallback if string is exact match?
-            cat1 = error_span.category
-        }
-
-        cat1_select.val(cat1)
-
-        let cat2s = mqm_categories[cat1]
-        if (cat2s && cat2s.length > 0) {
-            if (!frozenMode) {
-                cat2_select.empty().prop("disabled", false)
+        if (mqm_categories === "input") {
+            input_text.val(error_span.category);
+            if (frozenMode) {
+                input_text.prop("disabled", true);
             }
-            for (let subcat of cat2s) {
-                cat2_select.append(`<option value="${subcat}">${subcat}</option>`)
+        } else {
+            let mqm_cats = mqm_categories as { [key: string]: string[] };
+            let parts = error_span.category.split("/")
+            let cat1 = parts[0]
+            let cat2 = parts.length > 1 ? parts[1] : null
+
+            // Handle case where category might not exist in the taxonomy
+            if (mqm_cats[cat1] === undefined && cat1 !== "" && error_span.category !== "") {
+                // fallback if string is exact match?
+                cat1 = error_span.category
             }
-            if (cat2) cat2_select.val(cat2)
+
+            cat1_select.val(cat1)
+
+            let cat2s = mqm_cats[cat1]
+            if (cat2s && cat2s.length > 0) {
+                if (!frozenMode) {
+                    cat2_select.empty().prop("disabled", false)
+                }
+                for (let subcat of cat2s) {
+                    cat2_select.append(`<option value="${subcat}">${subcat}</option>`)
+                }
+                if (cat2) cat2_select.val(cat2)
+            }
         }
     }
 
@@ -596,7 +621,7 @@ export type ProtocolInfo = {
     show_model_names?: boolean,  // Show model names on top of each block (default: false)
     show_progress?: boolean,  // Show task tracker/progress (default: true)
     word_level?: boolean,  // Enable word-level span selection (default: false)
-    mqm_categories?: { [key: string]: string[] },  // Optional custom MQM categories
+    mqm_categories?: { [key: string]: string[] } | "input",  // Optional custom MQM categories
     mqm_severities?: string[],  // Optional custom MQM severities
     slider_colors?: boolean,  // Optional slider colors
     special_tokens?: string[],  // Optional custom special tokens

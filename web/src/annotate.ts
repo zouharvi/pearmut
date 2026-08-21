@@ -56,7 +56,7 @@ const state = {
     protocol: "",
     protocol_error_spans: false,
     protocol_error_categories: false,
-    mqm_categories: MQM_ERROR_CATEGORIES,
+    mqm_categories: MQM_ERROR_CATEGORIES as { [key: string]: string[] } | "input",
     mqm_severities: MQM_SEVERITIES as string[],
 }
 
@@ -108,7 +108,7 @@ function check_unlock() {
             for (const [model, r] of Object.entries(doc_responses)) {
                 let modelHasIncomplete = false;
                 for (const span of r.error_spans) {
-                    if (!isSpanComplete(span, state.protocol_error_categories)) {
+                    if (!isSpanComplete(span, state.protocol_error_categories, state.mqm_categories)) {
                         modelHasIncomplete = true;
                     }
                 }
@@ -169,6 +169,7 @@ function check_unlock() {
     }
 
     // All items complete - enable Next button and hide Skip button
+    $("#button_next").removeAttr("disabled")
     $("#button_next").removeClass("button-disabled")
     $("#button_next").val("Next ✅")
     $("#button_skip").hide()
@@ -388,7 +389,11 @@ function setupCandidateInteractions(
                 $(".tgt_char").removeClass("highlighted_active")
 
                 // hide corresponding toolbox after delay if error severity is set
-                if (obj.error_span != null && obj.error_span.severity != null && (!state.protocol_error_categories || (obj.error_span.category != null && obj.error_span.category?.includes("/")))) {
+                if (
+                    obj.error_span != null &&
+                    obj.error_span.severity != null &&
+                    (!state.protocol_error_categories || (obj.error_span.category != null && (obj.error_span.category?.includes("/") || state.mqm_categories == "input")))
+                ) {
                     const toolbox = obj.toolbox;
                     if (toolbox) {
                         const timeoutId = window.setTimeout(() => {
@@ -582,7 +587,12 @@ function setupCandidateInteractions(
                         // handle hover on toolbox
                         toolbox.on("mouseleave focusout", function () {
                             // hide if severity is set for ESA or both severity and category are set for MQM
-                            if (error_span.severity != null && (!state.protocol_error_categories || (error_span.category != null && error_span.category?.includes("/")))) {
+                            console.log("A", !state.protocol_error_categories, state.protocol_error_categories, error_span.category, error_span.category?.includes("/"))
+                            console.log("B", (error_span.category != null && error_span.category?.includes("/")))
+                            if (
+                                error_span.severity != null &&
+                                (!state.protocol_error_categories || (error_span.category != null && (error_span.category?.includes("/") || state.mqm_categories == "input")))
+                            ) {
                                 const timeoutId = window.setTimeout(() => {
                                     toolbox.css("display", "none")
                                     if (toolbox.data("reposition-interval")) {
@@ -685,7 +695,10 @@ function setupCandidateInteractions(
                 check_unlock()
             })
             toolbox.on("mouseleave", () => {
-                if (error_span.severity != null && (!state.protocol_error_categories || (error_span.category != null && error_span.category?.includes("/")))) {
+                if (
+                    error_span.severity != null &&
+                    (!state.protocol_error_categories || (error_span.category != null && (error_span.category?.includes("/") || state.mqm_categories == "input")))
+                ) {
                     const timeoutId = window.setTimeout(() => {
                         toolbox.css("display", "none");
                         check_unlock()
@@ -705,7 +718,10 @@ function setupCandidateInteractions(
                 obj.toolbox = toolbox
                 obj.error_span = error_span
             }
-            if (error_span.severity != null && (!state.protocol_error_categories || (error_span.category != null && error_span.category?.includes("/")))) {
+            if (
+                error_span.severity != null &&
+                (!state.protocol_error_categories || (error_span.category != null && (error_span.category?.includes("/") || state.mqm_categories == "input")))
+            ) {
                 toolbox.css("display", "none")
                 if (toolbox.data("reposition-interval")) {
                     window.clearInterval(toolbox.data("reposition-interval"))
@@ -965,11 +981,14 @@ async function display_next_payload(response: DataPayload) {
     state.protocol_error_categories = response.info.protocol == "MQM"
 
     // Use custom MQM categories if provided, otherwise use default
-    if (response.info.mqm_categories) {
+    if (response.info.mqm_categories === "input") {
+        state.mqm_categories = "input"
+    } else if (response.info.mqm_categories) {
         // adding blanks
+        const mqm_cats = response.info.mqm_categories as { [key: string]: string[] };
         state.mqm_categories = {
             "": [],
-            ...Object.fromEntries(Object.entries(response.info.mqm_categories).map(([key, value]) => [key, ["", ...value]]))
+            ...Object.fromEntries(Object.entries(mqm_cats).map(([key, value]: [string, any]) => [key, ["", ...value]]))
         }
 
     } else {
