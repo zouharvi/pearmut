@@ -347,7 +347,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
     # Template defaults to "annotate" if not specified
     assignment = campaign_data["info"]["assignment"]
     # use random words for identifying users
-    rng = random.Random()
+    rng = random.Random(campaign_data["info"].get("seed", None))
 
     user_tokens = {}  # user_id -> {"pass": ..., "fail": ...}
 
@@ -545,14 +545,14 @@ def _add_single_campaign(campaign_data, overwrite, url):
 
     # generate a token for dashboard access if not present
     if "token" not in campaign_data:
-        campaign_data["token"] = hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
+        campaign_data["token"] = hashlib.sha256(rng.randbytes(16)).hexdigest()[:10]
 
     def get_token(user_id, token_type):
         """Get user token or generate a random one."""
         token = user_tokens.get(user_id, {}).get(token_type)
         if token is not None:
             return token
-        return hashlib.sha256(random.randbytes(16)).hexdigest()[:10]
+        return hashlib.sha256(rng.randbytes(16)).hexdigest()[:10]
 
     user_progress = {
         user_id: {

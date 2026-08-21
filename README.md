@@ -120,6 +120,7 @@ The `shuffle` parameter in campaign `info` controls this behavior:
   "info": {
     "assignment": "task-based",
     "protocol": "ESA",
+    "seed": 123, # For full reproducibility of shuffled models
     "shuffle": true  # Default: true. Set to false to disable shuffling.
   },
   "campaign_id": "my_campaign",
