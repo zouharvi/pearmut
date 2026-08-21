@@ -310,6 +310,31 @@ async def _reset_campaign(request: ResetTaskRequest):
     return response
 
 
+class NoteUserRequest(BaseModel):
+    campaign_id: str
+    user_id: str
+    token: str
+    note: str | None = None
+
+
+@app.post("/note-user")
+async def _note_user(request: NoteUserRequest):
+    campaign_id = request.campaign_id
+    user_id = request.user_id
+    token = request.token
+
+    if campaign_id not in progress_data:
+        return JSONResponse(content="Unknown campaign ID.", status_code=400)
+    if token != campaigns_data[campaign_id]["token"]:
+        return JSONResponse(content="Invalid token", status_code=400)
+    if user_id not in progress_data[campaign_id]:
+        return JSONResponse(content="Unknown user ID.", status_code=400)
+
+    progress_data[campaign_id][user_id]["note"] = request.note if request.note else None
+    save_progress_data(campaign_id, progress_data[campaign_id])
+    return JSONResponse(content="ok", status_code=200)
+
+
 class AddNewUserRequest(BaseModel):
     campaign_id: str
     token: str
@@ -369,6 +394,7 @@ async def _add_new_user(request: AddNewUserRequest):
         new_progress_entry["time_start"] = None
         new_progress_entry["time_end"] = None
         new_progress_entry["time"] = 0
+        new_progress_entry["note"] = None
         if "validations" in new_progress_entry:
             new_progress_entry["validations"] = {}
         

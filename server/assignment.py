@@ -792,6 +792,8 @@ def reset_campaign(
         if "progress_goodbye" in progress_data[campaign_id][user_id]:
             progress_data[campaign_id][user_id]["progress_goodbye"] = [None] * len(progress_data[campaign_id][user_id]["progress_goodbye"])
 
+        progress_data[campaign_id][user_id]["note"] = None
+
 
     assignment = campaigns_data[campaign_id]["info"]["assignment"]
     if assignment == "task-based":

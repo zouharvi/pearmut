@@ -85,7 +85,8 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
         html += '<tr>'
 
         // user id and emoji
-        html += `<td>${status} ${user_id}</td>`
+        let display_name = data[user_id]["note"] ? data[user_id]["note"] : user_id;
+        html += `<td>${status} <span class="edit-note" user_id="${user_id}" current_note="${data[user_id]["note"] || ''}" style="cursor: pointer;" title="Click to edit name for ${user_id}">${display_name}</span></td>`
 
         // time section - show separate progress
         html += `<td>${progress_display}</td>`
@@ -418,6 +419,31 @@ async function fetchAndRenderCampaign(campaign_id: string, token: string | null)
                 error: (XMLHttpRequest) => {
                     const errorMsg = XMLHttpRequest.responseJSON?.error || XMLHttpRequest.responseText || XMLHttpRequest.statusText || "An unknown error occurred";
                     notify("Error resetting task: " + errorMsg);
+                },
+            });
+        })
+        el.find(".edit-note").on("click", function () {
+            let user_id = $(this).attr("user_id")
+            let current_note = $(this).attr("current_note")
+            let prefill = current_note ? current_note : user_id
+            let display = current_note ? " / " + current_note : ""
+            let new_note = prompt(`Edit name for user ${user_id} ${display}. Empty removes previous name `, prefill)
+            if (new_note === null) {
+                return;
+            }
+            $.ajax({
+                url: `note-user`,
+                method: "POST",
+                data: JSON.stringify({ "campaign_id": campaign_id, "user_id": user_id, "token": token, "note": new_note.trim() }),
+                contentType: "application/json",
+                dataType: "json",
+                success: (x) => {
+                    notify(`Note for user ${user_id} has been updated.`)
+                    location.reload()
+                },
+                error: (XMLHttpRequest) => {
+                    const errorMsg = XMLHttpRequest.responseJSON?.error || XMLHttpRequest.responseText || XMLHttpRequest.statusText || "An unknown error occurred";
+                    notify("Error updating note: " + errorMsg);
                 },
             });
         })

@@ -580,6 +580,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
             ),
             "token_correct": get_token(user_id, "pass"),
             "token_incorrect": get_token(user_id, "fail"),
+            "note": None,
         }
         for user_id in user_ids
     }

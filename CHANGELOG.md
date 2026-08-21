@@ -16,6 +16,7 @@ Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.
   - Enable per-user reset in single-stream and dynamic campaigns
   - Add user-facing tracker
   - Add per-campaign time summary
+  - Add ability to rename users
 - v1.1.5
   - Add `show_progress` flag to dashboard
   - Default to a single user for single-stream and dynamic campaigns if not specified

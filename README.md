@@ -486,6 +486,7 @@ Management link (shown when adding campaigns or running server) provides:
 - Annotator progress overview
 - Access to annotation links
 - Task progress reset (data preserved)
+- Renaming users (click the username)
 - Download progress and annotations
 
 <img width="1000" alt="Management dashboard" src="https://github.com/user-attachments/assets/5a27271c-1e80-4e54-b242-c361265df86e" />
