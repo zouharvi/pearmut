@@ -189,13 +189,20 @@ def shuffled(lst):
     return lst_copy
 
 
+_BAN_WORDS= {
+    "abuse","beheading","bombing","cancer","cannibal","genocide","erection","fisting","floozie","homicide","intercourse",
+    "kill","killing","misogyny","murder","racism","racist","rape","slave","slavery","suicide","terrorist","trafficker","x-rated"
+}
 def generate_user_name(existing_ids=None, rng=None):
     import wonderwords
     rng = rng or random.Random()
     rword = wonderwords.RandomWord(rng=rng)
     existing_ids = set(existing_ids) if existing_ids else set()
     while True:
-        new_id = f"{rword.random_words(amount=1, include_parts_of_speech=['adjective'])[0]}-{rword.random_words(amount=1, include_parts_of_speech=['noun'])[0]}"
-        new_id = f"{new_id}-{rng.randint(0, 999):03d}"
+        word_adjective = rword.random_words(amount=1, include_parts_of_speech=['adjective'])[0].lower()
+        word_noun = rword.random_words(amount=1, include_parts_of_speech=['noun'])[0].lower()
+        if word_adjective in _BAN_WORDS or word_noun in _BAN_WORDS:
+            continue
+        new_id = f"{word_adjective}-{word_noun}-{rng.randint(0, 999):03d}"
         if new_id not in existing_ids:
             return new_id
