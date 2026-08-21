@@ -537,12 +537,11 @@ def get_i_item_dynamic(
     ):
         return JSONResponse(content="Item index out of range", status_code=400)
 
-    # Show all models that have been annotated for this item.
+    # Show all models that have been annotated for this item by this user.
     # A non-null status means the model was annotated by this user ("completed")
-    # or by another user ("completed_foreign"), so this covers annotations from all users.
     item_progress = user_progress["progress"][item_i]
     annotated_models = [
-        model for model, status in item_progress.items() if status is not None
+        model for model, status in item_progress.items() if status == "completed"
     ]
 
     original_item = campaign_data["data"][item_i]

@@ -905,7 +905,7 @@ async function display_next_payload(response: DataPayload) {
     }
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
-    $("#progress").toggle(response.info.show_progress !== false)
+    $("#progress").toggle(debugMode || response.info.show_progress !== false)
     const progressResult = computeProgressString(response.progress, response.info.assignment, response.info.dynamic_models, response.info.docs_per_user, response.progress_welcome, response.progress_goodbye);
     $("#progress_text").html(`Time: ${Math.round(response.time / 60)}m&nbsp;&nbsp;&nbsp;&nbsp;Progress: ${progressResult.display}`)
 
@@ -1237,7 +1237,7 @@ function display_goodbye(response: DataGoodbye, navigate_to_item: (i: number | s
     // Note: instructions_goodbye may contain arbitrary HTML including variables that are replaced server-side
 
     $("#output_div").empty()
-    $("#progress").toggle(response.info.show_progress !== false)
+    $("#progress").toggle(debugMode || response.info.show_progress !== false)
     $("#instructions_global").html(response.info.instructions || "Completed")
 
     redrawProgress(null, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
@@ -1258,7 +1258,7 @@ function display_form(response: DataForm) {
     state.action_log = [{ "time": Date.now() / 1000, "action": "load" }]
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
-    $("#progress").toggle(response.info.show_progress !== false)
+    $("#progress").toggle(debugMode || response.info.show_progress !== false)
     const progressResult = computeProgressString(response.progress, response.info.assignment, response.info.dynamic_models, response.info.docs_per_user, response.progress_welcome, response.progress_goodbye);
     $("#progress_text").html(`Time: ${Math.round(response.time / 60)}m&nbsp;&nbsp;&nbsp;&nbsp;Progress: ${progressResult.display}`)
 
