@@ -1204,7 +1204,7 @@ class TestDynamic:
         data = json.loads(response.body.decode())
         assert data["info"]["item_i"] == 0
         assert "model1" in data["payload"][0]["tgt"]
-        assert "model2" in data["payload"][0]["tgt"]
+        assert "model2" not in data["payload"][0]["tgt"]
         assert "model3" not in data["payload"][0]["tgt"]
 
     def test_get_i_item_returns_all_models_when_none_annotated(self):
