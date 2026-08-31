@@ -37,6 +37,7 @@ CAMPAIGN_INFO_PUBLIC = {
     "special_tokens",
     "assignment",
     "dynamic_models",
+    "dynamic_slider",
     "docs_per_user",
 }
 
@@ -663,13 +664,21 @@ def get_next_item_dynamic(
         annotations = get_active_db_log(campaign_id)
 
         model_scores = collections.defaultdict(list)
+        dynamic_slider = campaign_data["info"].get("dynamic_slider")
+        
         for annotation_line in annotations:
             for annotation_item in annotation_line.get("annotation", {}):
                 if annotation_item is None:  # skippable items have no annotation
                     continue
                 for model in annotation_item:
-                    if "score" in annotation_item[model] and annotation_item[model]["score"] is not None:
-                        model_scores[model].append(annotation_item[model]["score"])
+                    # Extract score from dynamic_slider if configured, otherwise from score field
+                    if dynamic_slider and "sliders" in annotation_item[model]:
+                        score_val = annotation_item[model].get("sliders", {}).get(dynamic_slider)
+                    else:
+                        score_val = annotation_item[model].get("score")
+                    
+                    if score_val is not None:
+                        model_scores[model].append(score_val)
 
         # Calculate average scores
         model_avg_scores = {

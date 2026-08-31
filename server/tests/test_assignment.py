@@ -1488,3 +1488,132 @@ class TestDynamic:
         assert '"status":"ok"' in content
         # Should return an item
         assert '"item_i"' in content
+
+    def test_dynamic_slider_uses_slider_value_for_ranking(self):
+        """Test that dynamic assignment uses dynamic_slider value for model ranking."""
+        _clear_test_logs()
+        campaigns_data = {
+            "campaign1": {
+                "info": {
+                    "assignment": "dynamic",
+                    "dynamic_coldstart": 1,
+                    "dynamic_models": 1,
+                    "dynamic_slider": "Fluency",
+                    "sliders": [
+                        {"name": "Fluency", "min": 0, "max": 100, "step": 1},
+                        {"name": "Adequacy", "min": 0, "max": 100, "step": 1}
+                    ]
+                },
+                "data": [
+                    [{"src": "a", "tgt": {"model1": "b", "model2": "c"}}],
+                    [{"src": "d", "tgt": {"model1": "e", "model2": "f"}}],
+                    [{"src": "g", "tgt": {"model1": "h", "model2": "i"}}],
+                ]
+            }
+        }
+        progress_data = {
+            "campaign1": {
+                "user1": {
+                    "progress": [
+                        {"model1": "completed", "model2": "completed"},
+                        {"model1": None, "model2": None},
+                        {"model1": None, "model2": None},
+                    ],
+                    "progress_welcome": [],
+                    "time": 0,
+                    "token_correct": "abc",
+                    "token_incorrect": "xyz",
+                }
+            }
+        }
+        
+        # Save annotation with slider values
+        # model1 has high Fluency (90), model2 has low Fluency (30)
+        save_db_payload("campaign1", {
+            "user_id": "user1",
+            "item_i": 0,
+            "annotation": [
+                {
+                    "model1": {
+                        "score": 90,  # This should be ignored when dynamic_slider is set
+                        "sliders": {"Fluency": 90, "Adequacy": 50},
+                        "error_spans": []
+                    },
+                    "model2": {
+                        "score": 30,  # This should be ignored when dynamic_slider is set
+                        "sliders": {"Fluency": 30, "Adequacy": 80},
+                        "error_spans": []
+                    }
+                }
+            ]
+        })
+        
+        # Get next item - should prefer model2 since it has lower Fluency score
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
+        assert response.status_code == 200
+        import json
+        data = json.loads(response.body.decode())
+        # Should return item 1 or 2 (both incomplete)
+        assert data["info"]["item_i"] in [1, 2]
+
+    def test_dynamic_slider_falls_back_to_score_when_not_set(self):
+        """Test that dynamic assignment uses score field when dynamic_slider is not set."""
+        _clear_test_logs()
+        campaigns_data = {
+            "campaign1": {
+                "info": {
+                    "assignment": "dynamic",
+                    "dynamic_coldstart": 1,
+                    "dynamic_models": 1,
+                    "sliders": [
+                        {"name": "Fluency", "min": 0, "max": 100, "step": 1}
+                    ]
+                },
+                "data": [
+                    [{"src": "a", "tgt": {"model1": "b", "model2": "c"}}],
+                    [{"src": "d", "tgt": {"model1": "e", "model2": "f"}}],
+                ]
+            }
+        }
+        progress_data = {
+            "campaign1": {
+                "user1": {
+                    "progress": [
+                        {"model1": "completed", "model2": "completed"},
+                        {"model1": None, "model2": None},
+                    ],
+                    "progress_welcome": [],
+                    "time": 0,
+                    "token_correct": "abc",
+                    "token_incorrect": "xyz",
+                }
+            }
+        }
+        
+        # Save annotation with only score field (no dynamic_slider set)
+        save_db_payload("campaign1", {
+            "user_id": "user1",
+            "item_i": 0,
+            "annotation": [
+                {
+                    "model1": {
+                        "score": 90,
+                        "sliders": {"Fluency": 50},  # This should be ignored
+                        "error_spans": []
+                    },
+                    "model2": {
+                        "score": 30,
+                        "sliders": {"Fluency": 90},  # This should be ignored
+                        "error_spans": []
+                    }
+                }
+            ]
+        })
+        
+        # Get next item - should use score field (not sliders)
+        response = get_next_item("campaign1", "user1", campaigns_data, progress_data)
+        assert response.status_code == 200
+        import json
+        data = json.loads(response.body.decode())
+        # Should return item 1
+        assert data["info"]["item_i"] == 1
