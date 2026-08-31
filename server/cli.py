@@ -528,6 +528,22 @@ def _add_single_campaign(campaign_data, overwrite, url):
                 "Each slider must be a dict with 'name', 'min', 'max', and 'step' keys, where min/max/step are numeric, min <= max, and step > 0"
             )
 
+    # Validate dynamic_slider configuration if present
+    if "dynamic_slider" in campaign_data["info"]:
+        if assignment != "dynamic":
+            raise ValueError(
+                "'dynamic_slider' can only be used with 'dynamic' assignment type"
+            )
+        if "sliders" not in campaign_data["info"]:
+            raise ValueError(
+                "'dynamic_slider' requires 'sliders' to be defined in campaign info"
+            )
+        slider_names = {s["name"] for s in campaign_data["info"]["sliders"]}
+        if campaign_data["info"]["dynamic_slider"] not in slider_names:
+            raise ValueError(
+                f"'dynamic_slider' value '{campaign_data['info']['dynamic_slider']}' must be one of: {sorted(slider_names)}"
+            )
+
     # Remove output file when overwriting (after all validations pass)
     if overwrite and campaign_data["campaign_id"] in progress_data:
         output_file = f"{ROOT}/data/annotations/{campaign_data['campaign_id']}.jsonl"

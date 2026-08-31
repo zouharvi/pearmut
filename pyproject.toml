@@ -39,7 +39,8 @@ packages = ["pearmut", "pearmut.web"]
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+build-backend = "build_hooks"
+backend-path = ["."]
 
 [tool.setuptools.package-data]
 "pearmut" = ["static/**"]

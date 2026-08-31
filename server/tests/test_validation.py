@@ -353,3 +353,112 @@ class TestItemValidation:
 
         # Should not raise - custom slider validation is valid
         _add_single_campaign(campaign_data, True, "http://localhost:8001")
+
+    def test_dynamic_slider_valid_configuration(self):
+        """Test that valid dynamic_slider configuration is accepted."""
+        from pearmut.cli import _add_single_campaign
+
+        campaign_data = {
+            "campaign_id": "test_dynamic_slider_valid",
+            "info": {
+                "assignment": "dynamic",
+                "protocol": "ESA",
+                "users": 2,
+                "dynamic_slider": "Fluency",
+                "sliders": [
+                    {"name": "Fluency", "min": 0, "max": 100, "step": 1},
+                    {"name": "Adequacy", "min": 0, "max": 100, "step": 1}
+                ]
+            },
+            "data": [
+                [
+                    {"src": "hello", "tgt": {"A": "hola", "B": "ola"}},
+                ],
+                [
+                    {"src": "world", "tgt": {"A": "mundo", "B": "munda"}},
+                ]
+            ]
+        }
+
+        # Should not raise - valid dynamic_slider configuration
+        _add_single_campaign(campaign_data, True, "http://localhost:8001")
+
+    def test_dynamic_slider_requires_sliders(self):
+        """Test that dynamic_slider requires sliders to be defined."""
+        from pearmut.cli import _add_single_campaign
+        import pytest
+
+        campaign_data = {
+            "campaign_id": "test_dynamic_slider_no_sliders",
+            "info": {
+                "assignment": "dynamic",
+                "protocol": "ESA",
+                "users": 2,
+                "dynamic_slider": "Fluency"
+            },
+            "data": [
+                [
+                    {"src": "hello", "tgt": {"A": "hola", "B": "ola"}},
+                ]
+            ]
+        }
+
+        # Should raise - dynamic_slider requires sliders
+        with pytest.raises(ValueError, match="'dynamic_slider' requires 'sliders'"):
+            _add_single_campaign(campaign_data, True, "http://localhost:8001")
+
+    def test_dynamic_slider_requires_dynamic_assignment(self):
+        """Test that dynamic_slider only works with dynamic assignment."""
+        from pearmut.cli import _add_single_campaign
+        import pytest
+
+        campaign_data = {
+            "campaign_id": "test_dynamic_slider_task_based",
+            "info": {
+                "assignment": "task-based",
+                "protocol": "ESA",
+                "dynamic_slider": "Fluency",
+                "sliders": [
+                    {"name": "Fluency", "min": 0, "max": 100, "step": 1}
+                ]
+            },
+            "data": [
+                [
+                    [
+                        {"src": "hello", "tgt": {"A": "hola"}},
+                    ]
+                ]
+            ]
+        }
+
+        # Should raise - dynamic_slider only for dynamic assignment
+        with pytest.raises(ValueError, match="'dynamic_slider' can only be used with 'dynamic' assignment"):
+            _add_single_campaign(campaign_data, True, "http://localhost:8001")
+
+    def test_dynamic_slider_must_exist(self):
+        """Test that dynamic_slider value must match a defined slider."""
+        from pearmut.cli import _add_single_campaign
+        import pytest
+
+        campaign_data = {
+            "campaign_id": "test_dynamic_slider_nonexistent",
+            "info": {
+                "assignment": "dynamic",
+                "protocol": "ESA",
+                "users": 2,
+                "dynamic_slider": "NonExistent",
+                "sliders": [
+                    {"name": "Fluency", "min": 0, "max": 100, "step": 1},
+                    {"name": "Adequacy", "min": 0, "max": 100, "step": 1}
+                ]
+            },
+            "data": [
+                [
+                    {"src": "hello", "tgt": {"A": "hola", "B": "ola"}},
+                ]
+            ]
+        }
+
+        # Should raise - dynamic_slider value doesn't exist
+        with pytest.raises(ValueError, match="'dynamic_slider' value 'NonExistent' must be one of"):
+            _add_single_campaign(campaign_data, True, "http://localhost:8001")

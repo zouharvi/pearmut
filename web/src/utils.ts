@@ -627,6 +627,7 @@ export type ProtocolInfo = {
     special_tokens?: string[],  // Optional custom special tokens
     assignment?: string,
     dynamic_models?: number,
+    dynamic_slider?: string,  // Optional slider name to use for dynamic ranking
     docs_per_user?: number,
 }
 

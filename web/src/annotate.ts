@@ -752,6 +752,10 @@ function setupCandidateInteractions(
                 let val = parseInt((<HTMLInputElement>this).value)
                 label.text(`${val}/${sliderMax}`)
                 state.response_log[item_i][model].sliders![sliderName] = val
+                // Sync with score field if this is the dynamic_slider
+                if (response.info.dynamic_slider === sliderName) {
+                    state.response_log[item_i][model].score = val
+                }
             })
             // special handler if we ever go back to the original position
             slider.on("mouseup", function () {
@@ -766,6 +770,10 @@ function setupCandidateInteractions(
 
                 // Store in sliders field
                 state.response_log[item_i][model].sliders![sliderName] = val
+                // Sync with score field if this is the dynamic_slider
+                if (response.info.dynamic_slider === sliderName) {
+                    state.response_log[item_i][model].score = val
+                }
                 state.action_log.push({ "time": Date.now() / 1000, "action": sliderName, "index": item_i, "model": model, "value": val })
                 state.has_unsaved_work = true
                 check_unlock()
@@ -784,6 +792,10 @@ function setupCandidateInteractions(
                 slider.val(existingScore)
                 label.text(`${existingScore}/${sliderMax}`)
                 state.response_log[item_i][model].sliders![sliderName] = existingScore
+                // Sync with score field if this is the dynamic_slider
+                if (response.info.dynamic_slider === sliderName) {
+                    state.response_log[item_i][model].score = existingScore
+                }
             }
         }
     } else if (!hasNoSliders) {
