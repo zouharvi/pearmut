@@ -199,42 +199,38 @@
   <div style="flex: 1;">
     <div
       style="max-width: 1800px; min-width: 800px; margin-left: auto; margin-right: auto; margin-top: 20px; padding-left: 10px;">
-      <div class="white-box" style="margin-right: 10px; background-color: #e7e2cf; padding: 5px 15px 5px 5px;">
+      <div id="instructions_global" class="white-box" style="margin-right: 10px; background-color: #e7e2cf; padding: 10px 15px; font-size: 11pt;"></div>
 
-        <span id="instructions_global" style="display: inline-block; font-size: 11pt; width: calc(100% - 250px);">
-        </span>
+      <div id="output_div" style="margin-top: 20px;"></div>
 
-        <div id="progress_div" style="width: 250px; display: inline-block; vertical-align: top; padding-top: 5px; text-align: center;">
+      <div class="white-box" style="margin-right: 10px; margin-top: 40px; background-color: #e7e2cf; padding: 15px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div id="progress_text" style="font-size: 11pt;" title="Annotation time; Completed / Total screens"></div>
+            <input type="button" value="⚙️" id="button_settings" style="height: 1.5em; width: 30px; padding: 0;">
+          </div>
 
-          <div id="progress_text" style="font-size: 11pt; margin-top: 5px;" title="Annotation time; Completed / Total screens"></div>
-          
+          <div id="progress" style="text-align: left; flex: 1; margin-top: -15px;"></div>
+
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <input type="button" value="Skip ⏭️" id="button_skip" style="width: 100px; font-size: 13pt; height: 1.5em; display: none;">
+            <input type="button" value="Next 🛠️" id="button_next" class="button-disabled" style="width: 200px; font-size: 13pt; height: 2.5em;">
+          </div>
+        </div>
+
+        <div id="settings_div" style="margin: 15px auto 0 auto; display: none; font-size: 11pt; text-align: left;">
+          <input type="checkbox" id="settings_approximate_alignment">
+          <label for="settings_approximate_alignment">Show approximate alignment</label>
+          <br>
+          <input type="checkbox" id="settings_word_level">
+          <label for="settings_word_level">Word-level selection</label>
           <br>
           <br>
-          
-          <div id="progress" style="text-align: center;"></div>
-          
-          <br>
-          <br>
-          
-          <input type="button" value="Next 🛠️" id="button_next" class="button-disabled" style="width: 170px; height: 2.5em;">
-          <input type="button" value="Skip ⏭️" id="button_skip" style="width: 170px; font-size: 11pt; height: 1.7em; margin-right: 15px; margin-top: 10px; display: none;">
-          <input type="button" value="⚙️" id="button_settings" style="height: 1.5em; width: 30px; padding: 0; margin-right: -50px;">
+          <textarea id="settings_comment"
+            style="width: 100%; height: 80px; resize: vertical; margin-top: 5px; padding: 5px; border-radius: 4px; border: 1px solid #999; box-sizing: border-box;"
+            placeholder="Optional: Add any comments or feedback about this item. Will be submitted with Next."></textarea>
         </div>
       </div>
-      <div id="settings_div" class="white-box"
-        style="margin-right: 20px; margin-top: 10px; display: none; background-color: #e7e2cf; font-size: 11pt;">
-        <input type="checkbox" id="settings_approximate_alignment">
-        <label for="settings_approximate_alignment">Show approximate alignment</label>
-        <br>
-        <input type="checkbox" id="settings_word_level">
-        <label for="settings_word_level">Word-level selection</label>
-        <br>
-        <br>
-        <textarea id="settings_comment"
-          style="width: 95%; height: 80px; resize: vertical; margin-top: 5px; padding: 5px; border-radius: 4px; border: 1px solid #999;"
-          placeholder="Optional: Add any comments or feedback about this item. Will be submitted with Next."></textarea>
-      </div>
-      <div id="output_div" style="margin-top: 100px;"></div>
 
       <br><br><br>
     </div>

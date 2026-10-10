@@ -231,10 +231,11 @@ input[type="button"][selected] {
     border-radius: 50%;
     text-align: center;
     line-height: 2em;
-    margin-left: 2px;
     box-shadow: 0 1px 1px #0002;
     width: 10px;
     height: 10px;
+    margin-right: 2px;
+    margin-left: 2px;
 }
 
 #progress span:hover,
@@ -247,8 +248,8 @@ input[type="button"][selected] {
     width: 22px;
     height: 22px;
     font-size: 8pt;
-    margin-left: -5px;
-    margin-right: -5px;
+    margin-left: -4px;
+    margin-right: -4px;
     box-shadow: 0 1px 3px #0002;
     margin-bottom: 2px;
 }

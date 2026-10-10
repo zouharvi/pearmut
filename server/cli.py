@@ -77,16 +77,24 @@ class ValidationTypeError(TypeError, ValueError):
     pass
 
 
-def _run(args_unknown):
+def _check_running_instance():
     lock_file = f"{ROOT}/data/.lock"
     if os.path.exists(lock_file):
-        with open(lock_file, "r") as f:
-            pid = f.read().strip()
+        try:
+            with open(lock_file, "r") as f:
+                pid = f.read().strip()
+        except OSError:
+            pid = "unknown"
         print(
             f"Another instance (PID {pid}) is already running in the same directory. We know this because {lock_file} exists."
         )
         sys.exit(1)
 
+
+def _run(args_unknown):
+    _check_running_instance()
+
+    lock_file = f"{ROOT}/data/.lock"
     with open(lock_file, "w") as f:
         f.write(str(os.getpid()))
 
@@ -631,6 +639,7 @@ def _add_campaign(args_unknown):
     """
     Add campaigns from one or more JSON data files.
     """
+    _check_running_instance()
     args = argparse.ArgumentParser(
         prog="pearmut add",
         description="Add campaigns from one or more JSON data files."
@@ -674,6 +683,7 @@ def _add_existing(args_unknown):
     """
     Add existing campaigns from JSON data files, importing their progress and annotations.
     """
+    _check_running_instance()
     args = argparse.ArgumentParser(
         prog="pearmut add-existing",
         description="Import campaigns with existing progress and annotations from external files."
@@ -789,6 +799,7 @@ def main():
     elif args.command == "add-existing":
         _add_existing(args_unknown)
     elif args.command == "purge":
+        _check_running_instance()
         import shutil
 
         # Parse optional campaign name

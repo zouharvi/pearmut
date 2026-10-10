@@ -51,7 +51,7 @@ PROTOCOL_INSTRUCTIONS = {
     """,
     "cESA": """
     <ul>
-      <li><strong>Task:</strong> Read the source text and competing translations. Highlight all errors. Rate each translation (each column is an output from a single model/translator). At the end, click <b>Next</b> in top-right corner.</li><br>
+      <li><strong>Task:</strong> Read the source text and competing translations. Highlight all errors. Rate each translation (each column is an output from a single model/translator). At the end, click <b>Next</b> at the bottom of the page.</li><br>
       <li><strong>Highlighting errors:</strong>
         <ul>
           <li><strong>Mark errors</strong> by clicking the beginning and then clicking at the end of the erroneous text span. Then assign severity by hovering over the error span.</li>
@@ -80,7 +80,7 @@ PROTOCOL_INSTRUCTIONS = {
         </ul>
       </li>
       <br>
-      <li>For unexpected problems and remarks, use comment box in ⚙️ (top right).</li>
+      <li>For unexpected problems and remarks, use comment box in ⚙️ (bottom of the page).</li>
     </ul>
     """,
     "MQM": """
