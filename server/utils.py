@@ -1,3 +1,5 @@
+import contextlib
+import fcntl
 import hashlib
 import json
 import os
@@ -8,6 +10,16 @@ TOKEN_MAIN = os.environ.get("PEARMUT_TOKEN_MAIN", hashlib.sha256(random.randbyte
 
 # Sentinel value to indicate a task reset - masks all prior annotations
 RESET_MARKER = "__RESET__"
+
+
+@contextlib.contextmanager
+def file_lock():
+    with open(f"{ROOT}/data/.write.lock", "a") as f:
+        fcntl.flock(f, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(f, fcntl.LOCK_UN)
 
 
 def load_progress_data(warn: str | None = None):
@@ -28,7 +40,7 @@ def load_progress_data(warn: str | None = None):
 def save_progress_data(campaign_id: str, campaign_progress: dict):
     progress_dir = f"{ROOT}/data/progress"
     os.makedirs(progress_dir, exist_ok=True)
-    with open(f"{progress_dir}/{campaign_id}.json", "w") as f:
+    with file_lock(), open(f"{progress_dir}/{campaign_id}.json", "w") as f:
         json.dump(campaign_progress, f, ensure_ascii=False)
 
 
@@ -113,7 +125,7 @@ def save_db_payload(campaign_id: str, payload: dict):
 
     log_path = f"{ROOT}/data/annotations/{campaign_id}.jsonl"
     os.makedirs(os.path.dirname(log_path), exist_ok=True)
-    with open(log_path, "a") as log_file:
+    with file_lock(), open(log_path, "a") as log_file:
         log_file.write(
             json.dumps(
                 payload,

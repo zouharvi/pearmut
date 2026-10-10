@@ -473,6 +473,7 @@ You can then reference this URL in your campaign definitions by `data/assets/vid
 - **`pearmut purge [campaign]`**: Remove campaign data
   - Without args: Purge all campaigns
   - With campaign name: Purge specific campaign only
+- **`pearmut backup`**: Backup all campaign data into a zip file in `data/backup/`.
 - **`PEARMUT_ROOT=<path> pearmut `**: User pearmut with custom root directory
 - **`PEARMUT_TOKEN_MAIN=<token> pearmut run`**: Main admin token
 

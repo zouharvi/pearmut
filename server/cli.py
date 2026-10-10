@@ -14,6 +14,7 @@ import urllib.parse
 from .utils import (
     ROOT,
     TOKEN_MAIN,
+    file_lock,
     generate_user_name,
     is_form_document,
     load_progress_data,
@@ -24,6 +25,7 @@ os.makedirs(f"{ROOT}/data/campaigns", exist_ok=True)
 os.makedirs(f"{ROOT}/data/outputs", exist_ok=True)
 os.makedirs(f"{ROOT}/data/annotations", exist_ok=True)
 os.makedirs(f"{ROOT}/data/progress", exist_ok=True)
+os.makedirs(f"{ROOT}/data/backup", exist_ok=True)
 
 # NOTE: migration scripts will be removed in the next minor release, i.e. 1.2.0
 
@@ -76,6 +78,20 @@ class ValidationTypeError(TypeError, ValueError):
 
 
 def _run(args_unknown):
+    lock_file = f"{ROOT}/data/.lock"
+    if os.path.exists(lock_file):
+        with open(lock_file, "r") as f:
+            pid = f.read().strip()
+        print(
+            f"Another instance (PID {pid}) is already running in the same directory. We know this because {lock_file} exists."
+        )
+        sys.exit(1)
+
+    with open(lock_file, "w") as f:
+        f.write(str(os.getpid()))
+
+    atexit.register(lambda: os.path.exists(lock_file) and os.remove(lock_file))
+
     import uvicorn
     import uvicorn.config
 
@@ -592,7 +608,7 @@ def _add_single_campaign(campaign_data, overwrite, url):
         _shuffle_campaign_data(campaign_data, rng)
 
     # commit to transaction
-    with open(f"{ROOT}/data/campaigns/{campaign_data['campaign_id']}.json", "w") as f:
+    with file_lock(), open(f"{ROOT}/data/campaigns/{campaign_data['campaign_id']}.json", "w") as f:
         json.dump(campaign_data, f, indent=2, ensure_ascii=False)
 
     progress_data[campaign_data["campaign_id"]] = user_progress
@@ -756,28 +772,11 @@ def main():
     """
     Main entry point for the CLI.
     """
-
-    # Acquire lock before starting server
-    lock_file = f"{ROOT}/data/.lock"
-    if os.path.exists(lock_file):
-        with open(lock_file, "r") as f:
-            pid = f.read().strip()
-        print(
-            f"Another instance (PID {pid}) is already running in the same directory. We know this because {lock_file} exists."
-        )
-        sys.exit(1)
-
-    with open(lock_file, "w") as f:
-        f.write(str(os.getpid()))
-
-    # Register cleanup to remove lock file on exit
-    atexit.register(lambda: os.path.exists(lock_file) and os.remove(lock_file))
-
     args = argparse.ArgumentParser()
     args.add_argument(
         "command",
         type=str,
-        choices=["run", "add", "purge", "add-existing", "bake-existing"],
+        choices=["run", "add", "purge", "add-existing", "bake-existing", "backup"],
         default="run",
         nargs="?",
     )
@@ -847,6 +846,27 @@ def main():
                 print("Cancelled.")
     elif args.command == "bake-existing":
         _bake_existing(args_unknown)
+    elif args.command == "backup":
+        _backup(args_unknown)
+
+
+def _backup(args_unknown=None):
+    import datetime
+    import zipfile
+
+    backup_dir = f"{ROOT}/data/backup"
+    os.makedirs(backup_dir, exist_ok=True)
+    zip_path = f"{backup_dir}/{datetime.date.today().isoformat()}.zip"
+
+    with file_lock(), zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zipf:
+        for root, dirs, files in os.walk(f"{ROOT}/data"):
+            dirs[:] = [d for d in dirs if d != "backup" and not d.startswith(".")]
+            for file in files:
+                if not file.startswith("."):
+                    p = os.path.join(root, file)
+                    zipf.write(p, os.path.relpath(p, f"{ROOT}/data"))
+
+    print(f"Backup created at {zip_path}")
 
 
 def _bake_existing(args_unknown):
