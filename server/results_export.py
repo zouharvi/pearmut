@@ -59,9 +59,16 @@ def compute_model_scores(campaign_id):
                 continue
 
             for model, annotation in item_annotation.items():
-                if "score" in annotation and annotation["score"] is not None:
+                if not isinstance(annotation, dict):
+                    continue
+                score = annotation.get("score")
+                if score is None and annotation.get("sliders"):
+                    sliders = [v for v in annotation["sliders"].values() if v is not None]
+                    if sliders:
+                        score = statistics.mean(sliders)
+                if score is not None:
                     final_item_id = item.get("item_id", json.dumps(item | {"tgt": None}))
-                    model_scores[model][final_item_id] = annotation["score"]
+                    model_scores[model][final_item_id] = score
                     item_i_to_item_id[item_i].append(final_item_id)
 
     model_scores = list(model_scores.items())

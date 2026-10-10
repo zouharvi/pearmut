@@ -19,6 +19,7 @@ Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.
   - Add ability to rename users
   - Add `seed` to campaign info
   - Support custom span categories as input by user
+  - Average scores for dynamic assignment when custom sliders are specified
 - v1.1.5
   - Add `show_progress` flag to dashboard
   - Default to a single user for single-stream and dynamic campaigns if not specified

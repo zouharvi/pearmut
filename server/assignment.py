@@ -665,11 +665,18 @@ def get_next_item_dynamic(
         model_scores = collections.defaultdict(list)
         for annotation_line in annotations:
             for annotation_item in annotation_line.get("annotation", {}):
-                if annotation_item is None:  # skippable items have no annotation
+                if not isinstance(annotation_item, dict):
                     continue
                 for model in annotation_item:
-                    if "score" in annotation_item[model] and annotation_item[model]["score"] is not None:
-                        model_scores[model].append(annotation_item[model]["score"])
+                    if not isinstance(annotation_item[model], dict):
+                        continue
+                    score = annotation_item[model].get("score")
+                    if score is None and annotation_item[model].get("sliders"):
+                        sliders = [v for v in annotation_item[model]["sliders"].values() if v is not None]
+                        if sliders:
+                            score = statistics.mean(sliders)
+                    if score is not None:
+                        model_scores[model].append(score)
 
         # Calculate average scores
         model_avg_scores = {
