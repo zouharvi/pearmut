@@ -106,8 +106,13 @@ export type DataForm = {
  * For MQM protocol, category must contain "/" to indicate both main category and subcategory are set.
  * For ESA protocol (no categories), only severity is required.
  */
-export function isSpanComplete(span: ErrorSpan, protocol_error_categories: boolean, mqm_categories: { [key: string]: string[] } | "input"): boolean {
-    if (span.severity == null) return false
+export function isSpanComplete(
+    span: ErrorSpan,
+    protocol_error_categories: boolean,
+    mqm_categories: { [key: string]: string[] } | "input",
+    mqm_severities: string[] = MQM_SEVERITIES
+): boolean {
+    if (mqm_severities.length > 0 && span.severity == null) return false
     // MQM categories require format "MainCategory/SubCategory" (e.g., "Accuracy/Mistranslation")
     if (protocol_error_categories && (span.category == null || (!span.category.includes("/") && mqm_categories != "input"))) return false
     return true

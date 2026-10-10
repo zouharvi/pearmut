@@ -108,7 +108,7 @@ function check_unlock() {
             for (const [model, r] of Object.entries(doc_responses)) {
                 let modelHasIncomplete = false;
                 for (const span of r.error_spans) {
-                    if (!isSpanComplete(span, state.protocol_error_categories, state.mqm_categories)) {
+                    if (!isSpanComplete(span, state.protocol_error_categories, state.mqm_categories, state.mqm_severities)) {
                         modelHasIncomplete = true;
                     }
                 }
@@ -388,11 +388,10 @@ function setupCandidateInteractions(
                 $(".tgt_char").removeClass("highlighted")
                 $(".tgt_char").removeClass("highlighted_active")
 
-                // hide corresponding toolbox after delay if error severity is set
+                // hide corresponding toolbox after delay if error span is complete
                 if (
                     obj.error_span != null &&
-                    obj.error_span.severity != null &&
-                    (!state.protocol_error_categories || (obj.error_span.category != null && (obj.error_span.category?.includes("/") || state.mqm_categories == "input")))
+                    isSpanComplete(obj.error_span, state.protocol_error_categories, state.mqm_categories, state.mqm_severities)
                 ) {
                     const toolbox = obj.toolbox;
                     if (toolbox) {
@@ -566,6 +565,10 @@ function setupCandidateInteractions(
 
                         $("body").append(toolbox)
 
+                        if (isSpanComplete(error_span, state.protocol_error_categories, state.mqm_categories, state.mqm_severities)) {
+                            toolbox.css("display", "none")
+                        }
+
                         // handle hover on toolbox
                         toolbox.on("mouseenter focusin contextmenu", function (e) {
                             if (e.type === "contextmenu") e.preventDefault();
@@ -586,13 +589,7 @@ function setupCandidateInteractions(
                         })
                         // handle hover on toolbox
                         toolbox.on("mouseleave focusout", function () {
-                            // hide if severity is set for ESA or both severity and category are set for MQM
-                            console.log("A", !state.protocol_error_categories, state.protocol_error_categories, error_span.category, error_span.category?.includes("/"))
-                            console.log("B", (error_span.category != null && error_span.category?.includes("/")))
-                            if (
-                                error_span.severity != null &&
-                                (!state.protocol_error_categories || (error_span.category != null && (error_span.category?.includes("/") || state.mqm_categories == "input")))
-                            ) {
+                            if (isSpanComplete(error_span, state.protocol_error_categories, state.mqm_categories, state.mqm_severities)) {
                                 const timeoutId = window.setTimeout(() => {
                                     toolbox.css("display", "none")
                                     if (toolbox.data("reposition-interval")) {
@@ -695,10 +692,7 @@ function setupCandidateInteractions(
                 check_unlock()
             })
             toolbox.on("mouseleave", () => {
-                if (
-                    error_span.severity != null &&
-                    (!state.protocol_error_categories || (error_span.category != null && (error_span.category?.includes("/") || state.mqm_categories == "input")))
-                ) {
+                if (isSpanComplete(error_span, state.protocol_error_categories, state.mqm_categories, state.mqm_severities)) {
                     const timeoutId = window.setTimeout(() => {
                         toolbox.css("display", "none");
                         check_unlock()
@@ -718,10 +712,7 @@ function setupCandidateInteractions(
                 obj.toolbox = toolbox
                 obj.error_span = error_span
             }
-            if (
-                error_span.severity != null &&
-                (!state.protocol_error_categories || (error_span.category != null && (error_span.category?.includes("/") || state.mqm_categories == "input")))
-            ) {
+            if (isSpanComplete(error_span, state.protocol_error_categories, state.mqm_categories, state.mqm_severities)) {
                 toolbox.css("display", "none")
                 if (toolbox.data("reposition-interval")) {
                     window.clearInterval(toolbox.data("reposition-interval"))

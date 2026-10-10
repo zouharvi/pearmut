@@ -1,0 +1,60 @@
+{
+  "info": {
+    "assignment": "task-based",
+    "protocol": "cESA",
+    "mqm_severities": [],
+    "instructions": "cESA but without error categories",
+    "shuffle": false
+  },
+  "campaign_id": "example_no_severities",
+  "data": [
+    [
+      [
+        {
+          "item_id": "example_1",
+          "src": "The quick brown fox jumps over the lazy dog.",
+          "tgt": {
+            "ModelA": "Le renard brun rapide saute par-dessus le chien paresseux."
+          }
+        },
+        {
+          "item_id": "example_2",
+          "src": "Machine translation has improved significantly in recent years.",
+          "tgt": {
+            "ModelB": "La traduction automatique s'est considérablement améliorée ces dernières années."
+          }
+        },
+        {
+          "item_id": "example_3",
+          "src": "The weather today is exceptionally sunny and warm.",
+          "tgt": {
+            "ModelA": "Le temps aujourd'hui est exceptionnellement ensoleillé et chaud."
+          }
+        }
+      ],
+      [
+        {
+          "item_id": "example_4",
+          "src": "She have several books on the table.",
+          "tgt": {
+            "ModelB": "Elle ont plusieurs livres sur la table."
+          }
+        },
+        {
+          "item_id": "example_5",
+          "src": "Background noise makes it hard to hear the speaker.",
+          "tgt": {
+            "ModelA": "Le bruit de fond rend difficile l'écoute de l'orateur."
+          }
+        },
+        {
+          "item_id": "example_6",
+          "src": "The sun rises in the east.",
+          "tgt": {
+            "ModelA": "Le soleil se lève à l'ouest."
+          }
+        }
+      ]
+    ]
+  ]
+}

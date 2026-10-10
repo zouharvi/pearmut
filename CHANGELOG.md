@@ -3,6 +3,7 @@
 
 Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
 
+- v1.1.7 (unreleased)
 - v1.1.6 (unreleased)
   - Ship `web/` in the package so that `bake-existing` can run
   - Move campaign annotations storage from `data/outputs/` to `data/annotations/` with automatic migration
@@ -20,6 +21,7 @@ Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.
   - Add `seed` to campaign info
   - Support custom span categories as input by user
   - Average scores for dynamic assignment when custom sliders are specified
+  - Allow for "no severities" error span annotations
 - v1.1.5
   - Add `show_progress` flag to dashboard
   - Default to a single user for single-stream and dynamic campaigns if not specified

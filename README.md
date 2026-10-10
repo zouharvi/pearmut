@@ -234,6 +234,12 @@ The severity levels can also be customized via `mqm_severities` (default: `["Min
 "mqm_severities": ["Neutral", "Minor", "Major", "Critical"]
 ```
 
+To allow annotating error spans without any severity levels, specify an empty list:
+
+```json
+"mqm_severities": []
+```
+
 See [examples/custom_mqm.json](examples/custom_mqm.json) for a complete example.
 You can also set `"mqm_categories": "input"` so that the annotators fill in the category from scratch. Useful for explorative analyses.
 

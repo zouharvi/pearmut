@@ -122,7 +122,7 @@ label {
 
 /* Error span colors */
 .error_unknown {
-    background-color: #ddf;
+    background-color: #fcc;
 }
 
 .error_neutral {
