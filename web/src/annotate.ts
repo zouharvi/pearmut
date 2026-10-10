@@ -177,11 +177,47 @@ function check_unlock() {
     return true
 }
 
+const active_toolbox_intervals = new Set<number>()
+
+function startToolboxInterval(toolbox: JQuery<HTMLElement>, targetEl: JQuery<HTMLElement>) {
+    if (!toolbox.data("reposition-interval")) {
+        let intervalId = window.setInterval(() => {
+            updateToolboxPosition(toolbox, targetEl)
+        }, 1000)
+        toolbox.data("reposition-interval", intervalId)
+        active_toolbox_intervals.add(intervalId)
+    }
+}
+
+function stopToolboxInterval(toolbox: JQuery<HTMLElement>) {
+    const intervalId = toolbox.data("reposition-interval")
+    if (intervalId) {
+        window.clearInterval(intervalId)
+        toolbox.removeData("reposition-interval")
+        active_toolbox_intervals.delete(intervalId)
+    }
+}
+
 /**
  * Cleanup function to remove toolboxes and handlers from previous item
  * Must be called before loading a new item to prevent memory leaks and stale UI
  */
 function cleanupPreviousItem(): void {
+    // Clear all active reposition intervals
+    for (const id of active_toolbox_intervals) {
+        window.clearInterval(id)
+    }
+    active_toolbox_intervals.clear()
+
+    // Clear any remaining intervals and timeouts on toolboxes
+    $(".span_toolbox_parent").each(function () {
+        stopToolboxInterval($(this))
+        const timeoutId = $(this).data("hide-timeout")
+        if (timeoutId) {
+            window.clearTimeout(timeoutId)
+            $(this).removeData("hide-timeout")
+        }
+    })
     // Remove all toolboxes appended to body
     $(".span_toolbox_parent").remove()
     // Remove resize handlers for toolbox positioning (use namespace to avoid removing other handlers)
@@ -397,10 +433,7 @@ function setupCandidateInteractions(
                     if (toolbox) {
                         const timeoutId = window.setTimeout(() => {
                             toolbox.css("display", "none")
-                            if (toolbox.data("reposition-interval")) {
-                                window.clearInterval(toolbox.data("reposition-interval"))
-                                toolbox.removeData("reposition-interval")
-                            }
+                            stopToolboxInterval(toolbox)
                         }, 500);
                         toolbox.data("hide-timeout", timeoutId);
                     }
@@ -484,13 +517,7 @@ function setupCandidateInteractions(
                         }
                         toolbox.css("display", "block")
                         updateToolboxPosition(toolbox, firstEl)
-                        if (!toolbox.data("reposition-interval")) {
-                            // every 1 sec reposition the toolbox if visible
-                            let intervalId = window.setInterval(() => {
-                                updateToolboxPosition(toolbox, firstEl)
-                            }, 1000)
-                            toolbox.data("reposition-interval", intervalId)
-                        }
+                        startToolboxInterval(toolbox, firstEl)
                     }
                 }
             })
@@ -578,13 +605,7 @@ function setupCandidateInteractions(
                             }
                             toolbox.css("display", "block")
                             updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el))
-                            if (!toolbox.data("reposition-interval")) {
-                                // every 1 sec reposition the toolbox
-                                let intervalId = window.setInterval(() => {
-                                    updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el))
-                                }, 1000)
-                                toolbox.data("reposition-interval", intervalId)
-                            }
+                            startToolboxInterval(toolbox, $(tgt_chars_objs[left_i].el))
                             check_unlock()
                         })
                         // handle hover on toolbox
@@ -592,10 +613,7 @@ function setupCandidateInteractions(
                             if (isSpanComplete(error_span, state.protocol_error_categories, state.mqm_categories, state.mqm_severities)) {
                                 const timeoutId = window.setTimeout(() => {
                                     toolbox.css("display", "none")
-                                    if (toolbox.data("reposition-interval")) {
-                                        window.clearInterval(toolbox.data("reposition-interval"))
-                                        toolbox.removeData("reposition-interval")
-                                    }
+                                    stopToolboxInterval(toolbox)
                                     check_unlock()
                                 }, 500);
                                 toolbox.data("hide-timeout", timeoutId);
@@ -605,13 +623,7 @@ function setupCandidateInteractions(
                         // set up callback to reposition toolbox on resize         
                         $(window).on('resize.toolbox', () => updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el)))
                         updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el))
-                        if (!toolbox.data("reposition-interval")) {
-                            // every 1 sec reposition the toolbox
-                            let intervalId = window.setInterval(() => {
-                                updateToolboxPosition(toolbox, $(tgt_chars_objs[left_i].el))
-                            }, 1000)
-                            toolbox.data("reposition-interval", intervalId)
-                        }
+                        startToolboxInterval(toolbox, $(tgt_chars_objs[left_i].el))
 
                         // store error span
                         state.response_log[item_i][model].error_spans.push(error_span)
@@ -682,13 +694,7 @@ function setupCandidateInteractions(
                 }
                 toolbox.css("display", "block")
                 updateToolboxPosition(toolbox, $(span_objs[0].el))
-                // every 1 sec reposition the toolbox if visible
-                if (!toolbox.data("reposition-interval")) {
-                    let intervalId = window.setInterval(() => {
-                        updateToolboxPosition(toolbox, $(span_objs[0].el))
-                    }, 1000)
-                    toolbox.data("reposition-interval", intervalId)
-                }
+                startToolboxInterval(toolbox, $(span_objs[0].el))
                 check_unlock()
             })
             toolbox.on("mouseleave", () => {
@@ -696,10 +702,7 @@ function setupCandidateInteractions(
                     const timeoutId = window.setTimeout(() => {
                         toolbox.css("display", "none");
                         check_unlock()
-                        if (toolbox.data("reposition-interval")) {
-                            window.clearInterval(toolbox.data("reposition-interval"))
-                            toolbox.removeData("reposition-interval")
-                        }
+                        stopToolboxInterval(toolbox)
                     }, 500);
                     toolbox.data("hide-timeout", timeoutId);
                 }
@@ -714,10 +717,7 @@ function setupCandidateInteractions(
             }
             if (isSpanComplete(error_span, state.protocol_error_categories, state.mqm_categories, state.mqm_severities)) {
                 toolbox.css("display", "none")
-                if (toolbox.data("reposition-interval")) {
-                    window.clearInterval(toolbox.data("reposition-interval"))
-                    toolbox.removeData("reposition-interval")
-                }
+                stopToolboxInterval(toolbox)
             }
         }
     }
@@ -1243,6 +1243,7 @@ async function display_next_payload(response: DataPayload) {
  * Display goodbye screen when all annotations are done
  */
 function display_goodbye(response: DataGoodbye, navigate_to_item: (i: number | string) => void): void {
+    cleanupPreviousItem()
     // Use instructions_goodbye if provided, otherwise use default message
     // Note: instructions_goodbye may contain arbitrary HTML including variables that are replaced server-side
 
@@ -1260,6 +1261,7 @@ function display_goodbye(response: DataGoodbye, navigate_to_item: (i: number | s
 
 // Display form for collecting user information
 function display_form(response: DataForm) {
+    cleanupPreviousItem()
     // Clear previous content and state
     $("#output_div").empty()
     state.response_log = []

@@ -4,6 +4,7 @@
 Whenever `minor` is bumped in the `major.minor.patch` version (e.g. `1.0.2 -> 1.1.0`), the in-progress campaigns are not compatible with the new version.
 
 - v1.1.7 (unreleased)
+  - Clear refresh intervals on page navigation, which should help with frontend performance on large documents
 - v1.1.6
   - Ship `web/` in the package so that `bake-existing` can run
   - Move campaign annotations storage from `data/outputs/` to `data/annotations/` with automatic migration

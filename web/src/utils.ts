@@ -381,6 +381,16 @@ export function createSpanToolbox(
 
         // Delete
         toolbox.find(".error_delete").on("click", () => {
+            const intervalId = toolbox.data("reposition-interval")
+            if (intervalId) {
+                window.clearInterval(intervalId)
+                toolbox.removeData("reposition-interval")
+            }
+            const timeoutId = toolbox.data("hide-timeout")
+            if (timeoutId) {
+                window.clearTimeout(timeoutId)
+                toolbox.removeData("hide-timeout")
+            }
             toolbox.remove()
             for (let obj of tgt_chars_objs) {
                 if (obj.el_i >= start_el_i && obj.el_i <= end_el_i) {
