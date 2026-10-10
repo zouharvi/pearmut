@@ -1266,6 +1266,7 @@ function display_form(response: DataForm) {
     state.validations = []
     state.output_blocks = []
     state.action_log = [{ "time": Date.now() / 1000, "action": "load" }]
+    state.skip_mode = false
 
     redrawProgress(response.info.item_i, response.progress_welcome, response.progress_goodbye, response.progress, navigate_to_item)
     $("#progress").toggle(debugMode || response.info.show_progress !== false)
@@ -1369,7 +1370,7 @@ function display_form(response: DataForm) {
     // Set up submit button
     $("#button_next").off("click")
     $("#button_next").on("click", async function (e) {
-        if ($(this).hasClass("button-disabled")) {
+        if ($(this).hasClass("button-disabled") && !state.skip_mode) {
             e.preventDefault()
             if (state.incomplete_targets && state.incomplete_targets.length > 0) {
                 const target = state.incomplete_targets[0]
@@ -1409,8 +1410,10 @@ function display_form(response: DataForm) {
         // Disable button during submission
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Next 📶")
+        $("#button_skip").attr("disabled", "disabled")
+        $("#button_skip").val("Skip 📶")
 
-        state.action_log.push({ "time": Date.now() / 1000, "action": "submit" })
+        state.action_log.push({ "time": Date.now() / 1000, "action": "submit" + (state.skip_mode ? "_skip" : "") })
 
         // Build payload with proper typing
         const payload_local: {
@@ -1469,6 +1472,7 @@ function check_form_unlock(responses: Array<string | number | null>, payload: Ar
     if (frozenMode) {
         $("#button_next").attr("disabled", "disabled")
         $("#button_next").val("Next 🔒")
+        $("#button_skip").hide()
         return
     }
 
@@ -1490,12 +1494,16 @@ function check_form_unlock(responses: Array<string | number | null>, payload: Ar
     if (state.incomplete_items_i.length > 0) {
         $("#button_next").addClass("button-disabled")
         $("#button_next").val("Next 🚧")
+        $("#button_skip").show()
+        $("#button_skip").removeAttr("disabled")
+        $("#button_skip").val("Skip ⏭️")
         return
     }
 
     // All required fields are filled
     $("#button_next").removeClass("button-disabled")
     $("#button_next").val("Next ✅")
+    $("#button_skip").hide()
 }
 
 
